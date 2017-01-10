@@ -10,11 +10,17 @@
         "type": "git",
         "url": "https://github.com/jmg1138/grocereport_api.git"
     },
+    "scripts": {
+        "start": "node app.js"
+    },
     "dependencies": {
+        "auto-sni": "1.5.1",
         "body-parser": "1.15.2",
-        "express": "4.14.0"
+        "express": "4.14.0",
+        "request": "2.79.0"
     },
     "devDependencies": {
-        "eslint": "3.12.2"
+        "eslint": "3.12.2",
+        "jshint": "2.9.4"
     }
 }
