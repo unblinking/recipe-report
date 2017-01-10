@@ -16,7 +16,7 @@ var bodyParser = require('body-parser');
 // var createServer = require("auto-sni");
 
 // Just a few more things ...
-var port = 1138;
+var port = 1138; // Used when process.env.PORT doesn't exist
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -43,6 +43,6 @@ server.once("listening", () => {
 */
 
 
-server.listen(port, function() {
+server.listen(process.env.PORT || port, function() {
     console.log(`Server running on http://localhost:${port}`);
 });
