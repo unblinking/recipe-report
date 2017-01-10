@@ -6,21 +6,22 @@
 var express = require('express');
 var app = express();
 var routes = require('./routes/routes.js')(app);
-// var server = require('http').Server(app); // https://nodejs.org/api/http.html
+var server = require('http').Server(app); // https://nodejs.org/api/http.html
 
 // Parse requests courtesy of https://github.com/expressjs/body-parser
 var bodyParser = require('body-parser');
 
 // Free SSL courtesy of https://github.com/DylanPiercey/auto-sni
 // and https://letsencrypt.org/
-var createServer = require("auto-sni");
+// var createServer = require("auto-sni");
 
 // Just a few more things ...
-//var port = 1138;
+var port = 1138;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+/*
 var sslSettings = {
     email: "admin@grocereport.com", // Emailed when certificates expire.
     agreeTos: true, // Required for letsencrypt.
@@ -36,13 +37,12 @@ var sslSettings = {
     }
 };
 var server = createServer(sslSettings, app);
-
 server.once("listening", () => {
     console.log("Grocereport API server is running.");
 });
+*/
 
-/*
+
 server.listen(port, function() {
     console.log(`Server running on http://localhost:${port}`);
 });
-*/
