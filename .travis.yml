@@ -3,6 +3,7 @@ node_js:
   - "6"
 deploy:
   provider: heroku
-  app: grocereportapi
+  app:
+    master: grocereportapi
   api_key:
     secure: 02bd9fbb-8088-4622-985f-caf578468a74
