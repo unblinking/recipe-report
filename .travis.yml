@@ -4,4 +4,4 @@ node_js:
 deploy:
   provider: heroku
   api_key:
-    secure: "02bd9fbb-8088-4622-985f-caf578468a74"
+    secure: 02bd9fbb-8088-4622-985f-caf578468a74
