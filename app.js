@@ -8,6 +8,9 @@ var app = express();
 var routes = require('./routes/routes.js')(app);
 var server = require('http').Server(app); // https://nodejs.org/api/http.html
 
+// Secure express app courtesy of https://github.com/helmetjs/helmet
+var helmet = require('helmet');
+
 // Parse requests courtesy of https://github.com/expressjs/body-parser
 var bodyParser = require('body-parser');
 
@@ -18,6 +21,7 @@ var bodyParser = require('body-parser');
 // Just a few more things ...
 var port = 1138; // Used when process.env.PORT doesn't exist
 
+app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
