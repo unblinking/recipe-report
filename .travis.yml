@@ -1,8 +1,13 @@
 language: node_js
 node_js:
   - "6"
+branches:
+  only:
+  - master
 deploy:
   provider: heroku
-  app: grocereportapi
+  app:
+    master: grocereportapi
+  strategy: api
   api_key:
-    secure: 02bd9fbb-8088-4622-985f-caf578468a74
+     secure: "sMeP3BORgbrUnfBkB4jsxouvjsViOgsdeEBTXKN0L073mtyIC+h1HcKgtd79qa+SltwbFzBJrrqZrJLSSnXq6yAq3FpwEL8wVo0CzEoDw/xgVR2Vn/uygyzcoZElUG4jDbYwoCLvupZi96L9n08mxdzlbTi4Zdh4GWwPwsU26rommWtzKSVj9v0egNiTDxHwR2SqyKt2mwsJ+QfkYgTR0JnBTcVLyZ5jz3dM7c4mUMQ1scBP6m+hjorR+ZoysFid1f4t8pCYoF+pHzA/aSzp/51xMkgiAcUBag6PVHOBA9UY0X+JZIvplnNrwYLUife6E3ObOW/n9WLjF6aJphA7xUy9DY3J16pYGVmKaTOc8i/pkmfCJQItQosJk4ii3F5eU1pIzIPQhRjmMEnh7l+UQieWYeKofkLCcSOh/rTd4SedyWJhw35ZlPy2aWnqoyaCDEgOvG64UY02rFCKx7NrskhW2Gjtq4Mw8kGMoStFR4cVB8GwB/j8NJ5FjFwkvsOPf4T2aRexI195DJ2BBB2Cc/8QbBrE3ZD0OI46ETHVMWlPEtvMQ6H0fVpOtRUH/4vmay+LDkFrIakoH8GGj4E5ikmml4ATnxnh8JEJvUnBlteqbvD/pBKm9UAh9p0Rm6Bybzpb0dqDy6YphSNf9PbCJC9dWvkA5AGQzR0iwlQVMx8="
