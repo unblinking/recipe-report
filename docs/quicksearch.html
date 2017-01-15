@@ -1,0 +1,31 @@
+<html>
+<head>
+</head>
+<body style="background: transparent;">
+    <script src="scripts/docstrap.lib.js"></script>
+    <script src="scripts/lunr.min.js"></script>
+    <script src="scripts/fulltext-search.js"></script>
+
+    <script type="text/x-docstrap-searchdb">
+    {"namespaces.list.html":{"id":"namespaces.list.html","title":"Namespaces","body":" Grocereport Namespaces routesroutes.appRouter Namespaces Namespaces routes appRouter × Search results Close "},"index.html":{"id":"index.html","title":"Index","body":" Grocereport Namespaces routesroutes.appRouter grocereport_api Grocereport API server This is the source code for the Grocereport API server. Made with help from itblog × Search results Close "},"routes.html":{"id":"routes.html","title":"Namespace: routes","body":" Grocereport Namespaces routesroutes.appRouter Namespace: routes routes Routes for the Grocereport API. Define application end points and how they respond to client requests. Author: jmg1138 jmg1138 on GitHub Copyright: nothingworksright nothingworksright on GitHub Namespaces appRouter × Search results Close "},"routes.appRouter.html":{"id":"routes.appRouter.html","title":"Namespace: appRouter","body":" Grocereport Namespaces routesroutes.appRouter Namespace: appRouter routes. appRouter See: Express routing Express API app Methods &lt;static&gt; .app.get(req, res) GET request to the root route. Sends a response of 'hello' when a GET request is made to the root route. Parameters: Name Type Description req object The HTTP request. res object The HTTP response. See: Express API app.get Express API req Express API res Express API res.send Example www.grocereport.com/ &lt;static&gt; .app.post(req, res) POST request to the login route. Sends a response of 'Thank you' when a POST request is made to the login route. Parameters: Name Type Description req object The HTTP request. res object The HTTP response. See: Express API app.post Express API req Express API res Express API res.send Express API req.body Example var request = require('request'); var options = { url: 'http://127.0.0.1:1138/login', json: { name: 'Joshua' }, }; request.post(options, function(err, res, body) { console.log(body); }); × Search results Close "}}
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            Searcher.init();
+        });
+
+        $(window).on("message", function(msg) {
+            var msgData = msg.originalEvent.data;
+
+            if (msgData.msgid != "docstrap.quicksearch.start") {
+                return;
+            }
+
+            var results = Searcher.search(msgData.searchTerms);
+
+            window.parent.postMessage({"results": results, "msgid": "docstrap.quicksearch.done"}, "*");
+        });
+    </script>
+</body>
+</html>
