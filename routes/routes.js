@@ -4,6 +4,7 @@
  * Routes for the Grocereport API.
  * Define application end points and how they respond to client requests.
  * @namespace routes
+ * @public
  * @author jmg1138 {@link https://github.com/jmg1138 jmg1138 on GitHub}
  * @copyright nothingworksright {@link https://github.com/nothingworksright nothingworksright on GitHub}
  */
@@ -17,6 +18,7 @@
 /**
  * @namespace appRouter
  * @memberof routes
+ * @public
  * @param {object} app - The Express application instance.
  * @see {@link https://expressjs.com/en/guide/routing.html Express routing}
  * @see {@link http://expressjs.com/en/api.html#app Express API app}
@@ -26,6 +28,7 @@ var appRouter = function(app) {
     /**
      * @function app.get
      * @memberof! routes.appRouter
+     * @public
      * @summary GET request to the root route. Sends a response of 'hello' when a GET request is made to the root route.
      * @param {object} req - The HTTP request.
      * @param {object} res - The HTTP response.
@@ -43,13 +46,14 @@ var appRouter = function(app) {
     /**
      * @function app.post
      * @memberof! routes.appRouter
+     * @public
      * @summary POST request to the login route. Sends a response of 'Thank you' when a POST request is made to the login route.
      * @param {object} req - The HTTP request.
      * @param {object} res - The HTTP response.
      * @example
      * var request = require('request');
      * var options = {
-     *     url: 'http://127.0.0.1:1138/login',
+     *     url: 'http://grocereport.com/login',
      *     json: {
      *         name: 'Joshua'
      *     },
