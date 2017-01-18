@@ -18,12 +18,11 @@
         "jsdoc": "3.4.3"
     },
     "devDependencies": {
-        "chai": "^3.5.0",
-        "chai-http": "^2.0.1",
         "eslint": "3.12.2",
         "jshint": "2.9.4",
         "mocha": "^2.4.5",
-        "request": "2.79.0"
+        "should": "11.1.2",
+        "supertest": "2.0.1"
     },
     "scripts": {
         "install": "./node_modules/.bin/jsdoc -c jsdoc_conf.json -t ./node_modules/ink-docstrap/template -R README.md",
