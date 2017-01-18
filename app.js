@@ -58,3 +58,5 @@ routes(app);
 app.listen(port, function() {
     console.log(`Grocereport API running on port: ${port}`);
 });
+
+module.exports = app; // for testing

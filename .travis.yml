@@ -10,4 +10,12 @@ deploy:
     master: grocereportapi
   strategy: api
   api_key:
-     secure: SsWLWVosd/hQE4aOC6qL2oFJ6Zb6ok4PXoTfn6P20n1M/xP7rx4KK+SPo8xo7P/WJjHBlycjZJTNw2qxNzeLjnFe0cla38LN+4yzMTv7MK4ZGfywLVuRKxtW3TAldwMMI0KgAD3VGAiMy86RbX1FfzMLwUEfUYSrOzIzo66bCHKtlDEgNkpQzv7vcBiFE5B+zVmL9cXuRNFpMhb5lEvGbPautgajbU75Etv+B51embS6o5IfrgWEyBs27Y/tw8la6kkmfFFS+fFdgv6I7N+VYeKqm41jfKEV3eIesGtmhANuy3IZok3dlHs1ag3OYcNl7JDy1//t0v9vToKW8t4tq/bkbV3F0nl00JBS+dz0db0s9ZNOS5qjMkzcZu4FwXoJzUdLoTmOTCscmamXySO20d1pM4LNk6O3D5o3HO3+VZkHU5T14fOzkWfXFYaYr9WjX8d/Eo0VTdf+LOm6haf/bA8IwGB9EkzMrkGuyt+/Pzk4ZBaXe07cKDl0ovGvwJGp/Dv9vqWSHcj6s8gYNyid15MlI/8AgZmzUMS3uUzHi3zsadyFnynisKFT8aysDomQGPL1z5ZUdOn3dlQnNXyLKrsp/nxWE25NEcRrxTBhiSOUvtICddKmh0afT46SX2ezFBQ8mXtVQG5EprZnWxGH71aG/0BZn2xj8UKQRnvYenc=
+     secure: "sMeP3BORgbrUnfBkB4jsxouvjsViOgsdeEBTXKN0L073mtyIC+h1HcKgtd79qa+SltwbFzBJrrqZrJLSSnXq6yAq3FpwEL8wVo0CzEoDw/xgVR2Vn/uygyzcoZElUG4jDbYwoCLvupZi96L9n08mxdzlbTi4Zdh4GWwPwsU26rommWtzKSVj9v0egNiTDxHwR2SqyKt2mwsJ+QfkYgTR0JnBTcVLyZ5jz3dM7c4mUMQ1scBP6m+hjorR+ZoysFid1f4t8pCYoF+pHzA/aSzp/51xMkgiAcUBag6PVHOBA9UY0X+JZIvplnNrwYLUife6E3ObOW/n9WLjF6aJphA7xUy9DY3J16pYGVmKaTOc8i/pkmfCJQItQosJk4ii3F5eU1pIzIPQhRjmMEnh7l+UQieWYeKofkLCcSOh/rTd4SedyWJhw35ZlPy2aWnqoyaCDEgOvG64UY02rFCKx7NrskhW2Gjtq4Mw8kGMoStFR4cVB8GwB/j8NJ5FjFwkvsOPf4T2aRexI195DJ2BBB2Cc/8QbBrE3ZD0OI46ETHVMWlPEtvMQ6H0fVpOtRUH/4vmay+LDkFrIakoH8GGj4E5ikmml4ATnxnh8JEJvUnBlteqbvD/pBKm9UAh9p0Rm6Bybzpb0dqDy6YphSNf9PbCJC9dWvkA5AGQzR0iwlQVMx8="
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/5a961246e7d6d9693309 # https://gitter.im/nothingworksright/Lobby
+      - https://webhooks.gitter.im/e/1de5b5d08268f586998f # https://gitter.im/nothingworksright/grocereport_api
+    on_success: always  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: always    # options: [always|never|change] default: always
