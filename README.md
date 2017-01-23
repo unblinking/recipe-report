@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/nothingworksright/grocereport_api.png?label=ready&title=Ready)](https://waffle.io/nothingworksright/grocereport_api)
 # grocereport_api  
 
 [![Build Status](https://img.shields.io/travis/nothingworksright/grocereport_api.svg)](https://travis-ci.com/nothingworksright/grocereport_api)  [![Gitter](https://img.shields.io/gitter/room/nothingworksright/grocereport_api.svg)](https://gitter.im/nothingworksright/grocereport_api)   
