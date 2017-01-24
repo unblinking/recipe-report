@@ -1,0 +1,24 @@
+engines:
+  fixme:
+    enabled: true
+  markdownlint:
+    enabled: true
+  nodesecurity:
+    enabled: true
+  eslint:
+    enabled: true
+  csslint:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+        javascript:
+          mass_threshold: 50
+ratings:
+  paths:
+  - "**.css"
+  - "**.js"
+  - "**.md"
+exclude_paths:
+- "public/images/"
