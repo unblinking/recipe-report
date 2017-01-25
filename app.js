@@ -20,6 +20,7 @@
  */
 var express = require('express');
 var bodyParser = require('body-parser');
+var helmet = require('helmet');
 var routes = require('./routes/routes.js');
 
 /**
@@ -41,6 +42,7 @@ var port = parseInt(process.env.PORT, 10) || 1138;
  * @param {boolean} extended - When true uses {@link https://github.com/ljharb/qs qs querystring parsing}
  */
 var app = express();
+app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
