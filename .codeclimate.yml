@@ -21,4 +21,4 @@ ratings:
   - "**.js"
   - "**.md"
 exclude_paths:
-- "public/images/"
+- "docs"
