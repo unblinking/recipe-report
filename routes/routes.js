@@ -15,6 +15,13 @@
 'use strict';
 
 /**
+ * Require the modules that will be used.
+ * @var {object} passport {@link http://passportjs.org/ Passport}
+ */
+var passport = require('passport');
+var Account = require('./models/account');
+
+/**
  * @public
  * @namespace router
  * @memberof routes
@@ -88,9 +95,18 @@ var router = function(app) {
      * });
      * @see {@link https://expressjs.com/en/api.html Express API}
      */
+    /*
     app.post('/login', function(req, res) {
         res.status(200).json({ name: req.body.name });
     });
+    */
+
+    app.get('/login',
+        passport.authenticate('basic', { session: false }),
+        function(req, res) {
+            res.json({ id: req.user.id, username: req.user.username });
+        }
+    );
 
 };
 
