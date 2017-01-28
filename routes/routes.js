@@ -17,6 +17,7 @@
 /**
  * Require the modules that will be used.
  * @var {object} passport {@link http://passportjs.org/ Passport}
+ * @var {object} Account Our mongoose account model
  */
 var passport = require('passport');
 var Account = require('./models/account');
@@ -101,12 +102,20 @@ var router = function(app) {
     });
     */
 
-    app.get('/login',
-        passport.authenticate('basic', { session: false }),
-        function(req, res) {
-            res.json({ id: req.user.id, username: req.user.username });
-        }
-    );
+    app.post('/register', function(req, res) {
+        Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
+            if (err) {
+                return res.status(200).json({ status: 'error' });
+            }
+            passport.authenticate('local')(req, res, function () {
+                res.status(200).json({ status: 'success' });
+            });
+        });
+    });
+
+    app.post('/login', passport.authenticate('local'), function(req, res) {
+        res.redirect('/');
+    });
 
 };
 

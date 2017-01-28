@@ -16,11 +16,18 @@
  * Require the modules that will be used.
  * @var {object} express {@link https://github.com/expressjs/express Express}
  * @var {object} bodyParser {@link https://github.com/expressjs/body-parser Express body-parser}
+ * @var {object} helmet {@link https://github.com/helmetjs Helmet}
+ * @var {object} mongoose {@link https://github.com/Automattic/mongoose Mongoose}
+ * @var {object} passport {@link https://github.com/jaredhanson/passport Passport}
+ * @var {object} LocalStrategy {@link https://github.com/jaredhanson/passport-local Passport-local}
  * @var {object} routes - Our own defined application end points.
  */
 var express = require('express');
 var bodyParser = require('body-parser');
 var helmet = require('helmet');
+var mongoose = require('mongoose');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 var routes = require('./routes/routes.js');
 
 /**
@@ -30,6 +37,11 @@ var routes = require('./routes/routes.js');
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt MDN JavaScript parseInt}
  */
 var port = parseInt(process.env.PORT, 10) || 1138;
+
+/**
+ * Define the MongoDB stuff
+ */
+var mongodb_uri = process.env.MONGODB_URI;
 
 /**
  * Define all configurations here except routes (define routes last).
@@ -45,6 +57,15 @@ var app = express();
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Passport
+var account = require('./models/account');
+passport.use(new LocalStrategy(account.authenticate()));
+
+// Mongoose
+mongoose.connect(mongodb_uri);
 
 /**
  * Define routes last, after all other configurations.
