@@ -28,7 +28,9 @@ var helmet = require('helmet');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+
 var routes = require('./routes/routes.js');
+var account = require('./models/account.js');
 
 /**
  * Define the port for the app to listen on.
@@ -39,9 +41,11 @@ var routes = require('./routes/routes.js');
 var port = parseInt(process.env.PORT, 10) || 1138;
 
 /**
- * Define the MongoDB stuff
+ * Connect to the MongoDB.
  */
 var mongodb_uri = process.env.MONGODB_URI;
+mongoose.Promise = global.Promise; // https://github.com/Automattic/mongoose/issues/4291
+mongoose.connect(mongodb_uri);
 
 /**
  * Define all configurations here except routes (define routes last).
@@ -60,12 +64,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Passport
-var account = require('./models/account');
-passport.use(new LocalStrategy(account.authenticate()));
 
-// Mongoose
-mongoose.connect(mongodb_uri);
+// Passport
+passport.use(new LocalStrategy(account.authenticate()));
+passport.serializeUser(account.serializeUser());
+passport.deserializeUser(account.deserializeUser());
 
 /**
  * Define routes last, after all other configurations.
