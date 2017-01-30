@@ -34,10 +34,10 @@ This is the source code repo for the Grocereport API server.
 
 ## Made with help from …  
 
-[itblog][1] - [How to create A Simple RESTful API With Node.js][2]  
-[Michael Herman][3] - [User Authentication With Passport.js][4]  
+[itblog][17] - [How to create A Simple RESTful API With Node.js][18]  
+[Michael Herman][19] - [User Authentication With Passport.js][20]  
 
-[1]: http://itblog.mobi/ "itblog"  
-[2]: http://itblog.mobi/2015/12/29/how-to-create-a-simple-restful-api-with-node-js/ "How to create A Simple RESTful API With Node.js"  
-[3]: http://mherman.org/ "Michael Herman"  
-[4]: http://mherman.org/blog/2013/11/11/user-authentication-with-passport-dot-js/ "User Authentication With Passport.js"  
+[17]: http://itblog.mobi/ "itblog"  
+[18]: http://itblog.mobi/2015/12/29/how-to-create-a-simple-restful-api-with-node-js/ "How to create A Simple RESTful API With Node.js"  
+[19]: http://mherman.org/ "Michael Herman"  
+[20]: http://mherman.org/blog/2013/11/11/user-authentication-with-passport-dot-js/ "User Authentication With Passport.js"  
