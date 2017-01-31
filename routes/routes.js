@@ -15,6 +15,14 @@
 'use strict';
 
 /**
+ * Require the modules that will be used.
+ * @var {object} passport {@link http://passportjs.org/ Passport}
+ * @var {object} Account Our mongoose account model
+ */
+var passport = require('passport');
+var account = require('../models/account');
+
+/**
  * @public
  * @namespace router
  * @memberof routes
@@ -72,15 +80,16 @@ var router = function(app) {
      * @function app.post
      * @memberof! routes.router
      * @public
-     * @summary POST request to the login route. Sends a response of 'Thank you' when a POST request is made to the login route.
+     * @summary POST request to the register route. Register an account using the username and password provided when a POST request is made to the register route.
      * @param {object} req - The HTTP request.
      * @param {object} res - The HTTP response.
      * @example
      * var request = require('request');
      * var options = {
-     *     url: 'http://grocereport.com/login',
+     *     url: 'http://grocereport.com/register',
      *     json: {
-     *         name: 'Joshua'
+     *         name: 'Joshua',
+     *         password: 'Password'
      *     },
      * };
      * request.post(options, function(err, res, body) {
@@ -88,8 +97,43 @@ var router = function(app) {
      * });
      * @see {@link https://expressjs.com/en/api.html Express API}
      */
-    app.post('/login', function(req, res) {
-        res.status(200).json({ name: req.body.name });
+    app.post('/register', function(req, res, next) {
+        console.log(`Registering user.`);
+        account.register(new account({ username : req.body.username }), req.body.password, function(err, account) {
+            if (err) {
+                res.status(401).json({
+                    status: 'error',
+                    error: err
+                });
+                return next(err);
+            }
+            res.status(200).json({ status : 'success' });
+        });
+    });
+
+    /**
+     * @function app.post
+     * @memberof! routes.router
+     * @public
+     * @summary POST request to the login route. Authenticate an account based on the username and password provided when a POST request is made to the login route.
+     * @param {object} req - The HTTP request.
+     * @param {object} res - The HTTP response.
+     * @example
+     * var request = require('request');
+     * var options = {
+     *     url: 'http://grocereport.com/login',
+     *     json: {
+     *         name: 'Joshua',
+     *         password: 'Password'
+     *     },
+     * };
+     * request.post(options, function(err, res, body) {
+     *     console.log(body);
+     * });
+     * @see {@link https://expressjs.com/en/api.html Express API}
+     */
+    app.post('/login', passport.authenticate('local'), function(req, res) {
+        res.status(200).json({ status : 'success' });
     });
 
 };

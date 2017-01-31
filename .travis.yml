@@ -1,6 +1,8 @@
 language: node_js
 node_js:
   - "6"
+services:
+  - mongodb
 branches:
   only:
   - master
@@ -19,3 +21,6 @@ notifications:
     on_success: always  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
     on_start: always    # options: [always|never|change] default: always
+addons:
+    code_climate:
+        repo_token: 84291b1e539c5818a7813aa2cb1c6ab77a1baab8fec3ea1c5715862515148ccf
