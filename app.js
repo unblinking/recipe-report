@@ -25,6 +25,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var helmet = require('helmet');
+var sslRedirect = require('heroku-ssl-redirect');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -59,6 +60,7 @@ mongoose.connect(mongodb_uri);
  */
 var app = express();
 app.use(helmet());
+app.use(sslRedirect());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
