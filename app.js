@@ -43,7 +43,7 @@ var port = parseInt(process.env.PORT, 10) || 1138;
 /**
  * Connect to the MongoDB.
  */
-var mongodb_uri = process.env.MONGODB_URI;
+var mongodb_uri = process.env.MONGODB_URI || 'mongodb://localhost/';
 mongoose.Promise = global.Promise; // https://github.com/Automattic/mongoose/issues/4291
 mongoose.connect(mongodb_uri);
 
@@ -63,7 +63,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 // Passport
 passport.use(new LocalStrategy(account.authenticate()));
