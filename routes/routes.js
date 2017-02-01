@@ -103,11 +103,16 @@ var router = function(app) {
             if (err) {
                 res.status(401).json({
                     status: 'error',
-                    error: err
+                    message: err
                 });
                 return next(err);
             }
-            res.status(200).json({ status : 'success' });
+            res.status(200).json({
+                message: `User ${req.body.username} registered successfully.`,
+                data: {
+                    username: req.body.username
+                }
+            });
         });
     });
 
@@ -133,7 +138,13 @@ var router = function(app) {
      * @see {@link https://expressjs.com/en/api.html Express API}
      */
     app.post('/login', passport.authenticate('local'), function(req, res) {
-        res.status(200).json({ status : 'success' });
+        res.status(200).json({
+            status : 'success',
+            message: `User ${req.body.username} successfully authenticated.`,
+            data: {
+                username: req.body.username
+            }
+        });
     });
 
 };
