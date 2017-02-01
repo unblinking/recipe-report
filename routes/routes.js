@@ -108,6 +108,7 @@ var router = function(app) {
                 return next(err);
             }
             res.status(200).json({
+                status : "success",
                 message: `User ${req.body.username} registered successfully.`,
                 data: {
                     username: req.body.username
