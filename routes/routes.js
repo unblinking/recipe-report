@@ -5,22 +5,21 @@
  * @namespace routes
  * @public
  * @author jmg1138 {@link https://github.com/jmg1138 jmg1138 on GitHub}
- * @copyright nothingworksright {@link https://github.com/nothingworksright nothingworksright on GitHub}
  */
 
 /**
  * Invoke strict mode for the entire script.
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode Strict mode}
  */
-'use strict';
+"use strict";
 
 /**
  * Require the modules that will be used.
  * @var {object} passport {@link http://passportjs.org/ Passport}
  * @var {object} Account Our mongoose account model
  */
-var passport = require('passport');
-var account = require('../models/account');
+var passport = require("passport");
+var account = require("../models/account");
 
 /**
  * @public
@@ -33,16 +32,16 @@ var account = require('../models/account');
 var router = function(app) {
 
     /**
-     * GET request to the root route. Responds with the JSON object { message: "hello" }
+     * GET request to the root route. Responds with the JSON object { "message": "hello" }
      * @public
-     * @function .app.get('/')
+     * @function .app.get("/")
      * @memberof! routes.router
      * @param {object} req - The HTTP request.
      * @param {object} res - The HTTP response.
      * @example
-     * // Responds with the JSON object { message: "hello" }
-     * var request = require('request');
-     * request('http://www.grocereport.com/',
+     * // Responds with the JSON object { "message": "hello" }
+     * var request = require("request");
+     * request("http://www.grocereport.com/",
      *     function(err, res, body) {
      *         if (!err && res.statusCode == 200) {
      *             console.log(body);
@@ -50,21 +49,25 @@ var router = function(app) {
      *     });
      * @see {@link https://expressjs.com/en/api.html Express API}
      */
-    app.get('/', function(req, res) {
-        res.status(200).json({ message: 'hello' });
+    app.get("/", function(req, res) {
+        res
+            .status(200)
+            .json({
+                "message": "hello"
+            });
     });
 
     /**
-     * GET request to the /test route. Responds with the JSON object { message: "Welcome to the team, DZ-015" }
+     * GET request to the /test route. Responds with the JSON object { "message": "Welcome to the team, DZ-015" }
      * @public
-     * @function app.get('/test)
+     * @function app.get("/test")
      * @memberof! routes.router
      * @param {object} req - The HTTP request.
      * @param {object} res - The HTTP response.
      * @example
-     * // Responds with the JSON object { message: "Welcome to the team, DZ-015" }
-     * var request = require('request');
-     * request('http://www.grocereport.com/test',
+     * // Responds with the JSON object { "message": "Welcome to the team, DZ-015" }
+     * var request = require("request");
+     * request("http://www.grocereport.com/test",
      *     function(err, res, body) {
      *         if (!err && res.statusCode == 200) {
      *             console.log(body);
@@ -72,8 +75,12 @@ var router = function(app) {
      *     });
      * @see {@link https://expressjs.com/en/api.html Express API}
      */
-    app.get('/test', function(req, res) {
-        res.status(200).json({ message: 'Welcome to the team, DZ-015' });
+    app.get("/test", function(req, res) {
+        res
+            .status(200)
+            .json({
+                "message": "Welcome to the team, DZ-015"
+            });
     });
 
     /**
@@ -84,12 +91,12 @@ var router = function(app) {
      * @param {object} req - The HTTP request.
      * @param {object} res - The HTTP response.
      * @example
-     * var request = require('request');
+     * var request = require("request");
      * var options = {
-     *     url: 'http://grocereport.com/register',
+     *     url: "http://grocereport.com/register",
      *     json: {
-     *         name: 'Joshua',
-     *         password: 'Password'
+     *         "name": "Joshua",
+     *         "password": "Password"
      *     },
      * };
      * request.post(options, function(err, res, body) {
@@ -97,23 +104,27 @@ var router = function(app) {
      * });
      * @see {@link https://expressjs.com/en/api.html Express API}
      */
-    app.post('/register', function(req, res, next) {
+    app.post("/register", function(req, res, next) {
         console.log(`Registering user.`);
-        account.register(new account({ username : req.body.username }), req.body.password, function(err, account) {
+        account.register(new account({ username: req.body.username }), req.body.password, function(err, account) {
             if (err) {
-                res.status(401).json({
-                    status: 'error',
-                    message: err
-                });
+                res
+                    .status(401)
+                    .json({
+                        "status": "error",
+                        "message": err
+                    });
                 return next(err);
             }
-            res.status(200).json({
-                status : "success",
-                message: `User ${req.body.username} registered successfully.`,
-                data: {
-                    username: req.body.username
-                }
-            });
+            res
+                .status(200)
+                .json({
+                    "status": "success",
+                    "message": `User ${req.body.username} registered successfully.`,
+                    "data": {
+                        "username": req.body.username
+                    }
+                });
         });
     });
 
@@ -125,12 +136,12 @@ var router = function(app) {
      * @param {object} req - The HTTP request.
      * @param {object} res - The HTTP response.
      * @example
-     * var request = require('request');
+     * var request = require("request");
      * var options = {
-     *     url: 'http://grocereport.com/login',
+     *     url: "http://grocereport.com/login",
      *     json: {
-     *         name: 'Joshua',
-     *         password: 'Password'
+     *         "name": "Joshua",
+     *         "password": "Password"
      *     },
      * };
      * request.post(options, function(err, res, body) {
@@ -138,14 +149,16 @@ var router = function(app) {
      * });
      * @see {@link https://expressjs.com/en/api.html Express API}
      */
-    app.post('/login', passport.authenticate('local'), function(req, res) {
-        res.status(200).json({
-            status : 'success',
-            message: `User ${req.body.username} successfully authenticated.`,
-            data: {
-                username: req.body.username
-            }
-        });
+    app.post("/login", passport.authenticate("local"), function(req, res) {
+        res
+            .status(200)
+            .json({
+                "status": "success",
+                "message": `User ${req.body.username} successfully authenticated.`,
+                "data": {
+                    "username": req.body.username
+                }
+            });
     });
 
 };
