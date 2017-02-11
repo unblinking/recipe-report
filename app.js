@@ -19,8 +19,6 @@
  * @var {object} bodyParser {@link https://github.com/expressjs/body-parser Express body-parser}
  * @var {object} helmet {@link https://github.com/helmetjs Helmet}
  * @var {object} mongoose {@link https://github.com/Automattic/mongoose Mongoose}
- * @var {object} passport {@link https://github.com/jaredhanson/passport Passport}
- * @var {object} LocalStrategy {@link https://github.com/jaredhanson/passport-local Passport-local}
  * @var {object} routes - Our own defined application end points.
  */
 var express = require("express");
@@ -29,7 +27,6 @@ var helmet = require("helmet");
 var sslRedirect = require("heroku-ssl-redirect");
 var mongoose = require("mongoose");
 var passport = require("passport");
-var LocalStrategy = require("passport-local").Strategy;
 
 var routes = require("./routes/routes.js");
 var account = require("./models/account.js");
@@ -65,12 +62,7 @@ app.use(sslRedirect());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
-app.use(passport.session());
-
-// Passport
-passport.use(new LocalStrategy(account.authenticate()));
-passport.serializeUser(account.serializeUser());
-passport.deserializeUser(account.deserializeUser());
+// app.use(passport.session());
 
 /**
  * Define routes last, after all other configurations.

@@ -7,19 +7,41 @@
  * @author jmg1138 {@link https://github.com/jmg1138 jmg1138 on GitHub}
  */
 
-/**
- * Invoke strict mode for the entire script.
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode Strict mode}
- */
 "use strict";
 
-/**
- * Require the modules that will be used.
- * @var {object} passport {@link http://passportjs.org/ Passport}
- * @var {object} Account Our mongoose account model
- */
-var passport = require("passport");
+var jwt = require('jsonwebtoken');
 var account = require("../models/account");
+var passport = require("passport");
+var LocalStrategy = require("passport-local").Strategy;
+var passportJWT = require("passport-jwt");
+
+var JwtStrategy = passportJWT.Strategy;
+var ExtractJwt = passportJWT.ExtractJwt;
+
+var jwtOptions = {};
+jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader();
+jwtOptions.secretOrKey = process.env.JWT_SECRET || 'testSecret';
+jwtOptions.algorithm = process.env.JWT_ALGORITHM || "HS256";
+
+passport.use(new LocalStrategy(account.authenticate()));
+passport.serializeUser(account.serializeUser());
+passport.deserializeUser(account.deserializeUser());
+passport.use(new JwtStrategy(jwtOptions, function(payload, done) {
+    console.log(payload);
+    account
+        .findOne(payload._id, function(err, account) {
+            if (err) {
+                return done(err, false);
+            }
+            if (account) {
+                done(null, account);
+            } else {
+                done(null, false);
+            }
+        });
+}));
+
+
 
 /**
  * @public
@@ -49,39 +71,12 @@ var router = function(app) {
      *     });
      * @see {@link https://expressjs.com/en/api.html Express API}
      */
-    app.get("/", function(req, res) {
-        res
-            .status(200)
-            .json({
-                "message": "hello"
-            });
-    });
-
-    /**
-     * GET request to the /test route. Responds with the JSON object { "message": "Welcome to the team, DZ-015" }
-     * @public
-     * @function app.get("/test")
-     * @memberof! routes.router
-     * @param {object} req - The HTTP request.
-     * @param {object} res - The HTTP response.
-     * @example
-     * // Responds with the JSON object { "message": "Welcome to the team, DZ-015" }
-     * var request = require("request");
-     * request("http://www.grocereport.com/test",
-     *     function(err, res, body) {
-     *         if (!err && res.statusCode == 200) {
-     *             console.log(body);
-     *         }
-     *     });
-     * @see {@link https://expressjs.com/en/api.html Express API}
-     */
-    app.get("/test", function(req, res) {
-        res
-            .status(200)
-            .json({
-                "message": "Welcome to the team, DZ-015"
-            });
-    });
+    app
+        .get("/", function(req, res) {
+            res
+                .status(200)
+                .json({ "message": "hello" });
+        });
 
     /**
      * @function app.post
@@ -110,10 +105,7 @@ var router = function(app) {
             if (err) {
                 res
                     .status(401)
-                    .json({
-                        "status": "error",
-                        "message": err
-                    });
+                    .json({ "status": "error", "message": err });
                 return next(err);
             }
             res
@@ -122,7 +114,7 @@ var router = function(app) {
                     "status": "success",
                     "message": `User ${req.body.username} registered successfully.`,
                     "data": {
-                        "username": req.body.username
+                        "account": account
                     }
                 });
         });
@@ -150,14 +142,79 @@ var router = function(app) {
      * @see {@link https://expressjs.com/en/api.html Express API}
      */
     app.post("/login", passport.authenticate("local"), function(req, res) {
+        jwt
+            .sign({
+                data: req.body.username
+            }, jwtOptions.secretOrKey, {
+                algorithm: jwtOptions.algorithm
+            }, function(err, token) {
+                console.log("generated token");
+                console.log(token);
+                res
+                    .status(200)
+                    .json({
+                        "status": "success",
+                        "message": `User ${req.body.username} successfully authenticated.`,
+                        "data": {
+                            "token": token
+                        }
+                    });
+            });
+    });
+
+    /**
+     * Adding this middleware here. All routes below here will have to go
+     * through this, which checks for a valid token in the request.
+     */
+    app.use(function(req, res, next) {
+        // Look for requests with a token in the header
+        var token = req.headers.authorization;
+        console.log('break');
+        if (token) {
+            jwt.verify(token, jwtOptions.secretOrKey, function(err, decoded) {
+                console.log('break');
+                if (err) {
+                    return res.json({
+                        "status": "error",
+                        "message": "Failed to authenticate token."
+                    });
+                } else {
+                    req.decoded = decoded;
+                    next();
+                }
+            });
+        } else {
+            return res.status(403).send({
+                "status": "error",
+                "message": "No token provided"
+            });
+        }
+    });
+
+    /**
+     * GET request to the /test route. Responds with the JSON object { "message": "Welcome to the team, DZ-015" }
+     * @public
+     * @function app.get("/test")
+     * @memberof! routes.router
+     * @param {object} req - The HTTP request.
+     * @param {object} res - The HTTP response.
+     * @example
+     * // Responds with the JSON object { "message": "Welcome to the team, DZ-015" }
+     * var request = require("request");
+     * request("http://www.grocereport.com/test",
+     *     function(err, res, body) {
+     *         if (!err && res.statusCode == 200) {
+     *             console.log(body);
+     *         }
+     *     });
+     * @see {@link https://expressjs.com/en/api.html Express API}
+     */
+    app.get("/test", function(req, res) {
         res
             .status(200)
             .json({
                 "status": "success",
-                "message": `User ${req.body.username} successfully authenticated.`,
-                "data": {
-                    "username": req.body.username
-                }
+                "message": "Welcome to the team, DZ-015"
             });
     });
 
