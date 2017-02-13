@@ -62,7 +62,8 @@ app.use(sslRedirect());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
-// app.use(passport.session());
+
+app.set('json spaces', 2);
 
 /**
  * Define routes last, after all other configurations.

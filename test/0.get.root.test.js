@@ -6,15 +6,16 @@ var request = require('supertest');
 var should = require('should');
 
 describe('GET / (the root route)', function() {
-    it('should respond with the JSON object { message: "hello" }', function(done) {
+    it('should respond with status 200 and JSON object { "status": "success" }', function(done) {
         request(app)
             .get('/')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200)
-            .expect({ message: 'hello' })
+            //.expect({ "status": "success" })
             .end(function(err, res) {
                 if (err) return done(err);
+                res.body.status.should.equal("success");
                 done();
             });
     });
