@@ -37,7 +37,7 @@ var account = require("./models/account.js");
  * @var {integer} port - Port for the app to use.
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt MDN JavaScript parseInt}
  */
-var port = parseInt(process.env.PORT, 10) || 1138;
+var port = parseInt(process.env.PORT, 10) || 80;
 
 /**
  * Connect to the MongoDB.
