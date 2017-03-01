@@ -2,16 +2,22 @@
 
 This is the source code repo for the Grocereport API server.  
 
----  
+## Badges  
 
 [![Waffle.io][1]][2]
-[![Waffle.io][3]][4]
+[![Waffle.io][3]][4]  
 [![Code Climate][5]][6]
 [![Test Coverage][7]][8]
-[![Issue Count][9]][10]
+[![Issue Count][9]][10]  
 [![Build Status][11]][12]
 [![Heroku][13]][14]
 [![Gitter][15]][16]
+
+## Show your support  
+
+Support this project by [making a pledge via Patreon](https://www.patreon.com/jmg1138).  
+
+
 
 [1]: https://img.shields.io/waffle/label/nothingworksright/grocereport_api/in%20progress.svg? "In progress"  
 [2]: https://waffle.io/nothingworksright/grocereport_api "In progress"  
@@ -29,15 +35,3 @@ This is the source code repo for the Grocereport API server.
 [14]: https://www.heroku.com/home "Heroku"  
 [15]: https://img.shields.io/gitter/room/nothingworksright/grocereport_api.svg?colorB=ff69b4 "Gitter chat"  
 [16]: https://gitter.im/nothingworksright/grocereport_api "Gitter chat"  
-
----  
-
-## Made with help from …  
-
-[itblog][17] - [How to create A Simple RESTful API With Node.js][18]  
-[Michael Herman][19] - [User Authentication With Passport.js][20]  
-
-[17]: http://itblog.mobi/ "itblog"  
-[18]: http://itblog.mobi/2015/12/29/how-to-create-a-simple-restful-api-with-node-js/ "How to create A Simple RESTful API With Node.js"  
-[19]: http://mherman.org/ "Michael Herman"  
-[20]: http://mherman.org/blog/2013/11/11/user-authentication-with-passport-dot-js/ "User Authentication With Passport.js"  
