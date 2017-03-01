@@ -15,29 +15,31 @@ var passportJWT = require("passport-jwt");
 var jwt = require('jsonwebtoken');
 var account = require("../models/account");
 
-// Setup passport, passport-local, and passport-jwt
+// Setup passport
+passport.use(new LocalStrategy(account.authenticate()));
+passport.serializeUser(account.serializeUser());
+passport.deserializeUser(account.deserializeUser());
 var JwtStrategy = passportJWT.Strategy;
 var ExtractJwt = passportJWT.ExtractJwt;
 var jwtOptions = {};
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader();
 jwtOptions.secretOrKey = process.env.JWT_SECRET || 'testSecret';
 jwtOptions.algorithm = process.env.JWT_ALGORITHM || "HS256";
-passport.use(new LocalStrategy(account.authenticate()));
-passport.serializeUser(account.serializeUser());
-passport.deserializeUser(account.deserializeUser());
-passport.use(new JwtStrategy(jwtOptions, function(payload, done) {
-    console.log(payload);
-    account.findOne(payload._id, function(err, account) {
-        if (err) {
-            return done(err, false);
-        }
-        if (account) {
-            done(null, account);
-        } else {
-            done(null, false);
-        }
-    });
-}));
+passport.use(new JwtStrategy(
+    jwtOptions,
+    function(payload, done) {
+        // console.log(payload);
+        account.findOne(payload._id, function(err, account) {
+            if (err) {
+                return done(err, false);
+            }
+            if (account) {
+                done(null, account);
+            } else {
+                done(null, false);
+            }
+        });
+    }));
 
 /**
  * @public
@@ -100,13 +102,13 @@ var router = function(app) {
             .register(new account({ username: req.body.username }), req.body.password, function(err, account) {
                 if (err) {
                     res
-                        .status(401)
-                        .json({ "status": "error", "message": err });
+                        .status(200)
+                        .json({ "status": "error", "err": err });
                     return next(err);
                 }
                 res
                     .status(200)
-                    .json({ "status": "success", "message": `User ${req.body.username} registered successfully.` });
+                    .json({ "status": "success", "message": `Account ${req.body.username} registered successfully.` });
             });
     });
 
@@ -140,8 +142,8 @@ var router = function(app) {
             }, function(err, token) {
                 if (err) {
                     res
-                        .status(401)
-                        .json({ "status": "error", "message": err });
+                        .status(200)
+                        .json({ "status": "error", "err": err });
                 } else {
                     res
                         .status(200)
@@ -165,7 +167,9 @@ var router = function(app) {
             jwt
                 .verify(token, jwtOptions.secretOrKey, function(err, decoded) {
                     if (err) {
-                        return res.json({ "status": "error", "message": "Failed to authenticate token." });
+                        return res
+                            .status(200)
+                            .json({ "status": "error", "err": "Failed to authenticate token." });
                     } else {
                         req.decoded = decoded.data;
                         next();
@@ -173,8 +177,8 @@ var router = function(app) {
                 });
         } else {
             return res
-                .status(403)
-                .send({ "status": "error", "message": "No token provided" });
+                .status(200)
+                .json({ "status": "error", "err": "No token provided" });
         }
     });
 
