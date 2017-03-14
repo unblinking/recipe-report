@@ -6,10 +6,10 @@
     "author": "jmg1138 https://github.com/jmg1138",
     "license": "",
     "readme": "README.md",
-    "private": true,
+    "private": false,
     "repository": {
         "type": "git",
-        "url": "https://github.com/jmg1138/grocereport_api.git"
+        "url": "https://github.com/nothingworksright/grocereport_api.git"
     },
     "dependencies": {
         "body-parser": "1.16.0",

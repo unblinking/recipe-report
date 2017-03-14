@@ -18,8 +18,9 @@
  * @var {object} express {@link https://github.com/expressjs/express Express}
  * @var {object} bodyParser {@link https://github.com/expressjs/body-parser Express body-parser}
  * @var {object} helmet {@link https://github.com/helmetjs Helmet}
+ * @var {object} sslRedirect {@link https://github.com/nodenica/node-heroku-ssl-redirect sslRedirect}
  * @var {object} mongoose {@link https://github.com/Automattic/mongoose Mongoose}
- * @var {object} routes - Our own defined application end points.
+ * @var {object} passport - {@link http://passportjs.org/ Passport}
  */
 var express = require("express");
 var bodyParser = require("body-parser");
