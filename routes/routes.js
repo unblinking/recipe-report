@@ -14,6 +14,10 @@ var LocalStrategy = require("passport-local").Strategy;
 var passportJWT = require("passport-jwt");
 var jwt = require('jsonwebtoken');
 var account = require("../models/account");
+var Isemail = require('isemail');
+var sendmail = require('sendmail')({
+    silent: true
+});
 
 // Setup passport
 passport.use(new LocalStrategy(account.authenticate()));
@@ -27,9 +31,9 @@ jwtOptions.secretOrKey = process.env.JWT_SECRET || 'testSecret';
 jwtOptions.algorithm = process.env.JWT_ALGORITHM || "HS256";
 passport.use(new JwtStrategy(
     jwtOptions,
-    function(payload, done) {
+    function (payload, done) {
         // console.log(payload);
-        account.findOne(payload._id, function(err, account) {
+        account.findOne(payload._id, function (err, account) {
             if (err) {
                 return done(err, false);
             }
@@ -49,7 +53,7 @@ passport.use(new JwtStrategy(
  * @see {@link https://expressjs.com/en/guide/routing.html Express routing}
  * @see {@link http://expressjs.com/en/api.html Express API}
  */
-var router = function(app) {
+var router = function (app) {
 
     /**
      * GET request to the root route. Responds with status 200 and JSend-compliant response.
@@ -66,7 +70,7 @@ var router = function(app) {
      *     });
      */
     app
-        .get("/", function(req, res) {
+        .get("/", function (req, res) {
             res
                 .status(200)
                 .json({
@@ -97,19 +101,58 @@ var router = function(app) {
      *     }
      * });
      */
-    app.post("/register", function(req, res, next) {
-        account
-            .register(new account({ username: req.body.username }), req.body.password, function(err, account) {
-                if (err) {
-                    res
-                        .status(200)
-                        .json({ "status": "error", "err": err });
-                    return next(err);
+    app.post("/register", function (req, res, next) {
+        // Verify that the username is an email address.
+        Isemail.validate(
+            req.body.username, {
+                checkDNS: true
+            },
+            function (result) {
+                if (result) { // If the username is an email address...
+                    account
+                        .register(new account({
+                            username: req.body.username
+                        }), req.body.password, function (err, account) {
+                            if (err) {
+                                res
+                                    .status(200)
+                                    .json({
+                                        "status": "error",
+                                        "err": err
+                                    });
+                                return next(err);
+                            }
+
+                            // TODO: Send a registration email using node-sendmail
+                            // https://github.com/guileen/node-sendmail
+
+                            if (process.env.NODE_ENV == "production") {
+                                sendmail({
+                                    from: 'no-reply@grocereport.com',
+                                    to: req.body.username,
+                                    subject: 'Welcome',
+                                    html: 'Thank you for registering with Grocereport.',
+                                }, function (err, reply) {
+                                    console.log(err && err.stack);
+                                    console.dir(reply);
+                                });
+                            }
+
+                            res
+                                .status(200)
+                                .json({
+                                    "status": "success",
+                                    "message": `Account ${req.body.username} registered successfully.`
+                                });
+                        });
+                } else { // If the username is not an email address.
+                    res.status(200).json({
+                        "status": "error",
+                        "err": `Invalid email ${req.body.username}.`
+                    });
                 }
-                res
-                    .status(200)
-                    .json({ "status": "success", "message": `Account ${req.body.username} registered successfully.` });
-            });
+            }
+        );
     });
 
     /**
@@ -132,18 +175,21 @@ var router = function(app) {
      *     }
      * });
      */
-    app.post("/login", passport.authenticate("local"), function(req, res) {
+    app.post("/login", passport.authenticate("local"), function (req, res) {
         // Sign a token that holds the object ID of the user's MongoDB account document.
         jwt
             .sign({
                 data: req.user._doc._id
             }, jwtOptions.secretOrKey, {
                 algorithm: jwtOptions.algorithm
-            }, function(err, token) {
+            }, function (err, token) {
                 if (err) {
                     res
                         .status(200)
-                        .json({ "status": "error", "err": err });
+                        .json({
+                            "status": "error",
+                            "err": err
+                        });
                 } else {
                     res
                         .status(200)
@@ -161,15 +207,18 @@ var router = function(app) {
     /**
      * All routes below will be checked for a valid authorization token. If no token is present or authentication fails, responds with a JSend-compliant response. If authorization is successful, adds decoded payload data to the request object and then calls next.
      */
-    app.use(function(req, res, next) {
+    app.use(function (req, res, next) {
         var token = req.headers.authorization;
         if (token) {
             jwt
-                .verify(token, jwtOptions.secretOrKey, function(err, decoded) {
+                .verify(token, jwtOptions.secretOrKey, function (err, decoded) {
                     if (err) {
                         return res
                             .status(200)
-                            .json({ "status": "error", "err": "Failed to authenticate token." });
+                            .json({
+                                "status": "error",
+                                "err": "Failed to authenticate token."
+                            });
                     } else {
                         req.decoded = decoded.data;
                         next();
@@ -178,7 +227,10 @@ var router = function(app) {
         } else {
             return res
                 .status(200)
-                .json({ "status": "error", "err": "No token provided" });
+                .json({
+                    "status": "error",
+                    "err": "No token provided"
+                });
         }
     });
 
@@ -202,11 +254,14 @@ var router = function(app) {
      *         }
      *     });
      */
-    app.get("/test", function(req, res) {
+    app.get("/test", function (req, res) {
         // req.decoded holds the account document ID
         res
             .status(200)
-            .json({ "status": "success", "message": "Welcome to the team, DZ-015" });
+            .json({
+                "status": "success",
+                "message": "Welcome to the team, DZ-015"
+            });
     });
 
 };

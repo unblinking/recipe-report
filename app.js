@@ -78,6 +78,9 @@ routes(app);
  */
 app.listen(port, function() {
     console.log(`Grocereport API running on port: ${port}`);
+}).on('error', function(err) {
+    console.log(err);
+    // TODO: If error, try again a number of times and then give up.
 });
 
 module.exports = app; // for testing
