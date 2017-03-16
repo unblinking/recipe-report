@@ -6,11 +6,10 @@ var request = require('supertest');
 var should = require('should');
 
 describe('POST /register', function() {
-    it('should respond with the JSON object { status : "success" } when username and pas' +
-        'sword are sent with a POST request',
+    it('should respond with the JSON object { status : "success" } when username and password are sent with a POST request',
         function(done) {
-            process.env["MOCHA_USERNAME"] = new Date().getTime(); // A new username
-            process.env["MOCHA_PASSWORD"] = new Date().getTime(); // A new password
+            process.env.MOCHA_USERNAME = "no-reply" + "+" + new Date().getTime() + "@grocereport.com";
+            process.env.MOCHA_PASSWORD = new Date().getTime(); // A new password
             request(app)
                 .post('/register')
                 .set('Accept', 'application/json')
