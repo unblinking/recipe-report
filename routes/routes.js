@@ -13,6 +13,7 @@ var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
 var passportJWT = require("passport-jwt");
 var jwt = require('jsonwebtoken');
+
 var account = require("../models/account");
 var Isemail = require('isemail');
 var sendmail = require('sendmail')({

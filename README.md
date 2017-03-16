@@ -10,13 +10,11 @@ This is the source code repo for the Grocereport API server.
 [![Test Coverage][7]][8]
 [![Issue Count][9]][10]  
 [![Build Status][11]][12]
-[![Heroku][13]][14]
-[![Gitter][15]][16]
+[![Heroku][13]][14]  
 
 ## Show your support  
 
 Support this project by [making a pledge via Patreon](https://www.patreon.com/jmg1138).  
-
 
 
 [1]: https://img.shields.io/waffle/label/nothingworksright/grocereport_api/in%20progress.svg? "In progress"  
@@ -33,5 +31,3 @@ Support this project by [making a pledge via Patreon](https://www.patreon.com/jm
 [12]: https://travis-ci.com/nothingworksright/grocereport_api "Build status"  
 [13]: http://heroku-badge.herokuapp.com/?app=grocereportapi&style=flat&svg=1 "Deployed status"  
 [14]: https://www.heroku.com/home "Heroku"  
-[15]: https://img.shields.io/gitter/room/nothingworksright/grocereport_api.svg?colorB=ff69b4 "Gitter chat"  
-[16]: https://gitter.im/nothingworksright/grocereport_api "Gitter chat"  
