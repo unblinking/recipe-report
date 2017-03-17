@@ -11,4 +11,5 @@ deploy:
   app:
     master: grocereportapi
   strategy: api
-  api_key: {{HEROKU_API_KEY}}
+  api_key:
+     secure: "Cd1F4xkAF2P5MjrkEfIbMuIc9s8N8+Nzy3LbEfQUv9LKZUoOVNous1HtA6pLzgP+q735yNO3m8UBjy6s4j6PpIcOGekzZDixJJrZxBuCWT3zkABtKvhH8ir0aqE8F86LFi/kxZF/qrBH27NLGP+xCjV/C/Q/SN75sj+wmbS7/cdFZQTeGqJ9INOFJww5G5/X3tsl0VV4LXsHF2VBpW/VUa2F/09WfYnQTN3EYG8tQ5QYAHdEv5wi5tccDOLuhUCIL4iWZpsbgxBdvrsBxOOMO6og9ze7HatmRWfir5ckfe5ANMvxKoieGDQI3519xI+S/S7UV8wH/zBNvyq6cisqer5zR73By6gDDgfYpGr+AbRFUe7JcHr+Y38wA2YJRGaMff0RexPeBth4rOXqO6zKtu8Gjd1fIelW0LskVM9wwoRkIZP2a2zRutMSJ7Cq/vNjZDPczMhhrbFD0iv+7bD3WEmMvKx+hnhGyLDOHtzPGX9TqLn4BvccYh23tndyOO0t8phpE8+4u30cPakX3u+kNw3OigPY26mFvcqNyExK8snHftfWu2B7zBYyWk1Ssco11bhawbUwxUBWsjb3o5fSHkFzMbgvTpqssccsNa8TVqbjJ1PdFTb3b0sWxbu2ave0FncUG4NUWvTouwDJX3xCjlQ83Wb2Oa6YDrsxxohjRsY="
