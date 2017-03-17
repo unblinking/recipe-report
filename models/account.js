@@ -34,6 +34,11 @@ var accountSchema = new mongoose.Schema({}, { timestamps: true });
  * Plugin Passport-Local Mongoose into the schema.
  */
 var options = {
+    usernameField: "email",
+    usernameLowerCase: true,
+    usernameQueryFields: ["email"],
+    limitAttempts: true,
+    interval: 5000,
     MissingPasswordError: 'No password was given',
     AttemptTooSoonError: 'Account is currently locked. Try again later',
     TooManyAttemptsError: 'Account locked due to too many failed login attempts',
