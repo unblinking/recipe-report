@@ -12,9 +12,9 @@
 var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
 var passportJWT = require("passport-jwt");
-var jwt = require('jsonwebtoken');
-var Isemail = require('isemail');
-var sendmail = require('sendmail')({
+var jwt = require("jsonwebtoken");
+var Isemail = require("isemail");
+var sendmail = require("sendmail")({
     silent: true
 });
 
@@ -28,7 +28,7 @@ var JwtStrategy = passportJWT.Strategy;
 var ExtractJwt = passportJWT.ExtractJwt;
 var jwtOptions = {};
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader();
-jwtOptions.secretOrKey = process.env.JWT_SECRET || 'testSecret';
+jwtOptions.secretOrKey = process.env.JWT_SECRET || "testSecret";
 jwtOptions.algorithm = process.env.JWT_ALGORITHM || "HS256";
 passport.use(new JwtStrategy(
     jwtOptions,
@@ -114,7 +114,7 @@ var router = function (app) {
                         .register(new account({
                             username: req.body.username
                         }), req.body.password, function (err, account) {
-                            if (err) {
+                            if (err) { // Error registering the account
                                 res
                                     .status(200)
                                     .json({
@@ -122,29 +122,55 @@ var router = function (app) {
                                         "err": err
                                     });
                                 return next(err);
+                            } else { // Success registering the account
+                                if (process.env.NODE_ENV == "production") {
+                                    // Sign a token that expires in 48 hours
+                                    jwt
+                                        .sign({
+                                            data: account._doc._id
+                                        }, jwtOptions.secretOrKey, {
+                                            algorithm: jwtOptions.algorithm,
+                                            expiresIn: "48h"
+                                        }, function (err, token) {
+                                            if (err) { // Error signing the token
+                                                res
+                                                    .status(200)
+                                                    .json({
+                                                        "status": "error",
+                                                        "err": err
+                                                    });
+                                            } else { // Success signing the token
+                                                // Send an email containing an account activation link
+                                                sendmail({
+                                                    from: "no-reply@grocereport.com",
+                                                    to: req.body.username,
+                                                    subject: "Welcome",
+                                                    html: `Thank you for registering with Grocereport. Please follow [this link](https://api.grocereport.com/activate/${token}) to activate your new account.`,
+                                                }, function (err, reply) {
+                                                    if (err) { // Error sending activation email
+                                                        console.log(err && err.stack);
+                                                        console.dir(reply);
+                                                        res
+                                                            .status(200)
+                                                            .json({
+                                                                "status": "error",
+                                                                "err": err
+                                                            });
+                                                    } else { // Success sending the activation email
+                                                        res
+                                                            .status(200)
+                                                            .json({
+                                                                "status": "success",
+                                                                "message": `Account ${req.body.username} registered successfully. Account activation is required before you can login. An activation email has been sent. Please follow the link provided in the activation email.`
+                                                            });
+                                                    }
+                                                });
+                                            }
+                                        });
+                                } else {
+                                    // Not production environment
+                                }
                             }
-
-                            // TODO: Send a registration email using node-sendmail
-                            // https://github.com/guileen/node-sendmail
-
-                            if (process.env.NODE_ENV == "production") {
-                                sendmail({
-                                    from: 'no-reply@grocereport.com',
-                                    to: req.body.username,
-                                    subject: 'Welcome',
-                                    html: 'Thank you for registering with Grocereport.',
-                                }, function (err, reply) {
-                                    console.log(err && err.stack);
-                                    console.dir(reply);
-                                });
-                            }
-
-                            res
-                                .status(200)
-                                .json({
-                                    "status": "success",
-                                    "message": `Account ${req.body.username} registered successfully.`
-                                });
                         });
                 } else { // If the username is not an email address.
                     res.status(200).json({
@@ -154,6 +180,14 @@ var router = function (app) {
                 }
             }
         );
+    });
+
+    app.get("/activate/:token", function (req, res) {
+        var token = req.params.token;
+        res.status(200).json({
+            "status": "success",
+            "message": `Token: ${token}`
+        });
     });
 
     /**
