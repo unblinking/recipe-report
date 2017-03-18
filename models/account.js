@@ -28,6 +28,7 @@ var passportLocalMongoose = require("passport-local-mongoose");
  * 
  * @see {@link https://github.com/saintedlama/passport-local-mongoose#usage}
  */
+mongoose.Promise = global.Promise; // https://github.com/Automattic/mongoose/issues/4291
 var accountSchema = new mongoose.Schema({}, { timestamps: true });
 
 /**
