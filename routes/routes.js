@@ -145,7 +145,7 @@ var router = function (app) {
                                                 from: "no-reply@grocereport.com",
                                                 to: username,
                                                 subject: "Welcome",
-                                                text: `Hello ${username},\n\nThank you for registering with Grocereport. Please follow this link to activate your new account:\n\nhttps://api.grocereport.com/activate/${token} \n\nYou received this email because you (or someone else) used this email address to create a new account with Grocereport.\n\nRequest headers: ${JSON.stringify(headers, null, '\t')}`,
+                                                text: `Hello ${username},\n\nThank you for registering with Grocereport. Please follow this link to activate your new account:\n\nhttps://api.grocereport.com/activate/${token} \n\nYou received this email because you (or someone else) used this email address to create a new account.\n\nRequest headers: ${JSON.stringify(headers, null, '\t')}\n\nThank you,\n\nhttp://www.Grocereport.com`,
                                             }, function (err, reply) {
                                                 if (err) { // Error sending activation email
                                                     console.log(err && err.stack);
