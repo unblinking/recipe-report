@@ -28,12 +28,18 @@ var passportLocalMongoose = require("passport-local-mongoose");
  * 
  * @see {@link https://github.com/saintedlama/passport-local-mongoose#usage}
  */
+mongoose.Promise = global.Promise; // https://github.com/Automattic/mongoose/issues/4291
 var accountSchema = new mongoose.Schema({}, { timestamps: true });
 
 /**
  * Plugin Passport-Local Mongoose into the schema.
  */
 var options = {
+    usernameField: "email",
+    usernameLowerCase: true,
+    usernameQueryFields: ["email"],
+    limitAttempts: true,
+    interval: 5000,
     MissingPasswordError: 'No password was given',
     AttemptTooSoonError: 'Account is currently locked. Try again later',
     TooManyAttemptsError: 'Account locked due to too many failed login attempts',
