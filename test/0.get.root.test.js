@@ -6,7 +6,7 @@ var request = require('supertest');
 var should = require('should');
 
 describe('GET / (the root route)', function() {
-    it('should respond with status 200 and JSON object { "status": "success" }', function(done) {
+    it('should respond with the JSON object { status : "success" }', function(done) {
         request(app)
             .get('/')
             .set('Accept', 'application/json')
