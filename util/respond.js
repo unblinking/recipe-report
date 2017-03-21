@@ -24,16 +24,9 @@ var respond = {
       });
   },
 
-  success: function (res, route, json) {
-    var message = null;
+  success: function (res, message, json) {
     if (json === null) {
       json = {};
-    }
-    if (route === "root") {
-      message = "This is the Grocereport API server. http://www.Grocereport.com";
-    }
-    if (route === "registration") {
-      message = "Account registered successfully. Account activation is required before login. An activation email has been sent. Please follow the link provided in the activation email.";
     }
     res
       .status(200)

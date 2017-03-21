@@ -99,9 +99,11 @@ var router = function (app) {
    */
   app
     .get("/", function (req, res) {
-      return respond.success(res, "root", {
+      var message = `This is the Grocereport API server. http://www.Grocereport.com`;
+      var json = {
         "request-headers": req.headers
-      });
+      };
+      return respond.success(res, message, json);
     });
 
   /**
@@ -124,22 +126,24 @@ var router = function (app) {
    *   }
    * });
    */
-  app.post("/register", function (req, res, next) {
-    var email = req.body.email;
-    emailing.sanityCheck(email, function (err) {
-      if (err) return respond.err(res, err);
-      accounting.register(email, req.body.password, function (err, account) {
+  app
+    .post("/register", function (req, res, next) {
+      var message = `Account registered successfully. Account activation is required before login. An activation email has been sent. Please follow the link provided in the activation email.`;
+      var email = req.body.email;
+      emailing.sanityCheck(email, function (err) {
         if (err) return respond.err(res, err);
-        jwting.sign(account._doc._id, function (err, token) {
+        accounting.register(email, req.body.password, function (err, account) {
           if (err) return respond.err(res, err);
-          emailing.activationLink(email, token, req.headers, function (err, reply) {
+          jwting.sign(account._doc._id, function (err, token) {
             if (err) return respond.err(res, err);
-            return respond.success(res, "registration");
+            emailing.activationLink(email, token, req.headers, function (err, reply) {
+              if (err) return respond.err(res, err);
+              return respond.success(res, message, null);
+            });
           });
         });
       });
     });
-  });
 
   /**
    * GET request to the activate route. Responds with a JSend-compliant response.
@@ -186,15 +190,8 @@ var router = function (app) {
   app.post("/login", passport.authenticate("local"), function (req, res) {
     jwting.sign(req.user._doc._id, function (err, token) {
       if (err) return respond.err(res, err);
-      return res
-        .status(200)
-        .json({
-          "status": "success",
-          "message": `User ${req.body.useremail} successfully authenticated.`,
-          "data": {
-            "token": token
-          }
-        });
+      var message = `User ${req.body.useremail} successfully authenticated.`;
+      return respond.success(res, message, null);
     });
   });
 
