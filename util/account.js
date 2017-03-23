@@ -21,13 +21,14 @@ var accountModel = require("../models/account");
 
 var account = {
 
-  register: function (email, password, callback) {
+  register: function (bundle, callback) {
     accountModel.register(new accountModel({
-      email: email
-    }), password, function (err, account) {
-      callback(err, account);
+      email: bundle.email
+    }), bundle.password, function (err, account) {
+      bundle.account = account;
+      callback(err, bundle);
     });
-  }
+  },
 
 };
 
