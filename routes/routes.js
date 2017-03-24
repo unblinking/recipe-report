@@ -1,50 +1,50 @@
 #!/usr/bin/env node
 
-"use strict";
-
 /**
- * Define application end points (routes) for the Grocereport API and how they respond to client requests.
+ * The application end points (routes) for the Grocereport API server.
  * @namespace routes
  * @public
  * @author jmg1138 {@link https://github.com/jmg1138 jmg1138 on GitHub}
  */
 
-var passport = require("passport");
-var LocalStrategy = require("passport-local").Strategy;
-var passportJWT = require("passport-jwt");
-var jwt = require("jsonwebtoken");
-var Isemail = require("isemail");
-var sendmail = require("sendmail")({
-    silent: true
-});
+/**
+ * Invoke strict mode for the entire script.
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode Strict mode}
+ */
+"use strict";
 
-var account = require("../models/account");
+/**
+ * Require the 3rd party modules that will be used.
+ * @see {@link https://github.com/petkaantonov/bluebird bluebird}
+ * @see {@link https://github.com/auth0/node-jsonwebtoken node-jsonwebtoken}
+ * @see {@link https://github.com/jaredhanson/passport-local passport-local}
+ * @see {@link https://github.com/jaredhanson/passport Passport}
+ */
+const bluebird = require('bluebird');
+const jwt = require("jsonwebtoken");
+const localStrategy = require("passport-local").Strategy;
+const passport = require("passport");
 
-// Setup passport
-passport.use(new LocalStrategy(account.authenticate()));
+/**
+ * Require the local modules that will be used.
+ */
+const account = require("../models/account");
+const emailActivationLink = bluebird.promisify(require("../util/email").activationLink);
+const emailLooksOk = bluebird.promisify(require("../util/email").looksOk);
+const findAccount = bluebird.promisify(require("../models/account").findOne);
+const registerAccount = bluebird.promisify(require("../util/account").register);
+const respond = require("../util/respond");
+const signToken = bluebird.promisify(require("../util/jwt").sign);
+const verifyToken = bluebird.promisify(require("../util/jwt").verify);
+
+/**
+ * Setup Passport.
+ */
+passport.use(new localStrategy({
+  usernameField: "email"
+}, account.authenticate()));
 passport.serializeUser(account.serializeUser());
 passport.deserializeUser(account.deserializeUser());
-var JwtStrategy = passportJWT.Strategy;
-var ExtractJwt = passportJWT.ExtractJwt;
-var jwtOptions = {};
-jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader();
-jwtOptions.secretOrKey = process.env.JWT_SECRET || "testSecret";
-jwtOptions.algorithm = process.env.JWT_ALGORITHM || "HS256";
-passport.use(new JwtStrategy(
-    jwtOptions,
-    function (payload, done) {
-        // console.log(payload);
-        account.findOne(payload._id, function (err, account) {
-            if (err) {
-                return done(err, false);
-            }
-            if (account) {
-                done(null, account);
-            } else {
-                done(null, false);
-            }
-        });
-    }));
 
 /**
  * @public
@@ -54,285 +54,168 @@ passport.use(new JwtStrategy(
  * @see {@link https://expressjs.com/en/guide/routing.html Express routing}
  * @see {@link http://expressjs.com/en/api.html Express API}
  */
-var router = function (app) {
+const router = function (app) {
 
-    /**
-     * GET request to the root route. Responds with status 200 and JSend-compliant response.
-     * @public
-     * @function
-     * @memberof! routes.router
-     * @example
-     * var request = require("request");
-     * request("http://api.grocereport.com/",
-     *     function(err, res, body) {
-     *         if (!err && res.statusCode == 200) {
-     *             console.log(body);
-     *         }
-     *     });
-     */
-    app
-        .get("/", function (req, res) {
-            res
-                .status(200)
-                .json({
-                    "status": "success",
-                    "data": {
-                        "headers": req.headers
-                    }
-                });
+  /**
+   * GET request to the root route. Responds with a JSend-compliant response.
+   * @public
+   * @function
+   * @memberof! routes.router
+   * @example
+   * const request = require("request");
+   * request("https://api.grocereport.com/",
+   *   function(err, res, body) {
+   *     if (!err && res.statusCode == 200) {
+   *       console.log(body);
+   *     }
+   *   });
+   */
+  app.get("/", function (req, res) {
+    respond.success(res, "This is the Grocereport API server. http://www.Grocereport.com", {
+      headers: req.headers
+    });
+  });
+
+  /**
+   * POST request to the register route. Registers a new account document in the MongoDB instance based on the email address and password provided. Sends an activation email. Responds with a JSend-compliant response.
+   * @public
+   * @function
+   * @memberof! routes.router
+   * @example
+   * const request = require("request");
+   * const options = {
+   *   url: "https://api.grocereport.com/register",
+   *   json: {
+   *     "email": "no-reply@grocereport.com",
+   *     "password": "testPassword"
+   *   }
+   * };
+   * request.post(options, function(err, res, body) {
+   *   if (!err && res.statusCode == 200) {
+   *     console.log(body);
+   *   }
+   * });
+   */
+  app.post("/register", function (req, res) {
+    emailLooksOk({
+        email: req.body.email,
+        password: req.body.password,
+        headers: req.headers
+      })
+      .then(registerAccount)
+      .then(signToken)
+      .then(emailActivationLink)
+      .then(function (bundle) {
+        respond.success(res, "Registration successful.");
+      })
+      .catch(function (err) {
+        respond.err(res, err.message);
+      });
+  });
+
+  /**
+   * GET request to the activate route. Activates an account based on the token provided. Responds with a JSend-compliant response.
+   * @public
+   * @function
+   * @memberof! routes.router
+   * @example
+   * const request = require("request");
+   * request("https://api.grocereport.com/activate/secret-token",
+   *   function (err, response, body) {
+   *     if (!err && res.statusCode == 200) {
+   *       console.log(body);
+   *     }
+   *   });
+   */
+  app.get("/activate/:token", function (req, res) {
+    verifyToken({
+        token: req.params.token
+      })
+      .then(function (bundle) {
+        // TODO: Actually activate the account.
+        console.dir(bundle.decoded);
+        respond.success(res, "Activation successful.");
+      })
+      .catch(function (err) {
+        respond.err(res, err.message);
+      });
+  });
+
+  /**
+   * POST request to the login route. Authenticates an account based on the email address and password provided. Generates a token with payload containing user._doc._id. Responds with a JSend-compliant response, including the token.
+   * @public
+   * @function
+   * @memberof! routes.router
+   * @example
+   * const request = require("request");
+   * const options = {
+   *   url: "https://api.grocereport.com/login",
+   *   json: {
+   *     "email": "no-reply@grocereport.com",
+   *     "password": "temp"
+   *   }
+   * };
+   * request.post(options, function(err, res, body) {
+   *   if (!err && res.statusCode == 200) {
+   *     console.log(body);
+   *   }
+   * });
+   */
+  app.post("/login", passport.authenticate("local"), function (req, res) {
+    signToken({
+        account: req.user
+      })
+      .then(function (bundle) {
+        respond.success(res, "Authentication successful.", {
+          token: bundle.token
         });
+      })
+      .catch(function (err) {
+        respond.err(res, err.message);
+      });
+  });
 
-    /**
-     * POST request to the register route. Register a new account document using the username and password provided. Responds with a JSend-compliant response.
-     * @public
-     * @function
-     * @memberof! routes.router
-     * @example
-     * var request = require("request");
-     * var options = {
-     *     url: "http://api.grocereport.com/register",
-     *     json: {
-     *         "username": "testUsername",
-     *         "password": "testPassword"
-     *     }
-     * };
-     * request.post(options, function(err, res, body) {
-     *     if (!err && res.statusCode == 200) {
-     *         console.log(body);
-     *     }
-     * });
-     */
-    app.post("/register", function (req, res, next) {
-        var username = req.body.username;
-        var password = req.body.password;
-        var headers = req.headers;
-        // Verify that the username is an email address.
-        if (username !== null) { // Success receiving username
-            var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex looks like a valid email address
-            if (regex.test(username)) { // The username appears to be a valid email address
-                account
-                    .register(new account({
-                        email: username
-                    }), password, function (err, account) {
-                        if (err) { // Error registering the account
-                            res
-                                .status(200)
-                                .json({
-                                    "status": "error",
-                                    "err": err
-                                });
-                            return next(err);
-                        } else { // Success registering the account
-                            // Sign a token that expires in 48 hours
-                            jwt
-                                .sign({
-                                    data: account._doc._id
-                                }, jwtOptions.secretOrKey, {
-                                    algorithm: jwtOptions.algorithm,
-                                    expiresIn: 172800 // Two days, as seconds
-                                }, function (err, token) {
-                                    if (err) { // Error signing the token
-                                        res
-                                            .status(200)
-                                            .json({
-                                                "status": "error",
-                                                "err": err
-                                            });
-                                    } else { // Success signing the token
-                                        if (process.env.NODE_ENV == "production") {
-                                            // Send an email containing an account activation link
-                                            sendmail({
-                                                from: "no-reply@grocereport.com",
-                                                to: username,
-                                                subject: "Welcome",
-                                                text: `Hello ${username},\n\nThank you for registering with Grocereport. Please follow this link to activate your new account:\n\nhttps://api.grocereport.com/activate/${token} \n\nYou received this email because you (or someone else) used this email address to create a new account.\n\nRequest headers: ${JSON.stringify(headers, null, '\t')}\n\nThank you,\n\nhttp://www.Grocereport.com`,
-                                            }, function (err, reply) {
-                                                if (err) { // Error sending activation email
-                                                    console.log(err && err.stack);
-                                                    console.dir(reply);
-                                                    res
-                                                        .status(200)
-                                                        .json({
-                                                            "status": "error",
-                                                            "err": err
-                                                        });
-                                                } else { // Success sending the activation email
-                                                    res
-                                                        .status(200)
-                                                        .json({
-                                                            "status": "success",
-                                                            "message": `Account ${username} registered successfully. Account activation is required before you can login. An activation email has been sent. Please follow the link provided in the activation email.`
-                                                        });
-                                                }
-                                            });
-                                        } else { // Not the production environment
-                                            res
-                                                .status(200)
-                                                .json({
-                                                    "status": "success",
-                                                    "message": `Account ${username} registered successfully. Account activation is required before you can login. An activation email has been sent. Please follow the link provided in the activation email.`,
-                                                    "req.headers": headers,
-                                                    "email": `Thank you for registering with Grocereport. Please follow this link to activate your new account: http://localhost:1138/activate/${token} ${JSON.stringify(headers)}`
-                                                });
-                                        }
-                                    }
-                                });
-                        }
-                    });
-            } else { // Username doesn't appear to be a real email address
-                res.status(200).json({
-                    "status": "error",
-                    "err": `Invalid email ${username}.`
-                });
-            }
-        } else { // Error receiving username
-            res.status(200).json({
-                "status": "error",
-                "err": `No username was given.`
-            });
-        }
-    });
+  /**
+   * Middleware for token verification. Applies to all routes below. On success, adds decoded payload data to the request object and then calls next. On error, responds with a JSend-compliant response.
+   */
+  app.use(function (req, res, next) {
+    verifyToken({
+        token: req.headers.token
+      })
+      .then(function (bundle) {
+        req.decoded = bundle.decoded.data;
+        return next();
+      })
+      .catch(function (err) {
+        respond.err(res, err.message);
+      });
+  });
 
-    app.get("/activate/:token", function (req, res) {
-        var token = req.params.token;
-        if (token !== null) { // Success receiving token
-            jwt.verify(token, jwtOptions.secretOrKey, function (err, decoded) {
-                if (err) { // Error decoding token
-                    return res
-                        .status(200)
-                        .json({
-                            "status": "error",
-                            "err": "Failed to authenticate token.",
-                            "token": token
-                        });
-                } else { // Success decoding token
-                    console.dir(decoded);
-                    return res
-                        .status(200)
-                        .json({
-                            "status": "success",
-                            "message": "Account activated successfully. You can now login using your username and password."
-                        });
-                }
-            });
-        } else { // Failure receiving token
-            return res
-                .status(200)
-                .json({
-                    "status": "error",
-                    "err": `No token provided.`
-                });
-        }
-    });
-
-    /**
-     * POST request to the login route. Authenticates an account based on the username and password provided. Generates a token with payload containing user._doc._id. Responds with a JSend-compliant response, including the token.
-     * @public
-     * @function
-     * @memberof! routes.router
-     * @example
-     * var request = require("request");
-     * var options = {
-     *     url: "http://api.grocereport.com/login",
-     *     json: {
-     *         "username": "testUsername",
-     *         "password": "testPassword"
-     *     }
-     * };
-     * request.post(options, function(err, res, body) {
-     *     if (!err && res.statusCode == 200) {
-     *         console.log(body);
-     *     }
-     * });
-     */
-    app.post("/login", passport.authenticate("local"), function (req, res) {
-        // Sign a token that holds the object ID of the user's MongoDB account document.
-        jwt
-            .sign({
-                data: req.user._doc._id
-            }, jwtOptions.secretOrKey, {
-                algorithm: jwtOptions.algorithm
-            }, function (err, token) {
-                if (err) {
-                    res
-                        .status(200)
-                        .json({
-                            "status": "error",
-                            "err": err
-                        });
-                } else {
-                    res
-                        .status(200)
-                        .json({
-                            "status": "success",
-                            "message": `User ${req.body.username} successfully authenticated.`,
-                            "data": {
-                                "token": token
-                            }
-                        });
-                }
-            });
-    });
-
-    /**
-     * All routes below will be checked for a valid authorization token. If no token is present or authentication fails, responds with a JSend-compliant response. If authorization is successful, adds decoded payload data to the request object and then calls next.
-     */
-    app.use(function (req, res, next) {
-        var token = req.headers.authorization;
-        if (token) {
-            jwt
-                .verify(token, jwtOptions.secretOrKey, function (err, decoded) {
-                    if (err) {
-                        return res
-                            .status(200)
-                            .json({
-                                "status": "error",
-                                "err": "Failed to authenticate token."
-                            });
-                    } else {
-                        req.decoded = decoded.data;
-                        next();
-                    }
-                });
-        } else {
-            return res
-                .status(200)
-                .json({
-                    "status": "error",
-                    "err": "No token provided"
-                });
-        }
-    });
-
-    /**
-     * GET request to the test route. Responds with a JSend-compliant response
-     * @public
-     * @function
-     * @memberof! routes.router
-     * @example
-     * var request = require("request");
-     * var options = {
-     *     url: "http://api.grocereport.com/test",
-     *     headers: {
-     *         "Authorization": "secret token"
-     *     }
-     * };
-     * request(options,
-     *     function(err, res, body) {
-     *         if (!err && res.statusCode == 200) {
-     *             console.log(body);
-     *         }
-     *     });
-     */
-    app.get("/test", function (req, res) {
-        // req.decoded holds the account document ID
-        res
-            .status(200)
-            .json({
-                "status": "success",
-                "message": "Welcome to the team, DZ-015"
-            });
-    });
+  /**
+   * GET request to the test route. Responds with a JSend-compliant response
+   * @public
+   * @function
+   * @memberof! routes.router
+   * @example
+   * const request = require("request");
+   * const options = {
+   *   url: "https://api.grocereport.com/test",
+   *   headers: {
+   *     token: "secret-token"
+   *   }
+   * };
+   * request(options,
+   *   function(err, res, body) {
+   *     if (!err && res.statusCode == 200) {
+   *       console.log(body);
+   *     }
+   *   });
+   */
+  app.get("/test", function (req, res) {
+    // This is just here for development and debugging purposes.
+    // req.decoded holds the account document ID.
+    respond.success(res, "Welcome to the team, DZ-015", req.decoded);
+  });
 
 };
 

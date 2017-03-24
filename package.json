@@ -1,10 +1,10 @@
 {
     "name": "grocereport_api",
     "version": "0.0.1",
-    "description": "Server API for the Grocereport application.",
+    "description": "Grocereport API server.",
     "main": "app.js",
     "author": "jmg1138 https://github.com/jmg1138",
-    "license": "",
+    "license": "MIT",
     "readme": "README.md",
     "private": false,
     "repository": {
@@ -12,13 +12,13 @@
         "url": "https://github.com/nothingworksright/grocereport_api.git"
     },
     "dependencies": {
+        "bluebird": "3.5.0",
         "body-parser": "1.17.1",
         "express": "4.15.2",
         "helmet": "3.5.0",
         "heroku-ssl-redirect": "0.0.3",
-        "isemail": "2.2.1",
         "jsonwebtoken": "7.3.0",
-        "mongoose": "4.9.0",
+        "mongoose": "4.9.1",
         "passport": "0.3.2",
         "passport-jwt": "2.2.1",
         "passport-local": "1.0.0",
@@ -26,7 +26,7 @@
         "sendmail": "1.1.1"
     },
     "devDependencies": {
-        "eslint": "3.17.1",
+        "eslint": "3.18.0",
         "jsdoc-to-markdown": "3.0.0",
         "jshint": "2.9.4",
         "mocha": "3.2.0",
@@ -34,7 +34,7 @@
         "supertest": "3.0.0"
     },
     "scripts": {
-        "docs": "node node_modules/jsdoc-to-markdown/bin.js routes/routes.js --heading-depth 1 > DOCUMENTATION.md",
+        "docs": "node node_modules/jsdoc-to-markdown/bin/cli.js routes/routes.js --heading-depth 1 > DOCUMENTATION.md",
         "start": "node app.js",
         "test": "mocha --timeout 10000"
     }
