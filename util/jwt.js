@@ -14,43 +14,33 @@
 "use strict";
 
 /**
- * Require the modules that will be used.
+ * Require the 3rd party modules that will be used.
  * @see {@link https://github.com/auth0/node-jsonwebtoken node-jsonwebtoken}
  */
-var jsonwebtoken = require("jsonwebtoken");
+const jsonwebtoken = require("jsonwebtoken");
 
-var secret = process.env.JWT_SECRET || "testSecret";
-var algorithm = process.env.JWT_ALGORITHM || "HS256";
+const secret = process.env.JWT_SECRET || "testSecret";
+const algorithm = process.env.JWT_ALGORITHM || "HS256";
 
-var jwt = {
+const jwt = {
 
   sign: function (bundle, callback) {
-    if (bundle.account._doc._id !== null) {
-      jsonwebtoken.sign({
-        data: bundle.account._doc._id
-      }, secret, {
-        algorithm: algorithm,
-        expiresIn: 172800 // Two days (in seconds)
-      }, function (err, token) {
-        bundle.token = token;
-        callback(err, bundle);
-      });
-    } else {
-      var err = "Error signing token: No account provided.";
+    jsonwebtoken.sign({
+      data: bundle.account._doc._id
+    }, secret, {
+      algorithm: algorithm,
+      expiresIn: 172800 // Two days (in seconds)
+    }, function (err, token) {
+      bundle.token = token;
       callback(err, bundle);
-    }
+    });
   },
 
   verify: function (bundle, callback) {
-    if (bundle.token !== null) {
-      jsonwebtoken.verify(bundle.token, secret, function (err, decoded) {
-        bundle.decoded = decoded;
-        callback(err, bundle);
-      });
-    } else {
-      var err = "Error decoding token: No token provided.";
+    jsonwebtoken.verify(bundle.token, secret, function (err, decoded) {
+      bundle.decoded = decoded;
       callback(err, bundle);
-    }
+    });
   }
 
 };

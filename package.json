@@ -1,7 +1,7 @@
 {
     "name": "grocereport_api",
     "version": "0.0.1",
-    "description": "Server API for the Grocereport application.",
+    "description": "Grocereport API server.",
     "main": "app.js",
     "author": "jmg1138 https://github.com/jmg1138",
     "license": "MIT",
@@ -34,7 +34,7 @@
         "supertest": "3.0.0"
     },
     "scripts": {
-        "docs": "node node_modules/jsdoc-to-markdown/bin.js routes/routes.js --heading-depth 1 > DOCUMENTATION.md",
+        "docs": "node node_modules/jsdoc-to-markdown/bin/cli.js routes/routes.js --heading-depth 1 > DOCUMENTATION.md",
         "start": "node app.js",
         "test": "mocha --timeout 10000"
     }

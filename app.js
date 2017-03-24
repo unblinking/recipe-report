@@ -15,6 +15,7 @@
 
 /**
  * Require the 3rd party modules that will be used.
+ * @see {@link https://github.com/petkaantonov/bluebird bluebird}
  * @see {@link https://github.com/expressjs/body-parser Express body-parser}
  * @see {@link https://github.com/expressjs/express Express}
  * @see {@link https://github.com/helmetjs Helmet}
@@ -22,39 +23,39 @@
  * @see {@link https://github.com/jaredhanson/passport Passport}
  * @see {@link https://github.com/nodenica/node-heroku-ssl-redirect sslRedirect}
  */
-var bodyParser = require("body-parser");
-var express = require("express");
-var helmet = require("helmet");
-var mongoose = require("mongoose");
-var passport = require("passport");
-var sslRedirect = require("heroku-ssl-redirect");
+const bluebird = require('bluebird');
+const bodyParser = require("body-parser");
+const express = require("express");
+const helmet = require("helmet");
+const mongoose = require("mongoose");
+const passport = require("passport");
+const sslRedirect = require("heroku-ssl-redirect");
 
 /**
  * Require the local modules that will be used.
- * @var {object} routes The application end points
  */
-var routes = require("./routes/routes.js");
+const routes = require("./routes/routes.js");
 
 /**
  * Define the port for the application entry point to listen on.
  * Use port 1138 if environmental variable PORT is not defined.
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt MDN JavaScript parseInt}
  */
-var port = parseInt(process.env.PORT, 10) || 1138;
+const port = parseInt(process.env.PORT, 10) || 1138;
 
 /**
  * Connect to the MongoDB instance.
  * Use uri "mongodb://localhost/" if environmental variable MONGODB_URI is not defined.
  */
-var mongodb_uri = process.env.MONGODB_URI || "mongodb://localhost/";
-mongoose.Promise = global.Promise; // https://github.com/Automattic/mongoose/issues/4291
+const mongodb_uri = process.env.MONGODB_URI || "mongodb://localhost/";
+mongoose.Promise = bluebird; // https://github.com/Automattic/mongoose/issues/4291
 mongoose.connect(mongodb_uri);
 
 /**
  * Define all app configurations here except routes (define routes last).
  * Instantiate the Express application.
  */
-var app = express();
+const app = express();
 app.use(helmet());
 app.use(sslRedirect());
 app.use(bodyParser.json());
@@ -74,8 +75,8 @@ routes(app);
  * Listen for connections on the specified port.
  * @see {@link https://expressjs.com/en/api.html#app.listen Express API app.listen}
  */
-app.listen(port, function () {
-    console.log(`Grocereport API running on port: ${port}`);
+app.listen(parseInt(process.env.PORT, 10) || 1138, function () {
+    console.log("Grocereport API listening.");
 }).on('error', function (err) {
     console.log(err);
     // TODO: If error, try again a number of times and then give up.

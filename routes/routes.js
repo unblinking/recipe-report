@@ -14,7 +14,7 @@
 "use strict";
 
 /**
- * Require the modules that will be used.
+ * Require the 3rd party modules that will be used.
  * @see {@link https://github.com/petkaantonov/bluebird bluebird}
  * @see {@link https://github.com/auth0/node-jsonwebtoken node-jsonwebtoken}
  * @see {@link https://github.com/jaredhanson/passport-local passport-local}
@@ -24,7 +24,6 @@ const bluebird = require('bluebird');
 const jwt = require("jsonwebtoken");
 const localStrategy = require("passport-local").Strategy;
 const passport = require("passport");
-
 
 /**
  * Require the local modules that will be used.
@@ -213,7 +212,8 @@ const router = function (app) {
    *   });
    */
   app.get("/test", function (req, res) {
-    // req.decoded holds the account document ID
+    // This is just here for development and debugging purposes.
+    // req.decoded holds the account document ID.
     respond.success(res, "Welcome to the team, DZ-015", req.decoded);
   });
 

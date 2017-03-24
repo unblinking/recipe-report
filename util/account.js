@@ -15,11 +15,10 @@
 
 /**
  * Require the local modules that will be used.
- * @var {object} account The MongoDB account model
  */
-var accountModel = require("../models/account");
+const accountModel = require("../models/account");
 
-var account = {
+const account = {
 
   register: function (bundle, callback) {
     accountModel.register(new accountModel({

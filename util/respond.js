@@ -13,7 +13,7 @@
  */
 "use strict";
 
-var respond = {
+const respond = {
 
   err: function (res, err) {
     res
@@ -25,9 +25,6 @@ var respond = {
   },
 
   success: function (res, message, json) {
-    if (json === null) {
-      json = {};
-    }
     res
       .status(200)
       .json({
