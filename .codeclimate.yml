@@ -22,3 +22,4 @@ ratings:
   - "**.md"
 exclude_paths:
 - "docs"
+- "DOCUMENTATION.md"
