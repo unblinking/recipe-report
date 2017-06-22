@@ -28,6 +28,6 @@ Support this project by [making a pledge via Patreon](https://www.patreon.com/jm
 [9]: https://img.shields.io/codeclimate/issues/github/nothingworksright/grocereport_api.svg?label=code%20climate%20issues "Issue count"  
 [10]: https://codeclimate.com/github/nothingworksright/grocereport_api "Issue count"  
 [11]: https://img.shields.io/travis/nothingworksright/grocereport_api.svg?label=travis-ci%20build "Build status"  
-[12]: https://travis-ci.com/nothingworksright/grocereport_api "Build status"  
+[12]: https://travis-ci.org/nothingworksright/grocereport_api "Build status"  
 [13]: http://heroku-badge.herokuapp.com/?app=grocereportapi&style=flat&svg=1 "Deployed status"  
 [14]: https://www.heroku.com/home "Heroku"  
