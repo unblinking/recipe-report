@@ -47,7 +47,7 @@ const email = {
       });
     } else { // Not production, do not send email.
       // Log local link to console for debugging, then do the callback.
-      // console.log(`http://localhost:1138/activate/${bundle.token}`);
+      //console.log(`http://localhost:1138/activate/${bundle.token}`);
       callback(null, bundle);
     }
   }

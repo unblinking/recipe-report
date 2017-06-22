@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * The application entry point for the Grocereport API server.
- * @namespace app
- * @public
+ * The application entry point.
+ * @namespace grocereport
  * @author jmg1138 {@link https://github.com/jmg1138 jmg1138 on GitHub}
  */
 
@@ -23,7 +22,7 @@
  * @see {@link https://github.com/jaredhanson/passport Passport}
  * @see {@link https://github.com/nodenica/node-heroku-ssl-redirect sslRedirect}
  */
-const bluebird = require('bluebird');
+const bluebird = require("bluebird");
 const bodyParser = require("body-parser");
 const express = require("express");
 const helmet = require("helmet");
@@ -57,13 +56,13 @@ mongoose.connect(mongodb_uri);
  */
 const app = express();
 app.use(helmet());
-app.use(sslRedirect());
+if (process.env.NODE_ENV === "production") app.use(sslRedirect());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-    extended: true // When true uses {@link https://github.com/ljharb/qs qs querystring parsing}
+  extended: true // When true uses {@link https://github.com/ljharb/qs qs} querystring parsing.
 }));
 app.use(passport.initialize());
-app.set('json spaces', 2);
+app.set("json spaces", 2);
 
 /**
  * Define routes last, after all other configurations.
@@ -75,12 +74,10 @@ routes(app);
  * Listen for connections on the specified port.
  * @see {@link https://expressjs.com/en/api.html#app.listen Express API app.listen}
  */
-app.listen(parseInt(process.env.PORT, 10) || 1138, function () {
-    console.log("Grocereport API listening.");
-}).on('error', function (err) {
-    console.log(err);
-    // TODO: If error, try again a number of times and then give up.
-});
+app.listen(port, () =>
+  console.log(`Grocereport API listening on port ${port}.`)
+).on("error", err => console.log(err));
+// TODO: If error, try again a number of times and then give up.
 
 /**
  * Assign our app object to module.exports.

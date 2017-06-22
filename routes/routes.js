@@ -105,12 +105,8 @@ const router = function (app) {
       .then(registerAccount)
       .then(signToken)
       .then(emailActivationLink)
-      .then(function (bundle) {
-        respond.success(res, "Registration successful.");
-      })
-      .catch(function (err) {
-        respond.err(res, err.message);
-      });
+      .then(() => respond.success(res, "Registration successful."))
+      .catch(err => respond.error(res, err));
   });
 
   /**
@@ -137,7 +133,7 @@ const router = function (app) {
         respond.success(res, "Activation successful.");
       })
       .catch(function (err) {
-        respond.err(res, err.message);
+        respond.error(res, err);
       });
   });
 
@@ -171,7 +167,7 @@ const router = function (app) {
         });
       })
       .catch(function (err) {
-        respond.err(res, err.message);
+        respond.error(res, err);
       });
   });
 
@@ -187,7 +183,7 @@ const router = function (app) {
         return next();
       })
       .catch(function (err) {
-        respond.err(res, err.message);
+        respond.error(res, err);
       });
   });
 

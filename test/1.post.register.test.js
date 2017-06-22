@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Test for the Grocereport API server.
- * @namespace test
- * @public
- * @author jmg1138 {@link https://github.com/jmg1138 jmg1138 on GitHub}
+ * Registration test.
+ * @namespace registration
+ * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
 /**

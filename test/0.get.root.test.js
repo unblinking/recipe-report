@@ -35,11 +35,15 @@ describe('GET / (the root route)', function () {
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(200)
-      //.expect({ "status": "success" })
+      .then(res => res.body.status.should.equal("success"))
+      .then(() => done())
+      .catch(err => done(err));
+      /*
       .end(function (err, res) {
         if (err) return done(err);
         res.body.status.should.equal("success");
         done();
       });
+      */
   });
 });
