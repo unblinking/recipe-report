@@ -33,7 +33,8 @@ const sslRedirect = require("heroku-ssl-redirect");
 /**
  * Require the local modules that will be used.
  */
-const routes = require("./routes/routes.js");
+const respond = require("./util/respond");
+const routes = require("./routes/routes");
 
 /**
  * Define the port for the application entry point to listen on.
@@ -78,6 +79,14 @@ app.listen(port, () =>
   console.log(`Grocereport API listening on port ${port}.`)
 ).on("error", err => console.log(err));
 // TODO: If error, try again a number of times and then give up.
+
+/**
+ * Define error-handling middleware after app and route configurations.
+ */
+app.use((req, res, next) => {
+  respond.error(res, new Error("four oh four - :P"));
+});
+app.use((err, req, res, next) => respond.error(res, err));
 
 /**
  * Assign our app object to module.exports.

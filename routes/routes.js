@@ -28,23 +28,23 @@ const passport = require("passport");
 /**
  * Require the local modules that will be used.
  */
-const account = require("../models/account");
-const emailActivationLink = bluebird.promisify(require("../util/email").activationLink);
-const emailLooksOk = bluebird.promisify(require("../util/email").looksOk);
+const accountModel = require("../models/account");
+const sendActivationEmail = require("../util/email").sendActivation;
+const emailLooksOk = require("../util/email").looksOk;
 const findAccount = bluebird.promisify(require("../models/account").findOne);
-const registerAccount = bluebird.promisify(require("../util/account").register);
+const registerAccount = require("../util/account").register;
 const respond = require("../util/respond");
-const signToken = bluebird.promisify(require("../util/jwt").sign);
-const verifyToken = bluebird.promisify(require("../util/jwt").verify);
+const generateToken = require("../util/jwt").generateToken;
+const verifyToken = require("../util/jwt").verifyToken;
 
 /**
  * Setup Passport.
  */
 passport.use(new localStrategy({
   usernameField: "email"
-}, account.authenticate()));
-passport.serializeUser(account.serializeUser());
-passport.deserializeUser(account.deserializeUser());
+}, accountModel.authenticate()));
+passport.serializeUser(accountModel.serializeUser());
+passport.deserializeUser(accountModel.deserializeUser());
 
 /**
  * @public
@@ -97,15 +97,11 @@ const router = function (app) {
    * });
    */
   app.post("/register", function (req, res) {
-    emailLooksOk({
-        email: req.body.email,
-        password: req.body.password,
-        headers: req.headers
-      })
-      .then(registerAccount)
-      .then(signToken)
-      .then(emailActivationLink)
-      .then(() => respond.success(res, "Registration successful."))
+    emailLooksOk(req.body.email)
+      .then(() => registerAccount(req.body.email, req.body.password))
+      .then(account => generateToken(account))
+      .then(token => sendActivationEmail(req.body.email, req.headers, token))
+      .then(reply => respond.success(res, `Registration successful`, reply))
       .catch(err => respond.error(res, err));
   });
 
@@ -123,19 +119,14 @@ const router = function (app) {
    *     }
    *   });
    */
-  app.get("/activate/:token", function (req, res) {
-    verifyToken({
-        token: req.params.token
-      })
-      .then(function (bundle) {
+  app.get("/activate/:token", (req, res) =>
+    verifyToken(req.params.token)
+      .then(decoded => {
         // TODO: Actually activate the account.
-        console.dir(bundle.decoded);
+        console.dir(decoded);
         respond.success(res, "Activation successful.");
       })
-      .catch(function (err) {
-        respond.error(res, err);
-      });
-  });
+      .catch(err => respond.error(res, err)));
 
   /**
    * POST request to the login route. Authenticates an account based on the email address and password provided. Generates a token with payload containing user._doc._id. Responds with a JSend-compliant response, including the token.
@@ -158,12 +149,10 @@ const router = function (app) {
    * });
    */
   app.post("/login", passport.authenticate("local"), function (req, res) {
-    signToken({
-        account: req.user
-      })
-      .then(function (bundle) {
+    generateToken(req.user)
+      .then(token => {
         respond.success(res, "Authentication successful.", {
-          token: bundle.token
+          token: token
         });
       })
       .catch(function (err) {
@@ -175,11 +164,9 @@ const router = function (app) {
    * Middleware for token verification. Applies to all routes below. On success, adds decoded payload data to the request object and then calls next. On error, responds with a JSend-compliant response.
    */
   app.use(function (req, res, next) {
-    verifyToken({
-        token: req.headers.token
-      })
-      .then(function (bundle) {
-        req.decoded = bundle.decoded.data;
+    verifyToken(req.headers.token)
+      .then(decoded => {
+        req.decoded = decoded.data;
         return next();
       })
       .catch(function (err) {

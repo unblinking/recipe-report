@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Registration test.
- * @namespace registration
+ * Test the registration route.
+ * @namespace testRegistration
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
@@ -21,9 +21,18 @@ const request = require('supertest');
 const should = require('should');
 
 /**
+ * Mocha requires.
+ * @see {@link https://mochajs.org/#require mochajs require}
+ */
+const describe = require("mocha").describe;
+const it = require("mocha").it;
+
+/**
  * Require the local modules that will be used.
  */
 const app = require('../app');
+
+process.env.NODE_ENV = 'test';
 
 describe('POST /register', function () {
   it('should respond with the JSON object { status : "success" } when email and password are sent with a POST request',

@@ -27,65 +27,59 @@ const P = require("bluebird");
 const secret = process.env.JWT_SECRET || "testSecret";
 const algorithm = process.env.JWT_ALGORITHM || "HS256";
 
-/**
- *
- */
-const jwt = {
+function generateToken(account) {
+  return new P((resolve, reject) =>
+    accountReceived(account)
+      .then(() => sign(account))
+      .then(token => resolve(token))
+      .catch(err => reject(err)));
+}
+exports.generateToken = generateToken;
 
-  /**
-   *
-   * @param {Object}   bundle   [description]
-   * @param {Function} callback [description]
-   */
-  /*
-  sign: bundle => {
-    return new P((resolve, reject) =>
-      jsonwebtoken.sign({
-        data: bundle.account._doc._id
-      }, secret, {
-        algorithm: algorithm,
-        expiresIn: 172800 // Two days (in seconds)
-      }, (err, token) => {
-        if (err) reject(err);
-        else {
-          bundle.token = token;
-          resolve(bundle);
-        }
-      })
-    );
-  },
-  */
+function accountReceived(account) {
+  return new P((resolve, reject) => {
+    if (
+      account !== undefined &&
+      account._doc !== undefined &&
+      account._doc._id !== undefined
+    ) resolve(account);
+    else reject(new Error(`Valid account not received. Account required to generate a token.`));
+  });
+}
 
-  sign: (bundle, callback) => {
+function sign(account) {
+  return new P((resolve, reject) =>
     jsonwebtoken.sign({
-      data: bundle.account._doc._id
+      data: account._doc._id
     }, secret, {
       algorithm: algorithm,
       expiresIn: 172800 // Two days (in seconds)
-    }, function (err, token) {
-      bundle.token = token;
-      callback(err, bundle);
-    });
-  },
+    }, (err, token) => {
+      if (err) reject(err);
+      else resolve(token);
+    }));
+}
 
+function verifyToken(token) {
+  return new P((resolve, reject) =>
+    tokenReceived(token)
+      .then(token => verify(token))
+      .then(decoded => resolve(decoded))
+      .catch(err => reject(err)));
+}
+exports.verifyToken = verifyToken;
 
-  /**
-   *
-   * @param {Object}   bundle   [description]
-   * @param {Function} callback [description]
-   */
-  verify: (bundle, callback) => {
-    jsonwebtoken.verify(bundle.token, secret, function (err, decoded) {
-      bundle.decoded = decoded;
-      callback(err, bundle);
-    });
-  }
+function tokenReceived(token) {
+  return new P((resolve, reject) => {
+    if (token !== undefined) resolve(token);
+    else reject(new Error(`No token received. Token required to verify token.`))
+  });
+}
 
-};
-
-/**
- * Assign our object to module.exports.
- * @see {@link https://nodejs.org/api/modules.html#modules_the_module_object Nodejs modules: The module object}
- * @see {@link https://nodejs.org/api/modules.html#modules_module_exports Nodejs modules: module exports}
- */
-module.exports = jwt;
+function verify(token) {
+  return new P((resolve, reject) =>
+    jsonwebtoken.verify(token, secret, (err, decoded) => {
+      if (err) reject(err);
+      else resolve(decoded);
+    }));
+}

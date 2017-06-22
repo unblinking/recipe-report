@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Test for the Grocereport API server.
- * @namespace test
- * @public
- * @author jmg1138 {@link https://github.com/jmg1138 jmg1138 on GitHub}
+ * Test the login route.
+ * @namespace testLogin
+ * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
 /**
@@ -22,9 +21,18 @@ const request = require('supertest');
 const should = require('should');
 
 /**
+ * Mocha requires.
+ * @see {@link https://mochajs.org/#require mochajs require}
+ */
+const describe = require("mocha").describe;
+const it = require("mocha").it;
+
+/**
  * Require the local modules that will be used.
  */
 const app = require('../app');
+
+process.env.NODE_ENV = 'test';
 
 describe('POST /login', function () {
   it('should respond with the JSON object { status : "success" } when email and password are sent with a POST request',

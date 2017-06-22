@@ -14,21 +14,24 @@
 "use strict";
 
 /**
+ * Require the 3rd party modules that will be used.
+ * @see {@link https://github.com/petkaantonov/bluebird bluebird}
+ */
+const P = require('bluebird');
+
+/**
  * Require the local modules that will be used.
  */
 const accountModel = require("../models/account");
 
-const account = {
-
-  register: function (bundle, callback) {
+function register(email, password) {
+  return new P((resolve, reject) => {
     accountModel.register(new accountModel({
-      email: bundle.email
-    }), bundle.password, function (err, account) {
-      bundle.account = account;
-      callback(err, bundle);
+      email: email
+    }), password, (err, account) => {
+      if (err) reject(err);
+      else resolve(account);
     });
-  },
-
-};
-
-module.exports = account;
+  });
+}
+exports.register = register;
