@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Test for the Grocereport API server.
- * @namespace test
- * @public
+ * Test the token-validation-test route.
+ * @namespace testTest
  * @author jmg1138 {@link https://github.com/jmg1138 jmg1138 on GitHub}
  */
 
@@ -26,6 +25,15 @@ const should = require('should');
  */
 const app = require('../app');
 
+/**
+ * Test configuration.
+ */
+process.env.NODE_ENV = 'test';
+const agent = request.agent(app);
+
+/**
+ * Test.
+ */
 describe('GET /test', function () {
   it('should respond with the JSON object { status : "success" } when a valid token is sent with a GET request',
     function (done) {

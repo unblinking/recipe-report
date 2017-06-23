@@ -61,7 +61,7 @@ function renderEmail(email, headers, token) {
   return new P(resolve => {
     const from = `no-reply@grocereport.com`;
     const subject = `Welcome to Grocereport. Activation is required`;
-    const text = `Hello ${email},\n\nThank you for registering with Grocereport. You may login after completing activation. Please follow this link to activate your new account: \n\nhttps://api.grocereport.com/activate/${token} \n\nYou received this email because you (or someone else) used this email address to create a new account.\n\nRequest headers: ${JSON.stringify(headers, null, '\t')}\n\nThank you,\n\nhttp://www.Grocereport.com`;
+    const text = `Hello ${email},\n\nThank you for registering with Grocereport. You may login after completing activation. Please follow this link to activate your new account: \n\nhttps://api.grocereport.com/activate/${token} \n\nYou received this email because you (or someone else) used this email address to create a new account.\n\nRequest headers: ${JSON.stringify(headers, null, "\t")}\n\nThank you,\n\nhttp://www.Grocereport.com`;
     if (
       process.env.NODE_ENV !== "production" &&
       process.env.NODE_ENV !== "test"

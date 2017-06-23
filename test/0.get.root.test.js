@@ -17,37 +17,32 @@
  * @see {@link https://github.com/visionmedia/supertest supertest}
  * @see {@link https://github.com/shouldjs/should.js should}
  */
-
-const request = require('supertest');
-const should = require('should');
-
-/**
- * Mocha requires.
- * @see {@link https://mochajs.org/#require mochajs require}
- */
-const describe = require("mocha").describe;
-const it = require("mocha").it;
+const request = require("supertest");
+const should = require("should");
 
 /**
  * Require the local modules that will be used.
  */
-const app = require('../app');
+const app = require("../app");
 
-process.env.NODE_ENV = 'test';
+/**
+ * Test configuration.
+ */
+process.env.NODE_ENV = "test";
+const agent = request.agent(app);
 
-describe('GET / (the root route)', () =>
-  it('should respond with a JSON object and status 200.', () =>
-    request(app)
-      .get('/')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect(200)
-  )
-);
-
-describe('GET / (the root route)', () =>
-  it('should respond with res.body.status of "success".', () =>
-    request(app)
-      .get('/')
-      .set('Accept', 'application/json')
-      .then(res => res.body.status.should.equal("success"))));
+/**
+ * Test.
+ */
+describe("GET / (the root route)", () =>
+  it(`should respond with json, status 200, res.body.status of "success", and
+      res.body.message of "This is the Grocereport API server.
+      http://www.Grocereport.com".`, () =>
+    agent
+    .get("/")
+    .expect("Content-Type", /json/)
+    .expect(200)
+    .then(res => {
+      res.body.status.should.equal("success");
+      res.body.message.should.equal("This is the Grocereport API server. http://www.Grocereport.com");
+    })));

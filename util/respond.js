@@ -32,7 +32,9 @@ function error(res, err) {
     .json({
       "status": "error",
       "message": err.message,
-      "json": err2json(err)
+      "json": {
+        name: err2json(err).name
+      }
     })
   );
 }

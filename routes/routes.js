@@ -20,7 +20,7 @@
  * @see {@link https://github.com/jaredhanson/passport-local passport-local}
  * @see {@link https://github.com/jaredhanson/passport Passport}
  */
-const bluebird = require('bluebird');
+const bluebird = require("bluebird");
 const jwt = require("jsonwebtoken");
 const localStrategy = require("passport-local").Strategy;
 const passport = require("passport");

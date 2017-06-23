@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Test the login route.
+ * Test the account-login route.
  * @namespace testLogin
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
@@ -21,19 +21,19 @@ const request = require('supertest');
 const should = require('should');
 
 /**
- * Mocha requires.
- * @see {@link https://mochajs.org/#require mochajs require}
- */
-const describe = require("mocha").describe;
-const it = require("mocha").it;
-
-/**
  * Require the local modules that will be used.
  */
 const app = require('../app');
 
+/**
+ * Test configuration.
+ */
 process.env.NODE_ENV = 'test';
+const agent = request.agent(app);
 
+/**
+ * Test.
+ */
 describe('POST /login', function () {
   it('should respond with the JSON object { status : "success" } when email and password are sent with a POST request',
     function (done) {
