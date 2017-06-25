@@ -32,17 +32,16 @@ process.env.NODE_ENV = "test";
 const agent = request.agent(app);
 
 /**
- * Test.
+ * Tests.
  */
 describe("GET / (the root route)", () =>
   it(`should respond with json, status 200, res.body.status of "success", and
-      res.body.message of "This is the Grocereport API server.
-      http://www.Grocereport.com".`, () =>
+      res.body.message of "This is the http://www.Grocereport.com API server."`, () =>
     agent
     .get("/")
     .expect("Content-Type", /json/)
     .expect(200)
     .then(res => {
       res.body.status.should.equal("success");
-      res.body.message.should.equal("This is the Grocereport API server. http://www.Grocereport.com");
+      res.body.message.should.equal("This is the http://www.Grocereport.com API server.");
     })));

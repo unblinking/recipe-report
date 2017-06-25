@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * The application end points (routes) for the Grocereport API server.
+ * Application end points (routes).
  * @namespace routes
- * @public
- * @author jmg1138 {@link https://github.com/jmg1138 jmg1138 on GitHub}
+ * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
 /**
@@ -54,12 +53,10 @@ passport.deserializeUser(accountModel.deserializeUser());
  * @see {@link https://expressjs.com/en/guide/routing.html Express routing}
  * @see {@link http://expressjs.com/en/api.html Express API}
  */
-const router = function (app) {
+const router = (app) => {
 
   /**
    * GET request to the root route. Responds with a JSend-compliant response.
-   * @public
-   * @function
    * @memberof! routes.router
    * @example
    * const request = require("request");
@@ -70,16 +67,14 @@ const router = function (app) {
    *     }
    *   });
    */
-  app.get("/", function (req, res) {
-    respond.success(res, "This is the Grocereport API server. http://www.Grocereport.com", {
+  app.get("/", (req, res) =>
+    respond.success(res, "This is the http://www.Grocereport.com API server.", {
       headers: req.headers
-    });
-  });
+    })
+  );
 
   /**
    * POST request to the register route. Registers a new account document in the MongoDB instance based on the email address and password provided. Sends an activation email. Responds with a JSend-compliant response.
-   * @public
-   * @function
    * @memberof! routes.router
    * @example
    * const request = require("request");
@@ -96,19 +91,16 @@ const router = function (app) {
    *   }
    * });
    */
-  app.post("/register", function (req, res) {
+  app.post("/register", (req, res) =>
     emailLooksOk(req.body.email)
       .then(() => registerAccount(req.body.email, req.body.password))
       .then(account => generateToken(account))
       .then(token => sendActivationEmail(req.body.email, req.headers, token))
       .then(reply => respond.success(res, `Registration successful`, reply))
-      .catch(err => respond.error(res, err));
-  });
+      .catch(err => respond.error(res, err)));
 
   /**
    * GET request to the activate route. Activates an account based on the token provided. Responds with a JSend-compliant response.
-   * @public
-   * @function
    * @memberof! routes.router
    * @example
    * const request = require("request");
@@ -148,36 +140,27 @@ const router = function (app) {
    *   }
    * });
    */
-  app.post("/login", passport.authenticate("local"), function (req, res) {
+  app.post("/login", passport.authenticate("local"), (req, res) =>
     generateToken(req.user)
-      .then(token => {
+      .then(token =>
         respond.success(res, "Authentication successful.", {
           token: token
-        });
-      })
-      .catch(function (err) {
-        respond.error(res, err);
-      });
-  });
+        }))
+      .catch(err => respond.error(res, err)));
 
   /**
    * Middleware for token verification. Applies to all routes below. On success, adds decoded payload data to the request object and then calls next. On error, responds with a JSend-compliant response.
    */
-  app.use(function (req, res, next) {
+  app.use((req, res, next) =>
     verifyToken(req.headers.token)
       .then(decoded => {
         req.decoded = decoded.data;
         return next();
       })
-      .catch(function (err) {
-        respond.error(res, err);
-      });
-  });
+      .catch(err => respond.error(res, err)));
 
   /**
    * GET request to the test route. Responds with a JSend-compliant response
-   * @public
-   * @function
    * @memberof! routes.router
    * @example
    * const request = require("request");
@@ -194,11 +177,10 @@ const router = function (app) {
    *     }
    *   });
    */
-  app.get("/test", function (req, res) {
+  app.get("/test", (req, res) =>
     // This is just here for development and debugging purposes.
     // req.decoded holds the account document ID.
-    respond.success(res, "Welcome to the team, DZ-015", req.decoded);
-  });
+    respond.success(res, "Welcome to the team, DZ-015.", req.decoded));
 
 };
 

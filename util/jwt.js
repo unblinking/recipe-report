@@ -43,7 +43,7 @@ function accountReceived(account) {
       account._doc !== undefined &&
       account._doc._id !== undefined
     ) resolve(account);
-    else reject(new Error(`Valid account not received. Account required to generate a token.`));
+    else reject(new Error(`Account required for token generation.`));
   });
 }
 
@@ -72,7 +72,7 @@ exports.verifyToken = verifyToken;
 function tokenReceived(token) {
   return new P((resolve, reject) => {
     if (token !== undefined) resolve(token);
-    else reject(new Error(`No token received. Token required to verify token.`))
+    else reject(new Error(`Unauthorized.`))
   });
 }
 

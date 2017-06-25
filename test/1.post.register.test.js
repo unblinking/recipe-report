@@ -27,6 +27,7 @@ const app = require("../app");
 
 /**
  * Test configuration.
+ * Username and password are set for this (register) and the next (login) tests.
  */
 process.env.NODE_ENV = "test";
 process.env.MOCHA_USERNAME = "no-reply" + "+" + new Date().getTime() + "@grocereport.com";
@@ -34,7 +35,7 @@ process.env.MOCHA_PASSWORD = new Date().getTime(); // A new password
 const agent = request.agent(app);
 
 /**
- * Test.
+ * Tests.
  */
 describe("POST /register (account registration)", () => {
   it(`should respond with json, status 200, res.body.status of "success", and
@@ -71,7 +72,6 @@ describe("POST /register (account registration)", () => {
       res.body.message.should.equal("A user with the given username is already registered");
     })
   );
-
   it(`should respond with json, status 200, res.body.status of "error", and
       res.body.message of "No password was given" when request sends an email
       but no password.`, () =>
@@ -89,7 +89,6 @@ describe("POST /register (account registration)", () => {
       res.body.message.should.equal("A user with the given username is already registered");
     })
   );
-
   it(`should respond with json, status 200, res.body.status of "error", and
       res.body.message of "Email address seems invalid." when request sends no
       email.`, () =>
@@ -106,7 +105,6 @@ describe("POST /register (account registration)", () => {
       res.body.message.should.equal("Email address seems invalid.");
     })
   );
-
   it(`should respond with json, status 200, res.body.status of "error", and
       res.body.message of "Email address seems invalid." when request sends an
       invalid email.`, () =>
@@ -124,5 +122,4 @@ describe("POST /register (account registration)", () => {
       res.body.message.should.equal("Email address seems invalid.");
     })
   );
-
 });
