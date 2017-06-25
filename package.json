@@ -29,7 +29,7 @@
     "devDependencies": {
         "eslint": "4.0.0",
         "jsdoc-to-markdown": "3.0.0",
-        "jshint": "2.9.4",
+        "jshint": "2.9.5",
         "mocha": "3.4.2",
         "should": "11.2.1",
         "supertest": "3.0.0"
