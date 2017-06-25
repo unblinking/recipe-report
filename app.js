@@ -3,7 +3,7 @@
 /**
  * The application entry point.
  * @namespace grocereport
- * @author jmg1138 {@link https://github.com/jmg1138 jmg1138 on GitHub}
+ * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
 /**

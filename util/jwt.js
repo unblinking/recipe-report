@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Wrapper functions for the JSON Web Token.
- * @namespace utilities
- * @public
- * @author jmg1138 {@link https://github.com/jmg1138 jmg1138 on GitHub}
+ * JSON Web Token utilities.
+ * @namespace jwtUtilities
+ * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
 /**

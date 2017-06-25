@@ -74,7 +74,9 @@ const router = (app) => {
   );
 
   /**
-   * POST request to the register route. Registers a new account document in the MongoDB instance based on the email address and password provided. Sends an activation email. Responds with a JSend-compliant response.
+   * POST request to the register route. Registers a new account document in the
+   * MongoDB instance based on the email address and password provided. Sends an
+   * activation email. Responds with a JSend-compliant response.
    * @memberof! routes.router
    * @example
    * const request = require("request");
@@ -93,14 +95,15 @@ const router = (app) => {
    */
   app.post("/register", (req, res) =>
     emailLooksOk(req.body.email)
-      .then(() => registerAccount(req.body.email, req.body.password))
-      .then(account => generateToken(account))
-      .then(token => sendActivationEmail(req.body.email, req.headers, token))
-      .then(reply => respond.success(res, `Registration successful`, reply))
-      .catch(err => respond.error(res, err)));
+    .then(() => registerAccount(req.body.email, req.body.password))
+    .then(account => generateToken(account))
+    .then(token => sendActivationEmail(req.body.email, req.headers, token))
+    .then(reply => respond.success(res, `Registration successful`, reply))
+    .catch(err => respond.error(res, err)));
 
   /**
-   * GET request to the activate route. Activates an account based on the token provided. Responds with a JSend-compliant response.
+   * GET request to the activate route. Activates an account based on the token
+   * provided. Responds with a JSend-compliant response.
    * @memberof! routes.router
    * @example
    * const request = require("request");
@@ -113,15 +116,18 @@ const router = (app) => {
    */
   app.get("/activate/:token", (req, res) =>
     verifyToken(req.params.token)
-      .then(decoded => {
-        // TODO: Actually activate the account.
-        console.dir(decoded);
-        respond.success(res, "Activation successful.");
-      })
-      .catch(err => respond.error(res, err)));
+    .then(decoded => {
+      // TODO: Actually activate the account.
+      console.dir(decoded);
+      respond.success(res, "Activation successful.");
+    })
+    .catch(err => respond.error(res, err)));
 
   /**
-   * POST request to the login route. Authenticates an account based on the email address and password provided. Generates a token with payload containing user._doc._id. Responds with a JSend-compliant response, including the token.
+   * POST request to the login route. Authenticates an account based on the
+   * email address and password provided. Generates a token with payload
+   * containing user._doc._id. Responds with a JSend-compliant response,
+   * including the token.
    * @public
    * @function
    * @memberof! routes.router
@@ -142,22 +148,23 @@ const router = (app) => {
    */
   app.post("/login", passport.authenticate("local"), (req, res) =>
     generateToken(req.user)
-      .then(token =>
-        respond.success(res, "Authentication successful.", {
-          token: token
-        }))
-      .catch(err => respond.error(res, err)));
+    .then(token => respond.success(res, "Authentication successful.", {
+      token: token
+    }))
+    .catch(err => respond.error(res, err)));
 
   /**
-   * Middleware for token verification. Applies to all routes below. On success, adds decoded payload data to the request object and then calls next. On error, responds with a JSend-compliant response.
+   * Middleware for token verification. Applies to all routes below. On success,
+   * adds decoded payload data to the request object and then calls next. On
+   * error, responds with a JSend-compliant response.
    */
   app.use((req, res, next) =>
     verifyToken(req.headers.token)
-      .then(decoded => {
-        req.decoded = decoded.data;
-        return next();
-      })
-      .catch(err => respond.error(res, err)));
+    .then(decoded => {
+      req.decoded = decoded.data;
+      return next();
+    })
+    .catch(err => respond.error(res, err)));
 
   /**
    * GET request to the test route. Responds with a JSend-compliant response

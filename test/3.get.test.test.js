@@ -3,7 +3,7 @@
 /**
  * Test the token-validation-test route.
  * @namespace testTest
- * @author jmg1138 {@link https://github.com/jmg1138 jmg1138 on GitHub}
+ * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
 /**
@@ -85,8 +85,8 @@ describe('GET /test', () => {
     })
   );
   it(`should respond with json, status 200, res.body.status of "error",
-      res.body.message of "Unauthorized.", and res.body.json.name of
-      Error when request does not send any token in the header.`,
+      res.body.message of "Unauthorized.", and res.body.json.name of Error when
+      request does not send any token in the header.`,
     () =>
     agent
     .get('/test')

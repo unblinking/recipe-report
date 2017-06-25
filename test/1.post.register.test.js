@@ -30,8 +30,8 @@ const app = require("../app");
  * Username and password are set for this (register) and the next (login) tests.
  */
 process.env.NODE_ENV = "test";
-process.env.MOCHA_USERNAME = "no-reply" + "+" + new Date().getTime() + "@grocereport.com";
-process.env.MOCHA_PASSWORD = new Date().getTime(); // A new password
+process.env.MOCHA_USERNAME = new Date().getTime() + "@grocereport.com";
+process.env.MOCHA_PASSWORD = new Date().getTime();
 const agent = request.agent(app);
 
 /**

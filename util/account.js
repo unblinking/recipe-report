@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Account related utilities for the Grocereport API server.
- * @namespace utilities
- * @public
- * @author jmg1138 {@link https://github.com/jmg1138 jmg1138 on GitHub}
+ * Account utilities.
+ * @namespace accountUtilities
+ * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
 /**

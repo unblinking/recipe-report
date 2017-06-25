@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * The account model.
+ * The user account model.
  * @namespace account
- * @public
- * @author jmg1138 {@link https://github.com/jmg1138 jmg1138 on GitHub}
+ * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
 /**

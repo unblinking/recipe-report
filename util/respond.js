@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Wrapper functions for the Express Response object.
- * @namespace respond
+ * Express Response utilities.
+ * @namespace respondUtilities
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 

@@ -36,7 +36,8 @@ const agent = request.agent(app);
  */
 describe("GET / (the root route)", () =>
   it(`should respond with json, status 200, res.body.status of "success", and
-      res.body.message of "This is the http://www.Grocereport.com API server."`, () =>
+      res.body.message of "This is the http://www.Grocereport.com API server."`,
+    () =>
     agent
     .get("/")
     .expect("Content-Type", /json/)

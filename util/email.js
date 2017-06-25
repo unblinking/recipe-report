@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Email wrapper functions.
- * @namespace email
+ * Email utilities.
+ * @namespace emailUtilities
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
