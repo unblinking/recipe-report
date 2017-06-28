@@ -1,47 +1,26 @@
 #!/usr/bin/env node
+"use strict";
 
 /**
- * Test the account-registration route.
- * @namespace testRegistration
+ * Unit test of the account-registration route of the API.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
 /**
- * Invoke strict mode for the entire script.
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode Strict mode}
- */
-"use strict";
-
-/**
- * Require the 3rd party modules that will be used.
+ * Required modules.
  * @see {@link https://github.com/visionmedia/supertest supertest}
- * @see {@link https://github.com/shouldjs/should.js should}
  */
-const request = require("supertest");
-const should = require("should");
-
-/**
- * Require the local modules that will be used.
- */
-const app = require("../app");
-
-/**
- * Test configuration.
- * Username and password are set for this (register) and the next (login) tests.
- */
-process.env.NODE_ENV = "test";
-process.env.MOCHA_USERNAME = new Date().getTime() + "@grocereport.com";
-process.env.MOCHA_PASSWORD = new Date().getTime();
-const agent = request.agent(app);
+const app = require("../../app");
+const supertest = require("supertest");
 
 /**
  * Tests.
  */
-describe("POST /register (account registration)", () => {
+describe("POST /register (new account registration)", () => {
   it(`should respond with json, status 200, res.body.status of "success", and
       res.body.message of "Registration successful" when request sends a new
       user email and a password.`, () =>
-    agent
+    supertest(app)
     .post("/register")
     .set("Content-Type", "application/json")
     .send({
@@ -58,7 +37,7 @@ describe("POST /register (account registration)", () => {
   it(`should respond with json, status 200, res.body.status of "error", and
       res.body.message of "A user with the given username is already registered"
       when request sends a previously used email and a password.`, () =>
-    agent
+    supertest(app)
     .post("/register")
     .set("Content-Type", "application/json")
     .send({
@@ -75,24 +54,23 @@ describe("POST /register (account registration)", () => {
   it(`should respond with json, status 200, res.body.status of "error", and
       res.body.message of "No password was given" when request sends an email
       but no password.`, () =>
-    agent
+    supertest(app)
     .post("/register")
     .set("Content-Type", "application/json")
     .send({
-      email: process.env.MOCHA_USERNAME,
-      password: process.env.MOCHA_PASSWORD
+      email: new Date().getTime() + "@grocereport.com"
     })
     .expect("Content-Type", /json/)
     .expect(200)
     .then(res => {
       res.body.status.should.equal("error");
-      res.body.message.should.equal("A user with the given username is already registered");
+      res.body.message.should.equal("No password was given");
     })
   );
   it(`should respond with json, status 200, res.body.status of "error", and
       res.body.message of "Email address seems invalid." when request sends no
       email.`, () =>
-    agent
+    supertest(app)
     .post("/register")
     .set("Content-Type", "application/json")
     .send({
@@ -108,7 +86,7 @@ describe("POST /register (account registration)", () => {
   it(`should respond with json, status 200, res.body.status of "error", and
       res.body.message of "Email address seems invalid." when request sends an
       invalid email.`, () =>
-    agent
+    supertest(app)
     .post("/register")
     .set("Content-Type", "application/json")
     .send({
