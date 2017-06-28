@@ -26,12 +26,16 @@ const P = require("bluebird");
 const secret = process.env.JWT_SECRET || "testSecret";
 const algorithm = process.env.JWT_ALGORITHM || "HS256";
 
+/**
+ * Generate a jsonwebtoken
+ * @param  {Object} account An account model
+ */
 function generateToken(account) {
   return new P((resolve, reject) =>
     accountReceived(account)
-      .then(() => sign(account))
-      .then(token => resolve(token))
-      .catch(err => reject(err)));
+    .then(() => sign(account))
+    .then(token => resolve(token))
+    .catch(err => reject(err)));
 }
 exports.generateToken = generateToken;
 
@@ -62,9 +66,9 @@ function sign(account) {
 function verifyToken(token) {
   return new P((resolve, reject) =>
     tokenReceived(token)
-      .then(token => verify(token))
-      .then(decoded => resolve(decoded))
-      .catch(err => reject(err)));
+    .then(token => verify(token))
+    .then(decoded => resolve(decoded))
+    .catch(err => reject(err)));
 }
 exports.verifyToken = verifyToken;
 
@@ -81,4 +85,22 @@ function verify(token) {
       if (err) reject(err);
       else resolve(decoded);
     }));
+}
+
+function decodeToken(token) {
+  return new P((resolve, reject) =>
+    tokenReceived(token)
+    .then(token => decode(token))
+    .then(decoded => resolve(decoded))
+    .catch(err => reject(err)));
+}
+exports.decodeToken = decodeToken;
+
+function decode(token) {
+  return new P(resolve => {
+    const decoded = jsonwebtoken.decode(token, {
+      complete: true
+    });
+    resolve(decoded);
+  });
 }

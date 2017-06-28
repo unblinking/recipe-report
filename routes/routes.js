@@ -184,7 +184,7 @@ const router = (app) => {
    *     }
    *   });
    */
-  app.get("/test", (req, res) =>
+  app.get("/tokentest", (req, res) =>
     // This is just here for development and debugging purposes.
     // req.decoded holds the account document ID.
     respond.success(res, "Welcome to the team, DZ-015.", req.decoded));
