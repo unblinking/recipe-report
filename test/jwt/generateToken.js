@@ -3,7 +3,7 @@
 "use strict";
 
 /**
- * Test token generation.
+ * Unit test of the JSON Web Token generator.
  * @namespace testGenerateToken
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
@@ -25,7 +25,7 @@ const account = new accountModel({
 /**
  * Tests.
  */
-describe(`JSON Web Token tests.`, () =>
+describe(`JSON Web Token generator tests.`, () =>
   it(`Should generate and return a JSON web token that can be decoded`, () =>
     jwt.generateToken(account)
     .then(token => jwt.decodeToken(token))
@@ -43,12 +43,10 @@ describe(`JSON Web Token tests.`, () =>
           decoded.payload.data.toString().should.equal(account._id.toString())
         );
         it(`Issued date (in seconds) should equal today.`, () => {
-          (typeof decoded.payload.iat).should.equal("number");
           const itWasIssued = decoded.payload.iat * 1000;
           theMoment(itWasIssued).isSame(Date.now(), "day").should.equal(true);
         });
         it(`Expiration date is in 2 days.`, () => {
-          (typeof decoded.payload.exp).should.equal("number");
           const itExpires = decoded.payload.exp * 1000;
           theMoment(itExpires).fromNow().should.equal("in 2 days");
         });

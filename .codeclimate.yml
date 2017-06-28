@@ -21,5 +21,4 @@ ratings:
   - "**.js"
   - "**.md"
 exclude_paths:
-- "docs"
-- "DOCUMENTATION.md"
+- "test"

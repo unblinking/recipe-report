@@ -23,7 +23,7 @@ const P = require("bluebird");
 /**
  *
  */
-const secret = process.env.JWT_SECRET || "testSecret";
+const secret = process.env.JWT_SECRET || "devTestEnvironment";
 const algorithm = process.env.JWT_ALGORITHM || "HS256";
 
 /**
