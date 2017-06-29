@@ -8,7 +8,9 @@ This is the source code repo for the Grocereport API server.
 [![Issue Count](https://img.shields.io/codeclimate/issues/github/nothingworksright/grocereport_api.svg?style=flat-square&label=Code%20Review%20Issues%20Found)](https://codeclimate.com/github/nothingworksright/grocereport_api)  
 [![Codecov](https://img.shields.io/codecov/c/github/nothingworksright/grocereport_api.svg?style=flat-square&label=Code%20Test%20Coverage)](https://codecov.io/gh/nothingworksright/grocereport_api)  
 [![Travis-CI](https://img.shields.io/travis/nothingworksright/grocereport_api.svg?style=flat-square&label=Travis-CI%20Test%20Build%20Deploy)](https://travis-ci.org/nothingworksright/grocereport_api)  
-[![Heroku](http://heroku-badge.herokuapp.com/?app=grocereportapi&style=flat-square&svg=1)](https://www.heroku.com/home)  
+[![Heroku](http://heroku-badge.herokuapp.com/?app=grocereportapi&style=flat-square&svg=1)](https://grocereportapi.herokuapp.com)  
+
+> If the Heroku app status shows "failed" that means I've turned off the dyno to save some money during alpha development. I only turn it on occasionally at this point.  
 
 ## Show your support  
 
