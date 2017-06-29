@@ -4,6 +4,12 @@ This is the source code repo for the Grocereport API server.
 
 ## Badges  
 
+
+
+[![codecov](https://codecov.io/gh/nothingworksright/grocereport_api/branch/master/graph/badge.svg)](https://codecov.io/gh/nothingworksright/grocereport_api)  
+
+
+
 [![Waffle.io][1]][2]
 [![Waffle.io][3]][4]  
 [![Code Climate][5]][6]

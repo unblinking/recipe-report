@@ -52,7 +52,4 @@ describe(`JSON Web Token generator tests.`, () =>
         });
       });
       //console.log(decoded);
-    })
-  )
-
-);
+    })));
