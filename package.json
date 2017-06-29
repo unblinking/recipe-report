@@ -1,43 +1,44 @@
 {
-    "name": "grocereport_api",
-    "version": "0.0.1",
-    "description": "Grocereport API server.",
-    "main": "app.js",
-    "author": "jmg1138 https://github.com/jmg1138",
-    "license": "MIT",
-    "readme": "README.md",
-    "private": false,
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/nothingworksright/grocereport_api.git"
-    },
-    "dependencies": {
-        "bluebird": "3.5.0",
-        "body-parser": "1.17.2",
-        "error-to-json": "1.1.0",
-        "express": "4.15.3",
-        "helmet": "3.6.1",
-        "heroku-ssl-redirect": "0.0.4",
-        "jsonwebtoken": "7.4.1",
-        "moment": "2.18.1",
-        "mongoose": "4.10.8",
-        "passport": "0.3.2",
-        "passport-jwt": "2.2.1",
-        "passport-local": "1.0.0",
-        "passport-local-mongoose": "4.0.0",
-        "sendmail": "1.1.1"
-    },
-    "devDependencies": {
-        "env-test": "1.0.0",
-        "eslint": "4.1.1",
-        "jsdoc-to-markdown": "3.0.0",
-        "jshint": "2.9.5",
-        "mocha": "3.4.2",
-        "should": "11.2.1",
-        "supertest": "3.0.0"
-    },
-    "scripts": {
-        "start": "node app.js",
-        "test": "mocha"
-    }
+  "name": "grocereport_api",
+  "version": "0.0.1",
+  "description": "Grocereport API server.",
+  "main": "app.js",
+  "author": "jmg1138 https://github.com/jmg1138",
+  "license": "MIT",
+  "readme": "README.md",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nothingworksright/grocereport_api.git"
+  },
+  "dependencies": {
+    "bluebird": "3.5.0",
+    "body-parser": "1.17.2",
+    "error-to-json": "1.1.0",
+    "express": "4.15.3",
+    "helmet": "3.6.1",
+    "heroku-ssl-redirect": "0.0.4",
+    "jsonwebtoken": "7.4.1",
+    "moment": "2.18.1",
+    "mongoose": "4.10.8",
+    "passport": "0.3.2",
+    "passport-jwt": "2.2.1",
+    "passport-local": "1.0.0",
+    "passport-local-mongoose": "4.0.0",
+    "sendmail": "1.1.1"
+  },
+  "devDependencies": {
+    "codecov": "2.2.0",
+    "env-test": "1.0.0",
+    "eslint": "4.1.1",
+    "jsdoc-to-markdown": "3.0.0",
+    "jshint": "2.9.5",
+    "mocha": "3.4.2",
+    "should": "11.2.1",
+    "supertest": "3.0.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "mocha"
+  }
 }
