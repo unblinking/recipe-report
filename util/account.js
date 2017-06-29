@@ -1,36 +1,31 @@
 #!/usr/bin/env node
 
-/**
- * Account utilities.
- * @namespace accountUtilities
- * @author {@link https://github.com/jmg1138 jmg1138}
- */
+'use strict'
 
 /**
- * Invoke strict mode for the entire script.
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode Strict mode}
+ * Account utilities.
+ * @author {@link https://github.com/jmg1138 jmg1138}
  */
-"use strict";
 
 /**
  * Require the 3rd party modules that will be used.
  * @see {@link https://github.com/petkaantonov/bluebird bluebird}
  */
-const P = require("bluebird");
+const P = require('bluebird')
 
 /**
  * Require the local modules that will be used.
  */
-const accountModel = require("../models/account");
+const AccountModel = require('../models/account')
 
-function register(email, password) {
+function register (email, password) {
   return new P((resolve, reject) => {
-    accountModel.register(new accountModel({
+    AccountModel.register(new AccountModel({
       email: email
     }), password, (err, account) => {
-      if (err) reject(err);
-      else resolve(account);
-    });
-  });
+      if (err) reject(err)
+      else resolve(account)
+    })
+  })
 }
-exports.register = register;
+exports.register = register

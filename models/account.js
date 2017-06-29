@@ -1,16 +1,11 @@
 #!/usr/bin/env node
 
-/**
- * The user account model.
- * @namespace account
- * @author {@link https://github.com/jmg1138 jmg1138}
- */
+'use strict'
 
 /**
- * Invoke strict mode for the entire script.
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode Strict mode}
+ * The user account model.
+ * @author {@link https://github.com/jmg1138 jmg1138}
  */
-"use strict";
 
 /**
  * Require the 3rd party modules that will be used.
@@ -18,9 +13,9 @@
  * @see {@link https://github.com/Automattic/mongoose mongoose}
  * @see {@link https://github.com/saintedlama/passport-local-mongoose passport-local-mongoose}
  */
-const bluebird = require("bluebird");
-const mongoose = require("mongoose");
-const passportLocalMongoose = require("passport-local-mongoose");
+const bluebird = require('bluebird')
+const mongoose = require('mongoose')
+const passportLocalMongoose = require('passport-local-mongoose')
 
 /**
  * Define the schema.
@@ -30,35 +25,36 @@ const passportLocalMongoose = require("passport-local-mongoose");
  * be added automatically, we do not need to add any fields here manually.
  *
  * @see {@link https://github.com/saintedlama/passport-local-mongoose#usage}
+ * @see {@link https://github.com/Automattic/mongoose/issues/4291}
  */
-mongoose.Promise = bluebird; // https://github.com/Automattic/mongoose/issues/4291
+mongoose.Promise = bluebird
 let accountSchema = new mongoose.Schema({}, {
   timestamps: true
-});
+})
 
 /**
  * Plugin Passport-Local Mongoose into the schema.
  */
 const options = {
-  usernameField: "email",
+  usernameField: 'email',
   usernameLowerCase: true,
-  usernameQueryFields: ["email"],
+  usernameQueryFields: ['email'],
   limitAttempts: true,
   interval: 5000,
-  MissingPasswordError: "No password was given",
-  AttemptTooSoonError: "Account is currently locked. Try again later",
-  TooManyAttemptsError: "Account locked due to too many failed login attempts",
-  NoSaltValueStoredError: "Authentication not possible. No salt value stored",
-  IncorrectPasswordError: "Password or username are incorrect",
-  IncorrectUsernameError: "Password or username are incorrect",
-  MissingUsernameError: "No username was given",
-  UserExistsError: "A user with the given username is already registered"
-};
-accountSchema.plugin(passportLocalMongoose, options);
+  MissingPasswordError: 'No password was given',
+  AttemptTooSoonError: 'Account is currently locked. Try again later',
+  TooManyAttemptsError: 'Account locked due to too many failed login attempts',
+  NoSaltValueStoredError: 'Authentication not possible. No salt value stored',
+  IncorrectPasswordError: 'Password or username are incorrect',
+  IncorrectUsernameError: 'Password or username are incorrect',
+  MissingUsernameError: 'No username was given',
+  UserExistsError: 'A user with the given username is already registered'
+}
+accountSchema.plugin(passportLocalMongoose, options)
 
 /**
  * Define the model.
  */
-const account = mongoose.model("accounts", accountSchema);
+const account = mongoose.model('accounts', accountSchema)
 
-module.exports = account;
+module.exports = account
