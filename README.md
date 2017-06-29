@@ -2,7 +2,7 @@
 
 This is the source code repo for the Grocereport API server.  
 
-[![Awesome](https://img.shields.io/badge/Awesome-Very-blue.svg?style=flat-square)]
+![Awesome](https://img.shields.io/badge/Awesome-Very-blue.svg?style=flat-square)  
 [![Waffle.io](https://img.shields.io/waffle/label/nothingworksright/grocereport_api.svg?style=flat-square&label=Product%20Backlog%20Items%20Ready)](https://waffle.io/nothingworksright/grocereport_api)
 [![Waffle.io](https://img.shields.io/waffle/label/nothingworksright/grocereport_api/in%20progress.svg?style=flat-square&label=Product%20Backlog%20Items%20In%20Progress)](https://waffle.io/nothingworksright/grocereport_api)  
 [![Code Climate](https://img.shields.io/codeclimate/github/nothingworksright/grocereport_api.svg?style=flat-square&label=Code%20Review%20GPA)](https://codeclimate.com/github/nothingworksright/grocereport_api)
