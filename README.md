@@ -16,7 +16,7 @@ This is the source code repo for the Grocereport API server.
 ### Code Climate  
 
 [![Code Climate](https://img.shields.io/codeclimate/github/nothingworksright/grocereport_api.svg?label=code%20climate%20gpa)](https://codeclimate.com/github/nothingworksright/grocereport_api)
-[![Issue Count](https://img.shields.io/codeclimate/issues/github/nothingworksright/grocereport_api.svg?label=code%20climate%20issues)](https://codeclimate.com/github/nothingworksright/grocereport_api)]  
+[![Issue Count](https://img.shields.io/codeclimate/issues/github/nothingworksright/grocereport_api.svg?label=code%20climate%20issues)](https://codeclimate.com/github/nothingworksright/grocereport_api)  
 
 ### Travis-CI  
 
