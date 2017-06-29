@@ -44,7 +44,7 @@
     "supertest": "3.0.0"
   },
   "scripts": {
-    "pretest": "echo Dependency-Updates-Available && ncu",
+    "pretest": "echo Checking-Dependency-Updates-Available && ncu",
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec",
     "posttest": "./node_modules/.bin/codecov",
     "start": "node app.js"
