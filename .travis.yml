@@ -13,9 +13,3 @@ deploy:
   app: grocereportapi
   on:
     repo: nothingworksright/grocereport_api
-addons:
-  code_climate:
-    repo_token: 84291b1e539c5818a7813aa2cb1c6ab77a1baab8fec3ea1c5715862515148ccf
-after_success:
-  - istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec
-  - ./node_modules/.bin/codecov
