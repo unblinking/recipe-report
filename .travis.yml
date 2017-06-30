@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - "6"
+services:
+  - mongodb
+branches:
+  only:
+  - master
+deploy:
+  provider: heroku
+  api_key:
+    secure: epcU2NZQ13/UV/J7lKTLOPwx3i1ngqx+aIWlh1C/YeFz0z0ldADan5yc3FPnAEtpR1e+cpQMFpqKnR/ShYxkZK9Oci8ibalC/xB7cyr8JbyjNbAaaYxtrJPHb4zB1JiVUF9cXCiIvfCPs/DNJDg2YRo3lGd83LR/c4l3XYlUjmvn2RYndxUnwBMoo1My8JdxVIHgLZqRQ+fe12wTzvJ8Qxku9Z7VlOhxWpSSI1ZABu1B1NBLXeMLpQ175NVN7LAwTL+y3A9IAmc3AEub7VmKetw7dzxclk/5UU3ZhJDMFWPg4aO0DT5EaoBbPBzAhnn13n1wdWbBIp/Z6xqVJck2wLtfaUM1g3bG2coxrgg/i7WIWx8rbSIFma5zTkF32pTJTHmY1zI+rKqTMTnh/mija/3QVbVjc510d8tAEns++cNuu+pmYn8gmmHQxnN85EXaWjoOQiN2DtJ5SP4VIx5hPOC8K2GyJLiJF9Vavq2OmAEIy9h0Opa65E03H1cjmSaKHPv6z0Ly3pXAhypc1qjfSbeaqyodhu0xz2q/g/YP9N4Usrt37Yo4tCumR2Vno9hPpCBxzWPvSMfaQxxtg/2NQV16CA38bgLBdhZ5Ful+dMpy2ZJ7sNAhRpCWFt/1+e6gI7SyZK9iZj9GHDGYd7tucpFRfUU31lTB9cfJc+dpSLQ=
+  app: recipereportapi
+  on:
+    repo: nothingworksright/recipereport_api
