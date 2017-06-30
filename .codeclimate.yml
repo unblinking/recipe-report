@@ -19,3 +19,4 @@ ratings:
   - "**.md"
 exclude_paths:
 - "test"
+- "LICENSE.md"

@@ -39,12 +39,14 @@
     "istanbul": "0.4.5",
     "jshint": "2.9.5",
     "mocha": "3.4.2",
+    "npm-check-updates": "2.12.1",
     "should": "11.2.1",
     "supertest": "3.0.0"
   },
   "scripts": {
-    "start": "node app.js",
+    "pretest": "echo Checking-Dependency-Updates-Available && ncu",
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec",
-    "posttest": "./node_modules/.bin/codecov"
+    "posttest": "./node_modules/.bin/codecov",
+    "start": "node app.js"
   }
 }
