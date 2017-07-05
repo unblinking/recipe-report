@@ -17,7 +17,7 @@ const jsonwebtoken = require('jsonwebtoken')
 const P = require('bluebird')
 
 /**
- *
+ * Json Web Token configuration.
  */
 const jwtSecret = process.env.JWT_SECRET || 'devTestEnvironment'
 const jwtAlgorithm = process.env.JWT_ALGORITHM || 'HS256'
