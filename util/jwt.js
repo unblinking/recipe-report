@@ -8,22 +8,24 @@
  */
 
 /**
- * Require the 3rd party modules that will be used.
+ * Require the modules that will be used.
  * @see {@link https://github.com/auth0/node-jsonwebtoken node-jsonwebtoken}
  * @see {@link https://github.com/petkaantonov/bluebird bluebird}
  */
+const crypt = require('./crypt')
 const jsonwebtoken = require('jsonwebtoken')
 const P = require('bluebird')
 
 /**
- *
+ * Json Web Token configuration.
  */
-const secret = process.env.JWT_SECRET || 'devTestEnvironment'
-const algorithm = process.env.JWT_ALGORITHM || 'HS256'
+const jwtSecret = process.env.JWT_SECRET || 'devTestEnvironment'
+const jwtAlgorithm = process.env.JWT_ALGORITHM || 'HS256'
+const jwtExpires = 172800 // Two days (in seconds)
 
 /**
  * Generate a jsonwebtoken
- * @param  {Object} account An account model
+ * @param {Object} account An account model
  */
 function generateToken (account) {
   return new P((resolve, reject) =>
@@ -48,10 +50,11 @@ function accountReceived (account) {
 function sign (account) {
   return new P((resolve, reject) =>
     jsonwebtoken.sign({
-      data: account._doc._id
-    }, secret, {
-      algorithm: algorithm,
-      expiresIn: 172800 // Two days (in seconds)
+      // data: account._doc._id
+      data: crypt.encrypt(account._doc._id.toString())
+    }, jwtSecret, {
+      algorithm: jwtAlgorithm,
+      expiresIn: jwtExpires
     }, (err, token) => {
       if (err) reject(err)
       else resolve(token)
@@ -76,7 +79,7 @@ function tokenReceived (token) {
 
 function verify (token) {
   return new P((resolve, reject) =>
-    jsonwebtoken.verify(token, secret, (err, decoded) => {
+    jsonwebtoken.verify(token, jwtSecret, (err, decoded) => {
       if (err) reject(err)
       else resolve(decoded)
     }))
