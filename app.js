@@ -45,6 +45,10 @@ const port = parseInt(process.env.PORT, 10) || 1138
 const mongodbUri = process.env.MONGODB_URI || 'mongodb://localhost/'
 mongoose.Promise = bluebird // https://github.com/Automattic/mongoose/issues/4291
 mongoose.connect(mongodbUri)
+  .catch(err => {
+    console.log(err.message)
+    process.exit(1)
+  })
 
 /**
  * Define all app configurations here except routes (define routes last).
@@ -79,7 +83,7 @@ app.listen(port, () =>
  * Define error-handling middleware after app and route configurations.
  */
 app.use((req, res, next) => {
-  respond.error(res, new Error('four oh four - :P'))
+  respond.error(res, new Error('four, oh four!'))
 })
 app.use((err, req, res, next) => respond.error(res, err))
 

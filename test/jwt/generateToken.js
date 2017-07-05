@@ -11,6 +11,7 @@
  * Required modules.
  */
 const AccountModel = require('../../models/account')
+const crypt = require('../../util/crypt')
 const jwt = require('../../util/jwt')
 const theMoment = require('moment')
 
@@ -39,7 +40,7 @@ describe(`JSON Web Token generator tests.`, () =>
         })
         describe('JWT payload', () => {
           it(`Data should equal the account model ID.`, () =>
-            decoded.payload.data.toString().should.equal(account._id.toString())
+            crypt.decrypt(decoded.payload.data).should.equal(account._id.toString())
           )
           it(`Issued date (in seconds) should equal today.`, () => {
             const itWasIssued = decoded.payload.iat * 1000

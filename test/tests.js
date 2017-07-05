@@ -12,7 +12,7 @@ process.env.MOCHA_PASSWORD = new Date().getTime()
 require('./routes/root')
 require('./routes/register')
 require('./routes/login')
-require('./routes/test')
+require('./routes/tokentest')
 
 /**
  * jsonwebtoken tests.
