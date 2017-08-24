@@ -11,8 +11,8 @@
  * Required modules.
  */
 const AccountModel = require('../../models/account')
-const crypt = require('../../util/crypt')
-const jwt = require('../../util/jwt')
+const crypt = require('../../lib/crypt')
+const jwt = require('../../lib/jwt')
 const theMoment = require('moment')
 
 /**

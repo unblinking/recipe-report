@@ -8,14 +8,14 @@
  */
 
 /**
- * Require the 3rd party modules that will be used.
- * @see {@link https://github.com/petkaantonov/bluebird bluebird}
+ * Modules that will be used.
  * @see {@link https://github.com/Automattic/mongoose mongoose}
  * @see {@link https://github.com/saintedlama/passport-local-mongoose passport-local-mongoose}
  */
-const bluebird = require('bluebird')
 const mongoose = require('mongoose')
 const passportLocalMongoose = require('passport-local-mongoose')
+
+mongoose.Promise = global.Promise
 
 /**
  * Define the schema.
@@ -25,9 +25,7 @@ const passportLocalMongoose = require('passport-local-mongoose')
  * be added automatically, we do not need to add any fields here manually.
  *
  * @see {@link https://github.com/saintedlama/passport-local-mongoose#usage}
- * @see {@link https://github.com/Automattic/mongoose/issues/4291}
  */
-mongoose.Promise = bluebird
 let accountSchema = new mongoose.Schema({}, {
   timestamps: true
 })

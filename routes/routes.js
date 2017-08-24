@@ -19,13 +19,13 @@ const passport = require('passport')
  * Require the local modules that will be used.
  */
 const accountModel = require('../models/account')
-const crypt = require('../util/crypt')
-const sendActivationEmail = require('../util/email').sendActivation
-const emailLooksOk = require('../util/email').looksOk
-const registerAccount = require('../util/account').register
-const respond = require('../util/respond')
-const generateToken = require('../util/jwt').generateToken
-const verifyToken = require('../util/jwt').verifyToken
+const crypt = require('../lib/crypt')
+const sendActivationEmail = require('../lib/email').sendActivation
+const emailLooksOk = require('../lib/email').looksOk
+const registerAccount = require('../lib/account').register
+const respond = require('../lib/respond')
+const generateToken = require('../lib/jwt').generateToken
+const verifyToken = require('../lib/jwt').verifyToken
 
 /**
  * Setup Passport.
