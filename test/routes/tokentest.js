@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-env mocha */
 
 'use strict'
 
@@ -11,8 +12,8 @@
  * Required modules.
  * @see {@link https://github.com/visionmedia/supertest supertest}
  */
-const app = require('../../app')
 const supertest = require('supertest')
+const server = supertest('http://localhost:1138')
 
 /**
  * Tests.
@@ -21,8 +22,7 @@ describe('GET /tokentest (token authentication test)', () => {
   it(`should respond with json, status 200, res.body.status of 'success', and
       res.body.message of 'Welcome to the team, DZ-015.' when request sends a
       valid authentication token in the header.`, () =>
-      supertest(app)
-        .get('/tokentest')
+      server.get('/tokentest')
         .set('Accept', 'application/json')
         .set('Content-Type', 'application/json')
         .set('token', process.env.MOCHA_TOKEN)
@@ -37,8 +37,7 @@ describe('GET /tokentest (token authentication test)', () => {
       res.body.message of 'jwt malformed', and res.body.json.name of
       JsonWebTokenError when request sends an invalid authentication token in
       the header.`, () =>
-      supertest(app)
-        .get('/test')
+      server.get('/test')
         .set('Accept', 'application/json')
         .set('Content-Type', 'application/json')
         .set('token', 'invalidAuthenticationToken')
@@ -54,8 +53,7 @@ describe('GET /tokentest (token authentication test)', () => {
       res.body.message of 'jwt must be provided', and res.body.json.name of
       JsonWebTokenError when request sends an empty authentication token in
       the header.`, () =>
-      supertest(app)
-        .get('/test')
+      server.get('/test')
         .set('Accept', 'application/json')
         .set('Content-Type', 'application/json')
         .set('token', '')
@@ -71,8 +69,7 @@ describe('GET /tokentest (token authentication test)', () => {
       res.body.message of 'Unauthorized.', and res.body.json.name of Error when
       request does not send any token in the header.`,
     () =>
-      supertest(app)
-        .get('/test')
+      server.get('/test')
         .set('Accept', 'application/json')
         .set('Content-Type', 'application/json')
         .expect('Content-Type', /json/)

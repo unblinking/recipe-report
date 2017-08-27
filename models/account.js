@@ -13,9 +13,8 @@
  * @see {@link https://github.com/saintedlama/passport-local-mongoose passport-local-mongoose}
  */
 const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 const passportLocalMongoose = require('passport-local-mongoose')
-
-mongoose.Promise = global.Promise
 
 /**
  * Define the schema.
@@ -26,7 +25,7 @@ mongoose.Promise = global.Promise
  *
  * @see {@link https://github.com/saintedlama/passport-local-mongoose#usage}
  */
-let accountSchema = new mongoose.Schema({}, {
+const Account = new Schema({}, {
   timestamps: true
 })
 
@@ -38,7 +37,6 @@ const options = {
   usernameLowerCase: true,
   usernameQueryFields: ['email'],
   limitAttempts: true,
-  interval: 5000,
   MissingPasswordError: 'No password was given',
   AttemptTooSoonError: 'Account is currently locked. Try again later',
   TooManyAttemptsError: 'Account locked due to too many failed login attempts',
@@ -48,11 +46,6 @@ const options = {
   MissingUsernameError: 'No username was given',
   UserExistsError: 'A user with the given username is already registered'
 }
-accountSchema.plugin(passportLocalMongoose, options)
+Account.plugin(passportLocalMongoose, options)
 
-/**
- * Define the model.
- */
-const account = mongoose.model('accounts', accountSchema)
-
-module.exports = account
+module.exports = mongoose.model('Account', Account)

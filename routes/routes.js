@@ -8,33 +8,21 @@
  */
 
 /**
- * Require the 3rd party modules that will be used.
- * @see {@link https://github.com/jaredhanson/passport-local passport-local}
+ * Modules that will be used.
  * @see {@link https://github.com/jaredhanson/passport Passport}
  */
-const LocalStrategy = require('passport-local').Strategy
-const passport = require('passport')
-
-/**
- * Require the local modules that will be used.
- */
-const accountModel = require('../models/account')
+const Account = require('../models/account')
+const acct = require('../lib/account')
 const crypt = require('../lib/crypt')
-const sendActivationEmail = require('../lib/email').sendActivation
-const emailLooksOk = require('../lib/email').looksOk
-const registerAccount = require('../lib/account').register
-const respond = require('../lib/respond')
 const generateToken = require('../lib/jwt').generateToken
+const passport = require('passport')
+const respond = require('../lib/respond')
 const verifyToken = require('../lib/jwt').verifyToken
 
 /**
  * Setup Passport.
  */
-passport.use(new LocalStrategy({
-  usernameField: 'email'
-}, accountModel.authenticate()))
-passport.serializeUser(accountModel.serializeUser())
-passport.deserializeUser(accountModel.deserializeUser())
+passport.use(Account.createStrategy())
 
 /**
  * @param {object} app - The Express application instance.
@@ -44,15 +32,6 @@ passport.deserializeUser(accountModel.deserializeUser())
 const router = (app) => {
   /**
    * GET request to the root route. Responds with a JSend-compliant response.
-   * @memberof! routes.router
-   * @example
-   * const request = require("request");
-   * request("https://api.recipe.report/",
-   *   function(err, res, body) {
-   *     if (!err && res.statusCode == 200) {
-   *       console.log(body);
-   *     }
-   *   });
    */
   app.get('/', (req, res) =>
     respond.success(res, 'This is the http://www.Recipe.Report API server.', {
@@ -61,45 +40,15 @@ const router = (app) => {
   )
 
   /**
-   * POST request to the register route. Registers a new account document in the
-   * MongoDB instance based on the email address and password provided. Sends an
-   * activation email. Responds with a JSend-compliant response.
-   * @memberof! routes.router
-   * @example
-   * const request = require("request");
-   * const options = {
-   *   url: "https://api.recipe.report/register",
-   *   json: {
-   *     "email": "no-reply@recipe.report",
-   *     "password": "testPassword"
-   *   }
-   * };
-   * request.post(options, function(err, res, body) {
-   *   if (!err && res.statusCode == 200) {
-   *     console.log(body);
-   *   }
-   * });
+   * POST request to the register route. Registers a new user account.
    */
   app.post('/register', (req, res) =>
-    emailLooksOk(req.body.email)
-      .then(() => registerAccount(req.body.email, req.body.password))
-      .then(account => generateToken(account))
-      .then(token => sendActivationEmail(req.body.email, req.headers, token))
-      .then(reply => respond.success(res, `Registration successful`, reply))
-      .catch(err => respond.error(res, err)))
+    acct.registration(req.body.email, req.body.password, req.headers, res)
+  )
 
   /**
    * GET request to the activate route. Activates an account based on the token
    * provided. Responds with a JSend-compliant response.
-   * @memberof! routes.router
-   * @example
-   * const request = require("request");
-   * request("https://api.recipe.report/activate/secret-token",
-   *   function (err, response, body) {
-   *     if (!err && res.statusCode == 200) {
-   *       console.log(body);
-   *     }
-   *   });
    */
   app.get('/activate/:token', (req, res) =>
     verifyToken(req.params.token)
@@ -115,25 +64,10 @@ const router = (app) => {
    * email address and password provided. Generates a token with payload
    * containing user._doc._id. Responds with a JSend-compliant response,
    * including the token.
-   * @public
-   * @function
-   * @memberof! routes.router
-   * @example
-   * const request = require("request");
-   * const options = {
-   *   url: "https://api.recipe.report/login",
-   *   json: {
-   *     "email": "no-reply@recipe.report",
-   *     "password": "temp"
-   *   }
-   * };
-   * request.post(options, function(err, res, body) {
-   *   if (!err && res.statusCode == 200) {
-   *     console.log(body);
-   *   }
-   * });
    */
-  app.post('/login', passport.authenticate('local'), (req, res) =>
+  app.post('/login', passport.authenticate('local', {
+    'session': false
+  }), (req, res) =>
     generateToken(req.user)
       .then(token => respond.success(res, 'Authentication successful.', {
         token: token
@@ -155,21 +89,6 @@ const router = (app) => {
 
   /**
    * GET request to the test route. Responds with a JSend-compliant response
-   * @memberof! routes.router
-   * @example
-   * const request = require("request");
-   * const options = {
-   *   url: "https://api.recipe.report/test",
-   *   headers: {
-   *     token: "secret-token"
-   *   }
-   * };
-   * request(options,
-   *   function(err, res, body) {
-   *     if (!err && res.statusCode == 200) {
-   *       console.log(body);
-   *     }
-   *   });
    */
   app.get('/tokentest', (req, res) =>
     // This is just here for development and debugging purposes.
