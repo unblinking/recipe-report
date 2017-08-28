@@ -36,8 +36,4 @@ describe('Preparing to run unit tests.', () => {
     Promise.resolve(process.env.NODE_ENV)
       .then(nodeEnv => nodeEnv.should.equal('test'))
   )
-  it(`should find that MOCHA_USERNAME is defined.`, () =>
-    Promise.resolve(process.env.MOCHA_USERNAME)
-      .then(username => username.should.not.equal(undefined))
-  )
 })

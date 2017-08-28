@@ -8,17 +8,10 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-/**
- * Required modules.
- * @see {@link https://github.com/visionmedia/supertest supertest}
- */
 const supertest = require('supertest')
 const server = supertest('http://localhost:1138')
 const util = require('util')
 
-/**
- * Tests.
- */
 describe('POST /login (user account login)', () => {
   it(`should respond with JSON, status 200, res.body.status of 'success',
       res.body.message of 'Authentication successful.', and a token in
@@ -37,7 +30,7 @@ describe('POST /login (user account login)', () => {
           res.body.message.should.equal('Authentication successful.')
           res.body.json.should.have.property('token')
           // Save the token for the next test.
-          process.env.MOCHA_TOKEN = res.body.json.token
+          process.env.MOCHA_LOGIN_TOKEN = res.body.json.token
         })
   )
   it(`should respond with status 401 Unauthorized when request sends existing

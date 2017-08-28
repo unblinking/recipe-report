@@ -18,11 +18,11 @@ const server = supertest('http://localhost:1138')
 /**
  * Tests.
  */
-describe('GET / (the root route)', () =>
+describe('GET / (the root route \'/\' redirects to \'/root\')', () =>
   it(`should respond with json, status 200, res.body.status of 'success', and
       res.body.message of 'This is the http://www.Recipe.Report API server.'`,
     () =>
-      server.get('/')
+      server.get('/root')
         .expect('Content-Type', /json/)
         .expect(200)
         .then(res => {

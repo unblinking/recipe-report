@@ -25,7 +25,7 @@ describe('GET /tokentest (token authentication test)', () => {
       server.get('/tokentest')
         .set('Accept', 'application/json')
         .set('Content-Type', 'application/json')
-        .set('token', process.env.MOCHA_TOKEN)
+        .set('token', process.env.MOCHA_LOGIN_TOKEN)
         .expect('Content-Type', /json/)
         .expect(200)
         .then(res => {

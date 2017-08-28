@@ -9,6 +9,7 @@
 require('./prepare')
 require('./routes/root')
 require('./routes/register')
+require('./routes/activate')
 require('./routes/login')
 require('./routes/tokentest')
-require('./jwt/generateToken')
+require('./token/generateToken')

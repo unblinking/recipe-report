@@ -22,7 +22,7 @@ const fun = require('./lib/fun')
 const helmet = require('helmet')
 const herokuSslRedirect = require('heroku-ssl-redirect')
 const http = require('http')
-const routes = require('./routes/routes')
+const router = require('./routes/router')
 
 /**
  * Instantiate the expressjs application.
@@ -35,7 +35,7 @@ function expressInstance () {
 }
 
 /**
- * Configure the expressjs application.
+ * Middleware configuration for the expressjs application.
  * Define all expressjs configurations here (except routes, define routes last).
  * @param {Object} express The expressjs instance.
  */
@@ -59,7 +59,7 @@ function expressConfigure (express) {
  */
 function expressRoutes (express) {
   return new Promise(resolve => {
-    routes(express)
+    router.initialize(express)
     resolve()
   })
 }

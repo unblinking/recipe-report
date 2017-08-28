@@ -12,7 +12,7 @@
  */
 const AccountModel = require('../../models/account')
 const crypt = require('../../lib/crypt')
-const jwt = require('../../lib/jwt')
+const token = require('../../lib/token')
 const theMoment = require('moment')
 
 /**
@@ -27,8 +27,8 @@ const account = new AccountModel({
  */
 describe(`JSON Web Token generator tests.`, () =>
   it(`Should generate and return a JSON web token that can be decoded`, () =>
-    jwt.generateToken(account)
-      .then(token => jwt.decodeToken(token))
+    token.generate(account)
+      .then(Token => token.decodeToken(Token))
       .then(decoded => {
         describe('JWT headers', () => {
           it(`Algorithm should equal 'HS256'.`, () =>

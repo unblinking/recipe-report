@@ -33,6 +33,8 @@ describe('POST /register (new account registration)', () => {
         .then(res => {
           res.body.status.should.equal('success')
           res.body.message.should.equal('Registration successful')
+          // Save the activation link for the next test.
+          process.env.MOCHA_ACTIVATION_TOKEN = res.body.json.activationToken
         })
   )
   it(`should respond with json, status 200, res.body.status of 'error', and
