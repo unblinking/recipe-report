@@ -14,6 +14,6 @@ const passport = require('passport')
 
 let router = express.Router()
 passport.use(Account.createStrategy())
-router.post('/', passport.authenticate('local', { 'session': false }), login.sessionToken)
+router.post('/', passport.authenticate('local', { 'session': false }), login.accessToken)
 
 module.exports = router

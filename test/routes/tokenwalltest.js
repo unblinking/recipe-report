@@ -18,11 +18,11 @@ const server = supertest('http://localhost:1138')
 /**
  * Tests.
  */
-describe('GET /tokentest (token authentication test)', () => {
+describe('GET /tokenwalltest (token authentication test)', () => {
   it(`should respond with json, status 200, res.body.status of 'success', and
       res.body.message of 'Welcome to the team, DZ-015.' when request sends a
       valid authentication token in the header.`, () =>
-      server.get('/tokentest')
+      server.get('/tokenwalltest')
         .set('Accept', 'application/json')
         .set('Content-Type', 'application/json')
         .set('token', process.env.MOCHA_LOGIN_TOKEN)

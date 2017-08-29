@@ -12,7 +12,8 @@ const token = require('../lib/token')
 
 async function middleware (req, res, next) {
   try {
-    const decoded = await token.verifyToken(req.headers.token)
+    await token.tokenDefined(req.headers.token)
+    const decoded = await token.verify(req.headers.token)
     req.decoded = decoded.data
     next()
   } catch (err) {

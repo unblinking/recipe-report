@@ -17,15 +17,15 @@ const Schema = mongoose.Schema
 const passportLocalMongoose = require('passport-local-mongoose')
 
 /**
- * Define the schema.
- *
+ * The schema.
  * Passport-Local Mongoose will add a username, hash and salt field to store the
- * username, the hashed password and the salt value. Because these fields will
- * be added automatically, we do not need to add any fields here manually.
- *
+ * username, the hashed password and the salt value.
  * @see {@link https://github.com/saintedlama/passport-local-mongoose#usage}
  */
-const Account = new Schema({}, {
+const Account = new Schema({
+  nickname: { type: String, default: 'User' },
+  activated: { type: Boolean, default: false }
+}, {
   timestamps: true
 })
 

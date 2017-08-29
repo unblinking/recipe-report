@@ -8,10 +8,9 @@
  */
 
 const express = require('express')
-const register = require('../controllers/register')
+const tokenwalltest = require('../controllers/tokenwalltest')
 
 let router = express.Router()
-router.post('/', register.newAccount)
-router.get('/:token', register.activate)
+router.get('/', tokenwalltest.test)
 
 module.exports = router

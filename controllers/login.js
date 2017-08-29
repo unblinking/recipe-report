@@ -3,16 +3,17 @@
 'use strict'
 
 /**
- * The registration controller.
+ * The login controller.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
 const respond = require('../lib/respond')
 const token = require('../lib/token')
 
-async function sessionToken (req, res) {
+async function accessToken (req, res) {
   try {
-    const Token = await token.generate(req.user)
+    await token.accountDefined(req.user)
+    const Token = await token.sign(req.user)
     respond.success(res, 'Authentication successful.', {
       token: Token
     })
@@ -22,5 +23,5 @@ async function sessionToken (req, res) {
 }
 
 module.exports = {
-  sessionToken: sessionToken
+  accessToken: accessToken
 }

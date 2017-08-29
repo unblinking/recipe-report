@@ -7,11 +7,11 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-const rootRoute = require('./root')
-const registerRoute = require('./register')
-const loginRoute = require('./login')
+const rootroute = require('./root')
+const registration = require('./registration')
+const login = require('./login')
 const tokenwall = require('./tokenwall')
-const tokentestRoute = require('./tokentest')
+const tokenwalltestRoute = require('./tokenwalltest')
 
 /*
 function debugLog (express) {
@@ -31,11 +31,11 @@ function initialize (express) {
   express.get('/', (req, res) => {
     res.redirect('/root')
   })
-  express.use('/root', rootRoute)
-  express.use('/register', registerRoute)
-  express.use('/login', loginRoute)
+  express.use('/root', rootroute)
+  express.use('/register', registration)
+  express.use('/login', login)
   express.use(tokenwall.middleware)
-  express.use('/tokentest', tokentestRoute)
+  express.use('/tokenwalltest', tokenwalltestRoute)
 }
 
 module.exports = {

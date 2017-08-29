@@ -842,7 +842,6 @@
       "version": "1.6.0",
       "resolved": "https://registry.npmjs.org/concat-stream/-/concat-stream-1.6.0.tgz",
       "integrity": "sha1-CqxmL9Ur54lk1VMvaUeE5wEQrPc=",
-      "dev": true,
       "requires": {
         "inherits": "2.0.3",
         "readable-stream": "2.2.7",
@@ -981,6 +980,15 @@
       "dev": true,
       "requires": {
         "boom": "2.10.1"
+      }
+    },
+    "crypto-promise": {
+      "version": "2.0.0",
+      "resolved": "https://registry.npmjs.org/crypto-promise/-/crypto-promise-2.0.0.tgz",
+      "integrity": "sha1-HLxHRlG7vhOH21BlqD/6HX4HTHQ=",
+      "requires": {
+        "es6-denodeify": "0.1.5",
+        "stream-concat-promise": "1.0.2"
       }
     },
     "crypto-random-string": {
@@ -1195,6 +1203,11 @@
       "requires": {
         "is-arrayish": "0.2.1"
       }
+    },
+    "es6-denodeify": {
+      "version": "0.1.5",
+      "resolved": "https://registry.npmjs.org/es6-denodeify/-/es6-denodeify-0.1.5.tgz",
+      "integrity": "sha1-MdTV/pxVA+ElRgQ5MQ4WoqPznB8="
     },
     "es6-promise": {
       "version": "3.2.1",
@@ -8386,6 +8399,30 @@
       "resolved": "https://registry.npmjs.org/statuses/-/statuses-1.3.1.tgz",
       "integrity": "sha1-+vUbnrdKrvOzrPStX2Gr8ky3uT4="
     },
+    "stream-concat-promise": {
+      "version": "1.0.2",
+      "resolved": "https://registry.npmjs.org/stream-concat-promise/-/stream-concat-promise-1.0.2.tgz",
+      "integrity": "sha1-0esxLiE/OQAX9WU5KgP2IE+zYw8=",
+      "requires": {
+        "concat-stream": "1.6.0",
+        "promise": "6.1.0"
+      },
+      "dependencies": {
+        "asap": {
+          "version": "1.0.0",
+          "resolved": "https://registry.npmjs.org/asap/-/asap-1.0.0.tgz",
+          "integrity": "sha1-sqRdpf36ILBJb8N2jMJ8EvqRan0="
+        },
+        "promise": {
+          "version": "6.1.0",
+          "resolved": "https://registry.npmjs.org/promise/-/promise-6.1.0.tgz",
+          "integrity": "sha1-LOcp9rlLRcJoka0GAsXJDgTG7vY=",
+          "requires": {
+            "asap": "1.0.0"
+          }
+        }
+      }
+    },
     "stream-shift": {
       "version": "1.0.0",
       "resolved": "https://registry.npmjs.org/stream-shift/-/stream-shift-1.0.0.tgz",
@@ -8680,8 +8717,7 @@
     "typedarray": {
       "version": "0.0.6",
       "resolved": "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz",
-      "integrity": "sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=",
-      "dev": true
+      "integrity": "sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c="
     },
     "uglify-js": {
       "version": "2.8.29",
