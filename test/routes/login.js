@@ -10,49 +10,55 @@
 
 const supertest = require('supertest')
 const server = supertest('http://localhost:1138')
+const token = require('../../lib/token')
 const util = require('util')
 
-describe('POST /login (user account login)', () => {
-  it(`should respond with JSON, status 200, res.body.status of 'success',
-      res.body.message of 'Authentication successful.', and a token in
-      res.body.json.token when request sends existing user email and password.`,
-    () =>
-      server.post('/login')
-        .set('Content-Type', 'application/json')
+describe(`POST /login (account login)`, () => {
+  it(`should respond with JSON, status 200, body.status of 'success',
+      body.message of 'Authentication successful.', body.json property
+      'token', and the decoded token payload.type of 'access', when
+      request sends existing account email and password.`,
+    async () => {
+      const res = await server.post(`/login`)
+        .set(`Content-Type`, `application/json`)
         .send({
           email: process.env.MOCHA_USERNAME,
           password: process.env.MOCHA_PASSWORD
         })
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .then(res => {
-          res.body.status.should.equal('success')
-          res.body.message.should.equal('Authentication successful.')
-          res.body.json.should.have.property('token')
-          // Save the token for the next test.
-          process.env.MOCHA_LOGIN_TOKEN = res.body.json.token
-        })
+      res.type.should.equal(`application/json`)
+      res.status.should.equal(200)
+      res.body.status.should.equal(`success`)
+      res.body.message.should.equal(`Authentication successful.`)
+      res.body.json.should.have.property(`token`)
+      const decoded = await token.decode(process.env.MOCHA_ACCESS_TOKEN)
+      decoded.payload.type.should.equal(`access`)
+      // Save the token as an env var for a future test.
+      process.env.MOCHA_ACCESS_TOKEN = res.body.json.token
+    }
   )
   it(`should respond with status 401 Unauthorized when request sends existing
-      user email and an incorrect password.`, () =>
-      server.post('/login')
-        .set('Content-Type', 'application/json')
+      account email and an incorrect password.`,
+    async () => {
+      const res = await server.post(`/login`)
+        .set(`Content-Type`, `application/json`)
         .send({
           email: process.env.MOCHA_USERNAME,
-          password: 'wrongPassword'
+          password: `wrongPassword`
         })
-        .expect(401)
+      res.status.should.equal(401)
+    }
   )
   it(`should respond with status 401 Unauthorized when request sends existing
-      user email and password correct but too quickly after previous attempt.`,
-    () =>
-      server.post('/login')
-        .set('Content-Type', 'application/json')
+      account email and password correct but too quickly after previous attempt.`,
+    async () => {
+      const res = await server.post(`/login`)
+        .set(`Content-Type`, `application/json`)
         .send({
           email: process.env.MOCHA_USERNAME,
           password: process.env.MOCHA_PASSWORD
         })
-        .expect(401)
+      res.status.should.equal(401)
+    }
   )
   it(`should wait more than 100 milliseconds before next login attempt.`,
     async () => {
@@ -61,69 +67,76 @@ describe('POST /login (user account login)', () => {
     }
   )
   // Try logging in, again.
-  it(`should respond with JSON, status 200, res.body.status of 'success',
-      res.body.message of 'Authentication successful.', and a token in
-      res.body.json.token when request sends existing user email and password.`,
-    () =>
-      server.post('/login')
-        .set('Content-Type', 'application/json')
+  it(`should respond with JSON, status 200, body.status of 'success',
+      body.message of 'Authentication successful.', and body.json property of
+      'token', when request sends existing account email and password
+      (this is after an initial login success, then some failed attempts).`,
+    async () => {
+      const res = await server.post(`/login`)
+        .set(`Content-Type`, `application/json`)
         .send({
           email: process.env.MOCHA_USERNAME,
           password: process.env.MOCHA_PASSWORD
         })
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .then(res => {
-          res.body.status.should.equal('success')
-          res.body.message.should.equal('Authentication successful.')
-          res.body.json.should.have.property('token')
-          // Save the token for the next test.
-          process.env.MOCHA_TOKEN = res.body.json.token
-        })
+      res.type.should.equal(`application/json`)
+      res.status.should.equal(200)
+      res.body.status.should.equal(`success`)
+      res.body.message.should.equal(`Authentication successful.`)
+      res.body.json.should.have.property(`token`)
+    }
   )
   it(`should respond with status 401 Unauthorized when request sends an unknown
-      email and an existing user password.`, () =>
-      server.post('/login')
-        .set('Content-Type', 'application/json')
+      email and an existing account password.`,
+    async () => {
+      const res = await server.post(`/login`)
+        .set(`Content-Type`, `application/json`)
         .send({
-          email: 'unknownEmail@recipe.report',
+          email: `unknownEmail@recipe.report`,
           password: process.env.MOCHA_PASSWORD
         })
-        .expect(401)
+      res.status.should.equal(401)
+    }
   )
   it(`should respond with status 400 Bad Request when request sends existing
-      user email and an empty password.`, () =>
-      server.post('/login')
-        .set('Content-Type', 'application/json')
+      account email and an empty password.`,
+    async () => {
+      const res = await server.post(`/login`)
+        .set(`Content-Type`, `application/json`)
         .send({
           email: process.env.MOCHA_USERNAME,
-          password: ''
+          password: ``
         })
-        .expect(400)
+      res.status.should.equal(400)
+    }
   )
   it(`should respond with status 400 Bad Request when request sends empty email
-      and existing user password.`, () =>
-      server.post('/login')
-        .set('Content-Type', 'application/json')
+      and existing account password.`,
+    async () => {
+      const res = await server.post(`/login`)
+        .set(`Content-Type`, `application/json`)
         .send({
-          email: '',
+          email: ``,
           password: process.env.MOCHA_PASSWORD
         })
-        .expect(400)
+      res.status.should.equal(400)
+    }
   )
   it(`should respond with status 400 Bad Request when request sends empty email
-      and empty password.`, () =>
-      server.post('/login')
-        .set('Content-Type', 'application/json')
+      and empty password.`,
+    async () => {
+      const res = await server.post(`/login`)
+        .set(`Content-Type`, `application/json`)
         .send({
-          email: '',
-          password: ''
+          email: ``,
+          password: ``
         })
-        .expect(400)
+      res.status.should.equal(400)
+    }
   )
   it(`should respond with status 400 Bad Request when request sends nothing.`,
-    () =>
-      server.post('/login')
-        .expect(400)
+    async () => {
+      const res = await server.post(`/login`)
+      res.status.should.equal(400)
+    }
   )
 })

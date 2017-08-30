@@ -3,7 +3,7 @@
 'use strict'
 
 /**
- * The user account model.
+ * The account model.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
@@ -19,33 +19,36 @@ const passportLocalMongoose = require('passport-local-mongoose')
 /**
  * The schema.
  * Passport-Local Mongoose will add a username, hash and salt field to store the
- * username, the hashed password and the salt value.
+ * username, the hashed password, and the salt value. Later, options set the
+ * username field to 'email'.
  * @see {@link https://github.com/saintedlama/passport-local-mongoose#usage}
  */
 const Account = new Schema({
-  nickname: { type: String, default: 'User' },
+  nickname: { type: String, default: `nickname` },
   activated: { type: Boolean, default: false }
 }, {
   timestamps: true
 })
 
 /**
- * Plugin Passport-Local Mongoose into the schema.
+ * Plug passport-local-mongoose into the schema.
  */
 const options = {
-  usernameField: 'email',
+  usernameField: `email`,
   usernameLowerCase: true,
-  usernameQueryFields: ['email'],
+  usernameQueryFields: [`email`],
   limitAttempts: true,
-  MissingPasswordError: 'No password was given',
-  AttemptTooSoonError: 'Account is currently locked. Try again later',
-  TooManyAttemptsError: 'Account locked due to too many failed login attempts',
-  NoSaltValueStoredError: 'Authentication not possible. No salt value stored',
-  IncorrectPasswordError: 'Password or username are incorrect',
-  IncorrectUsernameError: 'Password or username are incorrect',
-  MissingUsernameError: 'No username was given',
-  UserExistsError: 'A user with the given username is already registered'
+  errorMessages: {
+    MissingPasswordError: `No password was given.`,
+    AttemptTooSoonError: `Account is currently locked. Try again later.`,
+    TooManyAttemptsError: `Account locked due to too many failed login attempts.`,
+    NoSaltValueStoredError: `Authentication not possible. No salt value stored.`,
+    IncorrectPasswordError: `Password or email address are incorrect.`,
+    IncorrectUsernameError: `Password or email address are incorrect.`,
+    MissingUsernameError: `No email address was given.`,
+    UserExistsError: `An account with the given email address is already registered.`
+  }
 }
 Account.plugin(passportLocalMongoose, options)
 
-module.exports = mongoose.model('Account', Account)
+module.exports = mongoose.model(`Account`, Account)

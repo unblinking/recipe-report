@@ -18,10 +18,9 @@ async function creation (req, res) {
   try {
     await email.looksOk(req.body.email)
     const Account = await account.create(req.body.email, req.body.password)
-    await token.accountDefined(Account)
-    const Token = await token.sign(Account)
+    const Token = await token.sign(Account, { type: 'activation' })
     const reply = await email.sendActivation(req.body.email, req.headers, Token)
-    respond.success(res, `Registration successful`, reply)
+    respond.success(res, `Registration successful.`, reply)
   } catch (err) {
     respond.error(res, err)
   }
@@ -29,9 +28,13 @@ async function creation (req, res) {
 
 async function activation (req, res) {
   try {
-    await token.tokenDefined(req.params.token)
     const decoded = await token.verify(req.params.token)
-    const accountId = await crypt.decrypt(decoded.data.toString())
+    const accountId = await crypt.decrypt(decoded.id.toString())
+    if (decoded.type === undefined || decoded.type !== 'activation') {
+      let activationError = new Error('Token type not activation.')
+      activationError.name = 'RegistrationActivationError'
+      throw activationError
+    }
     let Account = await AccountModel.findOne({_id: accountId})
     Account.activated = true
     await Account.save()

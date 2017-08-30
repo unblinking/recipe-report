@@ -12,9 +12,8 @@ const token = require('../lib/token')
 
 async function accessToken (req, res) {
   try {
-    await token.accountDefined(req.user)
     const Token = await token.sign(req.user)
-    respond.success(res, 'Authentication successful.', {
+    respond.success(res, `Authentication successful.`, {
       token: Token
     })
   } catch (err) {

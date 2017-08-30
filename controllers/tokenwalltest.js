@@ -16,8 +16,8 @@ async function test (req, res) {
     respond.success(
       res,
       'Welcome to the team, DZ-015.', {
-        encryptedID: req.decoded,
-        decryptedID: crypt.decrypt(req.decoded.toString())
+        encryptedID: req.decodedId,
+        decryptedID: crypt.decrypt(req.decodedId.toString())
       }
     )
   } catch (err) {

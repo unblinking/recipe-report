@@ -12,9 +12,13 @@ const token = require('../lib/token')
 
 async function middleware (req, res, next) {
   try {
-    await token.tokenDefined(req.headers.token)
     const decoded = await token.verify(req.headers.token)
-    req.decoded = decoded.data
+    if (decoded.type === `access`) req.decodedId = decoded.id
+    else {
+      let tokenwallError = new Error(`Token type is not access.`)
+      tokenwallError.name = `TokenwallError`
+      throw tokenwallError
+    }
     next()
   } catch (err) {
     respond.error(res, err)
