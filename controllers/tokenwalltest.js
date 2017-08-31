@@ -12,10 +12,7 @@ const respond = require('../lib/respond')
 
 async function test (req, res) {
   try {
-    respond.success(
-      res,
-      `Welcome to the team, DZ-${req.accountId}.`
-    )
+    respond.success(res, `Welcome to the team, DZ-${req.accountId}.`)
   } catch (err) {
     respond.error(res, err)
   }
