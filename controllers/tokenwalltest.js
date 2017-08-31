@@ -8,17 +8,13 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-const crypt = require('../lib/crypt')
 const respond = require('../lib/respond')
 
 async function test (req, res) {
   try {
     respond.success(
       res,
-      'Welcome to the team, DZ-015.', {
-        encryptedID: req.decodedId,
-        decryptedID: crypt.decrypt(req.decodedId.toString())
-      }
+      `Welcome to the team, DZ-${req.accountId}.`
     )
   } catch (err) {
     respond.error(res, err)

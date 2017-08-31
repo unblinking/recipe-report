@@ -8,6 +8,7 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
+const crypt = require('../../lib/crypt')
 const supertest = require('supertest')
 const server = supertest('http://localhost:1138')
 const token = require('../../lib/token')
@@ -17,6 +18,8 @@ describe(`GET /tokenwalltest (token authentication test)`, () => {
     async () => {
       const decoded = await token.decode(process.env.MOCHA_ACCESS_TOKEN)
       decoded.payload.type.should.equal(`access`)
+      // Save the decrypted account ID for the next text.
+      process.env.MOCHA_ACCESS_ACCT_ID = crypt.decrypt(decoded.payload.id.toString())
     }
   )
   it(`should respond with json, status 200, body.status of 'success', and
@@ -30,7 +33,8 @@ describe(`GET /tokenwalltest (token authentication test)`, () => {
       res.type.should.equal(`application/json`)
       res.status.should.equal(200)
       res.body.status.should.equal(`success`)
-      res.body.message.should.equal(`Welcome to the team, DZ-015.`)
+      const accountId = process.env.MOCHA_ACCESS_ACCT_ID
+      res.body.message.should.equal(`Welcome to the team, DZ-${accountId}.`)
     }
   )
   it(`should respond with json, status 200, body.status of 'error',
