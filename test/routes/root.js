@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-env mocha */
 
 'use strict'
 
@@ -7,25 +8,20 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-/**
- * Required modules.
- * @see {@link https://github.com/visionmedia/supertest supertest}
- */
-const app = require('../../app')
 const supertest = require('supertest')
+const server = supertest('http://localhost:1138')
 
-/**
- * Tests.
- */
-describe('GET / (the root route)', () =>
-  it(`should respond with json, status 200, res.body.status of 'success', and
-      res.body.message of 'This is the http://www.Recipe.Report API server.'`,
-    () =>
-      supertest(app)
-        .get('/')
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .then(res => {
-          res.body.status.should.equal('success')
-          res.body.message.should.equal('This is the http://www.Recipe.Report API server.')
-        })))
+describe(`GET / (the root route at '/' redirects to '/root')`, () =>
+  it(`should respond with type json, status 200, body.status 'success',
+      body.message 'This is the http://www.Recipe.Report API server.', and
+      body.json property 'headers'`,
+    async () => {
+      const res = await server.get(`/root`)
+      res.type.should.equal(`application/json`)
+      res.status.should.equal(200)
+      res.body.status.should.equal(`success`)
+      res.body.message.should.equal(`This is the http://www.Recipe.Report API server.`)
+      res.body.json.should.have.property(`headers`)
+    }
+  )
+)

@@ -1,20 +1,16 @@
-/**
- * Unit tests required in order of execution.
- */
+#!/usr/bin/env node
+/* eslint-env mocha */
+
+'use strict'
 
 /**
- * Route tests.
- * A new email and password are set as environmental variables for shared access
- * by the route unit tests.
+ * Unit tests in special order of execution.
+ * @author {@link https://github.com/jmg1138 jmg1138}
  */
-process.env.MOCHA_USERNAME = new Date().getTime() + '@recipe.report'
-process.env.MOCHA_PASSWORD = new Date().getTime()
+require('./prepare')
 require('./routes/root')
 require('./routes/register')
+require('./routes/activate')
 require('./routes/login')
-require('./routes/tokentest')
-
-/**
- * jsonwebtoken tests.
- */
-require('./jwt/generateToken')
+require('./routes/tokenwalltest')
+require('./lib/token')

@@ -3,88 +3,119 @@
 'use strict'
 
 /**
- * The application entry point.
+ * Expressjs API for the Recipe Report application.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
 /**
- * Require the 3rd party modules that will be used.
- * @see {@link https://github.com/petkaantonov/bluebird bluebird}
- * @see {@link https://github.com/expressjs/body-parser Express body-parser}
- * @see {@link https://github.com/expressjs/express Express}
- * @see {@link https://github.com/helmetjs Helmet}
- * @see {@link https://github.com/Automattic/mongoose Mongoose}
- * @see {@link https://github.com/jaredhanson/passport Passport}
- * @see {@link https://github.com/nodenica/node-heroku-ssl-redirect sslRedirect}
+ * Modules that will be used.
+ * @see {@link https://github.com/expressjs/body-parser body-parser}
+ * @see {@link https://github.com/expressjs/express expressjs}
+ * @see {@link https://github.com/helmetjs helmetjs}
+ * @see {@link https://github.com/nodenica/node-heroku-ssl-redirect heroku ssl}
+ * @see {@link https://nodejs.org/api/http.html http}
  */
-const bluebird = require('bluebird')
 const bodyParser = require('body-parser')
-const express = require('express')
+const db = require('./lib/db')
+const expressjs = require('express')
+const fun = require('./lib/fun')
 const helmet = require('helmet')
-const mongoose = require('mongoose')
-const passport = require('passport')
-const sslRedirect = require('heroku-ssl-redirect')
+const herokuSslRedirect = require('heroku-ssl-redirect')
+const http = require('http')
+const router = require('./routes/router')
 
 /**
- * Require the local modules that will be used.
+ * Instantiate the expressjs application.
  */
-const respond = require('./util/respond')
-const routes = require('./routes/routes')
-
-/**
- * Define the port for the application entry point to listen on.
- * Use port 1138 if environmental variable PORT is not defined.
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt MDN JavaScript parseInt}
- */
-const port = parseInt(process.env.PORT, 10) || 1138
-
-/**
- * Connect to the MongoDB instance.
- * Use uri "mongodb://localhost/" if environmental variable MONGODB_URI is not defined.
- */
-const mongodbUri = process.env.MONGODB_URI || 'mongodb://localhost/'
-mongoose.Promise = bluebird // https://github.com/Automattic/mongoose/issues/4291
-mongoose.connect(mongodbUri)
-  .catch(err => {
-    console.log(err.message)
-    process.exit(1)
+function expressInstance () {
+  return new Promise(resolve => {
+    let express = expressjs()
+    resolve(express)
   })
+}
 
 /**
- * Define all app configurations here except routes (define routes last).
- * Instantiate the Express application.
+ * Middleware configuration for the expressjs application.
+ * Define all expressjs configurations here (except routes, define routes last).
+ * @param {Object} express The expressjs instance.
  */
-const app = express()
-app.use(helmet())
-if (process.env.NODE_ENV === 'production') app.use(sslRedirect())
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({
-  extended: true // When true uses {@link https://github.com/ljharb/qs qs} querystring parsing.
-}))
-app.use(passport.initialize())
-app.set('json spaces', 2)
+function expressConfigure (express) {
+  return new Promise(resolve => {
+    express.use(helmet({
+      'contentSecurityPolicy': { 'directives': { 'defaultSrc': ["'self'"] } },
+      'referrerPolicy': { 'policy': 'same-origin' }
+    }))
+    express.use(herokuSslRedirect())
+    express.use(bodyParser.json())
+    express.use(bodyParser.urlencoded({ extended: true }))
+    express.set('json spaces', 2)
+    resolve()
+  })
+}
 
 /**
- * Define routes last, after all other configurations.
- * @param {object} app - The Express application instance.
+ * Define the expressjs routes.
+ * @param {Object} express The expressjs instance.
  */
-routes(app)
+function expressRoutes (express) {
+  return new Promise(resolve => {
+    router.initialize(express)
+    resolve()
+  })
+}
 
 /**
- * Listen for connections on the specified port.
- * @see {@link https://expressjs.com/en/api.html#app.listen Express API app.listen}
+ * Define the expressjs error handling middleware.
+ * @param {Object} express The expressjs instance.
  */
-app.listen(port, () =>
-  console.log(`Recipe.Report API listening on port ${port}.`)
-).on('error', err => console.log(err))
-// TODO: If error, try again a number of times and then give up.
+function expressErrors (express) {
+  return new Promise(resolve => {
+    express.use((req, res, next) => res.status(404).send('four, oh four!'))
+    express.use((err, req, res, next) => {
+      res.status(500).send('Something broke!')
+      console.log(err)
+    })
+    resolve()
+  })
+}
 
 /**
- * Define error-handling middleware after app and route configurations.
+ * Instantiate the http server.
+ * @param {Object} express The expressjs instance.
  */
-app.use((req, res, next) => {
-  respond.error(res, new Error('four, oh four!'))
-})
-app.use((err, req, res, next) => respond.error(res, err))
+function serverInstance (express) {
+  return new Promise(resolve => {
+    let server = http.Server(express)
+    resolve(server)
+  })
+}
 
-module.exports = app // For testing with supertest
+/**
+ * Listen for http server connections.
+ * @param {Object} server The http server instance.
+ */
+function serverListen (server) {
+  return new Promise(resolve => {
+    const port = parseInt(process.env.PORT, 10)
+    server.listen(port, () => {
+      console.log(` \x1b[1m\x1b[33m>\x1b[0m \x1b[1m\x1b[36mListening on port ${port}\x1b[0m`)
+      resolve()
+    })
+  })
+}
+
+/**
+ * Create the API parts in proper order.
+ */
+async function main () {
+  await fun.applicationName()
+  await db.connect()
+  let express = await expressInstance()
+  await expressConfigure(express)
+  await expressRoutes(express)
+  await expressErrors(express)
+  let server = await serverInstance(express)
+  await serverListen(server)
+}
+
+main()
