@@ -3,7 +3,7 @@
 'use strict'
 
 /**
- * The registration route.
+ * The tokenwall middlware.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 

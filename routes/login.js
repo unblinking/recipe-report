@@ -3,7 +3,7 @@
 'use strict'
 
 /**
- * The registration route.
+ * The login route.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 

@@ -3,7 +3,8 @@
 'use strict'
 
 /**
- * The registration route.
+ * The tokenwall-test route.
+ * I used this to test the tokenwall middleware.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
