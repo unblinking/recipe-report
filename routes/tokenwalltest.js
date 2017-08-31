@@ -9,9 +9,10 @@
  */
 
 const express = require('express')
+const tokenwall = require('./tokenwall')
 const tokenwalltest = require('../controllers/tokenwalltest')
 
 let router = express.Router()
-router.get('/', tokenwalltest.test)
+router.get('/', tokenwall.middleware, tokenwalltest.test)
 
 module.exports = router

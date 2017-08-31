@@ -10,7 +10,6 @@
 const rootroute = require('./root')
 const registration = require('./registration')
 const login = require('./login')
-const tokenwall = require('./tokenwall')
 const tokenwalltestRoute = require('./tokenwalltest')
 
 /*
@@ -34,7 +33,6 @@ function initialize (express) {
   express.use('/root', rootroute)
   express.use('/register', registration)
   express.use('/login', login)
-  express.use(tokenwall.middleware)
   express.use('/tokenwalltest', tokenwalltestRoute)
 }
 
