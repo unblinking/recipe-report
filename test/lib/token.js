@@ -10,20 +10,21 @@
 
 const AccountModel = require('../../models/account')
 const crypt = require('../../lib/crypt')
+const should = require('should')
 const token = require('../../lib/token')
 const theMoment = require('moment')
 
 /**
- * Account model to use during the tests.
+ * Account model to use during these tests.
  */
 const Account = new AccountModel({
   email: process.env.MOCHA_USERNAME
 })
 
 describe(`JSON Web Token tests.`, () => {
-  it(`should generate and return a JSON web token that can be decoded,
-      header.alg HS256, header.typ JWT, payload.id equal to the Account ID,
-      payload.type of 'access', payload.iat today, and payload.exp in 2 days.`,
+  it(`should generate and return a JWT that can be decoded, header.alg HS256,
+      header.typ JWT, payload.id equal to the Account ID, payload.type of
+      'access', payload.iat today, and payload.exp in 2 days.`,
     async () => {
       const Token = await token.sign(Account, { type: 'access' })
       const decoded = await token.decode(Token)
@@ -37,9 +38,9 @@ describe(`JSON Web Token tests.`, () => {
       theMoment(itExpires).fromNow().should.equal(`in 2 days`)
     }
   )
-  it(`should generate and return a JSON web token that can be decoded,
-      header.alg HS256, header.typ JWT, payload.id equal to the Account ID,
-      payload.type 'activation', payload.iat today, and payload.exp in 2 days.`,
+  it(`should generate and return a JWT that can be decoded, header.alg HS256,
+      header.typ JWT, payload.id equal to the Account ID, payload.type
+      'activation', payload.iat today, and payload.exp in 2 days.`,
     async () => {
       const Token = await token.sign(Account, { type: 'activation' })
       const decoded = await token.decode(Token)
@@ -53,9 +54,9 @@ describe(`JSON Web Token tests.`, () => {
       theMoment(itExpires).fromNow().should.equal(`in 2 days`)
     }
   )
-  it(`should generate and return a JSON web token that can be verified,
-      id equal to the Account ID, type of 'access', payload.iat today, and
-      payload.exp in 2 days.`,
+  it(`should generate and return a JWT that can be verified, id equal to the
+      Account ID, type of 'access', payload.iat today, and payload.exp in 2
+      days.`,
     async () => {
       const Token = await token.sign(Account, { type: 'access' })
       const verified = await token.verify(Token)
@@ -67,9 +68,9 @@ describe(`JSON Web Token tests.`, () => {
       theMoment(itExpires).fromNow().should.equal(`in 2 days`)
     }
   )
-  it(`should generate and return a JSON web token that can be verified,
-      id equal to the Account ID, type of 'activation', payload.iat today, and
-      payload.exp in 2 days.`,
+  it(`should generate and return a JWT that can be verified, id equal to the
+      Account ID, type of 'activation', payload.iat today, and payload.exp in 2
+      days.`,
     async () => {
       const Token = await token.sign(Account, { type: 'activation' })
       const verified = await token.verify(Token)
@@ -81,9 +82,9 @@ describe(`JSON Web Token tests.`, () => {
       theMoment(itExpires).fromNow().should.equal(`in 2 days`)
     }
   )
-  it(`should generate and return a JSON web token that can be verified,
-      id equal to the Account ID, type of 'access', payload.iat today, and
-      payload.exp in a month (2592000 seconds).`,
+  it(`should generate and return a JWT that can be verified, id equal to the
+      Account ID, type of 'access', payload.iat today, and payload.exp in a
+      month (2592000 seconds).`,
     async () => {
       const Token = await token.sign(Account, { type: 'access', expiresIn: 2592000 })
       const verified = await token.verify(Token)
@@ -93,6 +94,17 @@ describe(`JSON Web Token tests.`, () => {
       theMoment(itWasIssued).isSame(Date.now(), `day`).should.equal(true)
       const itExpires = verified.exp * 1000
       theMoment(itExpires).fromNow().should.equal(`in a month`)
+    }
+  )
+  it(`should fail to sign a JWT if the Account is undefined, return an error
+      with name 'TokenSignError' and message 'Account not found.'.`,
+    async () => {
+      try {
+        await token.sign(undefined, { type: 'access', expiresIn: 2592000 })
+      } catch (err) {
+        err.name.should.equal(`TokenSignError`)
+        err.message.should.equal(`Account not found.`)
+      }
     }
   )
 })

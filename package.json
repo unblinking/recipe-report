@@ -47,8 +47,8 @@
   "scripts": {
     "postinstall": "npm shrinkwrap --dev",
     "pretest": "echo \"Checking for available dependency updates\" && ncu",
-    "test": "nyc mocha",
-    "testonly": "nyc mocha",
+    "test": "nyc mocha --reporter dot",
+    "testonly": "nyc mocha --reporter dot",
     "posttest": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "start": "node app.js"
   }

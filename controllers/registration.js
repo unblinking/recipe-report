@@ -3,7 +3,7 @@
 'use strict'
 
 /**
- * The registration controller.
+ * The registration-route controller.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
@@ -16,9 +16,9 @@ const respond = require('../lib/respond')
 
 async function creation (req, res) {
   try {
-    await email.looksOk(req.body.email)
+    await email.seemsValid(req.body.email)
     const Account = await account.create(req.body.email, req.body.password)
-    const Token = await token.sign(Account, { type: 'activation' })
+    const Token = await token.sign(Account, { type: `activation` })
     const reply = await email.sendActivation(req.body.email, req.headers, Token)
     respond.success(res, `Registration successful.`, reply)
   } catch (err) {
@@ -30,15 +30,20 @@ async function activation (req, res) {
   try {
     const decoded = await token.verify(req.params.token)
     const accountId = await crypt.decrypt(decoded.id.toString())
-    if (decoded.type === undefined || decoded.type !== 'activation') {
-      let activationError = new Error('Token type not activation.')
-      activationError.name = 'RegistrationActivationError'
+    if (decoded.type === undefined || decoded.type !== `activation`) {
+      let activationError = new Error(`Token type not activation.`)
+      activationError.name = `RegistrationActivationError`
       throw activationError
     }
-    let Account = await AccountModel.findOne({_id: accountId})
+    let Account = await AccountModel.findOne({ _id: accountId })
+    if (Account === null || Account === undefined) {
+      let activationError = new Error(`Account not found.`)
+      activationError.name = `RegistrationActivationError`
+      throw activationError
+    }
     Account.activated = true
     await Account.save()
-    respond.success(res, 'Activation successful.')
+    respond.success(res, `Activation successful.`)
   } catch (err) {
     respond.error(res, err)
   }

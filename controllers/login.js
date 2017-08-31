@@ -3,7 +3,7 @@
 'use strict'
 
 /**
- * The login controller.
+ * The login-route controller.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 

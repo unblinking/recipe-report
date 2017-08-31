@@ -40,9 +40,10 @@ describe(`POST /register/:token (account activation)`, () => {
       const Token = await token.sign(Account, { type: `access` })
       process.env.MOCHA_ACCESS_TOKEN = Token
     })
-  it(`should respond with JSON, status 200, body.status of 'error', and
-      body.message of 'Activation successful.', when request includes an access
-      token in the URL instead of an activation token.`,
+  it(`should respond with JSON, status 200, body.status of 'error', body.message
+      of 'Activation successful.', and body.json.name of
+      'RegistrationActivationError' when request includes an access token in the
+      URL instead of an activation token.`,
     async () => {
       const Token = process.env.MOCHA_ACCESS_TOKEN
       const res = await server.get(`/register/${Token}`)
@@ -50,6 +51,30 @@ describe(`POST /register/:token (account activation)`, () => {
       res.status.should.equal(200)
       res.body.status.should.equal(`error`)
       res.body.message.should.equal(`Token type not activation.`)
+      res.body.json.name.should.equal(`RegistrationActivationError`)
+    }
+  )
+  it(`should create an activation token for the next test, but for an invalid
+      account ID.`,
+    async () => {
+      const Account = new AccountModel({
+        email: process.env.MOCHA_USERNAME
+      })
+      Account._id = `000000000000000000000000`
+      const Token = await token.sign(Account, { type: `activation` })
+      process.env.MOCHA_INVALID_ACCOUNT_ACCESS_TOKEN = Token
+    })
+  it(`should respond with JSON, status 200, body.status of 'error', body.message
+      of 'Account not found.', and body.json.name of
+      'RegistrationActivationError' when request includes an access token that
+      contains an invalid account ID.`,
+    async () => {
+      const Token = process.env.MOCHA_INVALID_ACCOUNT_ACCESS_TOKEN
+      const res = await server.get(`/register/${Token}`)
+      res.type.should.equal(`application/json`)
+      res.status.should.equal(200)
+      res.body.status.should.equal(`error`)
+      res.body.message.should.equal(`Account not found.`)
       res.body.json.name.should.equal(`RegistrationActivationError`)
     }
   )

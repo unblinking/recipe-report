@@ -3,7 +3,7 @@
 'use strict'
 
 /**
- * The access token test controller.
+ * The access-token-test-route controller.
  * I used this to see if the tokenwall middleware worked.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
