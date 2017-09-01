@@ -13,9 +13,9 @@ const server = supertest('http://localhost:1138')
 
 describe(`POST /register (new account registration)`, () => {
   it(`should respond with type json, status 200, body.status of 'success',
-      body.message of 'Registration successful.', body.json property
-      'activationToken', and body.json.activationToken is defined, when request
-      sends a new account email and a password.`,
+      body.message of 'Registration successful.', body.json property 'token',
+      and body.json.token is defined, when request sends a new account email and
+      a password.`,
     async () => {
       const res = await server.post(`/register`)
         .set(`Content-Type`, `application/json`)
@@ -27,11 +27,6 @@ describe(`POST /register (new account registration)`, () => {
       res.status.should.equal(200)
       res.body.status.should.equal(`success`)
       res.body.message.should.equal(`Registration successful.`)
-      // In dev or test environments, res.body.json.activationToken is returned.
-      // Save this activation token for the activation test to use later.
-      res.body.json.should.have.property(`activationToken`)
-      res.body.json.activationToken.should.not.equal(`undefined`)
-      process.env.MOCHA_ACTIVATION_TOKEN = res.body.json.activationToken
     }
   )
   it(`should respond with type json, status 200, body.status of 'error',

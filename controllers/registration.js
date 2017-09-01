@@ -16,10 +16,11 @@ const respond = require('../lib/respond')
 
 async function creation (req, res) {
   try {
-    await email.seemsValid(req.body.email)
+    await email.check(req.body.email)
     const Account = await account.create(req.body.email, req.body.password)
     const Token = await token.sign(Account, { type: `activation` })
-    const reply = await email.sendActivation(req.body.email, req.headers, Token)
+    const render = await email.render(req.body.email, Token)
+    const reply = await email.send(render.from, req.body.email, render.subject, render.text)
     respond.success(res, `Registration successful.`, reply)
   } catch (err) {
     respond.error(res, err)

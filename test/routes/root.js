@@ -11,7 +11,13 @@
 const supertest = require('supertest')
 const server = supertest('http://localhost:1138')
 
-describe(`GET / (the root route at '/' redirects to '/root')`, () =>
+describe(`GET / (the root route)`, () => {
+  it(`should redirect '/' to '/root'`,
+    async () => {
+      const res = await server.get(`/`)
+      res.text.should.equal(`Found. Redirecting to /root`)
+    }
+  )
   it(`should respond with type json, status 200, body.status 'success',
       body.message 'This is the http://www.Recipe.Report API server.', and
       body.json property 'headers'`,
@@ -24,4 +30,4 @@ describe(`GET / (the root route at '/' redirects to '/root')`, () =>
       res.body.json.should.have.property(`headers`)
     }
   )
-)
+})

@@ -38,6 +38,7 @@
     "eslint-plugin-promise": "3.5.0",
     "eslint-plugin-standard": "3.0.1",
     "istanbul": "0.4.5",
+    "maildev": "1.0.0-rc3",
     "mocha": "3.5.0",
     "npm-check-updates": "2.12.1",
     "nyc": "11.1.0",
