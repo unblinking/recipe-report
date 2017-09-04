@@ -7,14 +7,14 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-const bodyParser = require(`body-parser`)
-const error = require(`./lib/errors.js`)
+const parser = require(`body-parser`)
+const errors = require(`./lib/errors.js`)
 const expressjs = require(`express`)
-const fun = require(`./lib/funs`)
+const funs = require(`./lib/funs`)
 const helmet = require(`helmet`)
 const herokuSslRedirect = require(`heroku-ssl-redirect`)
 const http = require(`http`)
-const mongoose = require(`mongoose`)
+const mongo = require(`mongoose`)
 const router = require(`./routes/router`)
 
 /**
@@ -22,9 +22,9 @@ const router = require(`./routes/router`)
  */
 function datastoreConnect () {
   return new Promise(resolve => {
-    mongoose.Promise = global.Promise
-    mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true})
-    mongoose.connection.once(`connected`, resolve)
+    mongo.Promise = global.Promise
+    mongo.connect(process.env.MONGODB_URI, {useMongoClient: true})
+    mongo.connection.once(`connected`, resolve)
   })
 }
 
@@ -50,8 +50,8 @@ function expressConfigure (express) {
       referrerPolicy: { policy: `same-origin` }
     }))
     express.use(herokuSslRedirect())
-    express.use(bodyParser.json())
-    express.use(bodyParser.urlencoded({ extended: true }))
+    express.use(parser.json())
+    express.use(parser.urlencoded({ extended: true }))
     express.set(`json spaces`, 2)
     resolve()
   })
@@ -74,8 +74,8 @@ function expressRoutes (express) {
  */
 function expressErrors (express) {
   return new Promise(resolve => {
-    express.use(error.handle404)
-    express.use(error.handle500)
+    express.use(errors.handle404)
+    express.use(errors.handle500)
     resolve()
   })
 }
@@ -106,7 +106,7 @@ function serverListen (server) {
  * Create the API parts in proper order.
  */
 async function main () {
-  await fun.consoleGraffiti()
+  await funs.graffiti()
   await datastoreConnect()
   let express = await expressInstance()
   await expressConfigure(express)
