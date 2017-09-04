@@ -14,5 +14,6 @@ const tokenwalltest = require('../controllers/tokenwalltest')
 
 let router = express.Router()
 router.get('/', tokenwall.middleware, tokenwalltest.test)
+router.get('/throws', tokenwalltest.throws)
 
 module.exports = router

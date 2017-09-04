@@ -11,14 +11,10 @@ const respond = require('../lib/respond')
 const token = require('../lib/token')
 
 async function accessToken (req, res) {
-  try {
-    const Token = await token.sign(req.user)
-    respond.success(res, `Authentication successful.`, {
-      token: Token
-    })
-  } catch (err) {
-    respond.error(res, err)
-  }
+  const Token = await token.sign(req.user)
+  respond.success(res, `Authentication successful.`, {
+    token: Token
+  })
 }
 
 module.exports = {

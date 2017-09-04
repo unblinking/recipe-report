@@ -62,14 +62,14 @@ describe(`POST /register/:token (account activation)`, () => {
       })
       Account._id = `000000000000000000000000`
       const Token = await token.sign(Account, { type: `activation` })
-      process.env.MOCHA_INVALID_ACCOUNT_ACCESS_TOKEN = Token
+      process.env.MOCHA_INVALID_ACCOUNT_ACTIVATION_TOKEN = Token
     })
   it(`should respond with JSON, status 200, body.status of 'error', body.message
       of 'Account not found.', and body.json.name of
       'RegistrationActivationError' when request includes an access token that
       contains an invalid account ID.`,
     async () => {
-      const Token = process.env.MOCHA_INVALID_ACCOUNT_ACCESS_TOKEN
+      const Token = process.env.MOCHA_INVALID_ACCOUNT_ACTIVATION_TOKEN
       const res = await server.get(`/register/${Token}`)
       res.type.should.equal(`application/json`)
       res.status.should.equal(200)

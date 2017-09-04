@@ -7,22 +7,15 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-/**
- * Modules that will be used.
- * @see {@link https://github.com/expressjs/body-parser body-parser}
- * @see {@link https://github.com/expressjs/express expressjs}
- * @see {@link https://github.com/helmetjs helmetjs}
- * @see {@link https://github.com/nodenica/node-heroku-ssl-redirect heroku ssl}
- * @see {@link https://nodejs.org/api/http.html http}
- */
-const bodyParser = require('body-parser')
-const db = require('./lib/db')
-const expressjs = require('express')
-const fun = require('./lib/fun')
-const helmet = require('helmet')
-const herokuSslRedirect = require('heroku-ssl-redirect')
-const http = require('http')
-const router = require('./routes/router')
+const bodyParser = require(`body-parser`)
+const error = require(`./lib/error.js`)
+const expressjs = require(`express`)
+const fun = require(`./lib/fun`)
+const helmet = require(`helmet`)
+const herokuSslRedirect = require(`heroku-ssl-redirect`)
+const http = require(`http`)
+const mongoose = require('mongoose')
+const router = require(`./routes/router`)
 
 /**
  * Instantiate the expressjs application.
@@ -42,13 +35,13 @@ function expressInstance () {
 function expressConfigure (express) {
   return new Promise(resolve => {
     express.use(helmet({
-      'contentSecurityPolicy': { 'directives': { 'defaultSrc': ["'self'"] } },
-      'referrerPolicy': { 'policy': 'same-origin' }
+      contentSecurityPolicy: { directives: { defaultSrc: ["'self'"] } },
+      referrerPolicy: { policy: `same-origin` }
     }))
     express.use(herokuSslRedirect())
     express.use(bodyParser.json())
     express.use(bodyParser.urlencoded({ extended: true }))
-    express.set('json spaces', 2)
+    express.set(`json spaces`, 2)
     resolve()
   })
 }
@@ -70,11 +63,8 @@ function expressRoutes (express) {
  */
 function expressErrors (express) {
   return new Promise(resolve => {
-    express.use((req, res, next) => res.status(404).send('four, oh four!'))
-    express.use((err, req, res, next) => {
-      res.status(500).send('Something broke!')
-      console.log(err)
-    })
+    express.use(error.handle404)
+    express.use(error.handle500)
     resolve()
   })
 }
@@ -97,10 +87,7 @@ function serverInstance (express) {
 function serverListen (server) {
   return new Promise(resolve => {
     const port = parseInt(process.env.PORT, 10)
-    server.listen(port, () => {
-      console.log(` \x1b[1m\x1b[33m>\x1b[0m \x1b[1m\x1b[36mListening on port ${port}\x1b[0m`)
-      resolve()
-    })
+    server.listen(port, () => resolve())
   })
 }
 
@@ -109,7 +96,6 @@ function serverListen (server) {
  */
 async function main () {
   await fun.applicationName()
-  await db.connect()
   let express = await expressInstance()
   await expressConfigure(express)
   await expressRoutes(express)
@@ -118,4 +104,9 @@ async function main () {
   await serverListen(server)
 }
 
-main()
+/**
+ * Only start main() once the database is connected.
+ */
+mongoose.Promise = global.Promise
+mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true})
+mongoose.connection.once(`connected`, main)

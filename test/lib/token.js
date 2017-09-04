@@ -10,7 +10,6 @@
 
 const AccountModel = require('../../models/account')
 const crypt = require('../../lib/crypt')
-const should = require('should')
 const token = require('../../lib/token')
 const theMoment = require('moment')
 
