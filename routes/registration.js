@@ -3,15 +3,15 @@
 'use strict'
 
 /**
- * The registration route.
+ * The registration-route router.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-const express = require('express')
-const registration = require('../controllers/registration')
+const express = require(`express`)
+const registration = require(`../controllers/registration`)
 
 let router = express.Router()
-router.post('/', registration.creation)
-router.get('/:token', registration.activation)
+router.post(`/`, registration.creation)
+router.get(`/:token`, registration.activation)
 
 module.exports = router

@@ -8,14 +8,25 @@
  */
 
 const bodyParser = require(`body-parser`)
-const error = require(`./lib/error.js`)
+const error = require(`./lib/errors.js`)
 const expressjs = require(`express`)
-const fun = require(`./lib/fun`)
+const fun = require(`./lib/funs`)
 const helmet = require(`helmet`)
 const herokuSslRedirect = require(`heroku-ssl-redirect`)
 const http = require(`http`)
-const mongoose = require('mongoose')
+const mongoose = require(`mongoose`)
 const router = require(`./routes/router`)
+
+/**
+ * Connect to the datastore
+ */
+function datastoreConnect () {
+  return new Promise(resolve => {
+    mongoose.Promise = global.Promise
+    mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true})
+    mongoose.connection.once(`connected`, resolve)
+  })
+}
 
 /**
  * Instantiate the expressjs application.
@@ -95,7 +106,8 @@ function serverListen (server) {
  * Create the API parts in proper order.
  */
 async function main () {
-  await fun.applicationName()
+  await fun.consoleGraffiti()
+  await datastoreConnect()
   let express = await expressInstance()
   await expressConfigure(express)
   await expressRoutes(express)
@@ -104,9 +116,4 @@ async function main () {
   await serverListen(server)
 }
 
-/**
- * Only start main() once the database is connected.
- */
-mongoose.Promise = global.Promise
-mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true})
-mongoose.connection.once(`connected`, main)
+main()

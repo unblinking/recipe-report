@@ -8,7 +8,7 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-const MailDev = require('maildev')
+const MailDev = require(`maildev`)
 
 /**
  * Prepare for unit testing.
@@ -42,7 +42,7 @@ before(done => {
     const regex = /\bapi.recipe.report\/register\/(\S+)/
     process.env.MOCHA_ACTIVATION_TOKEN = email.text.match(regex)[1]
   })
-  require('../app')
+  require(`../app`)
   setTimeout(() => { console.log(``); done() }, 3000)
 })
 

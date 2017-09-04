@@ -7,16 +7,14 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-const respond = require('../lib/respond')
-const token = require('../lib/token')
+const responds = require(`../lib/responds`)
+const tokens = require(`../lib/tokens`)
 
-async function accessToken (req, res) {
-  const Token = await token.sign(req.user)
-  respond.success(res, `Authentication successful.`, {
-    token: Token
-  })
+async function access (req, res) {
+  const token = await tokens.sign(req.user)
+  responds.success(res, `Authentication successful.`, { token: token })
 }
 
 module.exports = {
-  accessToken: accessToken
+  access: access
 }

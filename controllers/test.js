@@ -3,15 +3,14 @@
 'use strict'
 
 /**
- * The access-token-test-route controller.
- * I used this to see if the tokenwall middleware worked.
+ * The test-route controller.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-const respond = require('../lib/respond')
+const responds = require(`../lib/responds`)
 
-function test (req, res) {
-  respond.success(res, `Welcome to the team, DZ-${req.accountId}.`)
+function success (req, res) {
+  responds.success(res, `Welcome to the team, DZ-${req.accountId}.`)
 }
 
 function throws (req, res) {
@@ -21,6 +20,6 @@ function throws (req, res) {
 }
 
 module.exports = {
-  test: test,
+  success: success,
   throws: throws
 }

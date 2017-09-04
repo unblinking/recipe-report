@@ -21,7 +21,7 @@ describe(`Error handling for expressjs.`, () => {
   )
   it(`should respond with status 500, and text 'five hundred! PurposefulError'`,
     async () => {
-      const res = await server.get(`/tokenwalltest/throws`)
+      const res = await server.get(`/test/throws`)
       res.status.should.equal(500)
       res.text.should.equal(`five hundred! PurposefulError`)
     }

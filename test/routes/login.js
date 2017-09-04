@@ -10,7 +10,7 @@
 
 const supertest = require('supertest')
 const server = supertest('http://localhost:1138')
-const token = require('../../lib/token')
+const tokens = require('../../lib/tokens')
 const util = require('util')
 
 describe(`POST /login (account login)`, () => {
@@ -30,7 +30,7 @@ describe(`POST /login (account login)`, () => {
       res.body.status.should.equal(`success`)
       res.body.message.should.equal(`Authentication successful.`)
       res.body.json.should.have.property(`token`)
-      const decoded = await token.decode(process.env.MOCHA_ACCESS_TOKEN)
+      const decoded = await tokens.decode(process.env.MOCHA_ACCESS_TOKEN)
       decoded.payload.type.should.equal(`access`)
       // Save the token as an env var for a future test.
       process.env.MOCHA_ACCESS_TOKEN = res.body.json.token
