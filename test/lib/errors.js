@@ -14,7 +14,7 @@ const server = supertest('http://localhost:1138')
 describe(`Error handling for expressjs.`, () => {
   it(`should respond with status 404, and text 'four, oh four!'`,
     async () => {
-      const res = await server.get(`/nonexisting`)
+      const res = await server.get(`/non-existing`)
       res.status.should.equal(404)
       res.text.should.equal(`four, oh four!`)
     }
