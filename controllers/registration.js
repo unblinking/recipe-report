@@ -7,8 +7,8 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-const accounts = require(`../lib/accounts`)
 const Account = require(`../models/account`)
+const accounts = require(`../lib/accounts`)
 const crypts = require(`../lib/crypts`)
 const emails = require(`../lib/emails`)
 const tokens = require(`../lib/tokens`)
@@ -32,15 +32,15 @@ async function activation (req, res) {
     const decoded = await tokens.verify(req.params.token)
     const accountId = await crypts.decrypt(decoded.id.toString())
     if (decoded.type === undefined || decoded.type !== `activation`) {
-      let activationError = new Error(`Token type not activation.`)
-      activationError.name = `RegistrationActivationError`
-      throw activationError
+      let error = new Error(`Token type not activation.`)
+      error.name = `RegistrationActivationError`
+      throw error
     }
     let account = await Account.findOne({ _id: accountId })
     if (account === null || account === undefined) {
-      let activationError = new Error(`Account not found.`)
-      activationError.name = `RegistrationActivationError`
-      throw activationError
+      let error = new Error(`Account not found.`)
+      error.name = `RegistrationActivationError`
+      throw error
     }
     account.activated = true
     await account.save()

@@ -94,7 +94,7 @@ describe(`GET /test (tokenwall authentication test)`, () => {
       res.type.should.equal(`application/json`)
       res.status.should.equal(200)
       res.body.status.should.equal(`error`)
-      res.body.message.should.equal(`Error reading token.`)
+      res.body.message.should.equal(`Token is not defined.`)
       res.body.json.name.should.equal(`TokenVerifyError`)
     }
   )

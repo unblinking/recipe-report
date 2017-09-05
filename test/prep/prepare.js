@@ -8,41 +8,44 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-const MailDev = require(`maildev`)
-
 /**
  * Prepare for unit testing.
- * Set environmental variable values for test.
- * Username: Needs to be unique. The username includes mixed-case letters here
- *           because passport-local-mongoose is setup to convert the username to
- *           lowercase and we will test that later.
- * Password: Nothing special required yet.
- * Start the development smtp email server
- * Start the application.
- * Wait a moment so everything has time to start before the unit tests begin.
  */
 before(done => {
+  // Set environmental variable values for test.
   process.env.MONGODB_URI = `mongodb://127.0.0.1/test`
   process.env.PORT = 1138
   process.env.CRYPTO_KEY = `MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT`
   process.env.JWT_SECRET = `devTestEnvironment`
   process.env.JWT_ALGORITHM = `HS256`
+  // Username: Needs to be unique. The username includes mixed-case letters here
+  // because passport-local-mongoose is setup to convert the username to
+  // lowercase and we will test that later.
   process.env.MOCHA_USERNAME = `${new Date().getTime()}@ReCiPe.RePoRt`
+  // Password: Nothing special required yet.
   process.env.MOCHA_PASSWORD = `password${new Date().getTime()}`
+  // Set the sendmail development port and host.
   process.env.SENDMAIL_DEV_PORT = 1025
   process.env.SENDMAIL_DEV_HOST = `localhost`
-  const maildev = new MailDev({
-    silent: true,
-    disableWeb: true
-  })
+  // Start the development smtp email server
   // MailDev WebApp running at http://localhost:1080
   // MailDev SMTP Server running at localhost:1025
+  const MailDev = require(`maildev`)
+  const maildev = new MailDev({
+    silent: true,
+    disableWeb: false
+  })
   maildev.listen()
   maildev.on(`new`, email => {
     const regex = /\bapi.recipe.report\/register\/(\S+)/
-    process.env.MOCHA_ACTIVATION_TOKEN = email.text.match(regex)[1]
+    const match = email.text.match(regex)
+    if (match !== null && match[1] !== undefined) {
+      process.env.MOCHA_ACTIVATION_TOKEN = match[1]
+    }
   })
-  require(`../app`)
+  // Start the application.
+  require(`../../app`)
+  // Wait a moment so everything has time to start before the unit tests begin.
   setTimeout(() => { console.log(``); done() }, 3000)
 })
 

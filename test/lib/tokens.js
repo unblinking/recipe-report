@@ -21,9 +21,9 @@ const account = new Account({
 })
 
 describe(`JSON Web Token tests.`, () => {
-  it(`should generate and return a JWT that can be decoded, header.alg HS256,
-      header.typ JWT, payload.id equal to the Account ID, payload.type of
-      'access', payload.iat today, and payload.exp in 2 days.`,
+  it(`should sign and decode a JWT, header.alg HS256, header.typ JWT, payload.id
+      equal to the Account ID, payload.type of 'access', payload.iat today, and
+      payload.exp in 2 days.`,
     async () => {
       const token = await tokens.sign(account, { type: 'access' })
       const decoded = await tokens.decode(token)
@@ -37,9 +37,9 @@ describe(`JSON Web Token tests.`, () => {
       theMoment(itExpires).fromNow().should.equal(`in 2 days`)
     }
   )
-  it(`should generate and return a JWT that can be decoded, header.alg HS256,
-      header.typ JWT, payload.id equal to the Account ID, payload.type
-      'activation', payload.iat today, and payload.exp in 2 days.`,
+  it(`should sign and decode a JWT, header.alg HS256, header.typ JWT, payload.id
+      equal to the Account ID, payload.type 'activation', payload.iat today, and
+      payload.exp in 2 days.`,
     async () => {
       const token = await tokens.sign(account, { type: 'activation' })
       const decoded = await tokens.decode(token)
@@ -53,9 +53,8 @@ describe(`JSON Web Token tests.`, () => {
       theMoment(itExpires).fromNow().should.equal(`in 2 days`)
     }
   )
-  it(`should generate and return a JWT that can be verified, id equal to the
-      Account ID, type of 'access', payload.iat today, and payload.exp in 2
-      days.`,
+  it(`should sign and verify a JWT, id equal to the Account ID, type of
+      'access', payload.iat today, and payload.exp in 2 days.`,
     async () => {
       const token = await tokens.sign(account, { type: 'access' })
       const verified = await tokens.verify(token)
@@ -67,9 +66,8 @@ describe(`JSON Web Token tests.`, () => {
       theMoment(itExpires).fromNow().should.equal(`in 2 days`)
     }
   )
-  it(`should generate and return a JWT that can be verified, id equal to the
-      Account ID, type of 'activation', payload.iat today, and payload.exp in 2
-      days.`,
+  it(`should sign and verify a JWT, id equal to the Account ID, type of
+      'activation', payload.iat today, and payload.exp in 2 days.`,
     async () => {
       const token = await tokens.sign(account, { type: 'activation' })
       const verified = await tokens.verify(token)
@@ -81,9 +79,8 @@ describe(`JSON Web Token tests.`, () => {
       theMoment(itExpires).fromNow().should.equal(`in 2 days`)
     }
   )
-  it(`should generate and return a JWT that can be verified, id equal to the
-      Account ID, type of 'access', payload.iat today, and payload.exp in a
-      month (2592000 seconds).`,
+  it(`should sign and verify a JWT, id equal to the Account ID, type of
+      'access', payload.iat today, and payload.exp in a month.`,
     async () => {
       const token = await tokens.sign(account, { type: 'access', expiresIn: 2592000 })
       const verified = await tokens.verify(token)
@@ -95,6 +92,14 @@ describe(`JSON Web Token tests.`, () => {
       theMoment(itExpires).fromNow().should.equal(`in a month`)
     }
   )
+  it(`should sign and decode a JWT, with payload.type of 'access', when the
+      token type is not specified.`,
+    async () => {
+      const token = await tokens.sign(account)
+      const decoded = await tokens.decode(token)
+      decoded.payload.type.should.equal(`access`)
+    }
+  )
   it(`should fail to sign a JWT if the Account is undefined, return an error
       with name 'TokenSignError' and message 'Account not found.'.`,
     async () => {
@@ -103,6 +108,26 @@ describe(`JSON Web Token tests.`, () => {
       } catch (err) {
         err.name.should.equal(`TokenSignError`)
         err.message.should.equal(`Account not found.`)
+      }
+    }
+  )
+  it(`should fail to verify a JWT if the token is not defined.`,
+    async () => {
+      try {
+        await tokens.verify(undefined)
+      } catch (err) {
+        err.name.should.equal(`TokenVerifyError`)
+        err.message.should.equal(`Token is not defined.`)
+      }
+    }
+  )
+  it(`should fail to decode a JWT if the token is not defined.`,
+    async () => {
+      try {
+        await tokens.decode(undefined)
+      } catch (err) {
+        err.name.should.equal(`TokenDecodeError`)
+        err.message.should.equal(`Token is not defined.`)
       }
     }
   )
