@@ -1,22 +1,17 @@
 #!/usr/bin/env node
+/* eslint-env mocha */
 
 'use strict'
 
 /**
- * Fun functions.
+ * Unit test of functions that put the fun in functions.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-const packageJson = require(`../package.json`)
+const funs = require(`../../lib/funs`)
+const packageJson = require(`../../package.json`)
 
-/**
- * The application name.
- * @see {@link http://patorjk.com/software/taag/#p=display&h=2&v=2&f=Standard&t=Recipe%0AReport TAAG}
- * @see {@link https://stackoverflow.com/a/41407246 nodejs console font color}
- */
-function graffiti () {
-  return new Promise(resolve => {
-    let art = `\x1b[1m\x1b[32m
+let art = `\x1b[1m\x1b[32m
   ____           _
  |  _ \\ ___  ___(_)_ __   ___
  | |_) / _ \\/ __| | '_ \\ / _ \\
@@ -28,7 +23,12 @@ function graffiti () {
  |_| \\_\\___| .__/ \\___/|_|   \\__|
            |_|     \x1b[37m version ${packageJson.version}
     \x1b[0m`
-    resolve(art)
-  })
-}
-exports.graffiti = graffiti
+
+describe(`Fun functions.`, () => {
+  it(`should return graffiti that can be logged to the console.`,
+    async () => {
+      const returned = await funs.graffiti()
+      returned.should.equal(art)
+    }
+  )
+})

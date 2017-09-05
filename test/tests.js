@@ -12,8 +12,14 @@
 require(`./prep/prepare`)
 
 // Next, the lib scripts.
+require(`./lib/accounts`)
+require(`./lib/crypts`)
+require(`./lib/datastore`)
 require(`./lib/emails`)
 require(`./lib/errors`)
+require(`./lib/funs`)
+require(`./lib/responds`)
+require(`./lib/templates`)
 require(`./lib/tokens`)
 
 // Next, the expressjs routes.

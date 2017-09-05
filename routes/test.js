@@ -13,6 +13,5 @@ const test = require(`../controllers/test`)
 
 let router = express.Router()
 router.get(`/`, tokenwall.middleware, test.success)
-router.get(`/throws`, test.throws)
 
 module.exports = router

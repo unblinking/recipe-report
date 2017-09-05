@@ -13,13 +13,6 @@ function success (req, res) {
   responds.success(res, `Welcome to the team, DZ-${req.accountId}.`)
 }
 
-function throws (req, res) {
-  let error = new Error(`Purposeful error to check expressjs error handling middleware.`)
-  error.name = `PurposefulError`
-  throw error
-}
-
 module.exports = {
-  success: success,
-  throws: throws
+  success: success
 }

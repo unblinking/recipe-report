@@ -7,13 +7,9 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-/**
- * Modules that will be used.
- * @see {@link https://github.com/Automattic/mongoose mongoose}
- * @see {@link https://github.com/saintedlama/passport-local-mongoose passport-local-mongoose}
- */
-const mongoose = require(`mongoose`)
-const Schema = mongoose.Schema
+const mongo = require(`mongoose`)
+mongo.Promise = global.Promise
+const Schema = mongo.Schema
 const passportLocalMongoose = require(`passport-local-mongoose`)
 
 /**
@@ -51,4 +47,4 @@ const options = {
 }
 Account.plugin(passportLocalMongoose, options)
 
-module.exports = mongoose.model(`Account`, Account)
+module.exports = mongo.model(`Account`, Account)

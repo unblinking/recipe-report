@@ -8,25 +8,14 @@
  */
 
 const parser = require(`body-parser`)
-const errors = require(`./lib/errors.js`)
+const datastore = require(`./lib/datastore`)
+const errors = require(`./lib/errors`)
 const expressjs = require(`express`)
 const funs = require(`./lib/funs`)
 const helmet = require(`helmet`)
 const herokuSslRedirect = require(`heroku-ssl-redirect`)
 const http = require(`http`)
-const mongo = require(`mongoose`)
 const router = require(`./routes/router`)
-
-/**
- * Connect to the datastore
- */
-function datastoreConnect () {
-  return new Promise(resolve => {
-    mongo.Promise = global.Promise
-    mongo.connect(process.env.MONGODB_URI, {useMongoClient: true})
-    mongo.connection.once(`connected`, resolve)
-  })
-}
 
 /**
  * Instantiate the expressjs application.
@@ -107,7 +96,7 @@ function serverListen (server) {
  */
 async function main () {
   await funs.graffiti()
-  await datastoreConnect()
+  await datastore.connect()
   let express = await expressInstance()
   await expressConfigure(express)
   await expressRoutes(express)
@@ -117,3 +106,7 @@ async function main () {
 }
 
 main()
+
+module.exports = {
+  main: main
+}
