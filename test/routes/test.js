@@ -8,25 +8,25 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-const crypt = require('../../lib/crypt')
+const crypts = require('../../lib/crypts')
 const supertest = require('supertest')
 const server = supertest('http://localhost:1138')
-const token = require('../../lib/token')
+const tokens = require('../../lib/tokens')
 
-describe(`GET /tokenwalltest (token authentication test)`, () => {
+describe(`GET /test (tokenwall authentication test)`, () => {
   it(`should be using a token with payload.type of 'access'.`,
     async () => {
-      const decoded = await token.decode(process.env.MOCHA_ACCESS_TOKEN)
+      const decoded = await tokens.decode(process.env.MOCHA_ACCESS_TOKEN)
       decoded.payload.type.should.equal(`access`)
       // Save the decrypted account ID for the next text.
-      process.env.MOCHA_ACCESS_ACCT_ID = crypt.decrypt(decoded.payload.id.toString())
+      process.env.MOCHA_ACCESS_ACCT_ID = crypts.decrypt(decoded.payload.id.toString())
     }
   )
   it(`should respond with json, status 200, body.status of 'success', and
       body.message of 'Welcome to the team, DZ-015.', when request sends a
       valid access token in the header.`,
     async () => {
-      const res = await server.get(`/tokenwalltest`)
+      const res = await server.get(`/test`)
         .set(`Accept`, `application/json`)
         .set(`Content-Type`, `application/json`)
         .set(`token`, process.env.MOCHA_ACCESS_TOKEN)
@@ -42,7 +42,7 @@ describe(`GET /tokenwalltest (token authentication test)`, () => {
       'TokenwallError', when request sends an activation token in the header
       instead of an access token.`,
     async () => {
-      const res = await server.get(`/tokenwalltest`)
+      const res = await server.get(`/test`)
         .set(`Accept`, `application/json`)
         .set(`Content-Type`, `application/json`)
         .set(`token`, process.env.MOCHA_ACTIVATION_TOKEN)
@@ -57,7 +57,7 @@ describe(`GET /tokenwalltest (token authentication test)`, () => {
       body.message of 'jwt malformed', and body.json.name of 'JsonWebTokenError'
       when request sends an invalid authentication token in the header.`,
     async () => {
-      const res = await server.get(`/tokenwalltest`)
+      const res = await server.get(`/test`)
         .set(`Accept`, `application/json`)
         .set(`Content-Type`, `application/json`)
         .set(`token`, `invalidAuthenticationToken`)
@@ -73,7 +73,7 @@ describe(`GET /tokenwalltest (token authentication test)`, () => {
       'JsonWebTokenError' when request sends an empty authentication token in
       the header.`,
     async () => {
-      const res = await server.get(`/tokenwalltest`)
+      const res = await server.get(`/test`)
         .set(`Accept`, `application/json`)
         .set(`Content-Type`, `application/json`)
         .set(`token`, ``)
@@ -88,13 +88,13 @@ describe(`GET /tokenwalltest (token authentication test)`, () => {
       body.message of 'Error reading token.', and body.json.name of
       'TokenVerifyError' when request does not send any token in the header.`,
     async () => {
-      const res = await server.get(`/tokenwalltest`)
+      const res = await server.get(`/test`)
         .set(`Accept`, `application/json`)
         .set(`Content-Type`, `application/json`)
       res.type.should.equal(`application/json`)
       res.status.should.equal(200)
       res.body.status.should.equal(`error`)
-      res.body.message.should.equal(`Error reading token.`)
+      res.body.message.should.equal(`Token is not defined.`)
       res.body.json.name.should.equal(`TokenVerifyError`)
     }
   )

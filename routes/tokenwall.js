@@ -7,15 +7,15 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-const crypt = require('../lib/crypt')
-const respond = require('../lib/respond')
-const token = require('../lib/token')
+const crypts = require('../lib/crypts')
+const responds = require('../lib/responds')
+const tokens = require('../lib/tokens')
 
 async function middleware (req, res, next) {
   try {
-    const decodedToken = await token.verify(req.headers.token)
-    if (decodedToken.type === `access`) {
-      const accountId = crypt.decrypt(decodedToken.id.toString())
+    const token = await tokens.verify(req.headers.token)
+    if (token.type === `access`) {
+      const accountId = crypts.decrypt(token.id.toString())
       req.accountId = accountId
     } else {
       let tokenwallError = new Error(`Token type is not access.`)
@@ -24,7 +24,7 @@ async function middleware (req, res, next) {
     }
     next()
   } catch (err) {
-    respond.error(res, err)
+    responds.error(res, err)
   }
 }
 

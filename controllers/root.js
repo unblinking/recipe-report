@@ -7,20 +7,16 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-const respond = require('../lib/respond')
+const responds = require(`../lib/responds`)
 
-function controller (req, res) {
-  try {
-    respond.success(
-      res,
-      'This is the http://www.Recipe.Report API server.',
-      { headers: req.headers }
-    )
-  } catch (err) {
-    respond.error(res, err)
-  }
+function curtsy (req, res) {
+  responds.success(
+    res,
+    `Welcome to the Recipe.Report API server.`,
+    { headers: req.headers }
+  )
 }
 
 module.exports = {
-  controller: controller
+  curtsy: curtsy
 }
