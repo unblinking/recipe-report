@@ -13,7 +13,6 @@
  */
 before(done => {
   // Set environmental variable values for test.
-  process.env.MONGODB_URI = `mongodb://127.0.0.1/test`
   process.env.PORT = 1138
   process.env.CRYPTO_KEY = `MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT`
   process.env.JWT_SECRET = `devTestEnvironment`
@@ -43,10 +42,7 @@ before(done => {
       process.env.MOCHA_ACTIVATION_TOKEN = match[1]
     }
   })
-  // Start the application.
-  require(`../../app`)
-  // Wait a moment so everything has time to start before the unit tests begin.
-  setTimeout(() => { console.log(``); done() }, 3000)
+  done()
 })
 
 describe(`Preparing to run unit tests.`, () => {

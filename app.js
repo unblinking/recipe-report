@@ -95,17 +95,19 @@ function serverListen (server) {
  * Create the API parts in proper order.
  */
 async function main () {
-  await funs.graffiti()
-  await datastore.connect()
-  let express = await expressInstance()
-  await expressConfigure(express)
-  await expressRoutes(express)
-  await expressErrors(express)
-  let server = await serverInstance(express)
-  await serverListen(server)
+  try {
+    await datastore.connect()
+    let express = await expressInstance()
+    await expressConfigure(express)
+    await expressRoutes(express)
+    await expressErrors(express)
+    let server = await serverInstance(express)
+    await serverListen(server)
+    console.log(await funs.graffiti())
+  } catch (err) {
+    errors.handleFatal(err)
+  }
 }
-
-main()
 
 module.exports = {
   main: main

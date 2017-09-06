@@ -11,6 +11,9 @@
 // First, some preparation needs to be done.
 require(`./prep/prepare`)
 
+// App startup.
+require(`./app/app`)
+
 // Next, the lib scripts.
 require(`./lib/accounts`)
 require(`./lib/crypts`)
