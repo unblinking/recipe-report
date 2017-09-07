@@ -11,6 +11,11 @@
 const crypts = require(`../../lib/crypts`)
 
 describe(`Cryptographic functions.`, () => {
+  it(`should set the required env vars.`,
+    () => {
+      process.env.CRYPTO_KEY = `MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT`
+    }
+  )
   it(`should encrypt a given string.`,
     async () => {
       const plainText = `Secret words`
@@ -36,6 +41,9 @@ describe(`Cryptographic functions.`, () => {
       decrypted.should.equal(plainText)
     }
   )
+  it(`should clean up the required env vars.`,
+    () => {
+      delete process.env.CRYPTO_KEY
+    }
+  )
 })
-
-// RKCN3/c4fAe6meb4HxSKYcxHTTQVdoaYYGJP7rrZpIo=

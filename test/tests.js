@@ -8,24 +8,28 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-// First, some preparation needs to be done.
+/**
+ * First, some preparation needs to be done.
+ */
 require(`./prep/prepare`)
 
-// App startup.
-require(`./app/app`)
-
-// Next, the lib scripts.
+/**
+ * Next, test the scripts in /lib.
+ */
 require(`./lib/accounts`)
 require(`./lib/crypts`)
-require(`./lib/datastore`)
-require(`./lib/emails`)
+require(`./lib/datastores`)
 require(`./lib/errors`)
 require(`./lib/funs`)
+require(`./lib/emails`)
 require(`./lib/responds`)
 require(`./lib/templates`)
 require(`./lib/tokens`)
 
-// Next, the expressjs routes.
+/**
+ * Start the expressjs app and test its routes.
+ */
+require(`./app/app`)
 require(`./routes/root`)
 require(`./routes/register`)
 require(`./routes/activate`)

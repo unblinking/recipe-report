@@ -9,18 +9,22 @@
  */
 
 const accounts = require(`../../lib/accounts`)
-const datastore = require(`../../lib/datastore`)
+const datastores = require(`../../lib/datastores`)
+const mongo = require(`mongoose`)
 const theMoment = require('moment')
 
 describe(`Account management wrapper functions.`, () => {
   let email = `${new Date().getTime()}@recipe.report`
   let password = `password${new Date().getTime()}`
-  it(`should connect to the datastore.`,
+  it(`should begin with the MongoDB readyState of 1 (connected).`,
     async () => {
-      await datastore.connect()
+      process.env.MONGODB_URI = `mongodb://127.0.0.1/test`
+      await datastores.connect()
+      mongo.connection.readyState.should.equal(1)
     }
   )
-  it(`should fail to create (register) a new account without an email address.`,
+  it(`should fail to create (register) a new account in the datastore without an
+      email address.`,
     async () => {
       try {
         await accounts.create(undefined, password)
@@ -30,7 +34,8 @@ describe(`Account management wrapper functions.`, () => {
       }
     }
   )
-  it(`should fail to create (register) a new account without a password.`,
+  it(`should fail to create (register) a new account in the datastore without a
+      password.`,
     async () => {
       try {
         await accounts.create(email, undefined)
@@ -56,6 +61,13 @@ describe(`Account management wrapper functions.`, () => {
       account._id.should.not.equal(undefined)
       account.activated.should.equal(false)
       account.nickname.should.equal(`nickname`)
+    }
+  )
+  it(`should end with the MongoDB readyState of 0 (disconnected).`,
+    async () => {
+      await datastores.disconnect()
+      delete process.env.MONGODB_URI
+      mongo.connection.readyState.should.equal(0)
     }
   )
 })

@@ -8,20 +8,25 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-const crypts = require('../../lib/crypts')
-const supertest = require('supertest')
-const server = supertest('http://localhost:1138')
-const tokens = require('../../lib/tokens')
+const accounts = require(`../../lib/accounts`)
+const supertest = require(`supertest`)
+const server = supertest(`http://localhost:1138`)
+const tokens = require(`../../lib/tokens`)
 
 describe(`GET /test (tokenwall authentication test)`, () => {
-  it(`should be using a token with payload.type of 'access'.`,
-    async () => {
-      const decoded = await tokens.decode(process.env.MOCHA_ACCESS_TOKEN)
-      decoded.payload.type.should.equal(`access`)
-      // Save the decrypted account ID for the next text.
-      process.env.MOCHA_ACCESS_ACCT_ID = crypts.decrypt(decoded.payload.id.toString())
-    }
-  )
+  before(async () => {
+    // Prepare access and activation tokens.
+    process.env.TEST_ACCOUNT_USERNAME = `${new Date().getTime()}@ReCiPe.RePoRt`
+    const email = process.env.TEST_ACCOUNT_USERNAME
+    process.env.TEST_ACCOUNT_PASSWORD = new Date().getTime()
+    const password = process.env.TEST_ACCOUNT_PASSWORD
+    const account = await accounts.create(email, password)
+    process.env.MOCHA_ACCESS_ACCT_ID = account._id
+    const accessToken = await tokens.sign(account, { type: `access` })
+    process.env.MOCHA_ACCESS_TOKEN = accessToken
+    const activationToken = await tokens.sign(account, { type: `activation` })
+    process.env.MOCHA_ACTIVATION_TOKEN = activationToken
+  })
   it(`should respond with json, status 200, body.status of 'success', and
       body.message of 'Welcome to the team, DZ-015.', when request sends a
       valid access token in the header.`,
@@ -98,4 +103,11 @@ describe(`GET /test (tokenwall authentication test)`, () => {
       res.body.json.name.should.equal(`TokenVerifyError`)
     }
   )
+  after(() => {
+    delete process.env.TEST_ACCOUNT_USERNAME
+    delete process.env.TEST_ACCOUNT_PASSWORD
+    delete process.env.MOCHA_ACCESS_ACCT_ID
+    delete process.env.MOCHA_ACCESS_TOKEN
+    delete process.env.MOCHA_ACTIVATION_TOKEN
+  })
 })

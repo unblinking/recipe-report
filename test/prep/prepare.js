@@ -12,17 +12,6 @@
  * Prepare for unit testing.
  */
 before(done => {
-  // Set environmental variable values for test.
-  process.env.PORT = 1138
-  process.env.CRYPTO_KEY = `MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT`
-  process.env.JWT_SECRET = `devTestEnvironment`
-  process.env.JWT_ALGORITHM = `HS256`
-  // Username: Needs to be unique. The username includes mixed-case letters here
-  // because passport-local-mongoose is setup to convert the username to
-  // lowercase and we will test that later.
-  process.env.MOCHA_USERNAME = `${new Date().getTime()}@ReCiPe.RePoRt`
-  // Password: Nothing special required yet.
-  process.env.MOCHA_PASSWORD = `password${new Date().getTime()}`
   // Set the sendmail development port and host.
   process.env.SENDMAIL_DEV_PORT = 1025
   process.env.SENDMAIL_DEV_HOST = `localhost`
@@ -35,13 +24,6 @@ before(done => {
     disableWeb: false
   })
   maildev.listen()
-  maildev.on(`new`, email => {
-    const regex = /\bapi.recipe.report\/register\/(\S+)/
-    const match = email.text.match(regex)
-    if (match !== null && match[1] !== undefined) {
-      process.env.MOCHA_ACTIVATION_TOKEN = match[1]
-    }
-  })
   done()
 })
 

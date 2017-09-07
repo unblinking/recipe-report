@@ -8,36 +8,51 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
+const datastores = require(`../../lib/datastores`)
 const intercept = require(`intercept-stdout`)
+const mongo = require(`mongoose`)
 const util = require(`util`)
 
+const setTimeoutPromise = util.promisify(setTimeout)
+
 describe(`App.js startup tests.`, () => {
-  it(`should cause a fatal error when MongoDB connection fails.`,
+  it(`should begin with the MongoDB readyState of 0 (disconnected).`,
     async () => {
-      process.env.MONGODB_URI = `mongodb://` // Missing URI hostname on purpose.
+      await datastores.disconnect()
+      mongo.connection.readyState.should.equal(0)
+    }
+  )
+  it(`should cause a fatal error when env vars are not set.`,
+    async () => {
+      // delete process.env.MONGODB_URI
       const exit = process.exit
-      process.exit = () => { process.env.FATAL_ERROR_TEST = `exited` }
+      process.exit = () => { process.env.FATAL_APP_TEST = `exited` }
       let unhook = intercept(txt => { return `` }) // Begin muting stdout.
       const fatalApp = require(`../../app`)
       fatalApp.main()
-      process.env.FATAL_ERROR_TEST.should.equal(`exited`)
+      await setTimeoutPromise(100) // Wait for the app to error.
+      process.env.FATAL_APP_TEST.should.equal(`exited`)
       unhook() // Stop muting stdout.
       process.exit = exit // Reset process.exit as it was.
       // Delete the require.cache instance for the app, so that it may be
       // required again fresh in the next test.
       delete require.cache[require.resolve(`../../app`)]
+      delete process.env.FATAL_APP_TEST
     }
   )
   it(`should start the app successfully.`,
     async () => {
       process.env.MONGODB_URI = `mongodb://127.0.0.1/test`
+      process.env.PORT = 1138
+      process.env.CRYPTO_KEY = `MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT`
+      process.env.JWT_SECRET = `devTestEnvironment`
+      process.env.JWT_ALGORITHM = `HS256`
       const app = require(`../../app`)
       app.main()
     }
   )
   it(`should wait a few seconds for the app to finish starting.`,
     async () => {
-      const setTimeoutPromise = util.promisify(setTimeout)
       await setTimeoutPromise(5000) // Wait 2 seconds for the app to finish starting.
     }
   )
