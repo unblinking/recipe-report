@@ -10,7 +10,7 @@
 
 const responds = require(`../../lib/responds`)
 
-describe(`Expressjs response wrapper functions.`, () => {
+describe(`Expressjs response wrapper functions`, () => {
   it(`should respond with an unknown error message when no error is provided.`,
     () => {
       let res = {

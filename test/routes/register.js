@@ -12,6 +12,11 @@ const supertest = require('supertest')
 const server = supertest('http://localhost:1138')
 
 describe(`POST /register (new account registration)`, () => {
+  before(() => {
+    // Set the required environmental variables.
+    process.env.TEST_ACCOUNT_USERNAME = `${new Date().getTime()}@ReCiPe.RePoRt`
+    process.env.TEST_ACCOUNT_PASSWORD = new Date().getTime()
+  })
   it(`should respond with type json, status 200, body.status of 'success',
       body.message of 'Registration successful.', body.json property 'token',
       and body.json.token is defined, when request sends a new account email and
@@ -20,8 +25,8 @@ describe(`POST /register (new account registration)`, () => {
       const res = await server.post(`/register`)
         .set(`Content-Type`, `application/json`)
         .send({
-          email: process.env.MOCHA_USERNAME,
-          password: process.env.MOCHA_PASSWORD
+          email: process.env.TEST_ACCOUNT_USERNAME,
+          password: process.env.TEST_ACCOUNT_PASSWORD
         })
       res.type.should.equal(`application/json`)
       res.status.should.equal(200)
@@ -37,8 +42,8 @@ describe(`POST /register (new account registration)`, () => {
       const res = await server.post(`/register`)
         .set(`Content-Type`, `application/json`)
         .send({
-          email: process.env.MOCHA_USERNAME,
-          password: process.env.MOCHA_PASSWORD
+          email: process.env.TEST_ACCOUNT_USERNAME,
+          password: process.env.TEST_ACCOUNT_PASSWORD
         })
       res.type.should.equal(`application/json`)
       res.status.should.equal(200)
@@ -71,7 +76,7 @@ describe(`POST /register (new account registration)`, () => {
       const res = await server.post(`/register`)
         .set(`Content-Type`, `application/json`)
         .send({
-          password: process.env.MOCHA_PASSWORD
+          password: process.env.TEST_ACCOUNT_PASSWORD
         })
       res.type.should.equal(`application/json`)
       res.status.should.equal(200)
@@ -89,7 +94,7 @@ describe(`POST /register (new account registration)`, () => {
         .set(`Content-Type`, `application/json`)
         .send({
           email: `invalidEmail`,
-          password: process.env.MOCHA_PASSWORD
+          password: process.env.TEST_ACCOUNT_PASSWORD
         })
       res.type.should.equal(`application/json`)
       res.status.should.equal(200)
@@ -98,4 +103,9 @@ describe(`POST /register (new account registration)`, () => {
       res.body.json.name.should.equal(`SeeminglyInvalidEmailError`)
     }
   )
+  after(() => {
+    // Clean up the required environmental variables.
+    delete process.env.TEST_ACCOUNT_USERNAME
+    delete process.env.TEST_ACCOUNT_PASSWORD
+  })
 })

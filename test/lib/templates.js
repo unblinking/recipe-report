@@ -10,16 +10,15 @@
 
 const templates = require(`../../lib/templates`)
 
-describe(`Template functions.`, () => {
-  it(`should return account activation email template with the provided token
+describe(`Templates`, () => {
+  it(`should return an account activation email template with the provided token
       in the form of a link.`,
     () => {
       let email = `seeminglyvalid@recipe.report`
       let token = `123456`
-      const rendered = templates.activation(email, token)
+      const template = templates.activation(email, token)
       const regex = /\bapi.recipe.report\/register\/(\S+)/
-      const match = rendered.match(regex)
-      match[1].should.equal(token)
+      template.match(regex)[1].should.equal(token)
     }
   )
 })

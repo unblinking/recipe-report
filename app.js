@@ -8,7 +8,7 @@
  */
 
 const parser = require(`body-parser`)
-const datastore = require(`./lib/datastore`)
+const datastores = require(`./lib/datastores`)
 const errors = require(`./lib/errors`)
 const expressjs = require(`express`)
 const funs = require(`./lib/funs`)
@@ -16,6 +16,27 @@ const helmet = require(`helmet`)
 const herokuSslRedirect = require(`heroku-ssl-redirect`)
 const http = require(`http`)
 const router = require(`./routes/router`)
+
+/**
+ * Verify required env vars are set.
+ */
+function environmentals () {
+  return new Promise((resolve, reject) => {
+    let missing = ``
+    if (process.env.MONGODB_URI === undefined) { missing = missing.concat(`\n MONGODB_URI`) }
+    if (process.env.PORT === undefined) { missing = missing.concat(`\n PORT`) }
+    if (process.env.CRYPTO_KEY === undefined) { missing = missing.concat(`\n CRYPTO_KEY`) }
+    if (process.env.JWT_SECRET === undefined) { missing = missing.concat(`\n JWT_SECRET`) }
+    if (process.env.JWT_ALGORITHM === undefined) { missing = missing.concat(`\n JWT_ALGORITHM`) }
+    if (missing === ``) {
+      resolve()
+    } else {
+      let error = new Error(`Environmental variable(s) missing:${missing}`)
+      error.name = `EnvironmentalVariableError`
+      reject(error)
+    }
+  })
+}
 
 /**
  * Instantiate the expressjs application.
@@ -95,17 +116,20 @@ function serverListen (server) {
  * Create the API parts in proper order.
  */
 async function main () {
-  await funs.graffiti()
-  await datastore.connect()
-  let express = await expressInstance()
-  await expressConfigure(express)
-  await expressRoutes(express)
-  await expressErrors(express)
-  let server = await serverInstance(express)
-  await serverListen(server)
+  try {
+    await environmentals()
+    await datastores.connect()
+    let express = await expressInstance()
+    await expressConfigure(express)
+    await expressRoutes(express)
+    await expressErrors(express)
+    let server = await serverInstance(express)
+    await serverListen(server)
+    console.log(await funs.graffiti())
+  } catch (err) {
+    errors.handleFatal(err)
+  }
 }
-
-main()
 
 module.exports = {
   main: main
