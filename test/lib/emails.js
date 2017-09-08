@@ -12,7 +12,7 @@ const checkEmail = require(`../../lib/emails`).check
 const renderEmail = require(`../../lib/emails`).render
 const sendEmail = require(`../../lib/emails`).send
 
-describe(`Email wrapper functions.`, () => {
+describe(`Email operations`, () => {
   it(`should check an email address and return it when it seems valid.
       seeminglyvalid@recipe.report`,
     async () => {
@@ -100,6 +100,10 @@ describe(`Email wrapper functions.`, () => {
       const text = `This is a unit test email.`
       const reply = await sendEmail(from, to, subject, text)
       reply.should.equal(`221 Bye\r\n`)
+      process.env.TEST_EMAIL_SENT_TEXT.should.equal(`This is a unit test email.\n\n`)
+      process.env.TEST_EMAIL_SENT_SUBJECT.should.equal(`Unit test sending email.`)
+      process.env.TEST_EMAIL_SENT_FROM.should.equal(`no-reply@recipe.report`)
+      process.env.TEST_EMAIL_SENT_TO.should.equal(`unitTesting@recipe.report`)
     }
   )
   it(`should not send email when 'from' is not provided.`,
@@ -144,4 +148,11 @@ describe(`Email wrapper functions.`, () => {
       }
     }
   )
+  after(() => {
+    // Clean up the used environmental variables.
+    delete process.env.TEST_EMAIL_SENT_TEXT
+    delete process.env.TEST_EMAIL_SENT_SUBJECT
+    delete process.env.TEST_EMAIL_SENT_FROM
+    delete process.env.TEST_EMAIL_SENT_TO
+  })
 })

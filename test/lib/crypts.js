@@ -10,40 +10,38 @@
 
 const crypts = require(`../../lib/crypts`)
 
-describe(`Cryptographic functions.`, () => {
-  it(`should set the required env vars.`,
-    () => {
-      process.env.CRYPTO_KEY = `MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT`
+describe(`Cryptographic operations`, () => {
+  before(() => {
+    // Set the required environmental variables.
+    process.env.CRYPTO_KEY = `MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT`
+  })
+  it(`should encrypt a given plaintext.`,
+    async () => {
+      const thePlainText = `Secret words`
+      const theCiphertext = await crypts.encrypt(thePlainText)
+      theCiphertext.should.not.equal(thePlainText)
+      theCiphertext.length.should.equal(44)
     }
   )
-  it(`should encrypt a given string.`,
+  it(`should encrypt a given plaintext twice, resulting in unique ciphertexts.`,
     async () => {
-      const plainText = `Secret words`
-      const encrypted = await crypts.encrypt(plainText)
-      encrypted.should.not.equal(plainText)
-      encrypted.length.should.equal(44)
-    }
-  )
-  it(`should encrypt a given string twice, resulting in a unique ciphertexts.`,
-    async () => {
-      const plainText = `Secret words`
-      const encrypted1 = await crypts.encrypt(plainText)
-      const encrypted2 = await crypts.encrypt(plainText)
-      encrypted1.should.not.equal(encrypted2)
+      const thePlainText = `Secret words`
+      const theFirstCiphertext = await crypts.encrypt(thePlainText)
+      const theSecondCiphertext = await crypts.encrypt(thePlainText)
+      theFirstCiphertext.should.not.equal(theSecondCiphertext)
     }
   )
   it(`should decrypt an encrypted string.`,
     async () => {
-      const plainText = `Secret words`
-      const encrypted = await crypts.encrypt(plainText)
-      encrypted.should.not.equal(plainText)
-      const decrypted = await crypts.decrypt(encrypted)
-      decrypted.should.equal(plainText)
+      const theOriginalPlainText = `Secret words`
+      const theCiphertext = await crypts.encrypt(theOriginalPlainText)
+      theCiphertext.should.not.equal(theOriginalPlainText)
+      const theDecryptedCiphertext = await crypts.decrypt(theCiphertext)
+      theDecryptedCiphertext.should.equal(theOriginalPlainText)
     }
   )
-  it(`should clean up the required env vars.`,
-    () => {
-      delete process.env.CRYPTO_KEY
-    }
-  )
+  after(() => {
+    // Clean up the required environmental variables.
+    delete process.env.CRYPTO_KEY
+  })
 })

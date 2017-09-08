@@ -15,16 +15,13 @@ const util = require(`util`)
 
 const setTimeoutPromise = util.promisify(setTimeout)
 
-describe(`App.js startup tests.`, () => {
-  it(`should begin with the MongoDB readyState of 0 (disconnected).`,
-    async () => {
-      await datastores.disconnect()
-      mongo.connection.readyState.should.equal(0)
-    }
-  )
+describe(`App.js (the main app script)`, () => {
+  before(async () => {
+    await datastores.disconnect()
+    mongo.connection.readyState.should.equal(0) // readyState of 0 (disconnected)
+  })
   it(`should cause a fatal error when env vars are not set.`,
     async () => {
-      // delete process.env.MONGODB_URI
       const exit = process.exit
       process.exit = () => { process.env.FATAL_APP_TEST = `exited` }
       let unhook = intercept(txt => { return `` }) // Begin muting stdout.
@@ -47,13 +44,11 @@ describe(`App.js startup tests.`, () => {
       process.env.CRYPTO_KEY = `MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT`
       process.env.JWT_SECRET = `devTestEnvironment`
       process.env.JWT_ALGORITHM = `HS256`
+      let unhook = intercept(txt => { return `` }) // Begin muting stdout.
       const app = require(`../../app`)
       app.main()
-    }
-  )
-  it(`should wait a few seconds for the app to finish starting.`,
-    async () => {
-      await setTimeoutPromise(5000) // Wait 2 seconds for the app to finish starting.
+      await setTimeoutPromise(2000) // Wait 2 seconds for the app to finish starting.
+      unhook() // Stop muting stdout.
     }
   )
 })

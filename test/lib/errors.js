@@ -11,7 +11,7 @@
 const errors = require(`../../lib/errors`)
 const intercept = require(`intercept-stdout`)
 
-describe(`Error handling middleware for expressjs.`, () => {
+describe(`Error handling middleware for expressjs`, () => {
   it(`should respond with status 404, and text 'four, oh four!'`,
     () => {
       let res = {

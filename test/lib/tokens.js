@@ -13,7 +13,7 @@ const crypts = require('../../lib/crypts')
 const tokens = require('../../lib/tokens')
 const theMoment = require('moment')
 
-describe(`JSON Web Token tests.`, () => {
+describe(`Token operations`, () => {
   before(() => {
     // Set the required environmental variables.
     process.env.CRYPTO_KEY = `MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT`

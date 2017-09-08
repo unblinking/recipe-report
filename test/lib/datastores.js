@@ -12,14 +12,26 @@ const datastores = require(`../../lib/datastores`)
 const intercept = require(`intercept-stdout`)
 const mongo = require(`mongoose`)
 
-describe(`Datastore wrapper functions.`, () => {
-  it(`should begin with the MongoDB readyState of 0 (disconnected).`,
+describe(`Datastore operations`, () => {
+  before(async () => {
+    await datastores.disconnect()
+    mongo.connection.readyState.should.equal(0) // readyState of 0 (disconnected)
+  })
+  it(`should fail to connect to the datastore when the MongoDB URI environmental
+      variable is not set.`,
     async () => {
-      await datastores.disconnect()
-      mongo.connection.readyState.should.equal(0)
+      let unhook = intercept(txt => { return `` }) // Begin muting stdout.
+      try {
+        delete process.env.MONGODB_URI
+        await datastores.connect()
+      } catch (err) {
+        err.name.should.equal(`MongoError`)
+        err.message.should.equal(`failed to connect to server [undefined:27017] on first connect [MongoError: getaddrinfo ENOTFOUND undefined undefined:27017]`)
+      }
+      unhook() // Stop muting stdout.
     }
   )
-  it(`should fail to connect to the datastore when the URI is incomplete.`,
+  it(`should fail to connect to the datastore when the MongoDB URI is incomplete.`,
     async () => {
       let unhook = intercept(txt => { return `` }) // Begin muting stdout.
       try {
@@ -45,11 +57,9 @@ describe(`Datastore wrapper functions.`, () => {
       result.should.equal(`MongoDB readyState 1`)
     }
   )
-  it(`should end with the MongoDB readyState of 0 (disconnected).`,
-    async () => {
-      await datastores.disconnect()
-      delete process.env.MONGODB_URI
-      mongo.connection.readyState.should.equal(0)
-    }
-  )
+  after(async () => {
+    await datastores.disconnect()
+    delete process.env.MONGODB_URI
+    mongo.connection.readyState.should.equal(0) // readyState of 0 (disconnected)
+  })
 })
