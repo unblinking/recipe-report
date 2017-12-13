@@ -7,7 +7,3 @@ This is the source code repository for the Recipe.Report API Server.
 [![Codecov](https://img.shields.io/codecov/c/github/nothingworksright/recipereport_api.svg?style=flat-square&label=Test%20Coverage)](https://codecov.io/gh/nothingworksright/recipereport_api)  
 [![Travis-CI](https://img.shields.io/travis/nothingworksright/recipereport_api.svg?style=flat-square&label=Test-Build-Deploy)](https://travis-ci.org/nothingworksright/recipereport_api)  
 [![Known Vulnerabilities](https://snyk.io/test/github/nothingworksright/recipereport_api/badge.svg)](https://snyk.io/test/github/nothingworksright/recipereport_api)  
-
-## Show your support  
-
-Support this project by [making a pledge via Patreon](https://www.patreon.com/jmg1138).  
