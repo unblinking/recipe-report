@@ -39,7 +39,7 @@ describe(`Datastore operations`, () => {
         await datastores.connect()
       } catch (err) {
         err.name.should.equal(`Error`)
-        err.message.should.equal(`Invalid mongodb uri. Missing hostname`)
+        err.message.should.equal(`Invalid mongodb uri "mongodb://". Missing hostname`)
       }
       unhook() // Stop muting stdout.
     }
