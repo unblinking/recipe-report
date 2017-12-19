@@ -1,11 +1,13 @@
 {
-  "name": "recipe.report_API",
+  "name": "recipereport_api",
   "version": "0.0.1",
   "description": "Recipe.Report API server.",
   "repository": "github:nothingworksright/recipereport_api",
+  "license": "MIT",
   "engines": {
-    "node": "8.9.1"
+    "node": "8.9.3"
   },
+  "private": false,
   "scripts": {
     "linter": "standard",
     "fixer": "standard --fix",
@@ -17,7 +19,6 @@
   },
   "author": "jmg1138 https://github.com/jmg1138",
   "main": "app.js",
-  "license": "MIT",
   "readme": "README.md",
   "dependencies": {
     "body-parser": "1.18.2",
