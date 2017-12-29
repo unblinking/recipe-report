@@ -3,7 +3,7 @@
 'use strict'
 
 /**
- * Expressjs API for the Recipe Report application.
+ * Expressjs API for the Recipe.Report application.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 

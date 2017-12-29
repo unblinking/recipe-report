@@ -2,6 +2,7 @@
 
 /**
  * Starts the Recipe.Report API server in development mode.
+ * Start the mongod service before running this: sudo service mongod start
  */
 
 const app = require(`./app`)
