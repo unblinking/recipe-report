@@ -23,10 +23,7 @@ describe(`POST /login (account login)`, () => {
     const account = await accounts.create(email, password)
     process.env.TEST_ACCESS_TOKEN = await tokens.sign(account, { type: `access` })
   })
-  it(`should respond with JSON, status 200, body.status of 'success',
-      body.message of 'Authentication successful.', body.json property
-      'token', and the decoded token payload.type of 'access', when
-      request sends existing account email and password.`,
+  it(`should respond with JSON, status 200, body.status of 'success', body.message of 'Authentication successful.', body.json property 'token', and the decoded token payload.type of 'access', when request sends existing account email and password.`,
     async () => {
       const res = await server.post(`/login`)
         .set(`Content-Type`, `application/json`)
@@ -45,8 +42,7 @@ describe(`POST /login (account login)`, () => {
       process.env.TEST_ACCESS_TOKEN = res.body.json.token
     }
   )
-  it(`should respond with status 401 Unauthorized when request sends existing
-      account email and an incorrect password.`,
+  it(`should respond with status 401 Unauthorized when request sends existing account email and an incorrect password.`,
     async () => {
       const res = await server.post(`/login`)
         .set(`Content-Type`, `application/json`)
@@ -57,8 +53,7 @@ describe(`POST /login (account login)`, () => {
       res.status.should.equal(401)
     }
   )
-  it(`should respond with status 401 Unauthorized when request sends existing
-      account email and password correct but too quickly after previous attempt.`,
+  it(`should respond with status 401 Unauthorized when request sends existing account email and password correct but too quickly after previous attempt.`,
     async () => {
       const res = await server.post(`/login`)
         .set(`Content-Type`, `application/json`)
@@ -76,10 +71,7 @@ describe(`POST /login (account login)`, () => {
     }
   )
   // Try logging in, again.
-  it(`should respond with JSON, status 200, body.status of 'success',
-      body.message of 'Authentication successful.', and body.json property of
-      'token', when request sends existing account email and password
-      (this is after an initial login success, then some failed attempts).`,
+  it(`should respond with JSON, status 200, body.status of 'success', body.message of 'Authentication successful.', and body.json property of 'token', when request sends existing account email and password (this is after an initial login success, then some failed attempts).`,
     async () => {
       const res = await server.post(`/login`)
         .set(`Content-Type`, `application/json`)
@@ -94,8 +86,7 @@ describe(`POST /login (account login)`, () => {
       res.body.json.should.have.property(`token`)
     }
   )
-  it(`should respond with status 401 Unauthorized when request sends an unknown
-      email and an existing account password.`,
+  it(`should respond with status 401 Unauthorized when request sends an unknown email and an existing account password.`,
     async () => {
       const res = await server.post(`/login`)
         .set(`Content-Type`, `application/json`)
@@ -106,8 +97,7 @@ describe(`POST /login (account login)`, () => {
       res.status.should.equal(401)
     }
   )
-  it(`should respond with status 400 Bad Request when request sends existing
-      account email and an empty password.`,
+  it(`should respond with status 400 Bad Request when request sends existing account email and an empty password.`,
     async () => {
       const res = await server.post(`/login`)
         .set(`Content-Type`, `application/json`)
@@ -118,8 +108,7 @@ describe(`POST /login (account login)`, () => {
       res.status.should.equal(400)
     }
   )
-  it(`should respond with status 400 Bad Request when request sends empty email
-      and existing account password.`,
+  it(`should respond with status 400 Bad Request when request sends empty email and existing account password.`,
     async () => {
       const res = await server.post(`/login`)
         .set(`Content-Type`, `application/json`)
@@ -130,8 +119,7 @@ describe(`POST /login (account login)`, () => {
       res.status.should.equal(400)
     }
   )
-  it(`should respond with status 400 Bad Request when request sends empty email
-      and empty password.`,
+  it(`should respond with status 400 Bad Request when request sends empty email and empty password.`,
     async () => {
       const res = await server.post(`/login`)
         .set(`Content-Type`, `application/json`)

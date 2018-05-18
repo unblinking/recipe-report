@@ -27,9 +27,7 @@ describe(`GET /test (tokenwall authentication test)`, () => {
     const activationToken = await tokens.sign(account, { type: `activation` })
     process.env.MOCHA_ACTIVATION_TOKEN = activationToken
   })
-  it(`should respond with json, status 200, body.status of 'success', and
-      body.message of 'Welcome to the team, DZ-015.', when request sends a
-      valid access token in the header.`,
+  it(`should respond with json, status 200, body.status of 'success', and body.message of 'Welcome to the team, DZ-015.', when request sends a valid access token in the header.`,
     async () => {
       const res = await server.get(`/test`)
         .set(`Accept`, `application/json`)
@@ -42,10 +40,7 @@ describe(`GET /test (tokenwall authentication test)`, () => {
       res.body.message.should.equal(`Welcome to the team, DZ-${accountId}.`)
     }
   )
-  it(`should respond with json, status 200, body.status of 'error',
-      body.message of 'Token type is not access.', and body.json.name of
-      'TokenwallError', when request sends an activation token in the header
-      instead of an access token.`,
+  it(`should respond with json, status 200, body.status of 'error', body.message of 'Token type is not access.', and body.json.name of 'TokenwallError', when request sends an activation token in the header instead of an access token.`,
     async () => {
       const res = await server.get(`/test`)
         .set(`Accept`, `application/json`)
@@ -58,9 +53,7 @@ describe(`GET /test (tokenwall authentication test)`, () => {
       res.body.json.name.should.equal(`TokenwallError`)
     }
   )
-  it(`should respond with json, status 200, body.status of 'error',
-      body.message of 'jwt malformed', and body.json.name of 'JsonWebTokenError'
-      when request sends an invalid authentication token in the header.`,
+  it(`should respond with json, status 200, body.status of 'error', body.message of 'jwt malformed', and body.json.name of 'JsonWebTokenError' when request sends an invalid authentication token in the header.`,
     async () => {
       const res = await server.get(`/test`)
         .set(`Accept`, `application/json`)
@@ -73,10 +66,7 @@ describe(`GET /test (tokenwall authentication test)`, () => {
       res.body.json.name.should.equal(`JsonWebTokenError`)
     }
   )
-  it(`should respond with json, status 200, body.status of 'error',
-      body.message of 'jwt must be provided', and body.json.name of
-      'JsonWebTokenError' when request sends an empty authentication token in
-      the header.`,
+  it(`should respond with json, status 200, body.status of 'error', body.message of 'jwt must be provided', and body.json.name of 'JsonWebTokenError' when request sends an empty authentication token in the header.`,
     async () => {
       const res = await server.get(`/test`)
         .set(`Accept`, `application/json`)
@@ -89,9 +79,7 @@ describe(`GET /test (tokenwall authentication test)`, () => {
       res.body.json.name.should.equal(`JsonWebTokenError`)
     }
   )
-  it(`should respond with json, status 200, body.status of 'error',
-      body.message of 'Error reading token.', and body.json.name of
-      'TokenVerifyError' when request does not send any token in the header.`,
+  it(`should respond with json, status 200, body.status of 'error', body.message of 'Error reading token.', and body.json.name of 'TokenVerifyError' when request does not send any token in the header.`,
     async () => {
       const res = await server.get(`/test`)
         .set(`Accept`, `application/json`)

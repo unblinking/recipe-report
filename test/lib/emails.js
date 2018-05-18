@@ -13,16 +13,14 @@ const renderEmail = require(`../../lib/emails`).render
 const sendEmail = require(`../../lib/emails`).send
 
 describe(`Email operations`, () => {
-  it(`should check an email address and return it when it seems valid.
-      seeminglyvalid@recipe.report`,
+  it(`should check an email address and return it when it seems valid. seeminglyvalid@recipe.report`,
     async () => {
       const email = `seeminglyvalid@recipe.report`
       const result = await checkEmail(email)
       result.should.equal(email)
     }
   )
-  it(`should check and email address and error when it seems invalid.
-      @recipe.report`,
+  it(`should check and email address and error when it seems invalid. @recipe.report`,
     async () => {
       try {
         const email = `@recipe.report`
@@ -33,8 +31,7 @@ describe(`Email operations`, () => {
       }
     }
   )
-  it(`should check and email address and error when it seems invalid.
-      seeminglyinvalid@recipe`,
+  it(`should check and email address and error when it seems invalid. seeminglyinvalid@recipe`,
     async () => {
       try {
         const email = `seeminglyinvalid@recipe`
@@ -45,8 +42,7 @@ describe(`Email operations`, () => {
       }
     }
   )
-  it(`should check and email address and error when it seems invalid.
-      seeminglyinvalid@`,
+  it(`should check and email address and error when it seems invalid. seeminglyinvalid@`,
     async () => {
       try {
         const email = `seeminglyinvalid@`
@@ -57,8 +53,7 @@ describe(`Email operations`, () => {
       }
     }
   )
-  it(`should render email fields 'from', 'subject', and 'text' when an email
-      address and activation token are provided.`,
+  it(`should render email fields 'from', 'subject', and 'text' when an email address and activation token are provided.`,
     async () => {
       const email = `seeminglyvalid@recipe.report`
       const token = `123`

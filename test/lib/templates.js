@@ -11,8 +11,7 @@
 const templates = require(`../../lib/templates`)
 
 describe(`Templates`, () => {
-  it(`should return an account activation email template with the provided token
-      in the form of a link.`,
+  it(`should return an account activation email template with the provided token in the form of a link.`,
     () => {
       let email = `seeminglyvalid@recipe.report`
       let token = `123456`

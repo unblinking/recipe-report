@@ -17,10 +17,7 @@ describe(`POST /register (new account registration)`, () => {
     process.env.TEST_ACCOUNT_USERNAME = `${new Date().getTime()}@ReCiPe.RePoRt`
     process.env.TEST_ACCOUNT_PASSWORD = new Date().getTime()
   })
-  it(`should respond with type json, status 200, body.status of 'success',
-      body.message of 'Registration successful.', body.json property 'token',
-      and body.json.token is defined, when request sends a new account email and
-      a password.`,
+  it(`should respond with type json, status 200, body.status of 'success', body.message of 'Registration successful.', body.json property 'token', and body.json.token is defined, when request sends a new account email and a password.`,
     async () => {
       const res = await server.post(`/register`)
         .set(`Content-Type`, `application/json`)
@@ -34,10 +31,7 @@ describe(`POST /register (new account registration)`, () => {
       res.body.message.should.equal(`Registration successful.`)
     }
   )
-  it(`should respond with type json, status 200, body.status of 'error',
-      body.message of 'An account with the given email address is already
-      registered.', and body.json.name of 'UserExistsError' when request sends
-      a previously used email and a password.`,
+  it(`should respond with type json, status 200, body.status of 'error', body.message of 'An account with the given email address is already registered.', and body.json.name of 'UserExistsError' when request sends a previously used email and a password.`,
     async () => {
       const res = await server.post(`/register`)
         .set(`Content-Type`, `application/json`)
@@ -52,9 +46,7 @@ describe(`POST /register (new account registration)`, () => {
       res.body.json.name.should.equal(`UserExistsError`)
     }
   )
-  it(`should respond with type json, status 200, body.status of 'error',
-      body.message of 'No password was given.', and body.json.name of
-      'MissingPasswordError' when request sends an email but no password.`,
+  it(`should respond with type json, status 200, body.status of 'error', body.message of 'No password was given.', and body.json.name of 'MissingPasswordError' when request sends an email but no password.`,
     async () => {
       const res = await server.post(`/register`)
         .set(`Content-Type`, `application/json`)
@@ -68,10 +60,7 @@ describe(`POST /register (new account registration)`, () => {
       res.body.json.name.should.equal(`MissingPasswordError`)
     }
   )
-  it(`should respond with type json, status 200, body.status of 'error',
-      body.message of 'Email address seems invalid.', and body.json.name of
-      'SeeminglyInvalidEmailError' when request sends no email and a valid
-      password.`,
+  it(`should respond with type json, status 200, body.status of 'error', body.message of 'Email address seems invalid.', and body.json.name of 'SeeminglyInvalidEmailError' when request sends no email and a valid password.`,
     async () => {
       const res = await server.post(`/register`)
         .set(`Content-Type`, `application/json`)
@@ -85,10 +74,7 @@ describe(`POST /register (new account registration)`, () => {
       res.body.json.name.should.equal(`SeeminglyInvalidEmailError`)
     }
   )
-  it(`should respond with type json, status 200, body.status of 'error',
-      body.message of 'Email address seems invalid.', and body.json.name of
-      'SeeminglyInvalidEmailError' when request sends an invalid email and a
-      valid password.`,
+  it(`should respond with type json, status 200, body.status of 'error', body.message of 'Email address seems invalid.', and body.json.name of 'SeeminglyInvalidEmailError' when request sends an invalid email and a valid password.`,
     async () => {
       const res = await server.post(`/register`)
         .set(`Content-Type`, `application/json`)

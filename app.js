@@ -131,6 +131,7 @@ async function main () {
   }
 }
 
+/* istanbul ignore next */
 if (require.main === module) main()
 
 module.exports = {

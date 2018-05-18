@@ -20,9 +20,7 @@ describe(`Token operations`, () => {
     process.env.JWT_SECRET = `devTestEnvironment`
     process.env.JWT_ALGORITHM = `HS256`
   })
-  it(`should sign and decode a JWT, header.alg HS256, header.typ JWT, payload.id
-      equal to the Account ID, payload.type of 'access', payload.iat today, and
-      payload.exp in 2 days.`,
+  it(`should sign and decode a JWT, header.alg HS256, header.typ JWT, payload.id equal to the Account ID, payload.type of 'access', payload.iat today, and payload.exp in 2 days.`,
     async () => {
       const account = new Account({
         email: `${new Date().getTime()}@ReCiPe.RePoRt`
@@ -39,9 +37,7 @@ describe(`Token operations`, () => {
       theMoment(itExpires).fromNow().should.equal(`in 2 days`)
     }
   )
-  it(`should sign and decode a JWT, header.alg HS256, header.typ JWT, payload.id
-      equal to the Account ID, payload.type 'activation', payload.iat today, and
-      payload.exp in 2 days.`,
+  it(`should sign and decode a JWT, header.alg HS256, header.typ JWT, payload.id equal to the Account ID, payload.type 'activation', payload.iat today, and payload.exp in 2 days.`,
     async () => {
       const account = new Account({
         email: `${new Date().getTime()}@ReCiPe.RePoRt`
@@ -58,8 +54,7 @@ describe(`Token operations`, () => {
       theMoment(itExpires).fromNow().should.equal(`in 2 days`)
     }
   )
-  it(`should sign and verify a JWT, id equal to the Account ID, type of
-      'access', payload.iat today, and payload.exp in 2 days.`,
+  it(`should sign and verify a JWT, id equal to the Account ID, type of 'access', payload.iat today, and payload.exp in 2 days.`,
     async () => {
       const account = new Account({
         email: `${new Date().getTime()}@ReCiPe.RePoRt`
@@ -74,8 +69,7 @@ describe(`Token operations`, () => {
       theMoment(itExpires).fromNow().should.equal(`in 2 days`)
     }
   )
-  it(`should sign and verify a JWT, id equal to the Account ID, type of
-      'activation', payload.iat today, and payload.exp in 2 days.`,
+  it(`should sign and verify a JWT, id equal to the Account ID, type of 'activation', payload.iat today, and payload.exp in 2 days.`,
     async () => {
       const account = new Account({
         email: `${new Date().getTime()}@ReCiPe.RePoRt`
@@ -90,8 +84,7 @@ describe(`Token operations`, () => {
       theMoment(itExpires).fromNow().should.equal(`in 2 days`)
     }
   )
-  it(`should sign and verify a JWT, id equal to the Account ID, type of
-      'access', payload.iat today, and payload.exp in a month.`,
+  it(`should sign and verify a JWT, id equal to the Account ID, type of 'access', payload.iat today, and payload.exp in a month.`,
     async () => {
       const account = new Account({
         email: `${new Date().getTime()}@ReCiPe.RePoRt`
@@ -106,8 +99,7 @@ describe(`Token operations`, () => {
       theMoment(itExpires).fromNow().should.equal(`in a month`)
     }
   )
-  it(`should sign and decode a JWT, with payload.type of 'access', when the
-      token type is not specified.`,
+  it(`should sign and decode a JWT, with payload.type of 'access', when the token type is not specified.`,
     async () => {
       const account = new Account({
         email: `${new Date().getTime()}@ReCiPe.RePoRt`
@@ -117,8 +109,7 @@ describe(`Token operations`, () => {
       decoded.payload.type.should.equal(`access`)
     }
   )
-  it(`should fail to sign a JWT if the Account is undefined, return an error
-      with name 'TokenSignError' and message 'Account not found.'.`,
+  it(`should fail to sign a JWT if the Account is undefined, return an error with name 'TokenSignError' and message 'Account not found.'.`,
     async () => {
       try {
         await tokens.sign(undefined, { type: 'access', expiresIn: 2592000 })

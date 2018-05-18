@@ -9,8 +9,8 @@
  */
 
 const datastores = require(`../../lib/datastores`)
-const intercept = require(`intercept-stdout`)
 const mongo = require(`mongoose`)
+const mute = require(`mute`)
 const util = require(`util`)
 
 const setTimeoutPromise = util.promisify(setTimeout)
@@ -24,12 +24,12 @@ describe(`App.js (the main app script)`, () => {
     async () => {
       const exit = process.exit
       process.exit = () => { process.env.FATAL_APP_TEST = `exited` }
-      let unhook = intercept(txt => { return `` }) // Begin muting stdout.
+      let unmute = mute() // Begin muting stdout and stderr.
       const fatalApp = require(`../../app`)
       fatalApp.main()
       await setTimeoutPromise(100) // Wait for the app to error.
       process.env.FATAL_APP_TEST.should.equal(`exited`)
-      unhook() // Stop muting stdout.
+      unmute() // Stop muting stdout and stderr.
       process.exit = exit // Reset process.exit as it was.
       // Delete the require.cache instance for the app, so that it may be
       // required again fresh in the next test.
@@ -44,11 +44,11 @@ describe(`App.js (the main app script)`, () => {
       process.env.CRYPTO_KEY = `MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT`
       process.env.JWT_SECRET = `devTestEnvironment`
       process.env.JWT_ALGORITHM = `HS256`
-      let unhook = intercept(txt => { return `` }) // Begin muting stdout.
+      let unmute = mute() // Begin muting stdout and stderr.
       const app = require(`../../app`)
       app.main()
       await setTimeoutPromise(2000) // Wait 2 seconds for the app to finish starting.
-      unhook() // Stop muting stdout.
+      unmute() // Stop muting stdout and stderr.
     }
   )
 })
