@@ -9,8 +9,8 @@ const app = require(`./app`)
 const MailDev = require(`maildev`)
 
 // Basic required environment variables
-process.env.MONGODB_URI=`mongodb://127.0.0.1/test`
-process.env.PORT=`1138`
+process.env.MONGODB_URI = `mongodb://127.0.0.1/test`
+process.env.PORT = `1138`
 process.env.CRYPTO_KEY = `MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT`
 process.env.JWT_SECRET = `devTestEnvironment`
 process.env.JWT_ALGORITHM = `HS256`
