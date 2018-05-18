@@ -23,8 +23,7 @@ describe(`Account operations`, () => {
     await datastores.connect()
     mongo.connection.readyState.should.equal(1) // readyState of 1 (connected)
   })
-  it(`should fail to create (register) a new account in the datastore without an
-      email address.`,
+  it(`should fail to create (register) a new account in the datastore without an email address.`,
     async () => {
       try {
         await accounts.create(undefined, process.env.TEST_ACCOUNT_PASSWORD)
@@ -34,8 +33,7 @@ describe(`Account operations`, () => {
       }
     }
   )
-  it(`should fail to create (register) a new account in the datastore without a
-      password.`,
+  it(`should fail to create (register) a new account in the datastore without a password.`,
     async () => {
       try {
         await accounts.create(process.env.TEST_ACCOUNT_USERNAME, undefined)

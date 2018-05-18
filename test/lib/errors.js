@@ -9,7 +9,7 @@
  */
 
 const errors = require(`../../lib/errors`)
-const intercept = require(`intercept-stdout`)
+const mute = require(`mute`)
 
 describe(`Error handling middleware for expressjs`, () => {
   it(`should respond with status 404, and text 'four, oh four!'`,
@@ -40,12 +40,12 @@ describe(`Error handling middleware for expressjs`, () => {
     async () => {
       const exit = process.exit
       process.exit = () => { process.env.FATAL_ERROR_TEST = `exited` }
-      let unhook = intercept(txt => { return `` }) // Begin muting stdout.
+      let unmute = mute() // Begin muting stdout and stderr.
       let err = new Error(`Unit test error.`)
       err.name = `UnitTestError`
       errors.handleFatal(err)
       process.env.FATAL_ERROR_TEST.should.equal(`exited`)
-      unhook() // Stop muting stdout.
+      unmute() // Stop muting stdout and stderr.
       process.exit = exit // Reset process.exit as it was.
       delete process.env.FATAL_ERROR_TEST
     }

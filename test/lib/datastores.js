@@ -9,39 +9,38 @@
  */
 
 const datastores = require(`../../lib/datastores`)
-const intercept = require(`intercept-stdout`)
 const mongo = require(`mongoose`)
+const mute = require(`mute`)
 
 describe(`Datastore operations`, () => {
   before(async () => {
     await datastores.disconnect()
     mongo.connection.readyState.should.equal(0) // readyState of 0 (disconnected)
   })
-  it(`should fail to connect to the datastore when the MongoDB URI environmental
-      variable is not set.`,
+  it(`should fail to connect to the datastore when the MongoDB URI environmental variable is not set.`,
     async () => {
-      let unhook = intercept(txt => { return `` }) // Begin muting stdout.
+      const unmute = mute() // Begin muting stdout and stderr.
       try {
         delete process.env.MONGODB_URI
         await datastores.connect()
       } catch (err) {
-        err.name.should.equal(`MongoError`)
-        err.message.should.equal(`failed to connect to server [undefined:27017] on first connect [MongoError: getaddrinfo ENOTFOUND undefined undefined:27017]`)
+        err.name.should.equal(`Error`)
+        err.message.should.equal(`URL malformed, cannot be parsed`)
       }
-      unhook() // Stop muting stdout.
+      unmute() // Stop muting stdout and stderr.
     }
   )
   it(`should fail to connect to the datastore when the MongoDB URI is incomplete.`,
     async () => {
-      let unhook = intercept(txt => { return `` }) // Begin muting stdout.
+      const unmute = mute() // Begin muting stdout and stderr.
       try {
         process.env.MONGODB_URI = `mongodb://`
         await datastores.connect()
       } catch (err) {
         err.name.should.equal(`Error`)
-        err.message.should.equal(`Invalid mongodb uri. Missing hostname`)
+        err.message.should.equal(`No hostname or hostnames provided in connection string`)
       }
-      unhook() // Stop muting stdout.
+      unmute() // Stop muting stdout and stderr.
     }
   )
   it(`should connect to the datastore without error.`,

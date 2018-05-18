@@ -3,7 +3,7 @@
 'use strict'
 
 /**
- * The tokenwall middlware.
+ * The tokenwall middleware.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 

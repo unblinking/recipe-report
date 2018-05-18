@@ -3,7 +3,7 @@
 'use strict'
 
 /**
- * Expressjs API for the Recipe Report application.
+ * Expressjs API for the Recipe.Report application.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
@@ -130,6 +130,9 @@ async function main () {
     errors.handleFatal(err)
   }
 }
+
+/* istanbul ignore next */
+if (require.main === module) main()
 
 module.exports = {
   main: main

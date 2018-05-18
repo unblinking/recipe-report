@@ -24,9 +24,7 @@ describe(`POST /register/:token (account activation)`, () => {
     process.env.TEST_ACTIVATION_TOKEN = await tokens.sign(account, { type: `activation` })
     process.env.TEST_ACCESS_TOKEN = await tokens.sign(account, { type: `access` })
   })
-  it(`should respond with JSON, status 200, body.status of 'success', and
-      body.message of 'Activation successful.', when request includes a valid
-      activation token for a valid account in the URL.`,
+  it(`should respond with JSON, status 200, body.status of 'success', and body.message of 'Activation successful.', when request includes a valid activation token for a valid account in the URL.`,
     async () => {
       const token = process.env.TEST_ACTIVATION_TOKEN
       const res = await server.get(`/register/${token}`)
@@ -36,10 +34,7 @@ describe(`POST /register/:token (account activation)`, () => {
       res.body.message.should.equal(`Activation successful.`)
     }
   )
-  it(`should respond with JSON, status 200, body.status of 'error', body.message
-      of 'Activation successful.', and body.json.name of
-      'RegistrationActivationError' when request includes an access token in the
-      URL instead of an activation token.`,
+  it(`should respond with JSON, status 200, body.status of 'error', body.message of 'Activation successful.', and body.json.name of 'RegistrationActivationError' when request includes an access token in the URL instead of an activation token.`,
     async () => {
       const token = process.env.TEST_ACCESS_TOKEN
       const res = await server.get(`/register/${token}`)
@@ -50,10 +45,7 @@ describe(`POST /register/:token (account activation)`, () => {
       res.body.json.name.should.equal(`RegistrationActivationError`)
     }
   )
-  it(`should respond with JSON, status 200, body.status of 'error', body.message
-      of 'Account not found.', and body.json.name of
-      'RegistrationActivationError' when request includes an access token that
-      contains an invalid account ID.`,
+  it(`should respond with JSON, status 200, body.status of 'error', body.message of 'Account not found.', and body.json.name of 'RegistrationActivationError' when request includes an access token that contains an invalid account ID.`,
     async () => {
       // Create an account model that has an _id but isn't in the datastore.
       const account = new Account({

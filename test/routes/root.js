@@ -18,9 +18,7 @@ describe(`GET / (the root route)`, () => {
       res.text.should.equal(`Found. Redirecting to /root`)
     }
   )
-  it(`should respond with type json, status 200, body.status 'success',
-      body.message 'Welcome to the Recipe.Report API server.', and
-      body.json property 'headers'`,
+  it(`should respond with type json, status 200, body.status 'success', body.message 'Welcome to the Recipe.Report API server.', and body.json property 'headers'`,
     async () => {
       const res = await server.get(`/root`)
       res.type.should.equal(`application/json`)
