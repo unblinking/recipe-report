@@ -23,31 +23,31 @@
   "readme": "README.md",
   "dependencies": {
     "body-parser": "1.18.3",
-    "cors": "2.8.4",
-    "express": "4.16.3",
-    "helmet": "3.12.1",
+    "cors": "2.8.5",
+    "express": "4.16.4",
+    "helmet": "3.15.0",
     "heroku-ssl-redirect": "0.0.4",
-    "jsonwebtoken": "8.2.1",
-    "moment": "2.22.1",
-    "mongoose": "5.1.1",
+    "jsonwebtoken": "8.4.0",
+    "moment": "2.23.0",
+    "mongoose": "5.4.1",
     "passport": "0.4.0",
     "passport-jwt": "4.0.0",
     "passport-local": "1.0.0",
-    "passport-local-mongoose": "5.0.0",
+    "passport-local-mongoose": "5.0.1",
     "sendmail": "1.4.1",
-    "wtfnode": "^0.6.0"
+    "wtfnode": "0.8.0"
   },
   "devDependencies": {
-    "codecov": "3.0.2",
+    "codecov": "3.1.0",
     "env-test": "1.0.0",
-    "eslint": "4.19.1",
+    "eslint": "5.11.1",
     "maildev": "1.0.0-rc3",
-    "mocha": "5.1.1",
+    "mocha": "5.2.0",
     "mute": "2.0.6",
-    "npm-check": "5.7.1",
-    "nyc": "11.8.0",
-    "should": "13.2.1",
-    "standard": "*",
-    "supertest": "3.1.0"
+    "npm-check": "5.9.0",
+    "nyc": "13.1.0",
+    "should": "13.2.3",
+    "standard": "12.0.1",
+    "supertest": "3.3.0"
   }
 }
