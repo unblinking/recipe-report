@@ -24,8 +24,8 @@ describe(`Datastore operations`, () => {
         delete process.env.MONGODB_URI
         await datastores.connect()
       } catch (err) {
-        err.name.should.equal(`Error`)
-        err.message.should.equal(`URL malformed, cannot be parsed`)
+        err.name.should.equal(`MongooseError`)
+        err.message.should.equal(`The \`uri\` parameter to \`openUri()\` must be a string, got "undefined". Make sure the first parameter to \`mongoose.connect()\` or \`mongoose.createConnection()\` is a string.`)
       }
       unmute() // Stop muting stdout and stderr.
     }
