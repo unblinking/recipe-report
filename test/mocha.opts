@@ -1,4 +1,0 @@
---require env-test
---require should
---ui bdd
---timeout 20000
