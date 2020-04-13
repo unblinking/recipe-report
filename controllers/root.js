@@ -7,12 +7,12 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-const responds = require(`../lib/responds`)
+const responds = require('../lib/responds')
 
 function curtsy (req, res) {
   responds.success(
     res,
-    `Welcome to the Recipe.Report API server.`,
+    'Welcome to the Recipe.Report API server.',
     { headers: req.headers }
   )
 }
