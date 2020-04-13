@@ -14,12 +14,12 @@ const tokens = require('../lib/tokens')
 async function middleware (req, res, next) {
   try {
     const token = await tokens.verify(req.headers.token)
-    if (token.type === `access`) {
+    if (token.type === 'access') {
       const accountId = crypts.decrypt(token.id.toString())
       req.accountId = accountId
     } else {
-      let tokenwallError = new Error(`Token type is not access.`)
-      tokenwallError.name = `TokenwallError`
+      const tokenwallError = new Error('Token type is not access.')
+      tokenwallError.name = 'TokenwallError'
       throw tokenwallError
     }
     next()

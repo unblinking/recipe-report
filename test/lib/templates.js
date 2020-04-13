@@ -8,13 +8,13 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-const templates = require(`../../lib/templates`)
+const templates = require('../../lib/templates')
 
-describe(`Templates`, () => {
-  it(`should return an account activation email template with the provided token in the form of a link.`,
+describe('Templates', () => {
+  it('should return an account activation email template with the provided token in the form of a link.',
     () => {
-      let email = `seeminglyvalid@recipe.report`
-      let token = `123456`
+      const email = 'seeminglyvalid@recipe.report'
+      const token = '123456'
       const template = templates.activation(email, token)
       const regex = /\bapi.recipe.report\/register\/(\S+)/
       template.match(regex)[1].should.equal(token)
