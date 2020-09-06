@@ -3,9 +3,7 @@
 'use strict'
 
 /**
- * Datastore wrapper functions.
+ * The account model.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
-
-import { sql, PgSqlDatabase, CrudRepository } from 'kiss-orm'
 
