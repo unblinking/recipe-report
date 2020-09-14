@@ -1,5 +1,8 @@
+import { Router } from 'express'
+
 interface Controller {
-  initRoutes(): any
+  initRoutes(): void
+  router: Router
 }
 
 export default Controller

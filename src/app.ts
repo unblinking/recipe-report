@@ -3,7 +3,10 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-import expressjs from 'express'
+import Expressjs from 'express'
+import { RequestHandler } from 'express'
+import Controller from './interfaces/controller'
+import Logger from './services/logger'
 
 interface Listener {
   listen(): void
@@ -11,37 +14,44 @@ interface Listener {
 
 // Expressjs application.
 class App implements Listener {
-  constructor(port: number, middleWares: any, controllers: any) {
-    this.app = expressjs()
+  constructor(
+    port: number,
+    middlewares: Array<RequestHandler>,
+    controllers: Array<Controller>
+  ) {
     this.port = port
-    this.middlewares(middleWares)
+    this.middlewares(middlewares)
     this.controllers(controllers)
   }
 
   // The Expressjs application.
-  private app: expressjs.Application
+  private app: Expressjs.Application = Expressjs()
+
+  // The logger service.
+  private logger: Logger = new Logger()
 
   // The port number for the application to listen on.
   private port: number
 
   // Use all of the provided middleWares.
-  private middlewares(middleWares: any) {
-    middleWares.forEach((middleWare: any) => {
-      this.app.use(middleWare)
-    })
+  private middlewares(middlewares: Array<RequestHandler>) {
+    this.app.use(middlewares)
   }
 
   // Use all of the provided controllers.
-  private controllers(controllers: any) {
-    controllers.forEach((controller: any) => {
+  private controllers(controllers: Array<Controller>) {
+    controllers.forEach((controller: Controller) => {
       this.app.use('/', controller.router)
     })
   }
 
   // Listen on the provided port number.
-  public listen(): void {
-    this.app.listen(this.port, () => {
-      console.log(`Application is listening on port ${this.port}`)
+  public listen(): Promise<unknown> {
+    return new Promise((resolve) => {
+      this.app.listen(this.port, () => {
+        this.logger.write(`Expressjs is listening on port ${this.port}`)
+        resolve()
+      })
     })
   }
 }

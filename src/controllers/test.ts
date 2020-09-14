@@ -16,13 +16,13 @@ class Test implements Controller {
   }
 
   // The Expressjs router for this controller.
-  private router: expressjs.Router = expressjs.Router()
+  public router: expressjs.Router = expressjs.Router()
 
   // Path for this controller.
   private path: string = '/test'
 
   // Initialize the routes for this controller.
-  public initRoutes() {
+  public initRoutes(): void {
     this.router.get(this.path, this.success)
   }
 

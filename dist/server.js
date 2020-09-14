@@ -23,6 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const BodyParser = __importStar(require("body-parser"));
+const helmet_1 = __importDefault(require("helmet"));
 const app_1 = __importDefault(require("./app"));
 const logger_1 = __importDefault(require("./services/logger"));
 const root_1 = __importDefault(require("./controllers/root"));
@@ -33,6 +34,7 @@ class RecipeReport {
         this.port = 1138;
         this.diary = new logger_1.default();
         this.middleWares = [
+            helmet_1.default(),
             BodyParser.json(),
             BodyParser.urlencoded({ extended: true }),
             this.diary.writer,
