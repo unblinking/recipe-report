@@ -69,7 +69,7 @@ class RecipeReport {
     start() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield this.app.listen();
+                yield this.app.listenWrapper();
                 this.logger.write(this.graffiti);
             }
             catch (ex) {

@@ -21,13 +21,14 @@ class App {
             this.app.use('/', controller.router);
         });
     }
-    listen() {
-        return new Promise((resolve) => {
+    listenWrapper() {
+        const promise = new Promise((resolve) => {
             this.app.listen(this.port, () => {
                 this.logger.write(`Expressjs is listening on port ${this.port}`);
                 resolve();
             });
         });
+        return promise;
     }
 }
 exports.default = App;

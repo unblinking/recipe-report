@@ -8,12 +8,12 @@ import { RequestHandler } from 'express'
 import Controller from './interfaces/controller'
 import Logger from './services/logger'
 
-interface Listener {
-  listen(): void
+interface ExpressWrapper {
+  listenWrapper(): Promise<unknown>
 }
 
 // Expressjs application.
-class App implements Listener {
+class App implements ExpressWrapper {
   constructor(
     port: number,
     middlewares: Array<RequestHandler>,
@@ -46,13 +46,14 @@ class App implements Listener {
   }
 
   // Listen on the provided port number.
-  public listen(): Promise<unknown> {
-    return new Promise((resolve) => {
+  public listenWrapper(): Promise<unknown> {
+    const promise = new Promise((resolve) => {
       this.app.listen(this.port, () => {
         this.logger.write(`Expressjs is listening on port ${this.port}`)
         resolve()
       })
     })
+    return promise
   }
 }
 

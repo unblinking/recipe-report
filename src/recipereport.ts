@@ -20,10 +20,6 @@ interface Starter {
   start(): void
 }
 
-interface Listener {
-  listen(): void
-}
-
 // Recipe.Report.
 class RecipeReport implements Starter {
   // The port number for the application to listen on.
@@ -64,12 +60,12 @@ class RecipeReport implements Starter {
   private controllers: Array<Controller> = [new Root(), new Test()]
 
   // Instantiate the Expressjs application.
-  private app: Listener = new App(this.port, this.middlewares, this.controllers)
+  private app: App = new App(this.port, this.middlewares, this.controllers)
 
   // "Let's Go" plays on the Stylophone
   public async start(): Promise<void> {
     try {
-      await this.app.listen()
+      await this.app.listenWrapper()
       this.logger.write(this.graffiti)
     } catch (ex) {
       this.logger.write(ex)
