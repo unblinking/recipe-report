@@ -33,34 +33,65 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const BodyParser = __importStar(require("body-parser"));
 const helmet_1 = __importDefault(require("helmet"));
+const heroku_ssl_redirect_1 = __importDefault(require("heroku-ssl-redirect"));
 const app_1 = __importDefault(require("./app"));
 const callhistory_1 = __importDefault(require("./middlewares/callhistory"));
+const fun_1 = __importDefault(require("./services/fun"));
+const laststop_1 = __importDefault(require("./middlewares/laststop"));
+const logger_1 = __importDefault(require("./services/logger"));
 const root_1 = __importDefault(require("./controllers/root"));
 const testtoken_1 = __importDefault(require("./controllers/testtoken"));
-const notfound_1 = __importDefault(require("./controllers/notfound"));
-const logger_1 = __importDefault(require("./services/logger"));
-const fun_1 = __importDefault(require("./services/fun"));
 class RecipeReport {
     constructor() {
         var _a;
         this.logger = new logger_1.default();
         this.callHistory = new callhistory_1.default();
-        this.fun = new fun_1.default();
+        this.lastStop = new laststop_1.default();
         this.port = parseInt((_a = process.env.PORT) !== null && _a !== void 0 ? _a : '', 10);
         this.middlewares = [
-            helmet_1.default(),
+            helmet_1.default({
+                contentSecurityPolicy: { directives: { defaultSrc: ["'self'"] } },
+                referrerPolicy: { policy: 'same-origin' },
+            }),
+            heroku_ssl_redirect_1.default(),
             BodyParser.json(),
             BodyParser.urlencoded({ extended: true }),
             this.callHistory.log,
         ];
-        this.controllers = [
-            new root_1.default(),
-            new testtoken_1.default(),
-            new notfound_1.default(),
-        ];
-        this.app = new app_1.default(this.port, this.middlewares, this.controllers);
+        this.controllers = [new root_1.default(), new testtoken_1.default()];
+        this.fourOhFour = this.lastStop.fourOhFour;
+        this.fiveHundred = this.lastStop.fiveHundred;
+        this.app = new app_1.default(this.port, this.middlewares, this.controllers, this.fourOhFour, this.fiveHundred);
+        this.fun = new fun_1.default();
+        this.environmentVariablesExist = () => __awaiter(this, void 0, void 0, function* () {
+            const promise = new Promise((resolve, reject) => {
+                let missing = '';
+                if (process.env.PORT === undefined) {
+                    missing = missing.concat('\n PORT');
+                }
+                if (process.env.CRYPTO_KEY === undefined) {
+                    missing = missing.concat('\n CRYPTO_KEY');
+                }
+                if (process.env.JWT_SECRET === undefined) {
+                    missing = missing.concat('\n JWT_SECRET');
+                }
+                if (process.env.JWT_ALGORITHM === undefined) {
+                    missing = missing.concat('\n JWT_ALGORITHM');
+                }
+                if (missing === '') {
+                    resolve();
+                }
+                else {
+                    const error = new Error(`Environment variable(s) missing:${missing}`);
+                    error.name = 'EnvironmentVariableError';
+                    reject(error);
+                }
+            });
+            return promise;
+        });
         this.start = () => __awaiter(this, void 0, void 0, function* () {
             try {
+                yield this.environmentVariablesExist();
                 yield this.app.listenWrapper();
                 yield this.fun.tag();
             }

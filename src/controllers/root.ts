@@ -5,8 +5,7 @@
  */
 
 /** External imports. */
-import expressjs from 'express'
-import { Request, Response } from 'express'
+import expressjs, { Request, Response } from 'express'
 /** Internal imports. */
 import Controller from '../interfaces/controller'
 import Responder from '../services/responder'

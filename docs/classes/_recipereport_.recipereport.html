@@ -105,7 +105,10 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_recipereport_.recipereport.html#app" class="tsd-kind-icon">app</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_recipereport_.recipereport.html#callhistory" class="tsd-kind-icon">call<wbr>History</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_recipereport_.recipereport.html#controllers" class="tsd-kind-icon">controllers</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_recipereport_.recipereport.html#fivehundred" class="tsd-kind-icon">five<wbr>Hundred</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_recipereport_.recipereport.html#fourohfour" class="tsd-kind-icon">four<wbr>OhFour</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_recipereport_.recipereport.html#fun" class="tsd-kind-icon">fun</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_recipereport_.recipereport.html#laststop" class="tsd-kind-icon">last<wbr>Stop</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_recipereport_.recipereport.html#logger" class="tsd-kind-icon">logger</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_recipereport_.recipereport.html#middlewares" class="tsd-kind-icon">middlewares</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_recipereport_.recipereport.html#port" class="tsd-kind-icon">port</a></li>
@@ -114,6 +117,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="_recipereport_.recipereport.html#environmentvariablesexist" class="tsd-kind-icon">environment<wbr>Variables<wbr>Exist</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_recipereport_.recipereport.html#start" class="tsd-kind-icon">start</a></li>
 							</ul>
 						</section>
@@ -125,10 +129,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="app" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> app</h3>
-					<div class="tsd-signature tsd-kind-icon">app<span class="tsd-signature-symbol">:</span> <a href="_app_.app.html" class="tsd-signature-type">App</a><span class="tsd-signature-symbol"> = new App(this.port, this.middlewares, this.controllers)</span></div>
+					<div class="tsd-signature tsd-kind-icon">app<span class="tsd-signature-symbol">:</span> <a href="_app_.app.html" class="tsd-signature-type">App</a><span class="tsd-signature-symbol"> = new App(this.port,this.middlewares,this.controllers,this.fourOhFour,this.fiveHundred)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/2182c88/src/recipereport.ts#L114">recipereport.ts:114</a></li>
+							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/c5b0658/src/recipereport.ts#L131">recipereport.ts:131</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -148,7 +152,7 @@
 					<div class="tsd-signature tsd-kind-icon">call<wbr>History<span class="tsd-signature-symbol">:</span> <a href="_middlewares_callhistory_.callhistory.html" class="tsd-signature-type">CallHistory</a><span class="tsd-signature-symbol"> = new CallHistory()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/2182c88/src/recipereport.ts#L60">recipereport.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/c5b0658/src/recipereport.ts#L59">recipereport.ts:59</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -165,10 +169,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="controllers" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> controllers</h3>
-					<div class="tsd-signature tsd-kind-icon">controllers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_interfaces_controller_.controller.html" class="tsd-signature-type">Controller</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = [new Root(),new TestToken(),new NotFound(),]</span></div>
+					<div class="tsd-signature tsd-kind-icon">controllers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_interfaces_controller_.controller.html" class="tsd-signature-type">Controller</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = [new Root(), new TestToken()]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/2182c88/src/recipereport.ts#L101">recipereport.ts:101</a></li>
+							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/c5b0658/src/recipereport.ts#L104">recipereport.ts:104</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -183,12 +187,52 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="fivehundred" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> five<wbr>Hundred</h3>
+					<div class="tsd-signature tsd-kind-icon">five<wbr>Hundred<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ErrorRequestHandler</span><span class="tsd-signature-symbol"> = this.lastStop.fiveHundred</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/c5b0658/src/recipereport.ts#L122">recipereport.ts:122</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>500 Internal Server Error middleware function.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>memberof</dt>
+							<dd><p>RecipeReport</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="fourohfour" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> four<wbr>OhFour</h3>
+					<div class="tsd-signature tsd-kind-icon">four<wbr>OhFour<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RequestHandler</span><span class="tsd-signature-symbol"> = this.lastStop.fourOhFour</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/c5b0658/src/recipereport.ts#L113">recipereport.ts:113</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>404 Not Found middleware function.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>memberof</dt>
+							<dd><p>RecipeReport</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="fun" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> fun</h3>
 					<div class="tsd-signature tsd-kind-icon">fun<span class="tsd-signature-symbol">:</span> <a href="_services_fun_.fun.html" class="tsd-signature-type">Fun</a><span class="tsd-signature-symbol"> = new Fun()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/2182c88/src/recipereport.ts#L69">recipereport.ts:69</a></li>
+							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/c5b0658/src/recipereport.ts#L146">recipereport.ts:146</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -203,12 +247,32 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="laststop" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> last<wbr>Stop</h3>
+					<div class="tsd-signature tsd-kind-icon">last<wbr>Stop<span class="tsd-signature-symbol">:</span> <a href="_middlewares_laststop_.laststop.html" class="tsd-signature-type">LastStop</a><span class="tsd-signature-symbol"> = new LastStop()</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/c5b0658/src/recipereport.ts#L68">recipereport.ts:68</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Last stop middleware. Handle 404 and 500 errors.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>memberof</dt>
+							<dd><p>RecipeReport</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="logger" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> logger</h3>
 					<div class="tsd-signature tsd-kind-icon">logger<span class="tsd-signature-symbol">:</span> <a href="_services_logger_.logger.html" class="tsd-signature-type">Logger</a><span class="tsd-signature-symbol"> = new Logger()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/2182c88/src/recipereport.ts#L51">recipereport.ts:51</a></li>
+							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/c5b0658/src/recipereport.ts#L50">recipereport.ts:50</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -225,10 +289,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="middlewares" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> middlewares</h3>
-					<div class="tsd-signature tsd-kind-icon">middlewares<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RequestHandler</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = [Helmet(),BodyParser.json(),BodyParser.urlencoded({ extended: true }),this.callHistory.log,]</span></div>
+					<div class="tsd-signature tsd-kind-icon">middlewares<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RequestHandler</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = [Helmet({contentSecurityPolicy: { directives: { defaultSrc: [&quot;&#x27;self&#x27;&quot;] } },referrerPolicy: { policy: &#x27;same-origin&#x27; },}),HerokuSslRedirect(),BodyParser.json(),BodyParser.urlencoded({ extended: true }),this.callHistory.log,]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/2182c88/src/recipereport.ts#L87">recipereport.ts:87</a></li>
+							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/c5b0658/src/recipereport.ts#L86">recipereport.ts:86</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -248,7 +312,7 @@
 					<div class="tsd-signature tsd-kind-icon">port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = parseInt(process.env.PORT ?? &#x27;&#x27;, 10)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/2182c88/src/recipereport.ts#L78">recipereport.ts:78</a></li>
+							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/c5b0658/src/recipereport.ts#L77">recipereport.ts:77</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -265,6 +329,34 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="environmentvariablesexist" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> environment<wbr>Variables<wbr>Exist</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">environment<wbr>Variables<wbr>Exist<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/c5b0658/src/recipereport.ts#L155">recipereport.ts:155</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Environment variable check. If these environment variables haven&#39;t been set
+									then we can&#39;t run the application.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>memberof</dt>
+									<dd><p>RecipeReport</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="start" class="tsd-anchor"></a>
 					<h3>start</h3>
@@ -276,7 +368,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_recipereport_.starter.html">Starter</a>.<a href="../interfaces/_recipereport_.starter.html#start">start</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/2182c88/src/recipereport.ts#L122">recipereport.ts:122</a></li>
+									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/c5b0658/src/recipereport.ts#L187">recipereport.ts:187</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -305,9 +397,6 @@
 						<a href="../modules/_app_.html">&quot;app&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="../modules/_controllers_notfound_.html">&quot;controllers/notfound&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
 						<a href="../modules/_controllers_root_.html">&quot;controllers/root&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -321,6 +410,9 @@
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/_middlewares_callhistory_.html">&quot;middlewares/callhistory&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_middlewares_laststop_.html">&quot;middlewares/laststop&quot;</a>
 					</li>
 					<li class="current tsd-kind-module">
 						<a href="../modules/_recipereport_.html">&quot;recipereport&quot;</a>
@@ -353,7 +445,16 @@
 								<a href="_recipereport_.recipereport.html#controllers" class="tsd-kind-icon">controllers</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_recipereport_.recipereport.html#fivehundred" class="tsd-kind-icon">five<wbr>Hundred</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_recipereport_.recipereport.html#fourohfour" class="tsd-kind-icon">four<wbr>OhFour</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_recipereport_.recipereport.html#fun" class="tsd-kind-icon">fun</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_recipereport_.recipereport.html#laststop" class="tsd-kind-icon">last<wbr>Stop</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_recipereport_.recipereport.html#logger" class="tsd-kind-icon">logger</a>
@@ -363,6 +464,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_recipereport_.recipereport.html#port" class="tsd-kind-icon">port</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="_recipereport_.recipereport.html#environmentvariablesexist" class="tsd-kind-icon">environment<wbr>Variables<wbr>Exist</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_recipereport_.recipereport.html#start" class="tsd-kind-icon">start</a>
@@ -388,10 +492,11 @@
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 			</ul>
 		</div>
 	</div>

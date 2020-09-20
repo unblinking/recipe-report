@@ -4,8 +4,7 @@
  */
 
 /** External imports. */
-import Expressjs from 'express'
-import { RequestHandler } from 'express'
+import Expressjs, { ErrorRequestHandler, RequestHandler } from 'express'
 /** Internal imports. */
 import Controller from './interfaces/controller'
 import Logger from './services/logger'
@@ -57,24 +56,34 @@ class App implements ExpressWrapper {
    * @type {Expressjs.Application}
    * @memberof App
    */
-  private expressApplication: Expressjs.Application = Expressjs()
+  private expressApplication: Expressjs.Application = Expressjs().set(
+    'json spaces',
+    2
+  )
 
   /**
-   * Instantiate the application.
+   * Instantiate the application. Set the port, the middlewares, the
+   * controllers, then at the end set the 404 and 500 handling.
    *
    * @param {number} port
    * @param {Array<RequestHandler>} middlewares
    * @param {Array<Controller>} controllers
+   * @param {RequestHandler} fourOhFour
+   * @param {ErrorRequestHandler} fiveHundred
    * @memberof App
    */
   constructor(
     port: number,
     middlewares: Array<RequestHandler>,
-    controllers: Array<Controller>
+    controllers: Array<Controller>,
+    fourOhFour: RequestHandler,
+    fiveHundred: ErrorRequestHandler
   ) {
     this.port = port
     this.middlewares(middlewares)
     this.controllers(controllers)
+    this.fourOhFour(fourOhFour)
+    this.fiveHundred(fiveHundred)
   }
 
   /**
@@ -99,6 +108,26 @@ class App implements ExpressWrapper {
     controllers.forEach((controller: Controller) => {
       this.expressApplication.use('/', controller.router)
     })
+  }
+
+  /**
+   * Mount the specified fourOhFour handler middleware function.
+   *
+   * @private
+   * @memberof App
+   */
+  private fourOhFour = (fourOhFour: RequestHandler): void => {
+    this.expressApplication.use(fourOhFour)
+  }
+
+  /**
+   * Mount the specified fiveHundred handler middleware function.
+   *
+   * @private
+   * @memberof App
+   */
+  private fiveHundred = (fiveHundred: ErrorRequestHandler): void => {
+    this.expressApplication.use(fiveHundred)
   }
 
   /**

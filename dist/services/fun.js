@@ -21,13 +21,13 @@ class Fun {
     |_| \\_\\___| .__/ \\___/|_|   \\__|
     \x1b[37mAlpha     \x1b[1m\x1b[32m|_|      \x1b[37mversion ${this.version}
     \x1b[0m`;
-    }
-    tag() {
-        const promise = new Promise((resolve) => {
-            this.logger.write(this.graffiti);
-            resolve();
-        });
-        return promise;
+        this.tag = () => {
+            const promise = new Promise((resolve) => {
+                this.logger.write(this.graffiti);
+                resolve();
+            });
+            return promise;
+        };
     }
 }
 exports.default = Fun;

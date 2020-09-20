@@ -1,5 +1,5 @@
 /**
- * CallHistory service.
+ * CallHistory middleware.
  * Keep a history of all API calls.
  * @author {@link https://github.com/jmg1138 jmg1138}
  */

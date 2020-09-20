@@ -4,18 +4,19 @@
  */
 
 /** External imports. */
-import { RequestHandler } from 'express'
+import { ErrorRequestHandler, RequestHandler } from 'express'
 import * as BodyParser from 'body-parser'
 import Helmet from 'helmet'
+import HerokuSslRedirect from 'heroku-ssl-redirect'
 /** Internal imports. */
 import App from './app'
 import CallHistory from './middlewares/callhistory'
 import Controller from './interfaces/controller'
+import Fun from './services/fun'
+import LastStop from './middlewares/laststop'
+import Logger from './services/logger'
 import Root from './controllers/root'
 import TestToken from './controllers/testtoken'
-import NotFound from './controllers/notfound'
-import Logger from './services/logger'
-import Fun from './services/fun'
 
 /**
  * Interface for the Recipe.Report application.
@@ -39,8 +40,6 @@ interface Starter {
  * @implements {Starter}
  */
 class RecipeReport implements Starter {
-  // TODO: Verify required environment vars are set.
-
   /**
    * General logging service.
    *
@@ -60,13 +59,13 @@ class RecipeReport implements Starter {
   private callHistory: CallHistory = new CallHistory()
 
   /**
-   * Fun service.
+   * Last stop middleware. Handle 404 and 500 errors.
    *
    * @private
-   * @type {Fun}
+   * @type {LastStop}
    * @memberof RecipeReport
    */
-  private fun: Fun = new Fun()
+  private lastStop: LastStop = new LastStop()
 
   /**
    * Port used by the Expressjs {@link https://expressjs.com/en/4x/api.html#app.listen app.listen} method.
@@ -85,7 +84,11 @@ class RecipeReport implements Starter {
    * @memberof RecipeReport
    */
   private middlewares: Array<RequestHandler> = [
-    Helmet(),
+    Helmet({
+      contentSecurityPolicy: { directives: { defaultSrc: ["'self'"] } },
+      referrerPolicy: { policy: 'same-origin' },
+    }),
+    HerokuSslRedirect(),
     BodyParser.json(),
     BodyParser.urlencoded({ extended: true }),
     this.callHistory.log,
@@ -98,11 +101,25 @@ class RecipeReport implements Starter {
    * @type {Array<Controller>}
    * @memberof RecipeReport
    */
-  private controllers: Array<Controller> = [
-    new Root(),
-    new TestToken(),
-    new NotFound(),
-  ]
+  private controllers: Array<Controller> = [new Root(), new TestToken()]
+
+  /**
+   * 404 Not Found middleware function.
+   *
+   * @private
+   * @type {RequestHandler}
+   * @memberof RecipeReport
+   */
+  private fourOhFour: RequestHandler = this.lastStop.fourOhFour
+
+  /**
+   * 500 Internal Server Error middleware function.
+   *
+   * @private
+   * @type {ErrorRequestHandler}
+   * @memberof RecipeReport
+   */
+  private fiveHundred: ErrorRequestHandler = this.lastStop.fiveHundred
 
   /**
    * Expressjs application wrapper.
@@ -111,7 +128,55 @@ class RecipeReport implements Starter {
    * @type {App}
    * @memberof RecipeReport
    */
-  private app: App = new App(this.port, this.middlewares, this.controllers)
+  private app: App = new App(
+    this.port,
+    this.middlewares,
+    this.controllers,
+    this.fourOhFour,
+    this.fiveHundred
+  )
+
+  /**
+   * Fun service.
+   *
+   * @private
+   * @type {Fun}
+   * @memberof RecipeReport
+   */
+  private fun: Fun = new Fun()
+
+  /**
+   * Environment variable check. If these environment variables haven't been set
+   * then we can't run the application.
+   *
+   * @private
+   * @memberof RecipeReport
+   */
+  private environmentVariablesExist = async (): Promise<unknown> => {
+    const promise = new Promise((resolve, reject) => {
+      let missing: string = ''
+      if (process.env.PORT === undefined) {
+        missing = missing.concat('\n PORT')
+      }
+      if (process.env.CRYPTO_KEY === undefined) {
+        missing = missing.concat('\n CRYPTO_KEY')
+      }
+      if (process.env.JWT_SECRET === undefined) {
+        missing = missing.concat('\n JWT_SECRET')
+      }
+      if (process.env.JWT_ALGORITHM === undefined) {
+        missing = missing.concat('\n JWT_ALGORITHM')
+      }
+      if (missing === '') {
+        resolve()
+      } else {
+        const error = new Error(`Environment variable(s) missing:${missing}`)
+        error.name = 'EnvironmentVariableError'
+        reject(error)
+      }
+    })
+    return promise
+  }
 
   /**
    * Recipe.Report application starter. Start listening for connections.
@@ -121,6 +186,7 @@ class RecipeReport implements Starter {
    */
   public start = async (): Promise<void> => {
     try {
+      await this.environmentVariablesExist()
       await this.app.listenWrapper()
       await this.fun.tag()
     } catch (error) {
