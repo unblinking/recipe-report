@@ -7,11 +7,11 @@ const logger_1 = __importDefault(require("../services/logger"));
 class CallHistory {
     constructor() {
         this.logger = new logger_1.default();
-    }
-    log(req, _res, next) {
-        const callDetails = `Request: ${req.method} ${req.path}`;
-        this.logger.write(callDetails);
-        next();
+        this.log = (req, _res, next) => {
+            const callDetails = `Request: ${req.method} ${req.path}`;
+            this.logger.write(callDetails);
+            next();
+        };
     }
 }
 exports.default = CallHistory;

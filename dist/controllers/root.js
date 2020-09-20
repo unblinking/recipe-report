@@ -9,6 +9,9 @@ class Root {
     constructor() {
         this.router = express_1.default.Router();
         this.path = '/';
+        this.initRoutes = () => {
+            this.router.get(this.path, this.curtsy);
+        };
         this.curtsy = (req, res) => {
             const respond = new responder_1.default();
             respond.success(res, {
@@ -17,9 +20,6 @@ class Root {
             });
         };
         this.initRoutes();
-    }
-    initRoutes() {
-        this.router.get(this.path, this.curtsy);
     }
 }
 exports.default = Root;

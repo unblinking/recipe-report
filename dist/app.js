@@ -7,28 +7,29 @@ const express_1 = __importDefault(require("express"));
 const logger_1 = __importDefault(require("./services/logger"));
 class App {
     constructor(port, middlewares, controllers) {
-        this.app = express_1.default();
         this.logger = new logger_1.default();
+        this.port = 0;
+        this.expressApplication = express_1.default();
+        this.middlewares = (middlewares) => {
+            this.expressApplication.use(middlewares);
+        };
+        this.controllers = (controllers) => {
+            controllers.forEach((controller) => {
+                this.expressApplication.use('/', controller.router);
+            });
+        };
+        this.listenWrapper = () => {
+            const promise = new Promise((resolve) => {
+                this.expressApplication.listen(this.port, () => {
+                    this.logger.write(`Expressjs is listening on port ${this.port}`);
+                    resolve();
+                });
+            });
+            return promise;
+        };
         this.port = port;
         this.middlewares(middlewares);
         this.controllers(controllers);
-    }
-    middlewares(middlewares) {
-        this.app.use(middlewares);
-    }
-    controllers(controllers) {
-        controllers.forEach((controller) => {
-            this.app.use('/', controller.router);
-        });
-    }
-    listenWrapper() {
-        const promise = new Promise((resolve) => {
-            this.app.listen(this.port, () => {
-                this.logger.write(`Expressjs is listening on port ${this.port}`);
-                resolve();
-            });
-        });
-        return promise;
     }
 }
 exports.default = App;

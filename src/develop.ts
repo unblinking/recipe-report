@@ -3,19 +3,34 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-import Logger from './services/logger'
+/** External imports. */
 import MailDev from 'maildev'
+/** Internal imports. */
+import Logger from './services/logger'
 import RecipeReport from './recipereport'
 
 /**
- * Setup required environment variables for development work.
+ * Environment variables for development work.
+ *
+ * @class DevEnvVars
  */
 class DevEnvVars {
-  // The general logging service.
+  /**
+   * General logging service.
+   *
+   * @private
+   * @type {Logger}
+   * @memberof DevEnvVars
+   */
   private logger: Logger = new Logger()
 
-  // Set those env vars now.
-  public setEnvVars(): void {
+  /**
+   * Set the environment variables.
+   *
+   * @public
+   * @memberof DevEnvVars
+   */
+  public setEnvVars = (): void => {
     try {
       process.env.PORT = '1138'
       process.env.CRYPTO_KEY = 'MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT'
@@ -30,11 +45,28 @@ class DevEnvVars {
   }
 }
 
+/**
+ * MailDev email server.
+ *
+ * @class DevEmailServer
+ */
 class DevEmailServer {
-  // The general logging service.
+  /**
+   * General logging service.
+   *
+   * @private
+   * @type {Logger}
+   * @memberof DevEmailServer
+   */
   private logger: Logger = new Logger()
 
-  public setup(): void {
+  /**
+   * Configure and start the MailDev email server.
+   *
+   * @public
+   * @memberof DevEmailServer
+   */
+  public setup = (): void => {
     const smtpPort: number = 1139
     const outHost: string = 'localhost'
     const outPort: number = 25
@@ -47,8 +79,10 @@ class DevEmailServer {
         disableWeb: false,
       })
       maildev.on('new', (email: unknown) => {
-        // When we get a new email, write the properties to env vars.
-        // Our test cases will be looking there to verify the email worked.
+        /**
+         * When we get a new email, write the properties to environment variables.
+         * Our test cases will be looking there to verify the email worked.
+         */
         interface From {
           address: string
         }
@@ -81,6 +115,13 @@ class DevEmailServer {
   }
 }
 
+/**
+ * If the file is being run directly, start the Recipe.Report API in development mode now.
+ *
+ * ```bash
+ * ts-node src/develop.ts
+ * ```
+ */
 if (require.main === module) {
   const devEnvVars = new DevEnvVars()
   devEnvVars.setEnvVars()

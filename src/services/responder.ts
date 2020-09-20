@@ -9,14 +9,44 @@ import { Response } from 'express'
 /**
  * Jsend interface definition.
  * Based on omniti-labs/jsend {@link https://github.com/omniti-labs/jsend JSend}
+ *
+ * @interface Jsend
  */
 interface Jsend {
-  // All went well, and (usually) some data was returned.
+  /**
+   * All went well, and (usually) some data was returned.
+   *
+   * @param {Response} res HTTP res that Expressjs sends when it gets a req.
+   * @param {Record<string, unknown>} [data] Any data returned by the API.
+   * @memberof Jsend
+   */
   success(res: Response, data?: Record<string, unknown>): void
-  // There was a problem with the data submitted, or some pre-condition of the
-  // API call wasn't satisfied.
+
+  /**
+   * There was a problem with the data submitted, or some pre-condition of the
+   * API call wasn't satisfied.
+   *
+   * @param {Response} res HTTP res that Expressjs sends when it gets a req.
+   * @param {Record<string, unknown>} [data] Again, provides the wrapper for the
+   *     details of why the request failed. If the reasons for failure
+   *     correspond to POST values, the response object's keys SHOULD correspond
+   *     to those POST values.
+   * @memberof Jsend
+   */
   fail(res: Response, data?: Record<string, unknown>): void
-  // An error occurred in processing the request, i.e. an exception was thrown
+
+  /**
+   * An error occurred in processing the request, i.e. an exception was thrown.
+   *
+   * @param {Response} res HTTP res that Expressjs sends when it gets a req.
+   * @param {string} message A meaningful, end-user-readable (or at the least
+   *     log-worthy) message, explaining what went wrong.
+   * @param {string} [code] A code corresponding to the error, if applicable.
+   * @param {Record<string, unknown>} [data] A generic container for any other
+   *     information about the error, i.e. the conditions that caused the error,
+   *     stack trace, etc.
+   * @memberof Jsend
+   */
   error(
     res: Response,
     message: string,
@@ -27,30 +57,44 @@ interface Jsend {
 
 /**
  * Responder service implementation.
+ *
+ * @class Responder
+ * @implements {Jsend}
  */
 class Responder implements Jsend {
+  private statusCode: number
+
+  constructor(statusCode?: number) {
+    this.statusCode = statusCode ?? 200
+  }
+
   /**
-   * Send the Expressjs response with success information.
+   * All went well, and (usually) some data was returned.
+   *
    * @param {Response} res HTTP res that Expressjs sends when it gets a req.
-   * @param {Record<string, unknown>} data Any data returned by the API.
+   * @param {Record<string, unknown>} [data] Any data returned by the API.
+   * @memberof Responder
    */
-  public success(res: Response, data?: Record<string, unknown>): void {
-    res.status(200).json({
+  public success = (res: Response, data?: Record<string, unknown>): void => {
+    res.status(this.statusCode).json({
       status: 'success',
       data: data,
     })
   }
 
   /**
-   * Send the Expressjs response with failure information.
+   * There was a problem with the data submitted, or some pre-condition of the
+   * API call wasn't satisfied.
+   *
    * @param {Response} res HTTP res that Expressjs sends when it gets a req.
-   * @param {Record<string, unknown>} data Again, provides the wrapper for the
+   * @param {Record<string, unknown>} [data] Again, provides the wrapper for the
    *     details of why the request failed. If the reasons for failure
    *     correspond to POST values, the response object's keys SHOULD correspond
    *     to those POST values.
+   * @memberof Responder
    */
-  public fail(res: Response, data?: Record<string, unknown>): void {
-    res.status(200).json({
+  public fail = (res: Response, data?: Record<string, unknown>): void => {
+    res.status(this.statusCode).json({
       status: 'fail',
       data: data,
     })
@@ -58,21 +102,31 @@ class Responder implements Jsend {
 
   /**
    * Send the Expressjs response with error information.
+   * @param {Response} res
+   * @param {string} message
+   * @param {string} code
+   * @param {Record<string, unknown>} data
+   */
+
+  /**
+   * An error occurred in processing the request, i.e. an exception was thrown.
+   *
    * @param {Response} res HTTP res that Expressjs sends when it gets a req.
    * @param {string} message A meaningful, end-user-readable (or at the least
    *     log-worthy) message, explaining what went wrong.
-   * @param {string} code A code corresponding to the error, if applicable.
-   * @param {Record<string, unknown>} data A generic container for any other
+   * @param {string} [code] A code corresponding to the error, if applicable.
+   * @param {Record<string, unknown>} [data] A generic container for any other
    *     information about the error, i.e. the conditions that caused the error,
    *     stack trace, etc.
+   * @memberof Responder
    */
-  public error(
+  public error = (
     res: Response,
     message: string,
     code?: string,
     data?: Record<string, unknown>
-  ): void {
-    res.status(200).json({
+  ): void => {
+    res.status(this.statusCode).json({
       status: 'error',
       message: message,
       code: code,

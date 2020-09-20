@@ -36,52 +36,50 @@ const helmet_1 = __importDefault(require("helmet"));
 const app_1 = __importDefault(require("./app"));
 const callhistory_1 = __importDefault(require("./middlewares/callhistory"));
 const root_1 = __importDefault(require("./controllers/root"));
-const test_1 = __importDefault(require("./controllers/test"));
+const testtoken_1 = __importDefault(require("./controllers/testtoken"));
+const notfound_1 = __importDefault(require("./controllers/notfound"));
 const logger_1 = __importDefault(require("./services/logger"));
+const fun_1 = __importDefault(require("./services/fun"));
 class RecipeReport {
     constructor() {
-        var _a, _b;
-        this.port = parseInt((_a = process.env.PORT) !== null && _a !== void 0 ? _a : '', 10);
-        this.version = (_b = process.env.npm_package_version) !== null && _b !== void 0 ? _b : '';
-        this.graffiti = `\x1b[1m\x1b[32m
-     ____           _
-    |  _ \\ ___  ___(_)_ __   ___
-    | |_) / _ \\/ __| | '_ \\ / _ \\
-    |  _ <  __/ (__| | |_) |  __/
-    |_|_\\_\\___|\\___|_| .__/ \\___|
-    |  _ \\ ___ _ __  |_|_  _ __| |_
-    | |_) / _ \\ '_ \\ / _ \\| '__| __|
-    |  _ <  __/ |_) | (_) | |  | |_
-    |_| \\_\\___| .__/ \\___/|_|   \\__|
-    \x1b[37mAlpha     \x1b[1m\x1b[32m|_|      \x1b[37mversion ${this.version}
-    \x1b[0m`;
-        this.callHistory = new callhistory_1.default();
+        var _a;
         this.logger = new logger_1.default();
+        this.callHistory = new callhistory_1.default();
+        this.fun = new fun_1.default();
+        this.port = parseInt((_a = process.env.PORT) !== null && _a !== void 0 ? _a : '', 10);
         this.middlewares = [
             helmet_1.default(),
             BodyParser.json(),
             BodyParser.urlencoded({ extended: true }),
-            this.callHistory.log.bind(this.callHistory),
+            this.callHistory.log,
         ];
-        this.controllers = [new root_1.default(), new test_1.default()];
+        this.controllers = [
+            new root_1.default(),
+            new testtoken_1.default(),
+            new notfound_1.default(),
+        ];
         this.app = new app_1.default(this.port, this.middlewares, this.controllers);
-    }
-    start() {
-        return __awaiter(this, void 0, void 0, function* () {
+        this.start = () => __awaiter(this, void 0, void 0, function* () {
             try {
                 yield this.app.listenWrapper();
-                this.logger.write(this.graffiti);
+                yield this.fun.tag();
             }
-            catch (ex) {
-                this.logger.write(ex);
+            catch (error) {
+                this.logger.write(error);
                 process.exit(1);
             }
         });
     }
 }
 if (require.main === module) {
-    const recipeReport = new RecipeReport();
-    recipeReport.start();
+    try {
+        const recipeReport = new RecipeReport();
+        recipeReport.start();
+    }
+    catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
 }
 exports.default = RecipeReport;
 //# sourceMappingURL=recipereport.js.map

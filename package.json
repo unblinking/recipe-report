@@ -12,7 +12,7 @@
     "linter": "eslint src/** --ext .js,.jsx,.ts,.tsx",
     "prettier": "prettier --write src/**",
     "pretest": "echo \"Checking for available dependency updates\" && ncu",
-    "build": "tsc",
+    "build": "tsc && typedoc --out docs src",
     "test": "",
     "testonly": "",
     "posttest": "",
@@ -35,6 +35,7 @@
     "npm-check-updates": "8.1.0",
     "prettier": "2.1.1",
     "ts-node": "9.0.0",
+    "typedoc": "0.19.1",
     "typescript": "4.0.2"
   },
   "dependencies": {
