@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>DevEnvVars | recipereport_api</title>
+	<title>IUserRepo | recipereport_api</title>
 	<meta name="description" content="Documentation for recipereport_api">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_develop_.html">&quot;develop&quot;</a>
+					<a href="../modules/_repositories_user_.html">&quot;repositories/user&quot;</a>
 				</li>
 				<li>
-					<a href="_develop_.devenvvars.html">DevEnvVars</a>
+					<a href="_repositories_user_.iuserrepo.html">IUserRepo</a>
 				</li>
 			</ul>
-			<h1>Class DevEnvVars</h1>
+			<h1>Interface IUserRepo</h1>
 		</div>
 	</div>
 </header>
@@ -72,86 +72,88 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Environment variables for development work.</p>
+						<p>User repository interface.</p>
 					</div>
+					<dl class="tsd-comment-tags">
+						<dt>interface</dt>
+						<dd><p>IUserRepo</p>
+						</dd>
+					</dl>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">DevEnvVars</span>
+						<span class="target">IUserRepo</span>
 					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel">
+				<h3>Implemented by</h3>
+				<ul class="tsd-hierarchy">
+					<li><a href="../classes/_repositories_user_.userrepo.html" class="tsd-signature-type">UserRepo</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-private tsd-is-private-protected tsd-is-not-exported">
-							<h3>Properties</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-not-exported"><a href="_develop_.devenvvars.html#logger" class="tsd-kind-icon">logger</a></li>
-							</ul>
-						</section>
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-not-exported"><a href="_develop_.devenvvars.html#setenvvars" class="tsd-kind-icon">set<wbr>Env<wbr>Vars</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="_repositories_user_.iuserrepo.html#createuser" class="tsd-kind-icon">create<wbr>User</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="_repositories_user_.iuserrepo.html#getuser" class="tsd-kind-icon">get<wbr>User</a></li>
 							</ul>
 						</section>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected tsd-is-not-exported">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-not-exported">
-					<a name="logger" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> logger</h3>
-					<div class="tsd-signature tsd-kind-icon">logger<span class="tsd-signature-symbol">:</span> <a href="_services_logger_.logger.html" class="tsd-signature-type">Logger</a><span class="tsd-signature-symbol"> = new Logger()</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/c5b0658/src/develop.ts#L25">develop.ts:25</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>General logging service.</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>memberof</dt>
-							<dd><p>DevEnvVars</p>
-							</dd>
-						</dl>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
-					<a name="setenvvars" class="tsd-anchor"></a>
-					<h3>set<wbr>Env<wbr>Vars</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Env<wbr>Vars<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="createuser" class="tsd-anchor"></a>
+					<h3>create<wbr>User</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">create<wbr>User<span class="tsd-signature-symbol">(</span>model<span class="tsd-signature-symbol">: </span><a href="../classes/_db_models_user_.usermodel.html" class="tsd-signature-type">UserModel</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">QueryResult</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/c5b0658/src/develop.ts#L33">develop.ts:33</a></li>
+									<li>Defined in repositories/user.ts:19</li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Set the environment variables.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>memberof</dt>
-									<dd><p>DevEnvVars</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>model: <a href="../classes/_db_models_user_.usermodel.html" class="tsd-signature-type">UserModel</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">QueryResult</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="getuser" class="tsd-anchor"></a>
+					<h3>get<wbr>User</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>User<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">QueryResult</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in repositories/user.ts:20</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">QueryResult</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -172,7 +174,13 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/_controllers_testtoken_.html">&quot;controllers/testtoken&quot;</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
+						<a href="../modules/_db_models_user_.html">&quot;db/models/user&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_db_pg_.html">&quot;db/pg&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
 						<a href="../modules/_develop_.html">&quot;develop&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -188,6 +196,15 @@
 						<a href="../modules/_recipereport_.html">&quot;recipereport&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
+						<a href="../modules/_repositories_base_.html">&quot;repositories/base&quot;</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="../modules/_repositories_user_.html">&quot;repositories/user&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/_services_encrypter_.html">&quot;services/encrypter&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
 						<a href="../modules/_services_fun_.html">&quot;services/fun&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -200,19 +217,19 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-not-exported">
-						<a href="_develop_.devemailserver.html" class="tsd-kind-icon">Dev<wbr>Email<wbr>Server</a>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_repositories_user_.userrepo.html" class="tsd-kind-icon">User<wbr>Repo</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-module tsd-is-not-exported">
-						<a href="_develop_.devenvvars.html" class="tsd-kind-icon">Dev<wbr>Env<wbr>Vars</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_repositories_user_.iuserrepo.html" class="tsd-kind-icon">IUser<wbr>Repo</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-not-exported">
-								<a href="_develop_.devenvvars.html#logger" class="tsd-kind-icon">logger</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="_repositories_user_.iuserrepo.html#createuser" class="tsd-kind-icon">create<wbr>User</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-not-exported">
-								<a href="_develop_.devenvvars.html#setenvvars" class="tsd-kind-icon">set<wbr>Env<wbr>Vars</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="_repositories_user_.iuserrepo.html#getuser" class="tsd-kind-icon">get<wbr>User</a>
 							</li>
 						</ul>
 					</li>
@@ -228,14 +245,13 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 			</ul>
 		</div>
 	</div>

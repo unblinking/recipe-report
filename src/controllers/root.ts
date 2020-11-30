@@ -59,7 +59,7 @@ class Root implements Controller {
    * @private
    * @memberof Root
    */
-  private curtsy = (req: Request, res: Response): void => {
+  private curtsy = async (req: Request, res: Response): Promise<void> => {
     const respond = new Responder()
     respond.success(res, {
       message: 'Welcome to the Recipe.Report API server.',

@@ -5,7 +5,7 @@
   "repository": "github:nothingworksright/recipereport_api",
   "license": "MIT",
   "engines": {
-    "node": "14.10.1"
+    "node": "14.15.1"
   },
   "private": false,
   "scripts": {
@@ -16,7 +16,9 @@
     "test": "",
     "testonly": "",
     "posttest": "",
-    "develop": "prettier --write src/** && tsc && ts-node src/develop.ts",
+    "flyway": "wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/7.3.0/flyway-commandline-7.3.0-linux-x64.tar.gz | tar xvz",
+    "migrate": "eval $(egrep -v '^#' .env.dev | xargs) ./flyway-7.3.0/flyway -configFiles=flyway.conf migrate",
+    "develop": "prettier --write src/** && tsc && ts-node -r dotenv/config src/develop.ts dotenv_config_path=.env.dev",
     "start": "node dist/recipereport.js"
   },
   "author": "jmg1138 https://github.com/jmg1138",
@@ -26,8 +28,10 @@
     "@types/express": "4.17.8",
     "@types/maildev": "0.0.1",
     "@types/node": "14.6.4",
+    "@types/pg": "7.14.5",
     "@typescript-eslint/eslint-plugin": "4.0.1",
     "@typescript-eslint/parser": "4.0.1",
+    "dotenv": "8.2.0",
     "eslint": "7.8.1",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
@@ -41,6 +45,7 @@
   "dependencies": {
     "express": "4.17.1",
     "helmet": "4.1.1",
-    "heroku-ssl-redirect": "0.1.1"
+    "heroku-ssl-redirect": "0.1.1",
+    "pg": "8.4.1"
   }
 }

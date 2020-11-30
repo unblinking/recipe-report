@@ -64,6 +64,12 @@ interface Jsend {
 class Responder implements Jsend {
   private statusCode: number
 
+  /**
+   * Creates an instance of Responder.
+   *
+   * @param {number} [statusCode]
+   * @memberof Responder
+   */
   constructor(statusCode?: number) {
     this.statusCode = statusCode ?? 200
   }

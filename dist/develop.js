@@ -6,25 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const maildev_1 = __importDefault(require("maildev"));
 const logger_1 = __importDefault(require("./services/logger"));
 const recipereport_1 = __importDefault(require("./recipereport"));
-class DevEnvVars {
-    constructor() {
-        this.logger = new logger_1.default();
-        this.setEnvVars = () => {
-            try {
-                process.env.PORT = '1138';
-                process.env.CRYPTO_KEY = 'MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT';
-                process.env.JWT_SECRET = 'devTestEnvironment';
-                process.env.JWT_ALGORITHM = 'HS256';
-                process.env.SENDMAIL_DEV_PORT = '1025';
-                process.env.SENDMAIL_DEV_HOST = 'localhost';
-            }
-            catch (ex) {
-                this.logger.write(ex);
-                process.exit(1);
-            }
-        };
-    }
-}
 class DevEmailServer {
     constructor() {
         this.logger = new logger_1.default();
@@ -61,8 +42,6 @@ class DevEmailServer {
     }
 }
 if (require.main === module) {
-    const devEnvVars = new DevEnvVars();
-    devEnvVars.setEnvVars();
     const devEmailServer = new DevEmailServer();
     devEmailServer.setup();
     const recipeReport = new recipereport_1.default();

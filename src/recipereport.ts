@@ -18,6 +18,11 @@ import Logger from './services/logger'
 import Root from './controllers/root'
 import TestToken from './controllers/testtoken'
 
+/** Temporarily testing some stuff here. */
+import UserModel from './db/models/user'
+import PostgreSQL from './db/pg'
+import UserRepo from './repositories/user'
+
 /**
  * Interface for the Recipe.Report application.
  *
@@ -74,7 +79,7 @@ class RecipeReport implements Starter {
    * @type {number}
    * @memberof RecipeReport
    */
-  private port: number = parseInt(process.env.PORT ?? '', 10)
+  private port: number = parseInt(process.env.EXPRESS_PORT ?? ``, 10)
 
   /**
    * Middleware functions.
@@ -154,24 +159,45 @@ class RecipeReport implements Starter {
    */
   private environmentVariablesExist = async (): Promise<unknown> => {
     const promise = new Promise((resolve, reject) => {
-      let missing: string = ''
-      if (process.env.PORT === undefined) {
-        missing = missing.concat('\n PORT')
+      let missing: string = ``
+      if (process.env.EXPRESS_PORT === undefined) {
+        missing = missing.concat(`\n EXPRESS_PORT`)
       }
       if (process.env.CRYPTO_KEY === undefined) {
-        missing = missing.concat('\n CRYPTO_KEY')
+        missing = missing.concat(`\n CRYPTO_KEY`)
+      }
+      if (process.env.CRYPTO_ALGO === undefined) {
+        missing = missing.concat(`\n CRYPTO_ALGO`)
+      }
+      if (process.env.CRYPTO_IV_LENGTH === undefined) {
+        missing = missing.concat(`\n CRYPTO_IV_LENGTH`)
       }
       if (process.env.JWT_SECRET === undefined) {
-        missing = missing.concat('\n JWT_SECRET')
+        missing = missing.concat(`\n JWT_SECRET`)
       }
       if (process.env.JWT_ALGORITHM === undefined) {
-        missing = missing.concat('\n JWT_ALGORITHM')
+        missing = missing.concat(`\n JWT_ALGORITHM`)
       }
-      if (missing === '') {
+      if (process.env.DB_USER === undefined) {
+        missing = missing.concat(`\n DB_USER`)
+      }
+      if (process.env.DB_HOST === undefined) {
+        missing = missing.concat(`\n DB_HOST`)
+      }
+      if (process.env.DB_DATABASE === undefined) {
+        missing = missing.concat(`\n DB_DATABASE`)
+      }
+      if (process.env.DB_PASSWORD === undefined) {
+        missing = missing.concat(`\n DB_PASSWORD`)
+      }
+      if (process.env.DB_PORT === undefined) {
+        missing = missing.concat(`\n DB_PORT`)
+      }
+      if (missing === ``) {
         resolve()
       } else {
         const error = new Error(`Environment variable(s) missing:${missing}`)
-        error.name = 'EnvironmentVariableError'
+        error.name = `EnvironmentVariableError`
         reject(error)
       }
     })
@@ -189,6 +215,21 @@ class RecipeReport implements Starter {
       await this.environmentVariablesExist()
       await this.app.listenWrapper()
       await this.fun.tag()
+
+      const user = new UserModel(
+        undefined,
+        `Joshua2`,
+        `password`,
+        `joshua2@unblinking.io`,
+        new Date(),
+        new Date(),
+        new Date()
+      )
+      const postgreSQL = new PostgreSQL()
+      const db = await postgreSQL.getClient()
+      const userRepo = new UserRepo(db, `users`)
+      const result = await userRepo.createOne(user)
+      console.log(result)
     } catch (error) {
       this.logger.write(error)
       process.exit(1)

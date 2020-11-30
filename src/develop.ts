@@ -10,42 +10,6 @@ import Logger from './services/logger'
 import RecipeReport from './recipereport'
 
 /**
- * Environment variables for development work.
- *
- * @class DevEnvVars
- */
-class DevEnvVars {
-  /**
-   * General logging service.
-   *
-   * @private
-   * @type {Logger}
-   * @memberof DevEnvVars
-   */
-  private logger: Logger = new Logger()
-
-  /**
-   * Set the environment variables.
-   *
-   * @public
-   * @memberof DevEnvVars
-   */
-  public setEnvVars = (): void => {
-    try {
-      process.env.PORT = '1138'
-      process.env.CRYPTO_KEY = 'MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT'
-      process.env.JWT_SECRET = 'devTestEnvironment'
-      process.env.JWT_ALGORITHM = 'HS256'
-      process.env.SENDMAIL_DEV_PORT = '1025'
-      process.env.SENDMAIL_DEV_HOST = 'localhost'
-    } catch (ex) {
-      this.logger.write(ex)
-      process.exit(1)
-    }
-  }
-}
-
-/**
  * MailDev email server.
  *
  * @class DevEmailServer
@@ -123,9 +87,6 @@ class DevEmailServer {
  * ```
  */
 if (require.main === module) {
-  const devEnvVars = new DevEnvVars()
-  devEnvVars.setEnvVars()
-
   const devEmailServer = new DevEmailServer()
   devEmailServer.setup()
 
