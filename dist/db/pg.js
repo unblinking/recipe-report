@@ -28,10 +28,10 @@ class PostgreSQL {
         this.query = (text, params) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const start = Date.now();
-                const res = yield this.pool.query(text, params);
+                const result = yield this.pool.query(text, params);
                 const duration = Date.now() - start;
-                this.logger.write(`Executed query. ${text}, ${duration}, ${res.rowCount}`);
-                return res;
+                this.logger.write(`Executed query. ${text}, ${duration}, ${result.rowCount}`);
+                return result;
             }
             catch (error) {
                 this.logger.write(error);
@@ -56,6 +56,16 @@ class PostgreSQL {
                 this.logger.write(error);
                 return error;
             }
+        });
+        this.hashAndSalt = (text) => __awaiter(this, void 0, void 0, function* () {
+            const query = `SELECT crypt('${text}', gen_salt('bf', 8))`;
+            const result = yield this.query(query, []);
+            return result;
+        });
+        this.authenticate = (email, text) => __awaiter(this, void 0, void 0, function* () {
+            const query = `SELECT _id FROM users WHERE _email = '${email}' AND _password = crypt('${text}', _password)`;
+            const result = yield this.query(query, []);
+            return result;
         });
     }
 }

@@ -4,25 +4,17 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-/** External imports. */
 import { Request, Response, NextFunction } from 'express'
-/** Internal imports. */
-import Logger from '../services/logger'
+
+import Logger from '../services/log'
 
 /**
  * Call history for API calls.
  *
  * @class CallHistory
  */
-class CallHistory {
-  /**
-   * General logging service.
-   *
-   * @private
-   * @type {Logger}
-   * @memberof CallHistory
-   */
-  private logger: Logger = new Logger()
+export class CallHistory {
+  logger: Logger = new Logger()
 
   /**
    * Write an API call event to the general log.
@@ -36,5 +28,3 @@ class CallHistory {
     next()
   }
 }
-
-export default CallHistory

@@ -4,11 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const maildev_1 = __importDefault(require("maildev"));
-const logger_1 = __importDefault(require("./services/logger"));
-const recipereport_1 = __importDefault(require("./recipereport"));
+const log_1 = __importDefault(require("./services/log"));
+const recipereport_1 = require("./recipereport");
 class DevEmailServer {
     constructor() {
-        this.logger = new logger_1.default();
+        this.logger = new log_1.default();
         this.setup = () => {
             const smtpPort = 1139;
             const outHost = 'localhost';
@@ -44,7 +44,7 @@ class DevEmailServer {
 if (require.main === module) {
     const devEmailServer = new DevEmailServer();
     devEmailServer.setup();
-    const recipeReport = new recipereport_1.default();
+    const recipeReport = new recipereport_1.RecipeReport();
     recipeReport.start();
 }
 //# sourceMappingURL=develop.js.map

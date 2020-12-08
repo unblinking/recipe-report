@@ -10,33 +10,14 @@ import Helmet from 'helmet'
 import HerokuSslRedirect from 'heroku-ssl-redirect'
 /** Internal imports. */
 import App from './app'
-import CallHistory from './middlewares/callhistory'
-import Controller from './interfaces/controller'
+import { CallHistory } from './middlewares/callhistory'
+import { IController } from './controllers/interfaces'
 import Fun from './services/fun'
 import LastStop from './middlewares/laststop'
-import Logger from './services/logger'
-import Root from './controllers/root'
-import TestToken from './controllers/testtoken'
-
-/** Temporarily testing some stuff here. */
-import UserModel from './db/models/user'
-import PostgreSQL from './db/pg'
-import UserRepo from './repositories/user'
-
-/**
- * Interface for the Recipe.Report application.
- *
- * @interface Starter
- */
-interface Starter {
-  /**
-   * Recipe.Report application starter.
-   *
-   * @returns {Promise<void>}
-   * @memberof Starter
-   */
-  start(): Promise<void>
-}
+import Logger from './services/log'
+import { RootController } from './controllers/rootcontroller'
+import { TestTokenController } from './controllers/testtokencontroller'
+import { UserController } from './controllers/usercontroller'
 
 /**
  * Recipe.Report application.
@@ -44,7 +25,7 @@ interface Starter {
  * @class RecipeReport
  * @implements {Starter}
  */
-class RecipeReport implements Starter {
+export class RecipeReport {
   /**
    * General logging service.
    *
@@ -106,7 +87,11 @@ class RecipeReport implements Starter {
    * @type {Array<Controller>}
    * @memberof RecipeReport
    */
-  private controllers: Array<Controller> = [new Root(), new TestToken()]
+  private controllers: Array<IController> = [
+    new RootController(),
+    new TestTokenController(),
+    new UserController(),
+  ]
 
   /**
    * 404 Not Found middleware function.
@@ -175,9 +160,6 @@ class RecipeReport implements Starter {
       if (process.env.JWT_SECRET === undefined) {
         missing = missing.concat(`\n JWT_SECRET`)
       }
-      if (process.env.JWT_ALGORITHM === undefined) {
-        missing = missing.concat(`\n JWT_ALGORITHM`)
-      }
       if (process.env.DB_USER === undefined) {
         missing = missing.concat(`\n DB_USER`)
       }
@@ -215,21 +197,6 @@ class RecipeReport implements Starter {
       await this.environmentVariablesExist()
       await this.app.listenWrapper()
       await this.fun.tag()
-
-      const user = new UserModel(
-        undefined,
-        `Joshua2`,
-        `password`,
-        `joshua2@unblinking.io`,
-        new Date(),
-        new Date(),
-        new Date()
-      )
-      const postgreSQL = new PostgreSQL()
-      const db = await postgreSQL.getClient()
-      const userRepo = new UserRepo(db, `users`)
-      const result = await userRepo.createOne(user)
-      console.log(result)
     } catch (error) {
       this.logger.write(error)
       process.exit(1)
@@ -245,13 +212,6 @@ class RecipeReport implements Starter {
  * ```
  */
 if (require.main === module) {
-  try {
-    const recipeReport = new RecipeReport()
-    recipeReport.start()
-  } catch (error) {
-    console.log(error)
-    process.exit(1)
-  }
+  const recipeReport = new RecipeReport()
+  recipeReport.start()
 }
-
-export default RecipeReport

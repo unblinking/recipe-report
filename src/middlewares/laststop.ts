@@ -4,20 +4,12 @@
  * @author {@link https://github.com/jmg1138 jmg1138}
  */
 
-/** External imports. */
 import { Request, Response, NextFunction } from 'express'
-/** Internal imports. */
-import Logger from '../services/logger'
-import Responder from '../services/responder'
+
+import Logger from '../services/log'
+import { Responder } from '../services/responder'
 
 class LastStop {
-  /**
-   * General logging service.
-   *
-   * @private
-   * @type {Logger}
-   * @memberof CallHistory
-   */
   private logger: Logger = new Logger()
 
   /**

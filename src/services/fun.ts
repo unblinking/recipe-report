@@ -5,7 +5,7 @@
  */
 
 /** Internal imports. */
-import Logger from './logger'
+import Logger from './log'
 
 /**
  * Some fun stuff.

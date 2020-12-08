@@ -6,8 +6,8 @@
 /** External imports. */
 import MailDev from 'maildev'
 /** Internal imports. */
-import Logger from './services/logger'
-import RecipeReport from './recipereport'
+import Logger from './services/log'
+import { RecipeReport } from './recipereport'
 
 /**
  * MailDev email server.

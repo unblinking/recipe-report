@@ -5,6 +5,7 @@
  */
 
 import { Response } from 'express'
+import Logger from './log'
 
 /**
  * Jsend interface definition.
@@ -13,40 +14,8 @@ import { Response } from 'express'
  * @interface Jsend
  */
 interface Jsend {
-  /**
-   * All went well, and (usually) some data was returned.
-   *
-   * @param {Response} res HTTP res that Expressjs sends when it gets a req.
-   * @param {Record<string, unknown>} [data] Any data returned by the API.
-   * @memberof Jsend
-   */
   success(res: Response, data?: Record<string, unknown>): void
-
-  /**
-   * There was a problem with the data submitted, or some pre-condition of the
-   * API call wasn't satisfied.
-   *
-   * @param {Response} res HTTP res that Expressjs sends when it gets a req.
-   * @param {Record<string, unknown>} [data] Again, provides the wrapper for the
-   *     details of why the request failed. If the reasons for failure
-   *     correspond to POST values, the response object's keys SHOULD correspond
-   *     to those POST values.
-   * @memberof Jsend
-   */
   fail(res: Response, data?: Record<string, unknown>): void
-
-  /**
-   * An error occurred in processing the request, i.e. an exception was thrown.
-   *
-   * @param {Response} res HTTP res that Expressjs sends when it gets a req.
-   * @param {string} message A meaningful, end-user-readable (or at the least
-   *     log-worthy) message, explaining what went wrong.
-   * @param {string} [code] A code corresponding to the error, if applicable.
-   * @param {Record<string, unknown>} [data] A generic container for any other
-   *     information about the error, i.e. the conditions that caused the error,
-   *     stack trace, etc.
-   * @memberof Jsend
-   */
   error(
     res: Response,
     message: string,
@@ -61,8 +30,9 @@ interface Jsend {
  * @class Responder
  * @implements {Jsend}
  */
-class Responder implements Jsend {
-  private statusCode: number
+export class Responder implements Jsend {
+  logger: Logger = new Logger()
+  statusCode: number
 
   /**
    * Creates an instance of Responder.
@@ -82,6 +52,7 @@ class Responder implements Jsend {
    * @memberof Responder
    */
   public success = (res: Response, data?: Record<string, unknown>): void => {
+    this.logger.write(`Responder|Success|${this.statusCode}`)
     res.status(this.statusCode).json({
       status: 'success',
       data: data,
@@ -100,6 +71,7 @@ class Responder implements Jsend {
    * @memberof Responder
    */
   public fail = (res: Response, data?: Record<string, unknown>): void => {
+    this.logger.write(`Responder|Fail|${this.statusCode}`)
     res.status(this.statusCode).json({
       status: 'fail',
       data: data,
@@ -132,6 +104,7 @@ class Responder implements Jsend {
     code?: string,
     data?: Record<string, unknown>
   ): void => {
+    this.logger.write(`Responder|Error|${this.statusCode}|${message}`)
     res.status(this.statusCode).json({
       status: 'error',
       message: message,
@@ -140,5 +113,3 @@ class Responder implements Jsend {
     })
   }
 }
-
-export default Responder

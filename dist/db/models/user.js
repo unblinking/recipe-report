@@ -1,57 +1,59 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserModel = void 0;
 class UserModel {
     constructor(id, username, password, email, date_created, date_last_login, date_deleted) {
-        this._id = id;
-        this._username = username;
-        this._password = password;
-        this._email = email;
-        this._date_created = date_created;
-        this._date_last_login = date_last_login;
-        this._date_deleted = date_deleted;
+        this.state = {};
+        this.set_id(id);
+        this.set_username(username);
+        this.set_password(password);
+        this.set_email(email);
+        this.set_date_created(date_created);
+        this.set_date_last_login(date_last_login);
+        this.set_date_deleted(date_deleted);
     }
     get id() {
-        return this._id;
+        return this.state.id;
     }
-    set id(id) {
-        this._id = id;
+    set_id(id) {
+        this.state.id = id;
     }
     get username() {
-        return this._username;
+        return this.state.username;
     }
-    set username(username) {
-        this._username = username;
+    set_username(username) {
+        this.state.username = username;
     }
     get password() {
-        return this._password;
+        return this.state.password;
     }
-    set password(password) {
-        this._password = password;
+    set_password(password) {
+        this.state.password = password;
     }
     get email() {
-        return this._email;
+        return this.state.email;
     }
-    set email(email) {
-        this._email = email;
+    set_email(email) {
+        this.state.email = email;
     }
     get date_created() {
-        return this._date_created;
+        return this.state.date_created;
     }
-    set date_created(date_created) {
-        this._date_created = date_created;
+    set_date_created(date_created) {
+        this.state.date_created = date_created;
     }
     get date_last_login() {
-        return this._date_last_login;
+        return this.state.date_last_login;
     }
-    set date_last_login(date_last_login) {
-        this._date_last_login = date_last_login;
+    set_date_last_login(date_last_login) {
+        this.state.date_last_login = date_last_login;
     }
     get date_deleted() {
-        return this._date_deleted;
+        return this.state.date_deleted;
     }
-    set date_deleted(date_deleted) {
-        this._date_deleted = date_deleted;
+    set_date_deleted(date_deleted) {
+        this.state.date_deleted = date_deleted;
     }
 }
-exports.default = UserModel;
+exports.UserModel = UserModel;
 //# sourceMappingURL=user.js.map

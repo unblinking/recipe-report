@@ -31,24 +31,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.RecipeReport = void 0;
 const BodyParser = __importStar(require("body-parser"));
 const helmet_1 = __importDefault(require("helmet"));
 const heroku_ssl_redirect_1 = __importDefault(require("heroku-ssl-redirect"));
 const app_1 = __importDefault(require("./app"));
-const callhistory_1 = __importDefault(require("./middlewares/callhistory"));
+const callhistory_1 = require("./middlewares/callhistory");
 const fun_1 = __importDefault(require("./services/fun"));
 const laststop_1 = __importDefault(require("./middlewares/laststop"));
-const logger_1 = __importDefault(require("./services/logger"));
-const root_1 = __importDefault(require("./controllers/root"));
-const testtoken_1 = __importDefault(require("./controllers/testtoken"));
-const user_1 = __importDefault(require("./db/models/user"));
-const pg_1 = __importDefault(require("./db/pg"));
-const user_2 = __importDefault(require("./repositories/user"));
+const log_1 = __importDefault(require("./services/log"));
+const rootcontroller_1 = require("./controllers/rootcontroller");
+const testtokencontroller_1 = require("./controllers/testtokencontroller");
+const usercontroller_1 = require("./controllers/usercontroller");
 class RecipeReport {
     constructor() {
         var _a;
-        this.logger = new logger_1.default();
-        this.callHistory = new callhistory_1.default();
+        this.logger = new log_1.default();
+        this.callHistory = new callhistory_1.CallHistory();
         this.lastStop = new laststop_1.default();
         this.port = parseInt((_a = process.env.EXPRESS_PORT) !== null && _a !== void 0 ? _a : ``, 10);
         this.middlewares = [
@@ -61,7 +60,11 @@ class RecipeReport {
             BodyParser.urlencoded({ extended: true }),
             this.callHistory.log,
         ];
-        this.controllers = [new root_1.default(), new testtoken_1.default()];
+        this.controllers = [
+            new rootcontroller_1.RootController(),
+            new testtokencontroller_1.TestTokenController(),
+            new usercontroller_1.UserController(),
+        ];
         this.fourOhFour = this.lastStop.fourOhFour;
         this.fiveHundred = this.lastStop.fiveHundred;
         this.app = new app_1.default(this.port, this.middlewares, this.controllers, this.fourOhFour, this.fiveHundred);
@@ -83,9 +86,6 @@ class RecipeReport {
                 }
                 if (process.env.JWT_SECRET === undefined) {
                     missing = missing.concat(`\n JWT_SECRET`);
-                }
-                if (process.env.JWT_ALGORITHM === undefined) {
-                    missing = missing.concat(`\n JWT_ALGORITHM`);
                 }
                 if (process.env.DB_USER === undefined) {
                     missing = missing.concat(`\n DB_USER`);
@@ -118,12 +118,6 @@ class RecipeReport {
                 yield this.environmentVariablesExist();
                 yield this.app.listenWrapper();
                 yield this.fun.tag();
-                const user = new user_1.default(undefined, `Joshua2`, `password`, `joshua2@unblinking.io`, new Date(), new Date(), new Date());
-                const postgreSQL = new pg_1.default();
-                const db = yield postgreSQL.getClient();
-                const userRepo = new user_2.default(db, `users`);
-                const result = yield userRepo.createOne(user);
-                console.log(result);
             }
             catch (error) {
                 this.logger.write(error);
@@ -132,15 +126,9 @@ class RecipeReport {
         });
     }
 }
+exports.RecipeReport = RecipeReport;
 if (require.main === module) {
-    try {
-        const recipeReport = new RecipeReport();
-        recipeReport.start();
-    }
-    catch (error) {
-        console.log(error);
-        process.exit(1);
-    }
+    const recipeReport = new RecipeReport();
+    recipeReport.start();
 }
-exports.default = RecipeReport;
 //# sourceMappingURL=recipereport.js.map

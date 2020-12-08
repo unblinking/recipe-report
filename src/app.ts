@@ -6,8 +6,8 @@
 /** External imports. */
 import Expressjs, { ErrorRequestHandler, RequestHandler } from 'express'
 /** Internal imports. */
-import Controller from './interfaces/controller'
-import Logger from './services/logger'
+import { IController } from './controllers/interfaces'
+import Logger from './services/log'
 
 /**
  * Interface for the Expressjs application wrapper.
@@ -75,7 +75,7 @@ class App implements ExpressWrapper {
   constructor(
     port: number,
     middlewares: Array<RequestHandler>,
-    controllers: Array<Controller>,
+    controllers: Array<IController>,
     fourOhFour: RequestHandler,
     fiveHundred: ErrorRequestHandler
   ) {
@@ -104,8 +104,8 @@ class App implements ExpressWrapper {
    * @memberof App
    * {@link https://expressjs.com/en/4x/api.html#app.use app.use}
    */
-  private controllers = (controllers: Array<Controller>): void => {
-    controllers.forEach((controller: Controller) => {
+  private controllers = (controllers: Array<IController>): void => {
+    controllers.forEach((controller: IController) => {
       this.expressApplication.use('/', controller.router)
     })
   }

@@ -3,11 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const logger_1 = __importDefault(require("./logger"));
+const log_1 = __importDefault(require("./log"));
 class Fun {
     constructor() {
         var _a;
-        this.logger = new logger_1.default();
+        this.logger = new log_1.default();
         this.version = (_a = process.env.npm_package_version) !== null && _a !== void 0 ? _a : 'unknown';
         this.graffiti = `\x1b[1m\x1b[32m
      ____           _

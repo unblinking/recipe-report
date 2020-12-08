@@ -4,10 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const logger_1 = __importDefault(require("./services/logger"));
+const log_1 = __importDefault(require("./services/log"));
 class App {
     constructor(port, middlewares, controllers, fourOhFour, fiveHundred) {
-        this.logger = new logger_1.default();
+        this.logger = new log_1.default();
         this.port = 0;
         this.expressApplication = express_1.default().set('json spaces', 2);
         this.middlewares = (middlewares) => {
