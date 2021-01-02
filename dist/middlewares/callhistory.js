@@ -1,19 +1,10 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CallHistory = void 0;
-const log_1 = __importDefault(require("../services/log"));
-class CallHistory {
-    constructor() {
-        this.logger = new log_1.default();
-        this.log = (req, _res, next) => {
-            const callDetails = `Request: ${req.method} ${req.path}`;
-            this.logger.write(callDetails);
-            next();
-        };
-    }
-}
-exports.CallHistory = CallHistory;
+exports.callHistory = void 0;
+const log_1 = require("../wrappers/log");
+const callHistory = (req, _res, next) => {
+    log_1.logger.info(`Request: ${req.method} ${req.path}`);
+    next();
+};
+exports.callHistory = callHistory;
 //# sourceMappingURL=callhistory.js.map

@@ -8,36 +8,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostgreSQL = void 0;
 const pg_1 = require("pg");
-const log_1 = __importDefault(require("../services/log"));
+const log_1 = require("../wrappers/log");
 class PostgreSQL {
     constructor() {
-        var _a, _b, _c, _d, _e;
-        this.logger = new log_1.default();
         this.pool = new pg_1.Pool({
-            user: (_a = process.env.DB_USER) !== null && _a !== void 0 ? _a : ``,
-            host: (_b = process.env.DB_HOST) !== null && _b !== void 0 ? _b : ``,
-            database: (_c = process.env.DB_DATABASE) !== null && _c !== void 0 ? _c : ``,
-            password: (_d = process.env.DB_PASSWORD) !== null && _d !== void 0 ? _d : ``,
-            port: parseInt((_e = process.env.DB_PORT) !== null && _e !== void 0 ? _e : ``, 10),
+            user: process.env.DB_USER,
+            host: process.env.DB_HOST,
+            database: process.env.DB_DATABASE,
+            password: process.env.DB_PASSWORD,
+            port: parseInt(process.env.DB_PORT, 10),
         });
         this.query = (text, params) => __awaiter(this, void 0, void 0, function* () {
             const start = Date.now();
             const result = yield this.pool.query(text, params);
             const duration = Date.now() - start;
-            this.logger.write(`Executed query. ${text}, ${duration}, ${result.rowCount}`);
+            log_1.logger.info(`Executed query. ${text}, ${duration}, ${result.rowCount}`);
             return result;
         });
         this.getClient = () => __awaiter(this, void 0, void 0, function* () {
             const client = yield this.pool.connect();
             const release = client.release;
             const timeout = setTimeout(() => {
-                console.error('A pg client has been out for more than 5 seconds!');
+                log_1.logger.warn(`A pg client has been out for more than 5 seconds!`);
             }, 5000);
             client.release = () => {
                 clearTimeout(timeout);
@@ -52,7 +47,7 @@ class PostgreSQL {
             return result;
         });
         this.authenticate = (email, text) => __awaiter(this, void 0, void 0, function* () {
-            const query = `SELECT _id FROM users WHERE _email = '${email}' AND _password = crypt('${text}', _password)`;
+            const query = `SELECT id FROM users WHERE email = '${email}' AND password = crypt('${text}', password)`;
             const result = yield this.query(query, []);
             return result;
         });

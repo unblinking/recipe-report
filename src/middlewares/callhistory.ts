@@ -5,26 +5,16 @@
  */
 
 import { Request, Response, NextFunction } from 'express'
-
-import Logger from '../services/log'
+import { logger } from '../wrappers/log'
 
 /**
  * Call history for API calls.
- *
- * @class CallHistory
  */
-export class CallHistory {
-  logger: Logger = new Logger()
-
-  /**
-   * Write an API call event to the general log.
-   *
-   * @public
-   * @memberof CallHistory
-   */
-  public log = (req: Request, _res: Response, next: NextFunction): void => {
-    const callDetails = `Request: ${req.method} ${req.path}`
-    this.logger.write(callDetails)
-    next()
-  }
+export const callHistory = (
+  req: Request,
+  _res: Response,
+  next: NextFunction
+): void => {
+  logger.info(`Request: ${req.method} ${req.path}`)
+  next()
 }
