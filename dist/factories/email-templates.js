@@ -9,7 +9,7 @@ Hello ${user.email_address},
 
 Thank you for registering with Recipe.Report recently. You may login after completing activation. Please follow this link to activate your new account:
 
-https://api.recipe.report/user/activate:${token}
+https://api.recipe.report/user/activate/${token}
 
 You received this email because you (or someone else) used this email address to create a new account.
 

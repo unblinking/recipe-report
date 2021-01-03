@@ -3,9 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.decodeToken = exports.encodeToken = void 0;
+exports.decodeToken = exports.encodeToken = exports.tokenType = void 0;
 const jwt_simple_1 = __importDefault(require("jwt-simple"));
 const cryptography_1 = require("./cryptography");
+var tokenType;
+(function (tokenType) {
+    tokenType[tokenType["NONE"] = 0] = "NONE";
+    tokenType[tokenType["ACTIVATION"] = 1] = "ACTIVATION";
+    tokenType[tokenType["ACCESS"] = 2] = "ACCESS";
+})(tokenType = exports.tokenType || (exports.tokenType = {}));
 const encodeToken = (userId, type, ttl) => {
     const secret = process.env.JWT_SECRET;
     if (!secret)

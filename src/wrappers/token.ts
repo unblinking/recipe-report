@@ -8,9 +8,15 @@
 import jwt from 'jwt-simple'
 import { encrypt, decrypt } from './cryptography'
 
+export enum tokenType {
+  NONE = 0,
+  ACTIVATION = 1,
+  ACCESS = 2,
+}
+
 export interface Payload {
   id: string
-  type: string
+  type: tokenType
   iat: number
   ttl: number
 }
@@ -21,7 +27,7 @@ export interface Payload {
  */
 export const encodeToken = (
   userId: string,
-  type: string,
+  type: tokenType,
   ttl: number
 ): string => {
   // Determine our secret, from environment variable.
@@ -29,6 +35,8 @@ export const encodeToken = (
   // Verify that we aren't missing anything important.
   if (!secret) throw new Error(`JWT error. Secret key is not defined.`)
   if (!userId) throw new Error(`JWT error. User ID is not defined.`)
+  // Note: tokenType.NONE is zero, which is a falsey value, so that would cause
+  // an error here just as if type was undefined.
   if (!type) throw new Error(`JWT error. Type is not defined.`)
   // Instantiate the payload.
   const payload: Payload = {
@@ -49,7 +57,7 @@ export const encodeToken = (
  * Decode a JWT and decrypt its payload.
  * @returns A decrypted payload from a JWT.
  */
-export const decodeToken = (token: string): Payload => {
+export const decodeToken = (token: string | undefined): Payload => {
   // Determine our secret, from environment variable.
   const secret: string = process.env.JWT_SECRET as string
   // Verify that we aren't missing anything important.

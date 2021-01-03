@@ -9,6 +9,7 @@ class UserModel {
         this.setPassword(props.password);
         this.setEmailAddress(props.email_address);
         this.setDateCreated(props.date_created);
+        this.setDateActivated(props.date_activated);
         this.setDateLastLogin(props.date_last_login);
         this.setDateDeleted(props.date_deleted);
     }
@@ -41,6 +42,12 @@ class UserModel {
     }
     setDateCreated(date_created) {
         this.state.date_created = date_created;
+    }
+    get date_activated() {
+        return this.state.date_activated;
+    }
+    setDateActivated(date_activated) {
+        this.state.date_activated = date_activated;
     }
     get date_last_login() {
         return this.state.date_last_login;

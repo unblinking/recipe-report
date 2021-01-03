@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS users (
   password TEXT NOT NULL,
   email_address TEXT UNIQUE NOT NULL,
   date_created TIMESTAMPTZ NOT NULL,
+  date_activated TIMESTAMPTZ,
   date_last_login TIMESTAMPTZ,
   date_deleted TIMESTAMPTZ
 );
@@ -32,5 +33,6 @@ COMMENT ON COLUMN users.username IS 'Unique user display name.';
 COMMENT ON COLUMN users.password IS 'Encrypted user password using the pgcrypto crypt function, and gen_salt with the blowfish algorithm and iteration count of 8.';
 COMMENT ON COLUMN users.email_address IS 'Unique email address for the user.';
 COMMENT ON COLUMN users.date_created IS 'The datetime when the user record was created in the database.';
+COMMENT ON COLUMN users.date_activated IS 'The datetime when the user record was activated for login.';
 COMMENT ON COLUMN users.date_last_login IS 'The datetime when the user last logged into the system successfully.';
 COMMENT ON COLUMN users.date_deleted IS 'Soft delete datetime when the user was marked as deleted.';

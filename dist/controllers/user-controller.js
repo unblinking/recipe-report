@@ -15,13 +15,14 @@ const responder_service_1 = require("../services/responder-service");
 const laststop_1 = require("../middlewares/laststop");
 const service_requests_1 = require("../db/models/service-requests");
 const user_service_1 = require("../services/user-service");
+const bs_logger_1 = require("bs-logger");
 class UserController {
     constructor() {
         this.router = express_1.Router();
         this.path = `/user`;
         this.initRoutes = () => {
             this.router.post(`/register`, this.register);
-            this.router.get(`/activate:token`, this.notimplemented);
+            this.router.get(`/activate/:token`, this.activate);
             this.router.post(`/login`, this.notimplemented);
             this.router.use(laststop_1.fiveHundred);
         };
@@ -35,8 +36,9 @@ class UserController {
             }
         };
         this.register = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            var _a;
             try {
-                const serviceRequest = new service_requests_1.UserRegistrationRequest(req.body.username, req.body.email_address, req.body.password);
+                const serviceRequest = new service_requests_1.UserRegistrationRequest(Object.assign({}, req.body));
                 const userService = new user_service_1.UserService();
                 const serviceResponse = yield userService.register(serviceRequest);
                 const respond = new responder_service_1.Responder();
@@ -44,7 +46,27 @@ class UserController {
                     respond.success(res);
                 }
                 else {
+                    bs_logger_1.logger.error((_a = serviceResponse.error) === null || _a === void 0 ? void 0 : _a.message);
                     respond.error(res, `Error registering user`, `500`);
+                }
+            }
+            catch (err) {
+                next(err);
+            }
+        });
+        this.activate = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            var _b;
+            try {
+                const serviceRequest = new service_requests_1.UserActivationRequest(Object.assign({}, req.params));
+                const userService = new user_service_1.UserService();
+                const serviceResponse = yield userService.activate(serviceRequest);
+                const respond = new responder_service_1.Responder();
+                if (serviceResponse.success === true) {
+                    respond.success(res);
+                }
+                else {
+                    bs_logger_1.logger.error((_b = serviceResponse.error) === null || _b === void 0 ? void 0 : _b.message);
+                    respond.error(res, `Error activating user`, `500`);
                 }
             }
             catch (err) {

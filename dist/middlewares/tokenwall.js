@@ -11,7 +11,7 @@ const tokenwall = (req, _res, next) => {
         if (!token)
             throw new Error(`Token is required in req.headers.token.`);
         const payload = token_1.decodeToken(token);
-        if (payload.type !== `access`)
+        if (payload.type !== token_1.tokenType.ACCESS)
             throw new Error(`Token type is not access. Try again using a valid access token.`);
         const userId = cryptography_1.decrypt(payload.id);
         req['userId'] = userId;

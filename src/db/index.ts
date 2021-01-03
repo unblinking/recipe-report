@@ -71,7 +71,8 @@ export class PostgreSQL {
    */
   public hashAndSalt = async (text: string): Promise<QueryResult> => {
     const query: string = `SELECT crypt('${text}', gen_salt('bf', 8))`
-    const result = await this.query(query, [])
+    // Use this.pool.query, so that this query isn't logged like other queries.
+    const result = await this.pool.query(query, [])
     return result
   }
 
@@ -91,7 +92,8 @@ export class PostgreSQL {
     text: string
   ): Promise<QueryResult> => {
     const query = `SELECT id FROM users WHERE email = '${email}' AND password = crypt('${text}', password)`
-    const result = await this.query(query, [])
+    // Use this.pool.query, so that this query isn't logged like other queries.
+    const result = await this.pool.query(query, [])
     return result
   }
 }

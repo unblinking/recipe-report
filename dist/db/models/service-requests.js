@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserRegistrationRequest = void 0;
+exports.UserActivationRequest = exports.UserRegistrationRequest = void 0;
 class ServiceRequest {
     constructor(item, user) {
         this.state = {};
@@ -21,15 +21,19 @@ class ServiceRequest {
     }
 }
 class UserRegistrationRequest extends ServiceRequest {
-    constructor(username, email_address, password) {
+    constructor(props) {
         super();
-        const item = {
-            username: username,
-            email_address: email_address,
-            password: password,
-        };
+        const item = props;
         super.setItem(item);
     }
 }
 exports.UserRegistrationRequest = UserRegistrationRequest;
+class UserActivationRequest extends ServiceRequest {
+    constructor(props) {
+        super();
+        const item = props;
+        super.setItem(item);
+    }
+}
+exports.UserActivationRequest = UserActivationRequest;
 //# sourceMappingURL=service-requests.js.map

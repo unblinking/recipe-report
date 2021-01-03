@@ -7,7 +7,7 @@
 import { Request, Response, NextFunction } from 'express'
 
 import { logger } from '../wrappers/log'
-import { Payload, decodeToken } from '../wrappers/token'
+import { Payload, decodeToken, tokenType } from '../wrappers/token'
 import { decrypt } from '../wrappers/cryptography'
 import { Responder } from '../services/responder-service'
 
@@ -20,7 +20,7 @@ export const tokenwall = (
     const token: string = req.headers.token as string
     if (!token) throw new Error(`Token is required in req.headers.token.`)
     const payload: Payload = decodeToken(token)
-    if (payload.type !== `access`)
+    if (payload.type !== tokenType.ACCESS)
       throw new Error(
         `Token type is not access. Try again using a valid access token.`
       )

@@ -21,10 +21,10 @@ class BaseRepo {
             const result = yield this.db.query(`SELECT * FROM ${this.table} WHERE id = $1`, [id]);
             return result;
         });
-        this.updateOneById = (id, item) => __awaiter(this, void 0, void 0, function* () {
-            console.log(id);
-            console.log(item);
-            throw new Error('Method not implemented.');
+        this.updateOneById = (item) => __awaiter(this, void 0, void 0, function* () {
+            const query = `UPDATE ${this.table} SET (${this.cols(item)}) = (${this.pars(item)}) WHERE id = $1 RETURNING *`;
+            const result = yield this.db.query(query, this.vals(item));
+            return result;
         });
         this.deleteOneById = (id) => __awaiter(this, void 0, void 0, function* () {
             console.log(id);

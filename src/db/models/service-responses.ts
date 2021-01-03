@@ -43,3 +43,7 @@ abstract class ServiceResponse<T> implements IServiceResponse<T> {
 export class UserRegistrationResponse<
   UserModel
 > extends ServiceResponse<UserModel> {}
+
+export class UserActivationResponse<
+  UserModel
+> extends ServiceResponse<UserModel> {}

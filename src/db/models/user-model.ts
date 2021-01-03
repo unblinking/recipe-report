@@ -12,6 +12,7 @@ export interface IUserModel {
   password?: string
   email_address?: string
   date_created?: Date | undefined
+  date_activated?: Date | undefined
   date_last_login?: Date | undefined
   date_deleted?: Date | undefined
 }
@@ -28,6 +29,7 @@ export class UserModel implements IUserModel {
     this.setPassword(props.password)
     this.setEmailAddress(props.email_address)
     this.setDateCreated(props.date_created)
+    this.setDateActivated(props.date_activated)
     this.setDateLastLogin(props.date_last_login)
     this.setDateDeleted(props.date_deleted)
   }
@@ -86,6 +88,17 @@ export class UserModel implements IUserModel {
   }
   public setDateCreated(date_created: Date | undefined): void {
     this.state.date_created = date_created
+  }
+
+  /**
+   * The datetime when the user record was activated to allow login.
+   * date_activated TIMESTAMPTZ NOT NULL
+   */
+  public get date_activated(): Date | undefined {
+    return this.state.date_activated
+  }
+  public setDateActivated(date_activated: Date | undefined): void {
+    this.state.date_activated = date_activated
   }
 
   /**

@@ -69,13 +69,21 @@ interface IUserRegistrationRequest {
  * @extends {ServiceRequest<IUserRegistrationRequest>}
  */
 export class UserRegistrationRequest extends ServiceRequest<IUserRegistrationRequest> {
-  constructor(username?: string, email_address?: string, password?: string) {
+  constructor(props: IUserRegistrationRequest) {
     super()
-    const item: IUserRegistrationRequest = {
-      username: username,
-      email_address: email_address,
-      password: password,
-    }
+    const item: IUserRegistrationRequest = props
+    super.setItem(item)
+  }
+}
+
+interface IUserActivationRequest {
+  token?: string
+}
+
+export class UserActivationRequest extends ServiceRequest<IUserActivationRequest> {
+  constructor(props: IUserActivationRequest) {
+    super()
+    const item: IUserActivationRequest = props
     super.setItem(item)
   }
 }

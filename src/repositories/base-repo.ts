@@ -33,10 +33,12 @@ export abstract class BaseRepo<T> implements IRead, IWrite<T> {
     return result
   }
 
-  public updateOneById = async (id: string, item: T): Promise<boolean> => {
-    console.log(id)
-    console.log(item)
-    throw new Error('Method not implemented.')
+  public updateOneById = async (item: T): Promise<QueryResult> => {
+    const query = `UPDATE ${this.table} SET (${this.cols(item)}) = (${this.pars(
+      item
+    )}) WHERE id = $1 RETURNING *`
+    const result = await this.db.query(query, this.vals(item))
+    return result
   }
 
   public deleteOneById = async (id: string): Promise<boolean> => {

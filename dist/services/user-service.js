@@ -30,13 +30,39 @@ class UserService {
                 const userRepo = new user_repo_1.UserRepo(db);
                 const repoResult = yield userRepo.createOne(userDehydrated);
                 const userHydrated = domainconverter_1.DomainConverter.fromDto(user_model_1.UserModel, repoResult.rows[0]);
-                const tokenType = `activation`;
                 const ttl = new Date().getTime() + 24 * 60 * 60 * 1000;
-                const token = token_1.encodeToken(userHydrated.id, tokenType, ttl);
+                const token = token_1.encodeToken(userHydrated.id, token_1.tokenType.ACTIVATION, ttl);
                 const emailMessageService = new email_message_service_1.EmailMessageService();
                 yield emailMessageService.sendActivation(userHydrated, token);
-                res.setSuccess(true);
                 res.setItem(userHydrated);
+                res.setSuccess(true);
+            }
+            catch (error) {
+                res.setError(error);
+            }
+            db.release();
+            return res;
+        });
+    }
+    activate(req) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const res = new service_responses_1.UserActivationResponse();
+            const db = yield new index_1.PostgreSQL().getClient();
+            try {
+                const encryptedEncodedToken = (_a = req.item) === null || _a === void 0 ? void 0 : _a.token;
+                const payload = token_1.decodeToken(encryptedEncodedToken);
+                if (payload.type !== token_1.tokenType.ACTIVATION)
+                    throw new Error(`Activation error. Token type is not activation.`);
+                const userRepo = new user_repo_1.UserRepo(db);
+                const findResult = yield userRepo.findOneById(payload.id);
+                const userHydrated = domainconverter_1.DomainConverter.fromDto(user_model_1.UserModel, findResult.rows[0]);
+                userHydrated.setDateActivated(new Date());
+                const userDehydrated = domainconverter_1.DomainConverter.toDto(userHydrated);
+                const updateResult = yield userRepo.updateOneById(userDehydrated);
+                const activatedUser = updateResult.rows[0];
+                res.setItem(activatedUser);
+                res.setSuccess(true);
             }
             catch (error) {
                 res.setError(error);

@@ -43,12 +43,12 @@ class PostgreSQL {
         });
         this.hashAndSalt = (text) => __awaiter(this, void 0, void 0, function* () {
             const query = `SELECT crypt('${text}', gen_salt('bf', 8))`;
-            const result = yield this.query(query, []);
+            const result = yield this.pool.query(query, []);
             return result;
         });
         this.authenticate = (email, text) => __awaiter(this, void 0, void 0, function* () {
             const query = `SELECT id FROM users WHERE email = '${email}' AND password = crypt('${text}', password)`;
-            const result = yield this.query(query, []);
+            const result = yield this.pool.query(query, []);
             return result;
         });
     }

@@ -81,7 +81,6 @@
     "**/*.spec.ts"
   ],
   "typedocOptions": {
-    "mode": "modules",
     "out": "docs"
   }
 }
