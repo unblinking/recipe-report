@@ -15,14 +15,14 @@ const index_1 = require("../db/index");
 class UserFactory {
     create(props) {
         return __awaiter(this, void 0, void 0, function* () {
+            const postgreSQL = new index_1.PostgreSQL();
             if (!props.password)
                 throw new Error(`Password is not defined.`);
-            const postgreSQL = new index_1.PostgreSQL();
             const queryResult = yield postgreSQL.hashAndSalt(props.password);
             if (queryResult.rowCount < 1 || !queryResult.rows[0].crypt)
                 throw new Error(`Error hashing password.`);
-            const hashedAndSaltedPassword = queryResult.rows[0].crypt;
-            props.password = hashedAndSaltedPassword;
+            const hashedPassword = queryResult.rows[0].crypt;
+            props.password = hashedPassword;
             props.date_created = new Date();
             const user = new user_model_1.UserModel(props);
             return user;

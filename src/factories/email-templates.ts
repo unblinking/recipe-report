@@ -6,8 +6,23 @@
 
 import { IUserModel } from 'db/models/user-model'
 
-export const noReplyAddress = `no-reply@recipe.report`
+const getProtocol = (): string => {
+  let protocol = `http`
+  if (process.env.NODE_ENV === 'production') {
+    protocol = `https`
+  }
+  return protocol
+}
 
+const getHostname = (): string => {
+  let hostname = `localhost:1138`
+  if (process.env.NODE_ENV === 'production') {
+    hostname = `api.recipe.report`
+  }
+  return hostname
+}
+
+export const noReplyAddress = `no-reply@recipe.report`
 export const subjectActivation = `Recipe.Report new user account activation required.`
 
 /**
@@ -24,7 +39,7 @@ Hello ${user.email_address},
 
 Thank you for registering with Recipe.Report recently. You may login after completing activation. Please follow this link to activate your new account:
 
-https://api.recipe.report/user/activate/${token}
+${getProtocol()}://${getHostname()}/user/activate/${token}
 
 You received this email because you (or someone else) used this email address to create a new account.
 

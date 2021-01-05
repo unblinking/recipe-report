@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserActivationResponse = exports.UserRegistrationResponse = void 0;
+exports.UserAuthenticationResponse = exports.UserActivationResponse = exports.UserRegistrationResponse = void 0;
 class ServiceResponse {
     constructor(success = false, error, item) {
         this.state = {};
@@ -33,4 +33,7 @@ exports.UserRegistrationResponse = UserRegistrationResponse;
 class UserActivationResponse extends ServiceResponse {
 }
 exports.UserActivationResponse = UserActivationResponse;
+class UserAuthenticationResponse extends ServiceResponse {
+}
+exports.UserAuthenticationResponse = UserAuthenticationResponse;
 //# sourceMappingURL=service-responses.js.map

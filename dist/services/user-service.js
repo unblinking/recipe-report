@@ -18,16 +18,30 @@ const index_1 = require("../db/index");
 const domainconverter_1 = require("../db/models/domainconverter");
 const token_1 = require("../wrappers/token");
 const email_message_service_1 = require("./email-message-service");
+const authentication_model_1 = require("../db/models/authentication-model");
 class UserService {
     register(req) {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
             const res = new service_responses_1.UserRegistrationResponse();
             const db = yield new index_1.PostgreSQL().getClient();
+            const userRepo = new user_repo_1.UserRepo(db);
             try {
+                if (!((_a = req.item) === null || _a === void 0 ? void 0 : _a.username))
+                    throw new Error(`Username is not defined.`);
+                if (!req.item.email_address)
+                    throw new Error(`Email address is not defined.`);
+                if (!req.item.password)
+                    throw new Error(`Password is not defined.`);
+                const countByUsername = yield userRepo.countByUsername((_b = req.item) === null || _b === void 0 ? void 0 : _b.username);
+                if (countByUsername > 0)
+                    throw new Error(`Username is already in use.`);
+                const countByEmailAddress = yield userRepo.countByEmailAddress(req.item.email_address);
+                if (countByEmailAddress > 0)
+                    throw new Error(`Email address is already in use.`);
                 const userFactory = new user_factory_1.UserFactory();
                 const newUser = yield userFactory.create(Object.assign({}, req.item));
                 const userDehydrated = domainconverter_1.DomainConverter.toDto(newUser);
-                const userRepo = new user_repo_1.UserRepo(db);
                 const repoResult = yield userRepo.createOne(userDehydrated);
                 const userHydrated = domainconverter_1.DomainConverter.fromDto(user_model_1.UserModel, repoResult.rows[0]);
                 const ttl = new Date().getTime() + 24 * 60 * 60 * 1000;
@@ -62,6 +76,34 @@ class UserService {
                 const updateResult = yield userRepo.updateOneById(userDehydrated);
                 const activatedUser = updateResult.rows[0];
                 res.setItem(activatedUser);
+                res.setSuccess(true);
+            }
+            catch (error) {
+                res.setError(error);
+            }
+            db.release();
+            return res;
+        });
+    }
+    authenticate(req) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const res = new service_responses_1.UserAuthenticationResponse();
+            const db = yield new index_1.PostgreSQL().getClient();
+            const postgreSQL = new index_1.PostgreSQL();
+            try {
+                if (!((_a = req.item) === null || _a === void 0 ? void 0 : _a.email_address))
+                    throw new Error(`Email address is not defined.`);
+                if (!req.item.password)
+                    throw new Error(`Password is not defined.`);
+                const queryResult = yield postgreSQL.authenticate(req.item);
+                if (queryResult.rowCount !== 1)
+                    throw new Error(`Unable to authenticate user.`);
+                const userId = queryResult.rows[0].id;
+                const ttl = new Date().getTime() + 24 * 60 * 60 * 1000;
+                const token = token_1.encodeToken(userId, token_1.tokenType.ACCESS, ttl);
+                const auth = new authentication_model_1.AuthenticationModel({ token: token });
+                res.setItem(auth);
                 res.setSuccess(true);
             }
             catch (error) {

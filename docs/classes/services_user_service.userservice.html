@@ -96,6 +96,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="services_user_service.userservice.html#activate" class="tsd-kind-icon">activate</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="services_user_service.userservice.html#authenticate" class="tsd-kind-icon">authenticate</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="services_user_service.userservice.html#register" class="tsd-kind-icon">register</a></li>
 							</ul>
 						</section>
@@ -131,7 +132,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/f8d9958/src/services/user-service.ts#L73">src/services/user-service.ts:73</a></li>
+									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/1cbf2eb/src/services/user-service.ts#L92">src/services/user-service.ts:92</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -141,6 +142,29 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="db_models_service_responses.useractivationresponse.html" class="tsd-signature-type" data-tsd-kind="Class">UserActivationResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="db_models_user_model.usermodel.html" class="tsd-signature-type" data-tsd-kind="Class">UserModel</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="authenticate" class="tsd-anchor"></a>
+					<h3>authenticate</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">authenticate<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><a href="db_models_service_requests.userauthenticationrequest.html" class="tsd-signature-type" data-tsd-kind="Class">UserAuthenticationRequest</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="db_models_service_responses.userauthenticationresponse.html" class="tsd-signature-type" data-tsd-kind="Class">UserAuthenticationResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="db_models_authentication_model.authenticationmodel.html" class="tsd-signature-type" data-tsd-kind="Class">AuthenticationModel</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/1cbf2eb/src/services/user-service.ts#L137">src/services/user-service.ts:137</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>req: <a href="db_models_service_requests.userauthenticationrequest.html" class="tsd-signature-type" data-tsd-kind="Class">UserAuthenticationRequest</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="db_models_service_responses.userauthenticationresponse.html" class="tsd-signature-type" data-tsd-kind="Class">UserAuthenticationResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="db_models_authentication_model.authenticationmodel.html" class="tsd-signature-type" data-tsd-kind="Class">AuthenticationModel</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -155,7 +179,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/services_user_service.iuserservice.html">IUserService</a>.<a href="../interfaces/services_user_service.iuserservice.html#register">register</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/f8d9958/src/services/user-service.ts#L29">src/services/user-service.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/1cbf2eb/src/services/user-service.ts#L32">src/services/user-service.ts:32</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -193,6 +217,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="services_user_service.userservice.html#activate" class="tsd-kind-icon">activate</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="services_user_service.userservice.html#authenticate" class="tsd-kind-icon">authenticate</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="services_user_service.userservice.html#register" class="tsd-kind-icon">register</a>

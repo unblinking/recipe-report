@@ -47,3 +47,7 @@ export class UserRegistrationResponse<
 export class UserActivationResponse<
   UserModel
 > extends ServiceResponse<UserModel> {}
+
+export class UserAuthenticationResponse<
+  AuthenticationModel
+> extends ServiceResponse<AuthenticationModel> {}

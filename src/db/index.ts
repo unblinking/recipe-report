@@ -5,6 +5,7 @@
 
 import { Pool, PoolClient, QueryResult } from 'pg'
 import { logger } from '../wrappers/log'
+import { IUserAuthenticationRequest } from '../db/models/service-requests'
 
 /**
  * `node-postgres` wrapper.
@@ -69,10 +70,10 @@ export class PostgreSQL {
    * @see {@link https://www.postgresql.org/docs/8.3/pgcrypto.html pgcrypto}
    * @returns The hashed and salted string.
    */
-  public hashAndSalt = async (text: string): Promise<QueryResult> => {
-    const query: string = `SELECT crypt('${text}', gen_salt('bf', 8))`
+  public hashAndSalt = async (password: string): Promise<QueryResult> => {
+    const query: string = `SELECT crypt($1, gen_salt('bf', 8))`
     // Use this.pool.query, so that this query isn't logged like other queries.
-    const result = await this.pool.query(query, [])
+    const result = await this.pool.query(query, [password])
     return result
   }
 
@@ -88,12 +89,14 @@ export class PostgreSQL {
    * authenticated user, or no rows if authentication failed.
    */
   public authenticate = async (
-    email: string,
-    text: string
+    props: IUserAuthenticationRequest
   ): Promise<QueryResult> => {
-    const query = `SELECT id FROM users WHERE email = '${email}' AND password = crypt('${text}', password)`
+    const query = `SELECT id FROM users WHERE email_address = $1 AND password = crypt($2, password)`
     // Use this.pool.query, so that this query isn't logged like other queries.
-    const result = await this.pool.query(query, [])
+    const result = await this.pool.query(query, [
+      props.email_address,
+      props.password,
+    ])
     return result
   }
 }

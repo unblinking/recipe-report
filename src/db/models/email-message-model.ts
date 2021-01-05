@@ -19,38 +19,38 @@ export interface IEmailMessageModel {
 export class EmailMessageModel implements IEmailMessageModel {
   private state: IEmailMessageModel = {}
 
-  constructor(from: string, to: string, subject: string, body: string) {
-    this.set_from(from)
-    this.set_to(to)
-    this.set_subject(subject)
-    this.set_body(body)
+  constructor(props: IEmailMessageModel) {
+    this.set_from(props.from)
+    this.set_to(props.to)
+    this.set_subject(props.subject)
+    this.set_body(props.body)
   }
 
   public get from(): string | undefined {
     return this.state.from
   }
-  public set_from(from: string): void {
+  public set_from(from: string | undefined): void {
     this.state.from = from
   }
 
   public get to(): string | undefined {
     return this.state.to
   }
-  public set_to(to: string): void {
+  public set_to(to: string | undefined): void {
     this.state.to = to
   }
 
   public get subject(): string | undefined {
     return this.state.subject
   }
-  public set_subject(subject: string): void {
+  public set_subject(subject: string | undefined): void {
     this.state.subject = subject
   }
 
   public get body(): string | undefined {
     return this.state.body
   }
-  public set_body(body: string): void {
+  public set_body(body: string | undefined): void {
     this.state.body = body
   }
 }

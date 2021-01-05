@@ -23,17 +23,8 @@ class UserController {
         this.initRoutes = () => {
             this.router.post(`/register`, this.register);
             this.router.get(`/activate/:token`, this.activate);
-            this.router.post(`/login`, this.notimplemented);
+            this.router.post(`/login`, this.authenticate);
             this.router.use(laststop_1.fiveHundred);
-        };
-        this.notimplemented = (_req, res, next) => {
-            try {
-                const respond = new responder_service_1.Responder(501);
-                respond.error(res, `501 Not Implemented`, `501`);
-            }
-            catch (err) {
-                next(err);
-            }
         };
         this.register = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             var _a;
@@ -67,6 +58,25 @@ class UserController {
                 else {
                     bs_logger_1.logger.error((_b = serviceResponse.error) === null || _b === void 0 ? void 0 : _b.message);
                     respond.error(res, `Error activating user`, `500`);
+                }
+            }
+            catch (err) {
+                next(err);
+            }
+        });
+        this.authenticate = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            var _c, _d;
+            try {
+                const serviceRequest = new service_requests_1.UserAuthenticationRequest(Object.assign({}, req.body));
+                const userService = new user_service_1.UserService();
+                const serviceResponse = yield userService.authenticate(serviceRequest);
+                const respond = new responder_service_1.Responder();
+                if (serviceResponse.success === true) {
+                    respond.success(res, { token: (_c = serviceResponse.item) === null || _c === void 0 ? void 0 : _c.token });
+                }
+                else {
+                    bs_logger_1.logger.error((_d = serviceResponse.error) === null || _d === void 0 ? void 0 : _d.message);
+                    respond.error(res, `Error authenticating user`, `500`);
                 }
             }
             catch (err) {

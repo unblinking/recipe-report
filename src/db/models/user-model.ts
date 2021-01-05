@@ -5,6 +5,9 @@
 
 /**
  * User model interface.
+ *
+ * @export
+ * @interface IUserModel
  */
 export interface IUserModel {
   id?: string
@@ -19,6 +22,10 @@ export interface IUserModel {
 
 /**
  * User model concrete class.
+ *
+ * @export
+ * @class UserModel
+ * @implements {IUserModel}
  */
 export class UserModel implements IUserModel {
   private state: IUserModel = {}
@@ -76,6 +83,7 @@ export class UserModel implements IUserModel {
     return this.state.email_address
   }
   public setEmailAddress(email_address: string | undefined): void {
+    this.emailAddressSanityCheck(email_address)
     this.state.email_address = email_address
   }
 
@@ -121,5 +129,20 @@ export class UserModel implements IUserModel {
   }
   public setDateDeleted(date_deleted: Date | undefined): void {
     this.state.date_deleted = date_deleted
+  }
+
+  /**
+   * Email address sanity check. Make sure it looks reasonable.
+   *
+   * @private
+   * @param {(string | undefined)} email_address
+   * @memberof UserModel
+   */
+  private emailAddressSanityCheck(email_address: string | undefined): void {
+    // A regular expression to do a quick sanity-check.
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!email_address) throw new Error(`User email address is not defined.`)
+    if (!regex.test(email_address))
+      throw new Error(`Seemingly invalid user email address.`)
   }
 }

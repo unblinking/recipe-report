@@ -35,6 +35,7 @@ class UserModel {
         return this.state.email_address;
     }
     setEmailAddress(email_address) {
+        this.emailAddressSanityCheck(email_address);
         this.state.email_address = email_address;
     }
     get date_created() {
@@ -60,6 +61,13 @@ class UserModel {
     }
     setDateDeleted(date_deleted) {
         this.state.date_deleted = date_deleted;
+    }
+    emailAddressSanityCheck(email_address) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email_address)
+            throw new Error(`User email address is not defined.`);
+        if (!regex.test(email_address))
+            throw new Error(`Seemingly invalid user email address.`);
     }
 }
 exports.UserModel = UserModel;

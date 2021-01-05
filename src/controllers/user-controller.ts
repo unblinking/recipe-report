@@ -10,6 +10,7 @@ import { Responder } from '../services/responder-service'
 import { fiveHundred } from '../middlewares/laststop'
 import {
   UserActivationRequest,
+  UserAuthenticationRequest,
   UserRegistrationRequest,
 } from '../db/models/service-requests'
 import { UserService } from '../services/user-service'
@@ -26,21 +27,8 @@ export class UserController implements IController {
   public initRoutes = (): void => {
     this.router.post(`/register`, this.register)
     this.router.get(`/activate/:token`, this.activate)
-    this.router.post(`/login`, this.notimplemented)
+    this.router.post(`/login`, this.authenticate)
     this.router.use(fiveHundred)
-  }
-
-  private notimplemented = (
-    _req: Request,
-    res: Response,
-    next: NextFunction
-  ): void => {
-    try {
-      const respond = new Responder(501)
-      respond.error(res, `501 Not Implemented`, `501`)
-    } catch (err) {
-      next(err)
-    }
   }
 
   private register = async (
@@ -79,6 +67,27 @@ export class UserController implements IController {
       } else {
         logger.error(serviceResponse.error?.message as string)
         respond.error(res, `Error activating user`, `500`)
+      }
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  private authenticate = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const serviceRequest = new UserAuthenticationRequest({ ...req.body })
+      const userService = new UserService()
+      const serviceResponse = await userService.authenticate(serviceRequest)
+      const respond = new Responder()
+      if (serviceResponse.success === true) {
+        respond.success(res, { token: serviceResponse.item?.token })
+      } else {
+        logger.error(serviceResponse.error?.message as string)
+        respond.error(res, `Error authenticating user`, `500`)
       }
     } catch (err) {
       next(err)

@@ -41,14 +41,17 @@ class PostgreSQL {
             };
             return client;
         });
-        this.hashAndSalt = (text) => __awaiter(this, void 0, void 0, function* () {
-            const query = `SELECT crypt('${text}', gen_salt('bf', 8))`;
-            const result = yield this.pool.query(query, []);
+        this.hashAndSalt = (password) => __awaiter(this, void 0, void 0, function* () {
+            const query = `SELECT crypt($1, gen_salt('bf', 8))`;
+            const result = yield this.pool.query(query, [password]);
             return result;
         });
-        this.authenticate = (email, text) => __awaiter(this, void 0, void 0, function* () {
-            const query = `SELECT id FROM users WHERE email = '${email}' AND password = crypt('${text}', password)`;
-            const result = yield this.pool.query(query, []);
+        this.authenticate = (props) => __awaiter(this, void 0, void 0, function* () {
+            const query = `SELECT id FROM users WHERE email_address = $1 AND password = crypt($2, password)`;
+            const result = yield this.pool.query(query, [
+                props.email_address,
+                props.password,
+            ]);
             return result;
         });
     }

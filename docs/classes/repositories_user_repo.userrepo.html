@@ -92,8 +92,16 @@
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="repositories_user_repo.userrepo.html#db" class="tsd-kind-icon">db</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="repositories_user_repo.userrepo.html#countbyemailaddress" class="tsd-kind-icon">count<wbr>ByEmail<wbr>Address</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="repositories_user_repo.userrepo.html#countbyusername" class="tsd-kind-icon">count<wbr>ByUsername</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="repositories_user_repo.userrepo.html#createone" class="tsd-kind-icon">create<wbr>One</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="repositories_user_repo.userrepo.html#deleteonebyid" class="tsd-kind-icon">delete<wbr>One<wbr>ById</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="repositories_user_repo.userrepo.html#findonebyid" class="tsd-kind-icon">find<wbr>One<wbr>ById</a></li>
@@ -116,7 +124,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="repositories_base_repo.baserepo.html">BaseRepo</a>.<a href="repositories_base_repo.baserepo.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/f8d9958/src/repositories/user-repo.ts#L13">src/repositories/user-repo.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/1cbf2eb/src/repositories/user-repo.ts#L13">src/repositories/user-repo.ts:13</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -131,7 +139,67 @@
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="db" class="tsd-anchor"></a>
+					<h3>db</h3>
+					<div class="tsd-signature tsd-kind-icon">db<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PoolClient</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="repositories_base_repo.baserepo.html">BaseRepo</a>.<a href="repositories_base_repo.baserepo.html#db">db</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/1cbf2eb/src/repositories/base-repo.ts#L12">src/repositories/base-repo.ts:12</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="countbyemailaddress" class="tsd-anchor"></a>
+					<h3>count<wbr>ByEmail<wbr>Address</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">count<wbr>ByEmail<wbr>Address<span class="tsd-signature-symbol">(</span>email_address<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/1cbf2eb/src/repositories/user-repo.ts#L25">src/repositories/user-repo.ts:25</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>email_address: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="countbyusername" class="tsd-anchor"></a>
+					<h3>count<wbr>ByUsername</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">count<wbr>ByUsername<span class="tsd-signature-symbol">(</span>username<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/1cbf2eb/src/repositories/user-repo.ts#L18">src/repositories/user-repo.ts:18</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>username: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="createone" class="tsd-anchor"></a>
 					<h3>create<wbr>One</h3>
@@ -143,7 +211,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="repositories_base_repo.baserepo.html">BaseRepo</a>.<a href="repositories_base_repo.baserepo.html#createone">createOne</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/f8d9958/src/repositories/base-repo.ts#L20">src/repositories/base-repo.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/1cbf2eb/src/repositories/base-repo.ts#L20">src/repositories/base-repo.ts:20</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -167,7 +235,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="repositories_base_repo.baserepo.html">BaseRepo</a>.<a href="repositories_base_repo.baserepo.html#deleteonebyid">deleteOneById</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/f8d9958/src/repositories/base-repo.ts#L44">src/repositories/base-repo.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/1cbf2eb/src/repositories/base-repo.ts#L42">src/repositories/base-repo.ts:42</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -191,7 +259,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="repositories_base_repo.baserepo.html">BaseRepo</a>.<a href="repositories_base_repo.baserepo.html#findonebyid">findOneById</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/f8d9958/src/repositories/base-repo.ts#L28">src/repositories/base-repo.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/1cbf2eb/src/repositories/base-repo.ts#L28">src/repositories/base-repo.ts:28</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -215,7 +283,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="repositories_base_repo.baserepo.html">BaseRepo</a>.<a href="repositories_base_repo.baserepo.html#updateonebyid">updateOneById</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/f8d9958/src/repositories/base-repo.ts#L36">src/repositories/base-repo.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/nothingworksright/recipereport_api/blob/1cbf2eb/src/repositories/base-repo.ts#L34">src/repositories/base-repo.ts:34</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -251,6 +319,15 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
 								<a href="repositories_user_repo.userrepo.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="repositories_user_repo.userrepo.html#db" class="tsd-kind-icon">db</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="repositories_user_repo.userrepo.html#countbyemailaddress" class="tsd-kind-icon">count<wbr>ByEmail<wbr>Address</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="repositories_user_repo.userrepo.html#countbyusername" class="tsd-kind-icon">count<wbr>ByUsername</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="repositories_user_repo.userrepo.html#createone" class="tsd-kind-icon">create<wbr>One</a>
 							</li>
@@ -277,20 +354,22 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+			</ul>
+			<ul class="tsd-legend">
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>

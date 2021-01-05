@@ -9,7 +9,7 @@ import { PoolClient, QueryResult } from 'pg'
 import { IRead, IWrite } from './interfaces'
 
 export abstract class BaseRepo<T> implements IRead, IWrite<T> {
-  private db: PoolClient
+  public db: PoolClient
   private table: string
 
   constructor(db: PoolClient, table: string) {
@@ -26,10 +26,8 @@ export abstract class BaseRepo<T> implements IRead, IWrite<T> {
   }
 
   public findOneById = async (id: string): Promise<QueryResult> => {
-    const result = await this.db.query(
-      `SELECT * FROM ${this.table} WHERE id = $1`,
-      [id]
-    )
+    const query = `SELECT * FROM ${this.table} WHERE id = $1`
+    const result = await this.db.query(query, [id])
     return result
   }
 

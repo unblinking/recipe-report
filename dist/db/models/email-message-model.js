@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmailMessageModel = void 0;
 class EmailMessageModel {
-    constructor(from, to, subject, body) {
+    constructor(props) {
         this.state = {};
-        this.set_from(from);
-        this.set_to(to);
-        this.set_subject(subject);
-        this.set_body(body);
+        this.set_from(props.from);
+        this.set_to(props.to);
+        this.set_subject(props.subject);
+        this.set_body(props.body);
     }
     get from() {
         return this.state.from;

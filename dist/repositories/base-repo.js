@@ -18,7 +18,8 @@ class BaseRepo {
             return result;
         });
         this.findOneById = (id) => __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.db.query(`SELECT * FROM ${this.table} WHERE id = $1`, [id]);
+            const query = `SELECT * FROM ${this.table} WHERE id = $1`;
+            const result = yield this.db.query(query, [id]);
             return result;
         });
         this.updateOneById = (item) => __awaiter(this, void 0, void 0, function* () {
