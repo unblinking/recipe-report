@@ -48,6 +48,7 @@ class UserService {
                 const token = token_1.encodeToken(userHydrated.id, token_1.tokenType.ACTIVATION, ttl);
                 const emailMessageService = new email_message_service_1.EmailMessageService();
                 yield emailMessageService.sendActivation(userHydrated, token);
+                console.log(userHydrated);
                 res.setItem(userHydrated);
                 res.setSuccess(true);
             }
@@ -67,10 +68,17 @@ class UserService {
                 const encryptedEncodedToken = (_a = req.item) === null || _a === void 0 ? void 0 : _a.token;
                 const payload = token_1.decodeToken(encryptedEncodedToken);
                 if (payload.type !== token_1.tokenType.ACTIVATION)
-                    throw new Error(`Activation error. Token type is not activation.`);
+                    throw new Error(`Token type is not activation.`);
+                const now = new Date().getTime();
+                if (payload.ttl < now)
+                    throw new Error(`Token expired.`);
                 const userRepo = new user_repo_1.UserRepo(db);
                 const findResult = yield userRepo.findOneById(payload.id);
+                if (findResult.rowCount < 1)
+                    throw new Error(`User not found.`);
                 const userHydrated = domainconverter_1.DomainConverter.fromDto(user_model_1.UserModel, findResult.rows[0]);
+                if (userHydrated.date_activated !== null)
+                    throw new Error(`User previously activated.`);
                 userHydrated.setDateActivated(new Date());
                 const userDehydrated = domainconverter_1.DomainConverter.toDto(userHydrated);
                 const updateResult = yield userRepo.updateOneById(userDehydrated);

@@ -37,8 +37,9 @@ class UserController {
                     respond.success(res);
                 }
                 else {
-                    bs_logger_1.logger.error((_a = serviceResponse.error) === null || _a === void 0 ? void 0 : _a.message);
-                    respond.error(res, `Error registering user`, `500`);
+                    const serviceErrorMessage = (_a = serviceResponse.error) === null || _a === void 0 ? void 0 : _a.message;
+                    bs_logger_1.logger.error(serviceErrorMessage);
+                    respond.error(res, `Error registering user: ${serviceErrorMessage}`, `500`);
                 }
             }
             catch (err) {
@@ -56,8 +57,9 @@ class UserController {
                     respond.success(res);
                 }
                 else {
-                    bs_logger_1.logger.error((_b = serviceResponse.error) === null || _b === void 0 ? void 0 : _b.message);
-                    respond.error(res, `Error activating user`, `500`);
+                    const serviceErrorMessage = (_b = serviceResponse.error) === null || _b === void 0 ? void 0 : _b.message;
+                    bs_logger_1.logger.error(serviceErrorMessage);
+                    respond.error(res, `Error activating user: ${serviceErrorMessage}`, `500`);
                 }
             }
             catch (err) {
@@ -75,8 +77,9 @@ class UserController {
                     respond.success(res, { token: (_c = serviceResponse.item) === null || _c === void 0 ? void 0 : _c.token });
                 }
                 else {
-                    bs_logger_1.logger.error((_d = serviceResponse.error) === null || _d === void 0 ? void 0 : _d.message);
-                    respond.error(res, `Error authenticating user`, `500`);
+                    const serviceErrorMessage = (_d = serviceResponse.error) === null || _d === void 0 ? void 0 : _d.message;
+                    bs_logger_1.logger.error(serviceErrorMessage);
+                    respond.error(res, `Error authenticating user: ${serviceErrorMessage}`, `500`);
                 }
             }
             catch (err) {

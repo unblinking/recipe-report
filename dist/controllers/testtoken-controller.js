@@ -13,11 +13,11 @@ class TestTokenController {
             this.router.get(`/`, tokenwall_1.tokenwall, this.success);
             this.router.use(laststop_1.fiveHundred);
         };
-        this.success = (_req, res, next) => {
+        this.success = (req, res, next) => {
             try {
                 const respond = new responder_service_1.Responder();
                 respond.success(res, {
-                    message: `Welcome to the team, DZ-something-something.`,
+                    message: `Welcome to the team, DZ-${req.userId}.`,
                 });
             }
             catch (err) {

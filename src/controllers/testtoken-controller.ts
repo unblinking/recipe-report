@@ -11,6 +11,10 @@ import { Responder } from '../services/responder-service'
 import { tokenwall } from '../middlewares/tokenwall'
 import { fiveHundred } from '../middlewares/laststop'
 
+interface RequestWithUser extends Request {
+  userId?: string
+}
+
 export class TestTokenController implements IController {
   router: Router = Router()
   path: string = `/testtoken`
@@ -25,14 +29,14 @@ export class TestTokenController implements IController {
   }
 
   private success = (
-    _req: Request,
+    req: RequestWithUser,
     res: Response,
     next: NextFunction
   ): void => {
     try {
       const respond = new Responder()
       respond.success(res, {
-        message: `Welcome to the team, DZ-something-something.`,
+        message: `Welcome to the team, DZ-${req.userId}.`,
       })
     } catch (err) {
       next(err)

@@ -80,6 +80,8 @@ export class UserService implements IUserService {
       const emailMessageService = new EmailMessageService()
       await emailMessageService.sendActivation(userHydrated, token)
 
+      console.log(userHydrated)
+
       res.setItem(userHydrated)
       res.setSuccess(true)
     } catch (error) {
@@ -99,21 +101,30 @@ export class UserService implements IUserService {
       const encryptedEncodedToken = req.item?.token
       const payload: Payload = decodeToken(encryptedEncodedToken)
 
-      // Verify token type is activation
+      // Verify that the token is for activation.
       if (payload.type !== tokenType.ACTIVATION)
-        throw new Error(`Activation error. Token type is not activation.`)
+        throw new Error(`Token type is not activation.`)
+
+      // Verify that the token hasn't expired.
+      const now = new Date().getTime()
+      if (payload.ttl < now) throw new Error(`Token expired.`)
 
       // Find the user in the database
       const userRepo = new UserRepo(db)
       const findResult = await userRepo.findOneById(payload.id)
 
-      // TODO: If user is not found, throw error.
+      // If user is not found, throw error.
+      if (findResult.rowCount < 1) throw new Error(`User not found.`)
 
       // Hydrate a user instance from the repository results.
       const userHydrated = DomainConverter.fromDto<UserModel>(
         UserModel,
         findResult.rows[0]
       )
+
+      // Verify that the user is not already activated.
+      if (userHydrated.date_activated !== null)
+        throw new Error(`User previously activated.`)
 
       // Set the user as activated
       userHydrated.setDateActivated(new Date())

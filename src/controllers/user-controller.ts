@@ -44,8 +44,13 @@ export class UserController implements IController {
       if (serviceResponse.success === true) {
         respond.success(res)
       } else {
-        logger.error(serviceResponse.error?.message as string)
-        respond.error(res, `Error registering user`, `500`)
+        const serviceErrorMessage = serviceResponse.error?.message as string
+        logger.error(serviceErrorMessage)
+        respond.error(
+          res,
+          `Error registering user: ${serviceErrorMessage}`,
+          `500`
+        )
       }
     } catch (err) {
       next(err)
@@ -65,8 +70,13 @@ export class UserController implements IController {
       if (serviceResponse.success === true) {
         respond.success(res)
       } else {
-        logger.error(serviceResponse.error?.message as string)
-        respond.error(res, `Error activating user`, `500`)
+        const serviceErrorMessage = serviceResponse.error?.message as string
+        logger.error(serviceErrorMessage)
+        respond.error(
+          res,
+          `Error activating user: ${serviceErrorMessage}`,
+          `500`
+        )
       }
     } catch (err) {
       next(err)
@@ -86,8 +96,13 @@ export class UserController implements IController {
       if (serviceResponse.success === true) {
         respond.success(res, { token: serviceResponse.item?.token })
       } else {
-        logger.error(serviceResponse.error?.message as string)
-        respond.error(res, `Error authenticating user`, `500`)
+        const serviceErrorMessage = serviceResponse.error?.message as string
+        logger.error(serviceErrorMessage)
+        respond.error(
+          res,
+          `Error authenticating user: ${serviceErrorMessage}`,
+          `500`
+        )
       }
     } catch (err) {
       next(err)
