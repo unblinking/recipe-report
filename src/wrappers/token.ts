@@ -9,7 +9,7 @@ import jwt from 'jwt-simple'
 import { encrypt, decrypt } from './cryptography'
 
 export enum tokenType {
-  NONE = 0,
+  NONE = 0, // Invalid (falsey) value by design.
   ACTIVATION = 1,
   ACCESS = 2,
 }
@@ -28,7 +28,7 @@ export interface Payload {
 export const encodeToken = (
   userId: string,
   type: tokenType,
-  ttl: number
+  ttl: number = new Date().getTime() + 60 * 60 * 24 * 1000 // Default 24 hours.
 ): string => {
   // Determine our secret, from environment variable.
   const secret: string = process.env.JWT_SECRET as string
