@@ -41,10 +41,7 @@ describe(`JSON Web Token actions.`, () => {
     const testFactory: TestFactory = new TestFactory()
     const userDto: IUserModel = testFactory.userNewDto()
     // Act.
-    const token: string = encodeToken(
-      userDto.id as string,
-      tokenType.ACCESS
-    )
+    const token: string = encodeToken(userDto.id as string, tokenType.ACCESS)
     // Assert.
     expect(token).toBeTruthy()
   })
@@ -83,11 +80,7 @@ describe(`JSON Web Token actions.`, () => {
     delete process.env.JWT_SECRET
     // Act and assert.
     expect(() => {
-      encodeToken(
-        userDto.id as string,
-        tokenType.ACCESS,
-        new Date().getTime()
-      )
+      encodeToken(userDto.id as string, tokenType.ACCESS, new Date().getTime())
     }).toThrow(`JWT error. Secret key is not defined.`)
     process.env.JWT_SECRET = backupJwtSecret
   })
@@ -95,11 +88,7 @@ describe(`JSON Web Token actions.`, () => {
   test(`Fails to encode without User ID.`, () => {
     // Arrange, act, and assert.
     expect(() => {
-      encodeToken(
-        ``,
-        tokenType.ACCESS,
-        new Date().getTime()
-      )
+      encodeToken(``, tokenType.ACCESS, new Date().getTime())
     }).toThrow(`JWT error. User ID is not defined.`)
   })
 
@@ -109,11 +98,7 @@ describe(`JSON Web Token actions.`, () => {
     const userDto: IUserModel = testFactory.userNewDto()
     // Act, and assert.
     expect(() => {
-      encodeToken(
-        userDto.id as string,
-        tokenType.NONE,
-        new Date().getTime()
-      )
+      encodeToken(userDto.id as string, tokenType.NONE, new Date().getTime())
     }).toThrow(`JWT error. Type is not defined.`)
   })
 

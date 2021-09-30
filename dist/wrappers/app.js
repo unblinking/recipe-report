@@ -8,7 +8,7 @@ const express_1 = __importDefault(require("express"));
 const log_1 = require("./log");
 const laststop_1 = require("../middlewares/laststop");
 exports.listen = log_1.logger.wrap(function listen(middlewares, controllers, port) {
-    const app = express_1.default().set('json spaces', 2);
+    const app = (0, express_1.default)().set('json spaces', 2);
     app.use(middlewares);
     controllers.forEach((controller) => {
         app.use(controller.path, controller.router);

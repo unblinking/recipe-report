@@ -15,7 +15,7 @@ const responder_service_1 = require("../services/responder-service");
 const laststop_1 = require("../middlewares/laststop");
 class RootController {
     constructor() {
-        this.router = express_1.Router();
+        this.router = (0, express_1.Router)();
         this.path = `/`;
         this.initRoutes = () => {
             this.router.get(`/`, this.curtsy);

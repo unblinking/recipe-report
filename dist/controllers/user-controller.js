@@ -18,7 +18,7 @@ const user_service_1 = require("../services/user-service");
 const bs_logger_1 = require("bs-logger");
 class UserController {
     constructor() {
-        this.router = express_1.Router();
+        this.router = (0, express_1.Router)();
         this.path = `/user`;
         this.initRoutes = () => {
             this.router.post(`/register`, this.register);

@@ -45,15 +45,15 @@ class UserService {
                 const repoResult = yield userRepo.createOne(userDehydrated);
                 const userHydrated = domainconverter_1.DomainConverter.fromDto(user_model_1.UserModel, repoResult.rows[0]);
                 const ttl = new Date().getTime() + 24 * 60 * 60 * 1000;
-                const token = token_1.encodeToken(userHydrated.id, token_1.tokenType.ACTIVATION, ttl);
+                const token = (0, token_1.encodeToken)(userHydrated.id, token_1.tokenType.ACTIVATION, ttl);
                 const emailMessageService = new email_message_service_1.EmailMessageService();
                 yield emailMessageService.sendActivation(userHydrated, token);
                 console.log(userHydrated);
                 res.setItem(userHydrated);
                 res.setSuccess(true);
             }
-            catch (error) {
-                res.setError(error);
+            catch (e) {
+                res.setError(e);
             }
             db.release();
             return res;
@@ -66,7 +66,7 @@ class UserService {
             const db = yield new index_1.PostgreSQL().getClient();
             try {
                 const encryptedEncodedToken = (_a = req.item) === null || _a === void 0 ? void 0 : _a.token;
-                const payload = token_1.decodeToken(encryptedEncodedToken);
+                const payload = (0, token_1.decodeToken)(encryptedEncodedToken);
                 if (payload.type !== token_1.tokenType.ACTIVATION)
                     throw new Error(`Token type is not activation.`);
                 const now = new Date().getTime();
@@ -86,8 +86,8 @@ class UserService {
                 res.setItem(activatedUser);
                 res.setSuccess(true);
             }
-            catch (error) {
-                res.setError(error);
+            catch (e) {
+                res.setError(e);
             }
             db.release();
             return res;
@@ -109,13 +109,13 @@ class UserService {
                     throw new Error(`Unable to authenticate user.`);
                 const userId = queryResult.rows[0].id;
                 const ttl = new Date().getTime() + 24 * 60 * 60 * 1000;
-                const token = token_1.encodeToken(userId, token_1.tokenType.ACCESS, ttl);
+                const token = (0, token_1.encodeToken)(userId, token_1.tokenType.ACCESS, ttl);
                 const auth = new authentication_model_1.AuthenticationModel({ token: token });
                 res.setItem(auth);
                 res.setSuccess(true);
             }
-            catch (error) {
-                res.setError(error);
+            catch (e) {
+                res.setError(e);
             }
             db.release();
             return res;

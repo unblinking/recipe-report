@@ -84,8 +84,8 @@ export class UserService implements IUserService {
 
       res.setItem(userHydrated)
       res.setSuccess(true)
-    } catch (error) {
-      res.setError(error)
+    } catch (e) {
+      res.setError(e as Error)
     }
     db.release()
     return res
@@ -138,8 +138,8 @@ export class UserService implements IUserService {
       // Respond with success
       res.setItem(activatedUser)
       res.setSuccess(true)
-    } catch (error) {
-      res.setError(error)
+    } catch (e) {
+      res.setError(e as Error)
     }
     db.release()
     return res
@@ -173,8 +173,8 @@ export class UserService implements IUserService {
 
       res.setItem(auth)
       res.setSuccess(true)
-    } catch (error) {
-      res.setError(error)
+    } catch (e) {
+      res.setError(e as Error)
     }
     db.release()
     return res

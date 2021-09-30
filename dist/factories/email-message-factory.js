@@ -7,7 +7,7 @@ const domainconverter_1 = require("../db/models/domainconverter");
 class EmailMessageFactory {
     constructor() {
         this.activation = (user, token) => {
-            const bodyActivation = email_templates_1.bodyActivationTemplate(user, token);
+            const bodyActivation = (0, email_templates_1.bodyActivationTemplate)(user, token);
             const emailDto = {
                 from: email_templates_1.noReplyAddress,
                 to: user.email_address,

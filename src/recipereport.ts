@@ -45,8 +45,8 @@ export const start = logger.wrap(async function start(): Promise<void> {
     graffiti()
     envVarCheck()
     listen(middlewares, controllers, port)
-  } catch (error) {
-    logger.fatal(error)
+  } catch (e) {
+    logger.fatal((e as Error).message)
     process.exit(1)
   }
 })

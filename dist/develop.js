@@ -31,13 +31,13 @@ const mailDevSetup = log_1.logger.wrap(function mailDevSetup() {
         log_1.logger.info(`MailDev webapp running at http://0.0.0.0:1080`);
         log_1.logger.info(`MailDev SMTP Server running at 0.0.0.0:${smtpPort}`);
     }
-    catch (ex) {
-        log_1.logger.fatal(ex);
+    catch (e) {
+        log_1.logger.fatal(e.message);
         process.exit(1);
     }
 });
 if (require.main === module) {
     mailDevSetup();
-    recipereport_1.start();
+    (0, recipereport_1.start)();
 }
 //# sourceMappingURL=develop.js.map

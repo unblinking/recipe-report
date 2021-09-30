@@ -53,8 +53,8 @@ const mailDevSetup = logger.wrap(function mailDevSetup(): void {
     )
     logger.info(`MailDev webapp running at http://0.0.0.0:1080`)
     logger.info(`MailDev SMTP Server running at 0.0.0.0:${smtpPort}`)
-  } catch (ex) {
-    logger.fatal(ex)
+  } catch (e) {
+    logger.fatal((e as Error).message)
     process.exit(1)
   }
 })

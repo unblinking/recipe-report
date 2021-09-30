@@ -9,7 +9,7 @@ class EmailMessageService {
         return new Promise((resolve, reject) => {
             const emailMessageFactory = new email_message_factory_1.EmailMessageFactory();
             const email = emailMessageFactory.activation(user, token);
-            send_email_1.sendmail({
+            (0, send_email_1.sendmail)({
                 from: email.from,
                 to: email.to,
                 subject: email.subject,
