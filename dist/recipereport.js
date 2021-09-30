@@ -45,11 +45,11 @@ const testtoken_controller_1 = require("./controllers/testtoken-controller");
 const user_controller_1 = require("./controllers/user-controller");
 const port = parseInt(process.env.EXPRESS_PORT, 10);
 const middlewares = [
-    helmet_1.default({
+    (0, helmet_1.default)({
         contentSecurityPolicy: { directives: { defaultSrc: ["'self'"] } },
         referrerPolicy: { policy: 'same-origin' },
     }),
-    heroku_ssl_redirect_1.default(),
+    (0, heroku_ssl_redirect_1.default)(),
     BodyParser.json(),
     BodyParser.urlencoded({ extended: true }),
     callhistory_1.callHistory,
@@ -62,17 +62,17 @@ const controllers = [
 exports.start = log_1.logger.wrap(function start() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            fun_factory_1.graffiti();
-            envvarcheck_1.envVarCheck();
-            app_1.listen(middlewares, controllers, port);
+            (0, fun_factory_1.graffiti)();
+            (0, envvarcheck_1.envVarCheck)();
+            (0, app_1.listen)(middlewares, controllers, port);
         }
-        catch (error) {
-            log_1.logger.fatal(error);
+        catch (e) {
+            log_1.logger.fatal(e.message);
             process.exit(1);
         }
     });
 });
 if (require.main === module) {
-    exports.start();
+    (0, exports.start)();
 }
 //# sourceMappingURL=recipereport.js.map

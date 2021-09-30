@@ -40,11 +40,11 @@ export const tokenwall = (
 
     // Allow the request to continue on.
     next()
-  } catch (error) {
-    logger.error(`Tokenwall error. ${error.message}`)
+  } catch (e) {
+    logger.error(`Tokenwall error. ${(e as Error).message}`)
     const data = {
       errorName: `401 Unauthorized`,
-      errorMessage: error.message,
+      errorMessage: (e as Error).message,
     }
     const responder: Responder = new Responder(401)
     responder.fail(_res, data)

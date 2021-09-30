@@ -12,7 +12,7 @@ var tokenType;
     tokenType[tokenType["ACTIVATION"] = 1] = "ACTIVATION";
     tokenType[tokenType["ACCESS"] = 2] = "ACCESS";
 })(tokenType = exports.tokenType || (exports.tokenType = {}));
-const encodeToken = (userId, type, ttl) => {
+const encodeToken = (userId, type, ttl = new Date().getTime() + 60 * 60 * 24 * 1000) => {
     const secret = process.env.JWT_SECRET;
     if (!secret)
         throw new Error(`JWT error. Secret key is not defined.`);
@@ -27,7 +27,7 @@ const encodeToken = (userId, type, ttl) => {
         ttl: ttl,
     };
     const stringified = JSON.stringify(payload);
-    const encryptedPayload = cryptography_1.encrypt(stringified);
+    const encryptedPayload = (0, cryptography_1.encrypt)(stringified);
     const encodedToken = jwt_simple_1.default.encode(encryptedPayload, secret, 'HS512');
     return encodedToken;
 };
@@ -39,7 +39,7 @@ const decodeToken = (token) => {
     if (!token)
         throw new Error(`JWT error. Token is not defined.`);
     const decodedToken = jwt_simple_1.default.decode(token, secret, false, 'HS512');
-    const decryptedPayload = cryptography_1.decrypt(decodedToken);
+    const decryptedPayload = (0, cryptography_1.decrypt)(decodedToken);
     const parsed = JSON.parse(decryptedPayload);
     return parsed;
 };

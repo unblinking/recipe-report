@@ -7,7 +7,7 @@ const tokenwall_1 = require("../middlewares/tokenwall");
 const laststop_1 = require("../middlewares/laststop");
 class TestTokenController {
     constructor() {
-        this.router = express_1.Router();
+        this.router = (0, express_1.Router)();
         this.path = `/testtoken`;
         this.initRoutes = () => {
             this.router.get(`/`, tokenwall_1.tokenwall, this.success);

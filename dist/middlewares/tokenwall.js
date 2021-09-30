@@ -9,7 +9,7 @@ const tokenwall = (req, _res, next) => {
         const token = req.headers.token;
         if (!token)
             throw new Error(`Token is required in req.headers.token.`);
-        const payload = token_1.decodeToken(token);
+        const payload = (0, token_1.decodeToken)(token);
         if (payload.type !== token_1.tokenType.ACCESS)
             throw new Error(`Token type is not access. Try again using a valid access token.`);
         const now = new Date().getTime();
@@ -19,11 +19,11 @@ const tokenwall = (req, _res, next) => {
         req.userId = userId;
         next();
     }
-    catch (error) {
-        log_1.logger.error(`Tokenwall error. ${error.message}`);
+    catch (e) {
+        log_1.logger.error(`Tokenwall error. ${e.message}`);
         const data = {
             errorName: `401 Unauthorized`,
-            errorMessage: error.message,
+            errorMessage: e.message,
         };
         const responder = new responder_service_1.Responder(401);
         responder.fail(_res, data);
