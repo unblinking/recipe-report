@@ -2,8 +2,8 @@
   "name": "recipereport_api",
   "version": "0.1.0",
   "description": "Recipe.Report API server.",
-  "repository": "github:nothingworksright/recipereport_api",
-  "license": "MIT",
+  "repository": "github:nothingworksright/api.recipe.report",
+  "license": "AGPL-3.0-or-later",
   "engines": {
     "node": "14.17.6"
   },
