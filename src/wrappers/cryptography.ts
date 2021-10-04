@@ -1,14 +1,37 @@
 /**
  * Cryptography.
+ * 
  * A basic wrapper around the node.js built-in crypto module.
  * @see {@link https://nodejs.org/api/crypto.html Crypto}
+ * 
  * Based on the following ...
  * Original Gist
  * @author {@link https://github.com/vlucas Vance Lucas}
  * @see {@link https://gist.github.com/vlucas/2bd40f62d20c1d49237a109d491974eb Gist}
+ * 
  * Forked Gist of the original Gist
  * @author {@link https://github.com/Miki79 Miki}
  * @see {@link https://gist.github.com/Miki79/7e8d5d3798343e0d178863cbce4fe355 Gist}
+ *
+ * @author Joshua Gray {@link https://github.com/jmg1138}
+ * @copyright Copyright (C) 2017-2021
+ * @license GNU AGPLv3 or later
+ *
+ * This file is part of Recipe.Report API server.
+ * @see {@link https://github.com/nothingworksright/api.recipe.report}
+ *
+ * Recipe.Report API Server is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * Recipe.Report API Server is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 import Crypto from 'crypto'

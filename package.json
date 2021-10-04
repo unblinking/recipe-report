@@ -10,7 +10,7 @@
   "scripts": {
     "linter": "eslint src/** --ext .js,.jsx,.ts,.tsx",
     "prettier": "prettier --write src/**",
-    "build": "tsc && typedoc --out docs src",
+    "build": "tsc && typedoc --entryPointStrategy expand --out docs src",
     "pretest": "echo \"Checking for available dependency updates\" && ncu",
     "test": "jest --coverage",
     "testonly": "jest --colors --coverage",
