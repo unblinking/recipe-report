@@ -1,6 +1,6 @@
 /**
  * PostgreSQL database access.
- * 
+ *
  * @see {@link https://www.postgresql.org/ PostgreSQL}
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}

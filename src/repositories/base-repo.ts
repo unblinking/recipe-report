@@ -1,6 +1,6 @@
 /**
  * Base class for all repositories to extend from.
- * 
+ *
  * Defines basic CRUD operations with PostgreSQL.
  * @see {@link https://medium.com/@erickwendel/generic-repository-with-typescript-and-node-js-731c10a1b98e}
  *

@@ -1,14 +1,14 @@
 /**
  * Cryptography.
- * 
+ *
  * A basic wrapper around the node.js built-in crypto module.
  * @see {@link https://nodejs.org/api/crypto.html Crypto}
- * 
+ *
  * Based on the following ...
  * Original Gist
  * @author {@link https://github.com/vlucas Vance Lucas}
  * @see {@link https://gist.github.com/vlucas/2bd40f62d20c1d49237a109d491974eb Gist}
- * 
+ *
  * Forked Gist of the original Gist
  * @author {@link https://github.com/Miki79 Miki}
  * @see {@link https://gist.github.com/Miki79/7e8d5d3798343e0d178863cbce4fe355 Gist}

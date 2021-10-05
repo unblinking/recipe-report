@@ -1,8 +1,8 @@
 /**
  * Test factory.
- * 
+ *
  * Create objects for use in unit testing.
- * 
+ *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
  * @license GNU AGPLv3 or later

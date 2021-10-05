@@ -1,6 +1,6 @@
 /**
  * Send email.
- * 
+ *
  * A basic wrapper around sendmail.
  * @see {@link https://github.com/guileen/node-sendmail sendmail}
  *

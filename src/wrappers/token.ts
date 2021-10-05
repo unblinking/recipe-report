@@ -1,9 +1,9 @@
 /**
  * Token.
- * 
+ *
  * Token encoding and decoding, with payload encrypting and decrypting.
  * A basic wrapper around jwt-simple, plus encrypted payload.
- * 
+ *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
  * @license GNU AGPLv3 or later

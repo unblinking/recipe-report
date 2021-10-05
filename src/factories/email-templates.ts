@@ -1,8 +1,8 @@
 /**
  * Email constants.
- * 
+ *
  * Short strings, and string literal templates, for email subjects and bodies.
- * 
+ *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
  * @license GNU AGPLv3 or later
