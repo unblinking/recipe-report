@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * Last stop middleware. 404 and 500 error handling.
- * 
+ *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
  * @license GNU AGPLv3 or later
@@ -22,6 +21,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { Request, Response, NextFunction } from 'express'
 

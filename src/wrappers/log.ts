@@ -1,6 +1,6 @@
 /**
  * Log.
- * 
+ *
  * A basic wrapper around bs-logger.
  * @see {@link https://github.com/huafu/bs-logger bs-logger}
  *

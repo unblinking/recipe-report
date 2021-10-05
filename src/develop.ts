@@ -1,7 +1,8 @@
 /**
  * Recipe.Report API Server
  *
- * This is the development mode 'main' script for the Recipe.Report API server.
+ * This is the development mode 'main' script for the Recipe.Report API
+ * server.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
