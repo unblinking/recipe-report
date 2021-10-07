@@ -1,7 +1,7 @@
 fixes:
   - "/home/runner/work/api.recipe.report/api.recipe.report::"
 comment:
-  layout: "sunburst, diff, flags, files"
+  layout: "reach, diff, flags, files, footer, sunburst"
   behavior: default
   require_changes: false
   require_base: no
