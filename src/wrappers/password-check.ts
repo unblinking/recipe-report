@@ -1,5 +1,5 @@
 /**
- * Passwords.
+ * Password check.
  *
  * A basic wrapper around zxcvbn-ts.
  * @see {@link https://github.com/zxcvbn-ts/zxcvbn}
@@ -37,6 +37,11 @@ import {
   MatchExtended,
 } from '@zxcvbn-ts/core/dist/types'
 
+export interface PasswordResult {
+  success: boolean
+  message?: string
+}
+
 export interface ZxcvbnResult {
   feedback: FeedbackType
   crackTimesSeconds: CrackTimesSeconds
@@ -49,11 +54,11 @@ export interface ZxcvbnResult {
   calcTime: number
 }
 
-export const checkIt = (
+export const checkPassword = (
   password: string,
   email: string,
   username: string
-): ZxcvbnResult => {
+): PasswordResult => {
   const options = {
     translations: zxcvbnEnPackage.translations,
     graphs: zxcvbnCommonPackage.adjacencyGraphs,
@@ -65,5 +70,21 @@ export const checkIt = (
   }
   ZxcvbnOptions.setOptions(options)
   const result: ZxcvbnResult = zxcvbn(password)
-  return result
+  const score: number = result.score
+  const warnings: number = result.feedback.warning ? 1 : 0
+  const suggestions: number = result.feedback.suggestions.length
+  const passwordResult: PasswordResult = {
+    success: true,
+  }
+  if (score < 3 || warnings || suggestions) {
+    passwordResult.success = false
+    passwordResult.message = `Password is weak.`
+    if (warnings) {
+      passwordResult.message += ` ${result.feedback.warning}`
+    }
+    if (suggestions) {
+      passwordResult.message += ` ${result.feedback.suggestions.join(' ')}`
+    }
+  }
+  return passwordResult
 }

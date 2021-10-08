@@ -42,7 +42,7 @@ import { DomainConverter } from '../db/models/domainconverter'
 import { decodeToken, encodeToken, Payload, tokenType } from '../wrappers/token'
 import { EmailMessageService } from './email-message-service'
 import { AuthenticationModel } from '../db/models/authentication-model'
-import { checkIt, ZxcvbnResult } from '../wrappers/password'
+import { checkPassword, PasswordResult } from '../wrappers/password-check'
 
 export interface IUserService {
   register(
@@ -75,12 +75,15 @@ export class UserService implements IUserService {
         throw new Error(`Email address is already in use.`)
 
       // Verify that the password is great.
-      const passwordCheck: ZxcvbnResult = checkIt(
+      const passwordResult: PasswordResult = checkPassword(
         req.item.password,
         req.item.email_address,
         req.item.username
       )
-      console.log(passwordCheck)
+
+      if (!passwordResult.success) {
+        throw new Error(passwordResult.message)
+      }
 
       // User factory creates an instance of a user.
       const userFactory = new UserFactory()
