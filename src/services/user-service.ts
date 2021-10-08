@@ -20,6 +20,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * @module
  */
 
 import {
@@ -40,6 +42,7 @@ import { DomainConverter } from '../db/models/domainconverter'
 import { decodeToken, encodeToken, Payload, tokenType } from '../wrappers/token'
 import { EmailMessageService } from './email-message-service'
 import { AuthenticationModel } from '../db/models/authentication-model'
+import {} from '../wrappers/password'
 
 export interface IUserService {
   register(
@@ -70,6 +73,8 @@ export class UserService implements IUserService {
       )
       if (countByEmailAddress > 0)
         throw new Error(`Email address is already in use.`)
+
+      // Verify that the password is great.
 
       // User factory creates an instance of a user.
       const userFactory = new UserFactory()

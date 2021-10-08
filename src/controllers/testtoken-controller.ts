@@ -23,6 +23,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * @module
  */
 
 import { NextFunction, Request, Response, Router } from 'express'
@@ -32,7 +34,7 @@ import { Responder } from '../services/responder-service'
 import { tokenwall } from '../middlewares/tokenwall'
 import { fiveHundred } from '../middlewares/laststop'
 
-interface RequestWithUser extends Request {
+export interface RequestWithUser extends Request {
   userId?: string
 }
 

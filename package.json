@@ -52,6 +52,9 @@
     "heroku-ssl-redirect": "0.1.1",
     "jwt-simple": "0.5.6",
     "pg": "8.7.1",
-    "sendmail": "1.6.1"
+    "sendmail": "1.6.1",
+    "@zxcvbn-ts/core": "1.0.0-beta.0",
+    "@zxcvbn-ts/language-common": "1.0.0-beta.0",
+    "@zxcvbn-ts/language-en": "1.0.0-beta.0"
   }
 }

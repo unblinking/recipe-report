@@ -22,6 +22,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * @module
  */
 
 import { Request, Response, NextFunction } from 'express'
@@ -30,7 +32,7 @@ import { logger } from '../wrappers/log'
 import { Payload, decodeToken, tokenType } from '../wrappers/token'
 import { Responder } from '../services/responder-service'
 
-interface RequestWithUser extends Request {
+export interface RequestWithUser extends Request {
   userId?: string
 }
 

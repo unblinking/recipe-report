@@ -22,6 +22,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * @module
  */
 
 import { Response } from 'express'
@@ -33,7 +35,7 @@ import { logger } from '../wrappers/log'
  *
  * @interface Jsend
  */
-interface Jsend {
+export interface Jsend {
   success(res: Response, data?: Record<string, unknown>): void
   fail(res: Response, data?: Record<string, unknown>): void
   error(
