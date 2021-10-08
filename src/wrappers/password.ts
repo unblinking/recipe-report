@@ -30,8 +30,12 @@
 import { zxcvbn, ZxcvbnOptions } from '@zxcvbn-ts/core'
 import zxcvbnCommonPackage from '@zxcvbn-ts/language-common'
 import zxcvbnEnPackage from '@zxcvbn-ts/language-en'
-import { FeedbackType, CrackTimesSeconds, LooseObject, MatchExtended } from '@zxcvbn-ts/core/dist/types'
-
+import {
+  FeedbackType,
+  CrackTimesSeconds,
+  LooseObject,
+  MatchExtended,
+} from '@zxcvbn-ts/core/dist/types'
 
 export interface ZxcvbnResult {
   feedback: FeedbackType
@@ -44,7 +48,8 @@ export interface ZxcvbnResult {
   sequence: MatchExtended[]
   calcTime: number
 }
-export const checkit = (
+
+export const checkIt = (
   password: string,
   email: string,
   username: string

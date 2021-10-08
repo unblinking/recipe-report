@@ -14,7 +14,7 @@
     "pretest": "echo \"Checking for available dependency updates\" && ncu",
     "test": "jest --coverage",
     "testonly": "jest --colors --coverage",
-    "posttest": "",
+    "posttest": "echo \"Testing has completed\"",
     "flyway": "wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/7.3.0/flyway-commandline-7.3.0-linux-x64.tar.gz | tar xvz",
     "migrate": "eval $(egrep -v '^#' .env.dev | xargs) ./flyway-7.3.0/flyway -configFiles=flyway.conf migrate",
     "develop": "prettier --write src/** && tsc && ts-node -r dotenv/config src/develop.ts dotenv_config_path=.env.dev",
