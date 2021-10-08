@@ -8,16 +8,16 @@
     "node": "14.17.6"
   },
   "scripts": {
-    "linter": "eslint src/** --ext .js,.jsx,.ts,.tsx",
+    "flyway": "wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/7.3.0/flyway-commandline-7.3.0-linux-x64.tar.gz | tar xvz",
+    "migrate": "eval $(egrep -v '^#' .env.dev | xargs) ./flyway-7.3.0/flyway -configFiles=flyway.conf migrate",
     "prettier": "prettier --write src/**",
-    "build": "tsc && typedoc --entryPointStrategy expand --out docs src",
+    "linter": "eslint src/** --ext .js,.jsx,.ts,.tsx",
     "pretest": "echo \"Checking for available dependency updates\" && ncu",
     "test": "jest --coverage",
     "testonly": "jest --colors --coverage",
-    "posttest": "",
-    "flyway": "wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/7.3.0/flyway-commandline-7.3.0-linux-x64.tar.gz | tar xvz",
-    "migrate": "eval $(egrep -v '^#' .env.dev | xargs) ./flyway-7.3.0/flyway -configFiles=flyway.conf migrate",
-    "develop": "prettier --write src/** && tsc && ts-node -r dotenv/config src/develop.ts dotenv_config_path=.env.dev",
+    "posttest": "echo \"Testing has completed\"",
+    "build": "tsc && typedoc --entryPointStrategy expand --out docs src",
+    "develop": "ts-node -r dotenv/config src/develop.ts dotenv_config_path=.env.dev",
     "start": "node dist/recipereport.js"
   },
   "author": "jmg1138 https://github.com/jmg1138",
@@ -52,6 +52,9 @@
     "heroku-ssl-redirect": "0.1.1",
     "jwt-simple": "0.5.6",
     "pg": "8.7.1",
-    "sendmail": "1.6.1"
+    "sendmail": "1.6.1",
+    "@zxcvbn-ts/core": "1.0.0-beta.0",
+    "@zxcvbn-ts/language-common": "1.0.0-beta.0",
+    "@zxcvbn-ts/language-en": "1.0.0-beta.0"
   }
 }

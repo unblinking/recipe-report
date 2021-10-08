@@ -20,6 +20,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * @module
  */
 
 import { EmailMessageModel } from '../db/models/email-message-model'
@@ -31,7 +33,7 @@ import {
 } from './email-templates'
 import { DomainConverter } from '../db/models/domainconverter'
 
-interface IEmailMessageFactory {
+export interface IEmailMessageFactory {
   activation(user: UserModel, token: string): EmailMessageModel
 }
 

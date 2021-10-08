@@ -20,6 +20,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * @module
  */
 
 import { UserModel } from './user-model'
@@ -30,7 +32,7 @@ import { UserModel } from './user-model'
  * @interface IServiceRequest
  * @template T
  */
-interface IServiceRequest<T> {
+export interface IServiceRequest<T> {
   // The item contains the details needed to complete the request.
   item?: T
 
@@ -74,7 +76,7 @@ abstract class ServiceRequest<T> implements IServiceRequest<T> {
  *
  * @interface IUserRegistrationRequest
  */
-interface IUserRegistrationRequest {
+export interface IUserRegistrationRequest {
   username?: string
   email_address?: string
   password?: string
@@ -100,7 +102,7 @@ export class UserRegistrationRequest extends ServiceRequest<IUserRegistrationReq
  *
  * @interface IUserActivationRequest
  */
-interface IUserActivationRequest {
+export interface IUserActivationRequest {
   token?: string
 }
 

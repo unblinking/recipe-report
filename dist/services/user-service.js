@@ -19,6 +19,7 @@ const domainconverter_1 = require("../db/models/domainconverter");
 const token_1 = require("../wrappers/token");
 const email_message_service_1 = require("./email-message-service");
 const authentication_model_1 = require("../db/models/authentication-model");
+const password_check_1 = require("../wrappers/password-check");
 class UserService {
     register(req) {
         var _a, _b;
@@ -39,6 +40,10 @@ class UserService {
                 const countByEmailAddress = yield userRepo.countByEmailAddress(req.item.email_address);
                 if (countByEmailAddress > 0)
                     throw new Error(`Email address is already in use.`);
+                const passwordResult = (0, password_check_1.checkPassword)(req.item.password, req.item.email_address, req.item.username);
+                if (!passwordResult.success) {
+                    throw new Error(passwordResult.message);
+                }
                 const userFactory = new user_factory_1.UserFactory();
                 const newUser = yield userFactory.create(Object.assign({}, req.item));
                 const userDehydrated = domainconverter_1.DomainConverter.toDto(newUser);

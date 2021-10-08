@@ -20,12 +20,14 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * @module
  */
 
 import { IUserModel, UserModel } from '../db/models/user-model'
 import { PostgreSQL } from '../db/index'
 
-interface IUserFactory {
+export interface IUserFactory {
   create(userProps: IUserModel): Promise<UserModel>
 }
 
