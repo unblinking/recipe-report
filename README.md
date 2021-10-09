@@ -25,7 +25,7 @@ yarn run test
 yarn run build
 ```
 
-Finally, run the `yarn run build` command to start the Recipe.Report API Server in development mode.
+Finally, run the `yarn run develop` command to start the Recipe.Report API Server in development mode.
 
 ```bash
 yarn run develop
