@@ -2,15 +2,18 @@ import type { Config } from '@jest/types'
 
 export default async (): Promise<Config.InitialOptions> => {
   return {
+    collectCoverageFrom: [
+      "src/**/*.ts"
+    ],
     roots: [
       "<rootDir>/src"
     ],
     testMatch: [
-      "**/__tests__/**/*.+(ts|tsx|js)",
-      "**/?(*.)+(spec|test).+(ts|tsx|js)"
+      "**/__tests__/**/*.+(ts)",
+      "**/?(*.)+(spec|test).+(ts)"
     ],
     transform: {
-      "^.+\\.(ts|tsx)$": "ts-jest"
+      "^.+\\.(ts)$": "ts-jest"
     },
     setupFiles: [
         "./jest.setup.ts"
