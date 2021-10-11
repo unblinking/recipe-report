@@ -25,6 +25,7 @@
  */
 
 import express, { Application, RequestHandler } from 'express'
+import cors from 'cors'
 
 import { logger } from './log'
 import { IController } from '../controllers/interfaces'
@@ -37,6 +38,9 @@ export const listen = logger.wrap(function listen(
 ): void {
   // Instatiate our express.js web application with settings.
   const app: Application = express().set('json spaces', 2)
+
+  // Use the express.js middleware to enable cross origin resource sharing.
+  app.use(cors())
 
   // Use our middlewares. Middleware can be declared in an array.
   // @see {@link https://expressjs.com/en/guide/using-middleware.html Application-level middleware}

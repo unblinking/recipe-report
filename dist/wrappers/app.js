@@ -5,10 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listen = void 0;
 const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
 const log_1 = require("./log");
 const laststop_1 = require("../middlewares/laststop");
 exports.listen = log_1.logger.wrap(function listen(middlewares, controllers, port) {
     const app = (0, express_1.default)().set('json spaces', 2);
+    app.use((0, cors_1.default)());
     app.use(middlewares);
     controllers.forEach((controller) => {
         app.use(controller.path, controller.router);
