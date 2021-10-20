@@ -42,7 +42,7 @@ const piece: string = `\x1b[1m\x1b[32m
  | |_) / _ \\ '_ \\ / _ \\| '__| __|
  |  _ <  __/ |_) | (_) | |  | |_
  |_| \\_\\___| .__/ \\___/|_|   \\__|
-           |_|      \x1b[37mversion ${version}
+ API       |_|      \x1b[37mversion ${version}
  
  Release is ${stage}
  Running in ${mode} mode
