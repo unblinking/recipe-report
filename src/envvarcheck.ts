@@ -29,7 +29,7 @@
 import { logger } from './wrappers/log'
 
 export const envVarCheck = logger.wrap(function envVarCheck(): void {
-  if (!process.env.EXPRESS_PORT) throw new Error(`EXPRESS_PORT is not defined.`)
+  if (!process.env.PORT) throw new Error(`PORT is not defined.`)
   if (!process.env.CRYPTO_KEY) throw new Error(`CRYPTO_KEY is not defined.`)
   if (!process.env.CRYPTO_ALGO) throw new Error(`CRYPTO_ALGO is not defined.`)
   if (!process.env.CRYPTO_IV_LENGTH)

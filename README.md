@@ -6,7 +6,7 @@ This is the [source code repository](https://github.com/nothingworksright/api.re
 
 ---  
 
-## Start Recipe.Report API Server in development mode:  
+## Start Recipe.Report API Server in development mode  
 
 First, prepare a development copy of the Recipe.Report database. Run the `vagrant up` command to create and configure a [Vagrant](https://www.vagrantup.com/intro) VM running PostgreSQL. Run the `yarn run flyway` command to download [Flyway](https://flywaydb.org/documentation/). Run the `yarn run migrate` command to apply [database migrations](https://github.com/nothingworksright/api.recipe.report/tree/main/src/db/migrations).
 
@@ -31,7 +31,7 @@ Finally, run the `yarn run develop` command to start the Recipe.Report API Serve
 yarn run develop
 ```
 
-## Start Recipe.Report API Server in production mode:  
+## Start Recipe.Report API Server in production mode  
 
 ```bash
 yarn run start
