@@ -43,7 +43,7 @@ import { RootController } from './controllers/root-controller'
 import { TestTokenController } from './controllers/testtoken-controller'
 import { UserController } from './controllers/user-controller'
 
-const port: number = parseInt(process.env.PORT as string, 1138)
+const port: number = parseInt(process.env.PORT as string, 10)
 
 const middlewares: Array<RequestHandler> = [
   Helmet({
