@@ -43,7 +43,7 @@ import { RootController } from './controllers/root-controller'
 import { TestTokenController } from './controllers/testtoken-controller'
 import { UserController } from './controllers/user-controller'
 
-const port: number = parseInt(process.env.PORT as string, 1138)
+const port: number = parseInt(process.env.PORT as string, 10)
 
 const middlewares: Array<RequestHandler> = [
   Helmet({
@@ -66,6 +66,7 @@ export const start = logger.wrap(async function start(): Promise<void> {
   try {
     graffiti()
     envVarCheck()
+    console.log(process.env.PORT)
     listen(middlewares, controllers, port)
   } catch (e) {
     logger.fatal((e as Error).message)
