@@ -43,7 +43,7 @@ const callhistory_1 = require("./middlewares/callhistory");
 const root_controller_1 = require("./controllers/root-controller");
 const testtoken_controller_1 = require("./controllers/testtoken-controller");
 const user_controller_1 = require("./controllers/user-controller");
-const port = parseInt(process.env.EXPRESS_PORT, 10);
+const port = parseInt(process.env.PORT, 10);
 const middlewares = [
     (0, helmet_1.default)({
         contentSecurityPolicy: { directives: { defaultSrc: ["'self'"] } },

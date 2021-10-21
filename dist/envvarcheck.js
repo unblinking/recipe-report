@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.envVarCheck = void 0;
 const log_1 = require("./wrappers/log");
 exports.envVarCheck = log_1.logger.wrap(function envVarCheck() {
-    if (!process.env.EXPRESS_PORT)
-        throw new Error(`EXPRESS_PORT is not defined.`);
+    if (!process.env.PORT)
+        throw new Error(`PORT is not defined.`);
     if (!process.env.CRYPTO_KEY)
         throw new Error(`CRYPTO_KEY is not defined.`);
     if (!process.env.CRYPTO_ALGO)
