@@ -29,7 +29,6 @@
 import { RequestHandler } from 'express'
 import * as BodyParser from 'body-parser'
 import Helmet from 'helmet'
-import HerokuSslRedirect from 'heroku-ssl-redirect'
 
 import { logger } from './wrappers/log'
 import { graffiti } from './factories/fun-factory'
@@ -50,7 +49,6 @@ const middlewares: Array<RequestHandler> = [
     contentSecurityPolicy: { directives: { defaultSrc: ["'self'"] } },
     referrerPolicy: { policy: 'same-origin' },
   }),
-  HerokuSslRedirect(),
   BodyParser.json(),
   BodyParser.urlencoded({ extended: true }),
   callHistory,
