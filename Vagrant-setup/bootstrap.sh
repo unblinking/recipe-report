@@ -94,6 +94,8 @@ CREATE DATABASE $APP_DB_NAME WITH OWNER=$APP_DB_USER
 EOF
 
 # Install extensions.
+# We must be superuser to create this extension, so we must do it here.
+# This can't be done later during the database migration scripts.
 sudo -u postgres psql myapp -c 'CREATE EXTENSION pgcrypto;'
 
 # Tag the provision time:
