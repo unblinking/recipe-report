@@ -42,6 +42,7 @@ export class PostgreSQL {
     database: process.env.DB_DATABASE as string,
     password: process.env.DB_PASSWORD as string,
     port: parseInt(process.env.DB_PORT as string, 10),
+    ssl: process.env.NODE_ENV == 'production' ? true : false,
   })
 
   /**
