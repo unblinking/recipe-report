@@ -37,5 +37,7 @@ import { start } from './recipereport'
  * ```
  */
 if (require.main === module) {
+  // If you want to setup anything special just for development mode, do it here.
+  // Otherwise, it will just start running recipereport.ts start().
   start()
 }

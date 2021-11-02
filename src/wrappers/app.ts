@@ -31,11 +31,13 @@ import { logger } from './log'
 import { IController } from '../controllers/interfaces'
 import { fiveHundred, fourOhFour } from '../middlewares/laststop'
 
-export const listen = logger.wrap(function listen(
+export const listen = (
   middlewares: Array<RequestHandler>,
   controllers: Array<IController>,
   port: number
-): void {
+): void => {
+  logger.trace(`Setting up the Expressjs app and listening.`)
+
   // Instatiate our express.js web application with settings.
   const app: Application = express().set('json spaces', 2)
 
@@ -69,4 +71,4 @@ export const listen = logger.wrap(function listen(
   app.listen(port, () => {
     logger.info(`Expressjs is listening on port ${port}`)
   })
-})
+}

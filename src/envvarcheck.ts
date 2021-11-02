@@ -28,7 +28,8 @@
 
 import { logger } from './wrappers/log'
 
-export const envVarCheck = logger.wrap(function envVarCheck(): void {
+export const envVarCheck = (): void => {
+  logger.trace(`Checking for required environment variables.`)
   if (!process.env.PORT) throw new Error(`PORT is not defined.`)
   if (!process.env.CRYPTO_KEY) throw new Error(`CRYPTO_KEY is not defined.`)
   if (!process.env.CRYPTO_ALGO) throw new Error(`CRYPTO_ALGO is not defined.`)
@@ -40,4 +41,4 @@ export const envVarCheck = logger.wrap(function envVarCheck(): void {
   if (!process.env.DB_DATABASE) throw new Error(`DB_DATABASE is not defined.`)
   if (!process.env.DB_PASSWORD) throw new Error(`DB_PASSWORD is not defined.`)
   if (!process.env.DB_PORT) throw new Error(`DB_PORT is not defined.`)
-})
+}
