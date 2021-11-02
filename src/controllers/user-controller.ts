@@ -35,7 +35,7 @@ import {
   UserRegistrationRequest,
 } from '../db/models/service-requests'
 import { UserService } from '../services/user-service'
-import { logger } from 'bs-logger'
+import { logger } from '../wrappers/log'
 
 export class UserController implements IController {
   router: Router = Router()

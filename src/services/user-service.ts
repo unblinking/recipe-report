@@ -113,8 +113,6 @@ export class UserService implements IUserService {
       const emailMessageService = new EmailMessageService()
       await emailMessageService.sendActivation(userHydrated, token)
 
-      console.log(userHydrated)
-
       res.setItem(userHydrated)
       res.setSuccess(true)
     } catch (e) {

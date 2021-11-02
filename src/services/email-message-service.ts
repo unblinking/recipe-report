@@ -26,43 +26,20 @@
 
 import { UserModel } from '../db/models/user-model'
 import { EmailMessageFactory } from '../factories/email-message-factory'
-import { sendmail } from '../wrappers/send-email'
-import { logger } from 'bs-logger'
+import { sendEmail } from '../wrappers/email-transactional'
+import { logger } from '../wrappers/log'
 
 export interface IEmailMessageService {
-  sendActivation(user: UserModel, token: string): Promise<string>
+  sendActivation(user: UserModel, token: string): Promise<void>
 }
 
 export class EmailMessageService implements IEmailMessageService {
-  public sendActivation(user: UserModel, token: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      // Instantiate the email object.
-      const emailMessageFactory = new EmailMessageFactory()
-      const email = emailMessageFactory.activation(user, token)
-      // Send the email.
-      sendmail(
-        {
-          from: email.from,
-          to: email.to,
-          subject: email.subject,
-          text: email.body,
-        },
-        (err: Error, reply: string) => {
-          // Reply should be something like '221 Bye\r\n' if successful.
-          if (err) {
-            logger.error(
-              `Sendmail error: Error name: ${err.name}. Error message: ${err.message}`,
-              err.stack
-            )
-            reject(err)
-          } else {
-            logger.info(
-              `Sendmail success. Sent activation email message to user ${user.id} ${user.email_address}. Reply: ${reply}`
-            )
-            resolve(reply)
-          }
-        }
-      )
-    })
+  public async sendActivation(user: UserModel, token: string): Promise<void> {
+    // Instantiate the email object.
+    const emailMessageFactory = new EmailMessageFactory()
+    const email = emailMessageFactory.activation(user, token)
+    // Send the email.
+    logger.info(`Sending activation email message to user ${user.id}.`)
+    await sendEmail(email)
   }
 }
