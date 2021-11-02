@@ -29,42 +29,44 @@
  * @module
  */
 
- import { MailerSend, EmailParams, Sender, Recipient } from 'mailer-send-ts'
- import { EmailMessageModel } from '../db/models/email-message-model'
- import { logger } from '../wrappers/log'
+import { MailerSend, EmailParams, Sender, Recipient } from 'mailer-send-ts'
+import { EmailMessageModel } from '../db/models/email-message-model'
+import { logger } from '../wrappers/log'
 
- /**
+/**
  * Send an email.
  * @param {EmailMessageModel} Email message model.
  */
 export async function sendEmail(email: EmailMessageModel): Promise<void> {
-  if (!process.env.MAILER_SEND_KEY) {
-    throw new Error(`MailerSend API Key is not defined.`)
-  }
-  if (!email.from){
+  if (!email.from) {
     throw new Error(`Email FROM address is not defined.`)
   }
-  if (!email.to){
+  if (!email.to) {
     throw new Error(`Email TO address is not defined.`)
   }
-  if (!email.subject){
+  if (!email.subject) {
     throw new Error(`Email SUBJECT is not defined.`)
   }
-  if (!email.body){
+  if (!email.body) {
     throw new Error(`Email BODY is not defined.`)
   }
-  const mailerSend = new MailerSend({ apiKey: process.env.MAILER_SEND_KEY })
-  const sentFrom = new Sender(email.from, 'Recipe.Report')
-  const recipients = [
-    new Recipient(email.to, email.to)
-  ]
-  const emailParams = new EmailParams()
-  .setFrom(sentFrom)
-  .setTo(recipients)
-  .setSubject(email.subject)
-  .setText(email.body)
-  const response = await mailerSend.email.send(emailParams)
-  logger.info(
-    `MailerSend response status code: ${response.statusCode}`
-  )
+  if (process.env.NODE_ENV === `production`) {
+    if (!process.env.MAILER_SEND_KEY) {
+      throw new Error(`MailerSend API Key is not defined.`)
+    }
+    const mailerSend = new MailerSend({ apiKey: process.env.MAILER_SEND_KEY })
+    const sentFrom = new Sender(email.from, `Recipe.Report`)
+    const recipients = [new Recipient(email.to, email.to)]
+    const emailParams = new EmailParams()
+      .setFrom(sentFrom)
+      .setTo(recipients)
+      .setSubject(email.subject)
+      .setText(email.body)
+    const response = await mailerSend.email.send(emailParams)
+    logger.info(`MailerSend response status code: ${response.statusCode}`)
+  } else {
+    logger.info(
+      `Email not sent in development mode.\n\nFROM: ${email.from}\nTO: ${email.to}\nSUBJECT: ${email.subject}\n${email.body}`
+    )
+  }
 }

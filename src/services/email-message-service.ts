@@ -39,9 +39,7 @@ export class EmailMessageService implements IEmailMessageService {
     const emailMessageFactory = new EmailMessageFactory()
     const email = emailMessageFactory.activation(user, token)
     // Send the email.
-    logger.info(
-      `Sending activation email message to user ${user.id}.`
-    )
+    logger.info(`Sending activation email message to user ${user.id}.`)
     await sendEmail(email)
   }
 }
