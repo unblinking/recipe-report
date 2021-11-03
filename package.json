@@ -17,7 +17,6 @@
     "test": "jest --coverage",
     "testonly": "jest --colors --coverage",
     "posttest": "echo \"Testing has completed\"",
-    "docs": "typedoc --entryPointStrategy expand --out docs --readme DOCUMENTATION.md src",
     "build": "tsc",
     "develop": "ts-node -r dotenv/config src/develop.ts dotenv_config_path=.env.dev",
     "start": "NODE_ENV=production node dist/recipereport.js"
@@ -34,8 +33,7 @@
     "npm-check-updates": "11.8.5",
     "prettier": "2.4.1",
     "ts-jest": "27.0.5",
-    "ts-node": "10.2.1",
-    "typedoc": "0.22.5"
+    "ts-node": "10.2.1"
   },
   "dependencies": {
     "@types/cors": "2.8.12",

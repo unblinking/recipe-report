@@ -1,0 +1,76 @@
+openapi: 3.0.0
+info:
+  title: Recipe.Report API
+  description: The official Recipe.Report API documentation.
+  version: 0.1.0
+servers:
+  - url: http://api.recipe.report/
+    description: Production API server
+paths:
+  /:
+    get:
+      summary: Information.
+      description: This is the root route of the Recipe.Report API server.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: 'Welcome to the Recipe.Report API server. This is the root route. For documentation please go to https://nothingworksright.github.io/api.recipe.report/'
+                      request_headers:
+                        type: object
+  /user/resgister:
+    post:
+      summary: Register a new user.
+      description: Create a new user account by registering a new user in the Recipe.Report system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                email_address:
+                  type: string
+      responses:
+        '200':
+          description: Registered
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+        '500':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: 'Error registering user: Username is already in use.'
+                  code:
+                    type: string
+                    example: 500
