@@ -12,7 +12,7 @@
     "migratedev": "eval $(egrep -v '^#' .env.dev | xargs) ./flyway-7.3.0/flyway -configFiles=flyway.conf migrate",
     "migrateprod": "./flyway-7.3.0/flyway -configFiles=flyway.conf migrate",
     "prettier": "prettier --write src/**",
-    "linter": "eslint src/** --ext .js,.jsx,.ts,.tsx",
+    "linter": "eslint --ext .js,.jsx,.ts,.tsx src/",
     "pretest": "echo \"Checking for available dependency updates\" && ncu",
     "test": "jest --coverage",
     "testonly": "jest --colors --coverage",
