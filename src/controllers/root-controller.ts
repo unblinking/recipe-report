@@ -29,6 +29,7 @@ import { NextFunction, Request, Response, Router } from 'express'
 import { IController } from './interfaces'
 import { Responder } from '../services/responder-service'
 import { fiveHundred } from '../middlewares/laststop'
+import { logger } from '../wrappers/log'
 
 export class RootController implements IController {
   router: Router = Router()
@@ -49,9 +50,11 @@ export class RootController implements IController {
     next: NextFunction
   ): Promise<void> => {
     try {
+      logger.trace(`root-controller.ts curtsy()`)
       const respond = new Responder()
       respond.success(res, {
-        message: 'Welcome to the Recipe.Report API server.',
+        message:
+          'Welcome to the Recipe.Report API server. This is the root route. For documentation please go to https://nothingworksright.github.io/api.recipe.report/',
         request_headers: req.headers,
       })
     } catch (err) {

@@ -36,7 +36,7 @@ export const listen = (
   controllers: Array<IController>,
   port: number
 ): void => {
-  logger.trace(`Setting up the Expressjs app and listening.`)
+  logger.trace(`app.ts listen()`)
 
   // Instatiate our express.js web application with settings.
   const app: Application = express().set('json spaces', 2)

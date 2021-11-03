@@ -62,7 +62,7 @@ const controllers: Array<IController> = [
 
 export const start = (): void => {
   try {
-    logger.trace(`Starting the Recipe.Report API Server.`)
+    logger.trace(`recipereport.ts start()`)
     graffiti()
     envVarCheck()
     listen(middlewares, controllers, port)
