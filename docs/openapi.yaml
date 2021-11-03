@@ -11,6 +11,25 @@ paths:
     get:
       summary: Information.
       description: This is the root route of the Recipe.Report API server.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: 'Welcome to the Recipe.Report API server. This is the root route. For documentation please go to https://nothingworksright.github.io/api.recipe.report/'
+                      request_headers:
+                        type: object
   /user/resgister:
     post:
       summary: Register a new user.
@@ -30,7 +49,7 @@ paths:
                   type: string
       responses:
         '200':
-          description: Success
+          description: Registered
           content:
             application/json:
               schema: 
@@ -51,7 +70,7 @@ paths:
                     example: error
                   message:
                     type: string
-                    example: Error registering user: Username is already in use.
+                    example: 'Error registering user: Username is already in use.'
                   code:
                     type: string
                     example: 500

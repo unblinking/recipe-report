@@ -11,16 +11,15 @@
     <title>Recipe.Report API Documentation</title>
   </head>
   <body>
-    <div id='openapi'>
-      <script src='//pagecdn.io/lib/swagger-ui/v3.31.1/swagger-ui-bundle.js'></script>
-      <script>
-        window.onload = function () {
-          const ui = SwaggerUIBundle({
-            url: 'openapi.yaml',
-            dom_id: '#openapi'
-          })
-        }
-      </script>
-    </div>
+    <div id='openapi'></div>
+    <script src='//pagecdn.io/lib/swagger-ui/v3.31.1/swagger-ui-bundle.js'></script>
+    <script>
+      window.onload = function () {
+        const ui = SwaggerUIBundle({
+          url: "openapi.yaml",
+          dom_id: "#openapi"
+        })
+      }
+    </script>
   </body>
 </html>
