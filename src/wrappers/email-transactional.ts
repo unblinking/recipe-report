@@ -38,6 +38,7 @@ import { logger } from '../wrappers/log'
  * @param {EmailMessageModel} Email message model.
  */
 export async function sendEmail(email: EmailMessageModel): Promise<void> {
+  logger.trace(`email-transactional sendEmail()`)
   if (!email.from) {
     throw new Error(`Email FROM address is not defined.`)
   }

@@ -60,8 +60,9 @@ const controllers: Array<IController> = [
   new UserController(),
 ]
 
-export const start = logger.wrap(async function start(): Promise<void> {
+export const start = (): void => {
   try {
+    logger.trace(`recipereport.ts start()`)
     graffiti()
     envVarCheck()
     listen(middlewares, controllers, port)
@@ -69,7 +70,7 @@ export const start = logger.wrap(async function start(): Promise<void> {
     logger.fatal((e as Error).message)
     process.exit(1)
   }
-})
+}
 
 /**
  * If the file is being run directly, start the Recipe.Report API now.

@@ -34,11 +34,11 @@ import { Responder } from '../services/responder-service'
 /**
  * Four, oh four! Not found, my dude.
  */
-export const fourOhFour = logger.wrap(function fourOhFour(
+export const fourOhFour = (
   req: Request,
   _res: Response,
   _next: NextFunction
-): void {
+): void => {
   const err = new Error(`Not Found`)
   logger.info(`404 Not Found. ${req.method} ${req.path}`)
   const respond = new Responder(404)
@@ -48,15 +48,13 @@ export const fourOhFour = logger.wrap(function fourOhFour(
   // We already sent headers to the client, so even if we were to pass the error
   // to our custom error handler, it would just pass it to the express built-in
   // error handler, and we don't want to do that.
-})
+}
 
 /**
  * Five hundred! Custom error handling middleware.
  */
-// This cannot be wrapped by the logger, or it will no longer work to catch
-// the express errors. Also, because this API is built with separate
-// express.Router router instances, this error handling middleware must be
-// used at the end of every controller/router.
+// Because this API is built with separate express.Router router instances, this
+// error handling middleware must be used at the end of every controller/router.
 export const fiveHundred = (
   err: Error,
   _req: Request,

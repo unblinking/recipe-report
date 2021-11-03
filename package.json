@@ -17,7 +17,7 @@
     "test": "jest --coverage",
     "testonly": "jest --colors --coverage",
     "posttest": "echo \"Testing has completed\"",
-    "docs": "typedoc --entryPointStrategy expand --out docs src",
+    "docs": "typedoc --entryPointStrategy expand --out docs --readme DOCUMENTATION.md src",
     "build": "tsc",
     "develop": "ts-node -r dotenv/config src/develop.ts dotenv_config_path=.env.dev",
     "start": "NODE_ENV=production node dist/recipereport.js"
