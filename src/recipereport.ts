@@ -26,8 +26,7 @@
  * @module
  */
 
-import { RequestHandler } from 'express'
-import * as BodyParser from 'body-parser'
+import { RequestHandler, json, urlencoded } from 'express'
 import Helmet from 'helmet'
 
 import { logger } from './wrappers/log'
@@ -49,8 +48,8 @@ const middlewares: Array<RequestHandler> = [
     contentSecurityPolicy: { directives: { defaultSrc: ["'self'"] } },
     referrerPolicy: { policy: 'same-origin' },
   }),
-  BodyParser.json(),
-  BodyParser.urlencoded({ extended: true }),
+  json(),
+  urlencoded({ extended: true }),
   callHistory,
 ]
 
