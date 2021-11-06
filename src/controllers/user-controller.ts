@@ -61,9 +61,14 @@ export class UserController implements IController {
       const serviceRequest = new UserRegistrationRequest({ ...req.body })
       const userService = new UserService()
       const serviceResponse = await userService.register(serviceRequest)
-      const respond = new Responder()
+      const respond = new Responder(serviceResponse.statusCode)
       if (serviceResponse.success === true) {
+        logger.info(`New user registration succeeded.`)
         respond.success(res)
+      } else if (serviceResponse.fail === true) {
+        const serviceErrorMessage = serviceResponse.error?.message as string
+        logger.info(serviceErrorMessage)
+        respond.fail(res, { message: serviceErrorMessage })
       } else {
         const serviceErrorMessage = serviceResponse.error?.message as string
         logger.error(serviceErrorMessage)
