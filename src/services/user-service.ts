@@ -55,24 +55,53 @@ export class UserService implements IUserService {
     req: UserRegistrationRequest
   ): Promise<UserRegistrationResponse<UserModel>> {
     const res = new UserRegistrationResponse<UserModel>()
-    const db = await new PostgreSQL().getClient()
-    const userRepo = new UserRepo(db)
     try {
-      if (!req.item?.username) throw new Error(`Username is not defined.`)
-      if (!req.item.email_address)
-        throw new Error(`Email address is not defined.`)
-      if (!req.item.password) throw new Error(`Password is not defined.`)
+      if (!req.item?.username) {
+        res.setFail(true)
+        res.setError(
+          new Error(
+            `Bad request. The user couldn't be registered because a username wasn't provided. Please provide a user name and try again.`
+          )
+        )
+        res.setStatusCode(400)
+        return res
+      }
+      if (!req.item.email_address) {
+        res.setFail(true)
+        res.setError(new Error(`Bad request. The user couldn't be registered because an email address wasn't provided. Please provide an email address and try again.`))
+        res.setStatusCode(400)
+        return res
+      }
+      if (!req.item.password) {
+        res.setFail(true)
+        res.setError(new Error(`Bad request. The user couldn't be registered because a password wasn't provided. Please provide a password and try again.`))
+        res.setStatusCode(400)
+        return res
+      }
+
+      // Get a client to use the database with the user repository.
+      const db = await new PostgreSQL().getClient()
+      const userRepo = new UserRepo(db)
 
       // Verify that the username does not already exist in the db.
       const countByUsername = await userRepo.countByUsername(req.item?.username)
-      if (countByUsername > 0) throw new Error(`Username is already in use.`)
+      if (countByUsername > 0) {
+        res.setFail(true)
+        res.setError(new Error(`Conflict. The user couldn't be registered because the username is already in use. Please change the requested username and try again.`))
+        res.setStatusCode(409)
+        return res
+      } 
 
       // Verify that the email address does not already exist in the db.
       const countByEmailAddress = await userRepo.countByEmailAddress(
         req.item.email_address
       )
-      if (countByEmailAddress > 0)
-        throw new Error(`Email address is already in use.`)
+      if (countByEmailAddress > 0) {
+        res.setFail(true)
+        res.setError(new Error(`Conflict. The user couldn't be registered because the email address is already in use. Please change the requested email address and try again.`))
+        res.setStatusCode(409)
+        return res
+      }
 
       // Verify that the password is great.
       const passwordResult: PasswordResult = checkPassword(
@@ -80,9 +109,11 @@ export class UserService implements IUserService {
         req.item.email_address,
         req.item.username
       )
-
       if (!passwordResult.success) {
-        throw new Error(passwordResult.message)
+        res.setFail(true)
+        res.setError(new Error(`Bad request. The user couldn't be registered because the password did not pass complexity requirements. ${passwordResult.message}`))
+        res.setStatusCode(400)
+        return res
       }
 
       // User factory creates an instance of a user.
@@ -94,6 +125,9 @@ export class UserService implements IUserService {
       const userDehydrated = DomainConverter.toDto<UserModel>(newUser)
       const repoResult = await userRepo.createOne(userDehydrated)
 
+      // Done using the database now.
+      db.release()
+
       // Hydrate a user instance from the repository results.
       const userHydrated = DomainConverter.fromDto<UserModel>(
         UserModel,
@@ -101,12 +135,10 @@ export class UserService implements IUserService {
       )
 
       // Create a JWT for the new user's activation email.
-      // const tokenType: string = `activation`
-      const ttl = new Date().getTime() + 24 * 60 * 60 * 1000
       const token = encodeToken(
         userHydrated.id as string,
         tokenType.ACTIVATION,
-        ttl
+        new Date().getTime() + 24 * 60 * 60 * 1000 // 24 hours.
       )
 
       // Email message service sends a registration email.
@@ -118,7 +150,6 @@ export class UserService implements IUserService {
     } catch (e) {
       res.setError(e as Error)
     }
-    db.release()
     return res
   }
 

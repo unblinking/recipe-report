@@ -89,7 +89,7 @@ export class Responder implements Jsend {
     res: Response,
     data?: Record<string, unknown> | string
   ): void => {
-    logger.warn(`Responder|Fail|${this.statusCode}`)
+    logger.info(`Responder|Fail|${this.statusCode}`)
     res.status(this.statusCode).json({
       status: 'fail',
       data: data,
