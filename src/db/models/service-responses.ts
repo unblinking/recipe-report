@@ -24,49 +24,42 @@
  * @module
  */
 
+import {
+  httpStatusValueType,
+  outcomes,
+  outcomeValueType,
+} from '../../constants'
+
 interface IServiceResponse<T> {
-  success?: boolean
-  fail?: boolean
+  outcome?: outcomeValueType
   error?: Error
   item?: T
-  statusCode?: number
+  statusCode?: httpStatusValueType
 }
 
 abstract class ServiceResponse<T> implements IServiceResponse<T> {
   private state: IServiceResponse<T> = {}
 
+  // Outcome is assumed an error unless explicitly set otherwise.
   constructor(
-    success: boolean = false,
-    fail: boolean = false,
+    outcome: outcomeValueType = outcomes.ERROR,
     error?: Error,
     item?: T,
-    statusCode?: number
+    statusCode?: httpStatusValueType
   ) {
-    this.setSuccess(success)
-    this.setFail(fail)
+    this.setOutcome(outcome)
     this.setError(error)
     this.setItem(item)
     this.setStatusCode(statusCode)
   }
 
-  // Success or not?
-  // Did the service do what it wanted to do successfully?
-  // This would normally return a status code 200.
-  public get success(): boolean | undefined {
-    return this.state.success
+  // What was the outcome?
+  // Did we have succcess, fail, or error?
+  public get outcome(): outcomeValueType | undefined {
+    return this.state.outcome
   }
-  public setSuccess(success: boolean | undefined): void {
-    this.state.success = success
-  }
-
-  // Fail or not?
-  // Did the service have some problem caused by the client?
-  // This would normally return a status code 400.
-  public get fail(): boolean | undefined {
-    return this.state.fail
-  }
-  public setFail(fail: boolean | undefined): void {
-    this.state.fail = fail
+  public setOutcome(outcome: outcomeValueType | undefined): void {
+    this.state.outcome = outcome
   }
 
   // Error object.
@@ -94,10 +87,10 @@ abstract class ServiceResponse<T> implements IServiceResponse<T> {
   // Depending on success (200), fail(400), or error (500), this should return a
   // proper status code. Could be any standard HTTP status code, but it would be
   // nice if we could limit to the three main status codes for simplicity.
-  public get statusCode(): number | undefined {
+  public get statusCode(): httpStatusValueType | undefined {
     return this.state.statusCode
   }
-  public setStatusCode(statusCode: number | undefined): void {
+  public setStatusCode(statusCode: httpStatusValueType | undefined): void {
     this.state.statusCode = statusCode
   }
 }
