@@ -33,6 +33,7 @@ import { IController } from './interfaces'
 import { Responder } from '../services/responder-service'
 import { tokenwall } from '../middlewares/tokenwall'
 import { fiveHundred } from '../middlewares/laststop'
+import { httpStatus } from '../constants'
 
 export interface RequestWithUser extends Request {
   userId?: string
@@ -47,17 +48,17 @@ export class TestTokenController implements IController {
   }
 
   public initRoutes = (): void => {
-    this.router.get(`/`, tokenwall, this.success)
+    this.router.get(`/`, tokenwall, this.welcome) // Token required.
     this.router.use(fiveHundred)
   }
 
-  private success = (
+  private welcome = (
     req: RequestWithUser,
     res: Response,
     next: NextFunction
   ): void => {
     try {
-      const respond = new Responder()
+      const respond = new Responder(httpStatus.OK)
       respond.success(res, {
         message: `Welcome to the team, DZ-${req.userId}.`,
       })

@@ -59,7 +59,7 @@ export const bodyActivationTemplate = (
   return `
 Hello ${user.email_address},
 
-Thank you for registering with Recipe.Report recently. You may login after completing activation. Please follow this link to activate your new account:
+Thank you for registering with Recipe.Report recently. You may login after completing activation. Please follow the link below to activate your new account. The link will expire in 24 hours.
 
 ${getProtocol()}://${getHostname()}/user/activate/${token}
 

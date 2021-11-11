@@ -27,7 +27,7 @@
 import { NextFunction, Request, Response, Router } from 'express'
 
 import { IController } from './interfaces'
-import { Responder } from '../services/responder-service'
+
 import { fiveHundred } from '../middlewares/laststop'
 import {
   UserActivationRequest,
@@ -35,7 +35,8 @@ import {
   UserRegistrationRequest,
 } from '../db/models/service-requests'
 import { UserService } from '../services/user-service'
-import { logger } from '../wrappers/log'
+import { success, fail, error } from './helpers'
+import { errBase, logMsg, outcomes } from '../constants'
 
 export class UserController implements IController {
   router: Router = Router()
@@ -61,17 +62,17 @@ export class UserController implements IController {
       const serviceRequest = new UserRegistrationRequest({ ...req.body })
       const userService = new UserService()
       const serviceResponse = await userService.register(serviceRequest)
-      const respond = new Responder()
-      if (serviceResponse.success === true) {
-        respond.success(res)
-      } else {
-        const serviceErrorMessage = serviceResponse.error?.message as string
-        logger.error(serviceErrorMessage)
-        respond.error(
-          res,
-          `Error registering user: ${serviceErrorMessage}`,
-          `500`
-        )
+      const code = serviceResponse.statusCode
+      switch (serviceResponse.outcome) {
+        case outcomes.SUCCESS:
+          success(res, code, logMsg.LOG_REG_SUCCESS)
+          break
+        case outcomes.FAIL:
+          fail(res, code, serviceResponse.error?.message)
+          break
+        default:
+          error(errBase.REG, res, code, serviceResponse.error?.message)
+          break
       }
     } catch (err) {
       next(err)
@@ -87,17 +88,17 @@ export class UserController implements IController {
       const serviceRequest = new UserActivationRequest({ ...req.params })
       const userService = new UserService()
       const serviceResponse = await userService.activate(serviceRequest)
-      const respond = new Responder()
-      if (serviceResponse.success === true) {
-        respond.success(res)
-      } else {
-        const serviceErrorMessage = serviceResponse.error?.message as string
-        logger.error(serviceErrorMessage)
-        respond.error(
-          res,
-          `Error activating user: ${serviceErrorMessage}`,
-          `500`
-        )
+      const code = serviceResponse.statusCode
+      switch (serviceResponse.outcome) {
+        case outcomes.SUCCESS:
+          success(res, code, logMsg.LOG_ACTIVATE_SUCCESS)
+          break
+        case outcomes.FAIL:
+          fail(res, code, serviceResponse.error?.message)
+          break
+        default:
+          error(errBase.ACTIVATE, res, code, serviceResponse.error?.message)
+          break
       }
     } catch (err) {
       next(err)
@@ -113,17 +114,17 @@ export class UserController implements IController {
       const serviceRequest = new UserAuthenticationRequest({ ...req.body })
       const userService = new UserService()
       const serviceResponse = await userService.authenticate(serviceRequest)
-      const respond = new Responder()
-      if (serviceResponse.success === true) {
-        respond.success(res, { token: serviceResponse.item?.token })
-      } else {
-        const serviceErrorMessage = serviceResponse.error?.message as string
-        logger.error(serviceErrorMessage)
-        respond.error(
-          res,
-          `Error authenticating user: ${serviceErrorMessage}`,
-          `500`
-        )
+      const code = serviceResponse.statusCode
+      switch (serviceResponse.outcome) {
+        case outcomes.SUCCESS:
+          success(res, code, logMsg.LOG_AUTHENTICATE_SUCCESS)
+          break
+        case outcomes.FAIL:
+          fail(res, code, serviceResponse.error?.message)
+          break
+        default:
+          error(errBase.AUTH, res, code, serviceResponse.error?.message)
+          break
       }
     } catch (err) {
       next(err)

@@ -24,28 +24,47 @@
  * @module
  */
 
+import {
+  httpStatusValueType,
+  outcomes,
+  outcomeValueType,
+} from '../../constants'
+
 interface IServiceResponse<T> {
-  success?: boolean
+  outcome?: outcomeValueType
   error?: Error
   item?: T
+  statusCode?: httpStatusValueType
 }
 
 abstract class ServiceResponse<T> implements IServiceResponse<T> {
   private state: IServiceResponse<T> = {}
 
-  constructor(success: boolean = false, error?: Error, item?: T) {
-    this.setSuccess(success)
+  // Outcome is assumed an error unless explicitly set otherwise.
+  constructor(
+    outcome: outcomeValueType = outcomes.ERROR,
+    error?: Error,
+    item?: T,
+    statusCode?: httpStatusValueType
+  ) {
+    this.setOutcome(outcome)
     this.setError(error)
     this.setItem(item)
+    this.setStatusCode(statusCode)
   }
 
-  public get success(): boolean | undefined {
-    return this.state.success
+  // What was the outcome?
+  // Did we have succcess, fail, or error?
+  public get outcome(): outcomeValueType | undefined {
+    return this.state.outcome
   }
-  public setSuccess(success: boolean | undefined): void {
-    this.state.success = success
+  public setOutcome(outcome: outcomeValueType | undefined): void {
+    this.state.outcome = outcome
   }
 
+  // Error object.
+  // An error happened during the request.
+  // This would normally return a status code 500.
   public get error(): Error | undefined {
     return this.state.error
   }
@@ -53,11 +72,26 @@ abstract class ServiceResponse<T> implements IServiceResponse<T> {
     this.state.error = error
   }
 
+  // Item requested.
+  // If some item was requested, respond with the item here.
+  // Examples: a user object, or an authentication token.
   public get item(): T | undefined {
     return this.state.item
   }
   public setItem(item: T | undefined): void {
     this.state.item = item
+  }
+
+  // HTTP status code.
+  // @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Status}
+  // Depending on success (200), fail(400), or error (500), this should return a
+  // proper status code. Could be any standard HTTP status code, but it would be
+  // nice if we could limit to the three main status codes for simplicity.
+  public get statusCode(): httpStatusValueType | undefined {
+    return this.state.statusCode
+  }
+  public setStatusCode(statusCode: httpStatusValueType | undefined): void {
+    this.state.statusCode = statusCode
   }
 }
 
