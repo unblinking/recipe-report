@@ -30,7 +30,7 @@ import { Request, Response, NextFunction } from 'express'
 
 import { logger } from '../wrappers/log'
 import { Responder } from '../services/responder-service'
-import { httpStatus } from '../constants'
+import { httpStatus, errMessage } from '../constants'
 
 /**
  * Four, oh four! Not found, my dude.
@@ -40,10 +40,9 @@ export const fourOhFour = (
   _res: Response,
   _next: NextFunction
 ): void => {
-  const err = new Error(`404 Not Found`)
-  logger.info(err.message + req.method + req.path)
+  logger.info(`${errMessage.LASTSTOP_404} ${req.method} ${req.path}`)
   const respond = new Responder(httpStatus.NOT_FOUND)
-  respond.fail(_res, err.message)
+  respond.fail(_res, errMessage.LASTSTOP_404)
   // I do not pass the error along to next(err) here on purpose.
   // We already handled the 404 Not Found as much as we want to.
   // We already sent headers to the client, so even if we were to pass the error
@@ -62,7 +61,7 @@ export const fiveHundred = (
   res: Response,
   next: NextFunction
 ): void => {
-  logger.error(`500 Internal Server Error. ${err.name} ${err.message}`)
+  logger.error(`${errMessage.LASTSTOP_500} ${err.name} ${err.message}`)
   // Cannot set headers after they are sent to the client!
   // https://expressjs.com/en/guide/error-handling.html
   // If you call next() with an error after you have started writing the
@@ -75,14 +74,8 @@ export const fiveHundred = (
     return next(err)
   }
   // Ok, now we can delegate to our custom error handling.
-  const respond = new Responder(500)
-  respond.error(
-    res,
-    `500 Internal Server Error`,
-    httpStatus.INTERNAL_ERROR,
-    {
-      error: err.name,
-      message: err.message,
-    }
-  )
+  // For security, do not provide any internal error details.
+  // Be vague here on purpose.
+  const respond = new Responder(httpStatus.INTERNAL_ERROR)
+  respond.error(res, errMessage.LASTSTOP_500, httpStatus.INTERNAL_ERROR)
 }

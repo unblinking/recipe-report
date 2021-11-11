@@ -88,6 +88,9 @@ export const errMessage = {
   TOKENWALL_UNDEFINED: `Token is required in req.headers.token.`,
   TOKENWALL_TYPE: `Token type is not access. Try again using a valid access token.`,
   TOKENWALL_EXPIRED: `Token expired.`,
+
+  LASTSTOP_404: `The endpoint you are looking for can't be found.`,
+  LASTSTOP_500: `Something went wrong.`,
 }
 type errMessageType = typeof errMessage
 export type errMessageKeyType = keyof errMessageType
