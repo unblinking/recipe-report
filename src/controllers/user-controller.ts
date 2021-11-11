@@ -35,6 +35,7 @@ import {
   UserRegistrationRequest,
 } from '../db/models/service-requests'
 import { UserService } from '../services/user-service'
+import { httpStatus, logMessage, outcomes } from '../constants'
 import { logger } from '../wrappers/log'
 
 export class UserController implements IController {
@@ -62,21 +63,23 @@ export class UserController implements IController {
       const userService = new UserService()
       const serviceResponse = await userService.register(serviceRequest)
       const respond = new Responder(serviceResponse.statusCode)
-      if (serviceResponse.success === true) {
-        logger.info(`New user registration succeeded.`)
-        respond.success(res)
-      } else if (serviceResponse.fail === true) {
-        const serviceErrorMessage = serviceResponse.error?.message as string
-        logger.info(serviceErrorMessage)
-        respond.fail(res, { message: serviceErrorMessage })
-      } else {
-        const serviceErrorMessage = serviceResponse.error?.message as string
-        logger.error(serviceErrorMessage)
-        respond.error(
-          res,
-          `Error registering user: ${serviceErrorMessage}`,
-          `500`
-        )
+      switch (serviceResponse.outcome) {
+        case outcomes.SUCCESS:
+          logger.info(logMessage.LOG_REG_SUCCESS)
+          respond.success(res)
+          break
+        case outcomes.FAIL:
+          logger.info(serviceResponse.error?.message as string)
+          respond.fail(res, { message: serviceResponse.error?.message })
+          break
+        default:
+          logger.error(serviceResponse.error?.message as string)
+          respond.error(
+            res,
+            `Error registering user.`,
+            httpStatus.INTERNAL_ERROR
+          )
+          break
       }
     } catch (err) {
       next(err)
@@ -92,17 +95,24 @@ export class UserController implements IController {
       const serviceRequest = new UserActivationRequest({ ...req.params })
       const userService = new UserService()
       const serviceResponse = await userService.activate(serviceRequest)
-      const respond = new Responder()
-      if (serviceResponse.success === true) {
-        respond.success(res)
-      } else {
-        const serviceErrorMessage = serviceResponse.error?.message as string
-        logger.error(serviceErrorMessage)
-        respond.error(
-          res,
-          `Error activating user: ${serviceErrorMessage}`,
-          `500`
-        )
+      const respond = new Responder(serviceResponse.statusCode)
+      switch (serviceResponse.outcome) {
+        case outcomes.SUCCESS:
+          logger.info(logMessage.LOG_ACTIVATE_SUCCESS)
+          respond.success(res)
+          break
+        case outcomes.FAIL:
+          logger.info(serviceResponse.error?.message as string)
+          respond.fail(res, { message: serviceResponse.error?.message })
+          break
+        default:
+          logger.error(serviceResponse.error?.message as string)
+          respond.error(
+            res,
+            `Error activating user.`,
+            httpStatus.INTERNAL_ERROR
+          )
+          break
       }
     } catch (err) {
       next(err)
@@ -118,17 +128,24 @@ export class UserController implements IController {
       const serviceRequest = new UserAuthenticationRequest({ ...req.body })
       const userService = new UserService()
       const serviceResponse = await userService.authenticate(serviceRequest)
-      const respond = new Responder()
-      if (serviceResponse.success === true) {
-        respond.success(res, { token: serviceResponse.item?.token })
-      } else {
-        const serviceErrorMessage = serviceResponse.error?.message as string
-        logger.error(serviceErrorMessage)
-        respond.error(
-          res,
-          `Error authenticating user: ${serviceErrorMessage}`,
-          `500`
-        )
+      const respond = new Responder(serviceResponse.statusCode)
+      switch (serviceResponse.outcome) {
+        case outcomes.SUCCESS:
+          logger.info(logMessage.LOG_AUTHENTICATE_SUCCESS)
+          respond.success(res, { token: serviceResponse.item?.token })
+          break
+        case outcomes.FAIL:
+          logger.info(serviceResponse.error?.message as string)
+          respond.fail(res, { message: serviceResponse.error?.message })
+          break
+        default:
+          logger.error(serviceResponse.error?.message as string)
+          respond.error(
+            res,
+            `Error authenticating user.`,
+            httpStatus.INTERNAL_ERROR
+          )
+          break
       }
     } catch (err) {
       next(err)

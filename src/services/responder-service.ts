@@ -27,6 +27,7 @@
  */
 
 import { Response } from 'express'
+import { httpStatus, httpStatusValueType } from '../constants'
 import { logger } from '../wrappers/log'
 
 /**
@@ -41,7 +42,7 @@ export interface Jsend {
   error(
     res: Response,
     message: string,
-    code?: string,
+    code?: httpStatusValueType,
     data?: Record<string, unknown>
   ): void
 }
@@ -53,10 +54,11 @@ export interface Jsend {
  * @implements {Jsend}
  */
 export class Responder implements Jsend {
-  statusCode: number
+  statusCode: httpStatusValueType
 
-  constructor(statusCode?: number) {
-    this.statusCode = statusCode ?? 200
+  constructor(statusCode?: httpStatusValueType) {
+    // Default status code to 200 OK.
+    this.statusCode = statusCode ?? httpStatus.OK
   }
 
   /**
@@ -110,7 +112,7 @@ export class Responder implements Jsend {
    * @param {Response} res HTTP res that Expressjs sends when it gets a req.
    * @param {string} message A meaningful, end-user-readable (or at the least
    *     log-worthy) message, explaining what went wrong.
-   * @param {string} [code] A code corresponding to the error, if applicable.
+   * @param {httpStatusValueType} [code] A code corresponding to the error, if applicable.
    * @param {Record<string, unknown>} [data] A generic container for any other
    *     information about the error, i.e. the conditions that caused the error,
    *     stack trace, etc.
@@ -119,7 +121,7 @@ export class Responder implements Jsend {
   public error = (
     res: Response,
     message: string,
-    code?: string,
+    code?: httpStatusValueType,
     data?: Record<string, unknown>
   ): void => {
     logger.error(`Responder|Error|${this.statusCode}|${message}`)
