@@ -59,30 +59,30 @@ export type outcomeValueType = outcomeType[keyof outcomeType]
 /**
  * Error message base statements.
  */
-const errBase = {
-  REG: `The user couldn't be registered because`,
-  ACTIVATE: `The user couldn't be activated because`,
-  AUTH: `The user couldn't be authenticated because`,
+export const errBase = {
+  REG: `The user couldn't be registered.`,
+  ACTIVATE: `The user couldn't be activated.`,
+  AUTH: `The user couldn't be authenticated.`,
 }
 /**
  * Error messages.
  */
-export const errMessage = {
-  REG_USERNAME_UNDEFINED: `${errBase.REG} a username wasn't provided. Please provide a user name and try again.`,
-  REG_EMAIL_UNDEFINED: `${errBase.REG} an email address wasn't provided. Please provide an email address and try again.`,
-  REG_PASSWORD_UNDEFINED: `${errBase.REG} a password wasn't provided. Please provide a password and try again.`,
-  REG_USERNAME_IN_USE: `${errBase.REG} the username is already in use. Please change the requested username and try again.`,
-  REG_EMAIL_IN_USE: `${errBase.REG} the email address is already in use. Please change the requested email address and try again.`,
-  REG_PASSWORD_WEAK: `${errBase.REG} the password did not pass complexity requirements.`,
+export const errMsg = {
+  REG_USERNAME_UNDEFINED: `${errBase.REG} A username wasn't provided. Please provide a user name and try again.`,
+  REG_EMAIL_UNDEFINED: `${errBase.REG} An email address wasn't provided. Please provide an email address and try again.`,
+  REG_PASSWORD_UNDEFINED: `${errBase.REG} A password wasn't provided. Please provide a password and try again.`,
+  REG_USERNAME_IN_USE: `${errBase.REG} The username is already in use. Please change the requested username and try again.`,
+  REG_EMAIL_IN_USE: `${errBase.REG} The email address is already in use. Please change the requested email address and try again.`,
+  REG_PASSWORD_WEAK: `${errBase.REG} The password did not pass complexity requirements.`,
 
-  ACTIVATE_TOKEN_UNDEFINED: `${errBase.ACTIVATE} the activation token wasn't provided. Please provide an activation token and try again.`,
-  ACTIVATE_TOKEN_DECODE: `${errBase.ACTIVATE} the activation token was corrupted. Please provide the complete and correct activation token and try again.`,
-  ACTIVATE_TOKEN_TYPE: `${errBase.ACTIVATE} the token was not made for activation. Please provide the correct activation token and try again.`,
-  ACTIVATE_TOKEN_EXP: `${errBase.ACTIVATE} the token has expired. Please request a new user activation email.`,
-  ACTIVATE_TOKEN_USR: `${errBase.ACTIVATE} the user could not be found in the system. Please request a new user activation email.`,
+  ACTIVATE_TOKEN_UNDEFINED: `${errBase.ACTIVATE} The activation token wasn't provided. Please provide an activation token and try again.`,
+  ACTIVATE_TOKEN_DECODE: `${errBase.ACTIVATE} The activation token was corrupted. Please provide the complete and correct activation token and try again.`,
+  ACTIVATE_TOKEN_TYPE: `${errBase.ACTIVATE} The token was not made for activation. Please provide the correct activation token and try again.`,
+  ACTIVATE_TOKEN_EXP: `${errBase.ACTIVATE} The token has expired. Please request a new user activation email.`,
+  ACTIVATE_TOKEN_USR: `${errBase.ACTIVATE} The user could not be found in the system. Please request a new user activation email.`,
 
-  AUTH_EMAIL_UNDEFINED: `${errBase.AUTH} an email address wasn't provided. Please provide an email address and try again.`,
-  AUTH_PASSWORD_UNDEFINED: `${errBase.AUTH} a password wasn't provided. Please provide a password and try again.`,
+  AUTH_EMAIL_UNDEFINED: `${errBase.AUTH} An email address wasn't provided. Please provide an email address and try again.`,
+  AUTH_PASSWORD_UNDEFINED: `${errBase.AUTH} A password wasn't provided. Please provide a password and try again.`,
   AUTH_FAIL: `Unable to authenticate user.`,
 
   TOKENWALL_UNDEFINED: `Token is required in req.headers.token.`,
@@ -92,14 +92,14 @@ export const errMessage = {
   LASTSTOP_404: `The endpoint you are looking for can't be found.`,
   LASTSTOP_500: `Something went wrong.`,
 }
-type errMessageType = typeof errMessage
+type errMessageType = typeof errMsg
 export type errMessageKeyType = keyof errMessageType
 export type errMessageValueType = errMessageType[keyof errMessageType]
 
 /**
  * Logging messages.
  */
-export const logMessage = {
+export const logMsg = {
   LOG_REG_SUCCESS: `New user registration succeeded.`,
   LOG_ACTIVATE_SUCCESS: `New user activation succeeded.`,
   LOG_AUTHENTICATE_SUCCESS: `User authentication succeeded.`,

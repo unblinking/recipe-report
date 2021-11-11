@@ -34,7 +34,7 @@ import {
   UserAuthenticationResponse,
   UserRegistrationResponse,
 } from '../db/models/service-responses'
-import { errMessage, httpStatus, outcomes } from '../constants'
+import { errBase, errMsg, httpStatus, outcomes } from '../constants'
 import { UserModel } from '../db/models/user-model'
 import { UserFactory } from '../factories/user-factory'
 import { UserRepo } from '../repositories/user-repo'
@@ -66,19 +66,19 @@ export class UserService implements IUserService {
       // Verify that the required arguments were passed as expected.
       if (!req.item?.username) {
         res.setOutcome(outcomes.FAIL)
-        res.setError(new Error(errMessage.REG_USERNAME_UNDEFINED))
+        res.setError(new Error(errMsg.REG_USERNAME_UNDEFINED))
         res.setStatusCode(httpStatus.BAD_REQUEST)
         return res
       }
       if (!req.item.email_address) {
         res.setOutcome(outcomes.FAIL)
-        res.setError(new Error(errMessage.REG_EMAIL_UNDEFINED))
+        res.setError(new Error(errMsg.REG_EMAIL_UNDEFINED))
         res.setStatusCode(httpStatus.BAD_REQUEST)
         return res
       }
       if (!req.item.password) {
         res.setOutcome(outcomes.FAIL)
-        res.setError(new Error(errMessage.REG_PASSWORD_UNDEFINED))
+        res.setError(new Error(errMsg.REG_PASSWORD_UNDEFINED))
         res.setStatusCode(httpStatus.BAD_REQUEST)
         return res
       }
@@ -92,7 +92,7 @@ export class UserService implements IUserService {
       if (countByUsername > 0) {
         db.release() // Release the database now before we return.
         res.setOutcome(outcomes.FAIL)
-        res.setError(new Error(errMessage.REG_USERNAME_IN_USE))
+        res.setError(new Error(errMsg.REG_USERNAME_IN_USE))
         res.setStatusCode(httpStatus.CONFLICT)
         return res
       }
@@ -104,7 +104,7 @@ export class UserService implements IUserService {
       if (countByEmailAddress > 0) {
         db.release() // Release the database now before we return.
         res.setOutcome(outcomes.FAIL)
-        res.setError(new Error(errMessage.REG_EMAIL_IN_USE))
+        res.setError(new Error(errMsg.REG_EMAIL_IN_USE))
         res.setStatusCode(httpStatus.CONFLICT)
         return res
       }
@@ -119,7 +119,7 @@ export class UserService implements IUserService {
         db.release() // Release the database now before we return.
         res.setOutcome(outcomes.FAIL)
         res.setError(
-          new Error(errMessage.REG_PASSWORD_WEAK + ` ${passwordResult.message}`)
+          new Error(errMsg.REG_PASSWORD_WEAK + ` ${passwordResult.message}`)
         )
         res.setStatusCode(httpStatus.BAD_REQUEST)
         return res
@@ -179,7 +179,7 @@ export class UserService implements IUserService {
       // Verify that the required arguments were passed as expected.
       if (!req.item?.token) {
         res.setOutcome(outcomes.FAIL)
-        res.setError(new Error(errMessage.ACTIVATE_TOKEN_UNDEFINED))
+        res.setError(new Error(errMsg.ACTIVATE_TOKEN_UNDEFINED))
         res.setStatusCode(httpStatus.BAD_REQUEST)
         return res
       }
@@ -190,7 +190,7 @@ export class UserService implements IUserService {
         payload = decodeToken(req.item?.token)
       } catch {
         res.setOutcome(outcomes.FAIL)
-        res.setError(new Error(errMessage.ACTIVATE_TOKEN_DECODE))
+        res.setError(new Error(errMsg.ACTIVATE_TOKEN_DECODE))
         res.setStatusCode(httpStatus.BAD_REQUEST)
         return res
       }
@@ -198,7 +198,7 @@ export class UserService implements IUserService {
       // Verify that the token is for activation.
       if (payload.type !== tokenType.ACTIVATION) {
         res.setOutcome(outcomes.FAIL)
-        res.setError(new Error(errMessage.ACTIVATE_TOKEN_TYPE))
+        res.setError(new Error(errMsg.ACTIVATE_TOKEN_TYPE))
         res.setStatusCode(httpStatus.BAD_REQUEST)
         return res
       }
@@ -207,7 +207,7 @@ export class UserService implements IUserService {
       const now = new Date().getTime()
       if (payload.ttl < now) {
         res.setOutcome(outcomes.FAIL)
-        res.setError(new Error(errMessage.ACTIVATE_TOKEN_EXP))
+        res.setError(new Error(errMsg.ACTIVATE_TOKEN_EXP))
         res.setStatusCode(httpStatus.BAD_REQUEST)
         return res
       }
@@ -222,7 +222,7 @@ export class UserService implements IUserService {
       // If user is not found, throw error.
       if (findResult.rowCount < 1) {
         res.setOutcome(outcomes.FAIL)
-        res.setError(new Error(errMessage.ACTIVATE_TOKEN_USR))
+        res.setError(new Error(errMsg.ACTIVATE_TOKEN_USR))
         res.setStatusCode(httpStatus.BAD_REQUEST)
         return res
       }
@@ -282,13 +282,13 @@ export class UserService implements IUserService {
       // Verify that the required arguments were passed as expected.
       if (!req.item?.email_address) {
         res.setOutcome(outcomes.FAIL)
-        res.setError(new Error(errMessage.AUTH_EMAIL_UNDEFINED))
+        res.setError(new Error(errMsg.AUTH_EMAIL_UNDEFINED))
         res.setStatusCode(httpStatus.BAD_REQUEST)
         return res
       }
       if (!req.item.password) {
         res.setOutcome(outcomes.FAIL)
-        res.setError(new Error(errMessage.AUTH_PASSWORD_UNDEFINED))
+        res.setError(new Error(errMsg.AUTH_PASSWORD_UNDEFINED))
         res.setStatusCode(httpStatus.BAD_REQUEST)
         return res
       }
@@ -300,7 +300,7 @@ export class UserService implements IUserService {
       // Error if authentication failed.
       if (queryResult.rowCount !== 1) {
         res.setOutcome(outcomes.FAIL)
-        res.setError(new Error(errMessage.AUTH_FAIL))
+        res.setError(new Error(errBase.AUTH)) // Just the short message.
         res.setStatusCode(httpStatus.UNAUTHORIZED)
         return res
       }
