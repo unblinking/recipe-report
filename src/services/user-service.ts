@@ -144,13 +144,13 @@ export class UserService implements IUserService {
         db.release() // Release the database now before we return.
         const err = e as Err
         switch (err.name) {
-          case `USER_EMAIL_UNDEFINED`:
+          case `USR_EMAIL_UNDEF`:
             // This is a client error. We will provide the client with feedback.
             res.setOutcome(outcomes.FAIL)
             res.setErr(err)
             res.setStatusCode(httpStatus.BAD_REQUEST)
             break
-          case `USER_EMAIL_INVALID`:
+          case `USR_EMAIL_INVALID`:
             // This is a client error. We will provide the client with feedback.
             res.setOutcome(outcomes.FAIL)
             res.setErr(err)

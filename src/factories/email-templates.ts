@@ -61,7 +61,7 @@ Hello ${user.email_address},
 
 Thank you for registering with Recipe.Report recently. You may login after completing activation. Please follow the link below to activate your new account. The link will expire in 24 hours.
 
-${getProtocol()}://${getHostname()}/user/activate/${token}
+${getProtocol()}://${getHostname()}/v1/user/activate/${token}
 
 You received this email because you (or someone else) used this email address to create a new account.
 
