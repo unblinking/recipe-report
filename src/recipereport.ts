@@ -38,7 +38,7 @@ import { callHistory } from './middlewares/callhistory'
 
 import { IController } from './controllers/interfaces'
 import { RootController } from './controllers/root-controller'
-import { TestTokenController } from './controllers/testtoken-controller'
+import { TokenController } from './controllers/token-controller'
 import { UserController } from './controllers/user-controller'
 
 const port: number = parseInt(process.env.PORT as string, 10)
@@ -54,7 +54,7 @@ const middlewares: Array<RequestHandler> = [
 
 const controllers: Array<IController> = [
   new RootController(),
-  new TestTokenController(),
+  new TokenController(),
   new UserController(),
 ]
 

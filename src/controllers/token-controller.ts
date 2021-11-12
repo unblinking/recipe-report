@@ -39,20 +39,20 @@ export interface RequestWithUser extends Request {
   userId?: string
 }
 
-export class TestTokenController implements IController {
+export class TokenController implements IController {
   router: Router = Router()
-  path: string = `/v1/testtoken`
+  path: string = `/v1/token`
 
   constructor() {
     this.initRoutes()
   }
 
   public initRoutes = (): void => {
-    this.router.get(`/`, tokenwall, this.welcome) // Token required.
+    this.router.get(`/test`, tokenwall, this.test) // Token required.
     this.router.use(fiveHundred)
   }
 
-  private welcome = (
+  private test = (
     req: RequestWithUser,
     res: Response,
     next: NextFunction
