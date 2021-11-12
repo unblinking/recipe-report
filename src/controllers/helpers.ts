@@ -34,7 +34,7 @@ export const success = async (
   code?: httpStatusValueType,
   log?: string,
   data?: Record<string, unknown>
-) => {
+): Promise<void> => {
   logger.info(log as string)
   const respond = new Responder(code)
   respond.success(res, data)
@@ -45,7 +45,7 @@ export const fail = async (
   code?: httpStatusValueType,
   log?: string,
   data?: Record<string, unknown>
-) => {
+): Promise<void> => {
   logger.info(log as string)
   const respond = new Responder(code)
   respond.fail(res, data)
@@ -56,7 +56,7 @@ export const error = async (
   res: Response,
   code?: httpStatusValueType,
   log?: string
-) => {
+): Promise<void> => {
   logger.error(log as string)
   const respond = new Responder(code)
   respond.error(res, message, httpStatus.INTERNAL_ERROR)

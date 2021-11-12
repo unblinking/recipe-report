@@ -68,8 +68,9 @@ export class UserController implements IController {
           success(res, code, logMsg.LOG_REG_SUCCESS)
           break
         case outcomes.FAIL:
-          const errMsg = serviceResponse.err?.message
-          fail(res, code, errMsg, { message: errMsg })
+          fail(res, code, serviceResponse.err?.message, {
+            message: serviceResponse.err?.message,
+          })
           break
         default:
           error(errBase.REG, res, code, serviceResponse.err?.message)
@@ -95,8 +96,9 @@ export class UserController implements IController {
           success(res, code, logMsg.LOG_ACTIVATE_SUCCESS)
           break
         case outcomes.FAIL:
-          const errMsg = serviceResponse.err?.message
-          fail(res, code, errMsg, { message: errMsg })
+          fail(res, code, serviceResponse.err?.message, {
+            message: serviceResponse.err?.message,
+          })
           break
         default:
           error(errBase.ACTIVATE, res, code, serviceResponse.err?.message)
@@ -124,8 +126,9 @@ export class UserController implements IController {
           })
           break
         case outcomes.FAIL:
-          const errMsg = serviceResponse.err?.message
-          fail(res, code, errMsg, { message: errMsg })
+          fail(res, code, serviceResponse.err?.message, {
+            message: serviceResponse.err?.message,
+          })
           break
         default:
           error(errBase.AUTH, res, code, serviceResponse.err?.message)

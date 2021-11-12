@@ -131,7 +131,7 @@ export class UserService implements IUserService {
       }
 
       // Create the user now.
-      let repoResult: QueryResult<any>
+      let repoResult: QueryResult
       try {
         // User factory creates an instance of a user.
         const userFactory = new UserFactory()
