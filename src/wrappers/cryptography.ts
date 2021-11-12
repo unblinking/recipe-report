@@ -37,15 +37,17 @@
  */
 
 import Crypto from 'crypto'
+import { Err } from './error'
+import { errMsg } from '../constants'
 
 const key: string = process.env.CRYPTO_KEY as string
 const ivLength: number = parseInt(process.env.CRYPTO_IV_LENGTH as string, 10)
 const algorithm: string = process.env.CRYPTO_ALGO as string
 
 const varCheck = (): void => {
-  if (!key) throw new Error(`Crypto error. Crypto key is not defined.`)
-  if (!ivLength) throw new Error(`Crypto error. IV length is not defined.`)
-  if (!algorithm) throw new Error(`Crypto error. Algorithm is not defined.`)
+  if (!key) throw new Err(`CRYPTO_KEY`, errMsg.CRYPTO_KEY)
+  if (!ivLength) throw new Err(`CRYPTO_IV_LENGTH`, errMsg.CRYPTO_IV_LENGTH)
+  if (!algorithm) throw new Err(`CRYPTO_ALGO`, errMsg.CRYPTO_ALGO)
 }
 
 /**

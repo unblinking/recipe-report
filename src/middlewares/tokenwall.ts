@@ -30,6 +30,7 @@ import { Request, Response, NextFunction } from 'express'
 
 import { logger } from '../wrappers/log'
 import { Payload, decodeToken, tokenType } from '../wrappers/token'
+import { Err } from '../wrappers/error'
 import { Responder } from '../services/responder-service'
 import { httpStatus, errMsg } from '../constants'
 
@@ -44,16 +45,16 @@ export const tokenwall = (
 ): void => {
   try {
     const token: string = req.headers.token as string
-    if (!token) throw new Error(errMsg.TOKENWALL_UNDEFINED)
+    if (!token) throw new Err(`TOKENWALL_UNDEF`, errMsg.TOKENWALL_UNDEF)
     const payload: Payload = decodeToken(token)
 
     // Verify that the token is for access.
     if (payload.type !== tokenType.ACCESS)
-      throw new Error(errMsg.TOKENWALL_TYPE)
+      throw new Err(`TOKENWALL_TYPE`, errMsg.TOKENWALL_TYPE)
 
     // Verify that the token hasn't expired.
     const now = new Date().getTime()
-    if (payload.ttl < now) throw new Error(errMsg.TOKENWALL_EXPIRED)
+    if (payload.ttl < now) throw new Err(`TOKENWALL_EXP`, errMsg.TOKENWALL_EXP)
 
     // Add the user Id from the payload to the request.
     const userId: string = payload.id
@@ -62,10 +63,10 @@ export const tokenwall = (
     // Allow the request to continue on.
     next()
   } catch (e) {
-    logger.warn(`Tokenwall error. ${(e as Error).message}`)
+    logger.warn(`Tokenwall error. ${(e as Err).message}`)
     const data = {
       errorName: `401 Unauthorized`,
-      errorMessage: (e as Error).message,
+      errorMessage: (e as Err).message,
     }
     const responder: Responder = new Responder(httpStatus.UNAUTHORIZED)
     responder.fail(_res, data)

@@ -24,6 +24,7 @@
  * @module
  */
 
+import { Err } from '../../wrappers/error'
 import {
   httpStatusValueType,
   outcomes,
@@ -32,7 +33,7 @@ import {
 
 interface IServiceResponse<T> {
   outcome?: outcomeValueType
-  error?: Error
+  err?: Err
   item?: T
   statusCode?: httpStatusValueType
 }
@@ -43,12 +44,12 @@ abstract class ServiceResponse<T> implements IServiceResponse<T> {
   // Outcome is assumed an error unless explicitly set otherwise.
   constructor(
     outcome: outcomeValueType = outcomes.ERROR,
-    error?: Error,
+    err?: Err,
     item?: T,
     statusCode?: httpStatusValueType
   ) {
     this.setOutcome(outcome)
-    this.setError(error)
+    this.setErr(err)
     this.setItem(item)
     this.setStatusCode(statusCode)
   }
@@ -62,14 +63,14 @@ abstract class ServiceResponse<T> implements IServiceResponse<T> {
     this.state.outcome = outcome
   }
 
-  // Error object.
+  // Err object.
   // An error happened during the request.
-  // This would normally return a status code 500.
-  public get error(): Error | undefined {
-    return this.state.error
+  // This could be from an outcome of FAIL or ERROR.
+  public get err(): Err | undefined {
+    return this.state.err
   }
-  public setError(error: Error | undefined): void {
-    this.state.error = error
+  public setErr(err: Err | undefined): void {
+    this.state.err = err
   }
 
   // Item requested.
@@ -84,9 +85,7 @@ abstract class ServiceResponse<T> implements IServiceResponse<T> {
 
   // HTTP status code.
   // @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Status}
-  // Depending on success (200), fail(400), or error (500), this should return a
-  // proper status code. Could be any standard HTTP status code, but it would be
-  // nice if we could limit to the three main status codes for simplicity.
+  // Must be one of the defined constants of type httpStatusValueType.
   public get statusCode(): httpStatusValueType | undefined {
     return this.state.statusCode
   }

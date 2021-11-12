@@ -60,37 +60,74 @@ export type outcomeValueType = outcomeType[keyof outcomeType]
  * Error message base statements.
  */
 export const errBase = {
-  REG: `The user couldn't be registered.`,
-  ACTIVATE: `The user couldn't be activated.`,
-  AUTH: `The user couldn't be authenticated.`,
+  REG: `The user couldn't be registered.`, // User registration endpoint.
+  ACTIVATE: `The user couldn't be activated.`, // User activation endpoint.
+  AUTH: `The user couldn't be authenticated.`, // User authentication endpoint.
 }
+type errBaseType = typeof errBase
+export type errBaseKeyType = keyof errBaseType
+export type errBaseValueType = keyof errBaseType
+
 /**
  * Error messages.
  */
 export const errMsg = {
-  REG_USERNAME_UNDEFINED: `${errBase.REG} A username wasn't provided. Please provide a user name and try again.`,
-  REG_EMAIL_UNDEFINED: `${errBase.REG} An email address wasn't provided. Please provide an email address and try again.`,
-  REG_PASSWORD_UNDEFINED: `${errBase.REG} A password wasn't provided. Please provide a password and try again.`,
-  REG_USERNAME_IN_USE: `${errBase.REG} The username is already in use. Please change the requested username and try again.`,
-  REG_EMAIL_IN_USE: `${errBase.REG} The email address is already in use. Please change the requested email address and try again.`,
-  REG_PASSWORD_WEAK: `${errBase.REG} The password did not pass complexity requirements.`,
-
-  ACTIVATE_TOKEN_UNDEFINED: `${errBase.ACTIVATE} The activation token wasn't provided. Please provide an activation token and try again.`,
-  ACTIVATE_TOKEN_DECODE: `${errBase.ACTIVATE} The activation token was corrupted. Please provide the complete and correct activation token and try again.`,
-  ACTIVATE_TOKEN_TYPE: `${errBase.ACTIVATE} The token was not made for activation. Please provide the correct activation token and try again.`,
-  ACTIVATE_TOKEN_EXP: `${errBase.ACTIVATE} The token has expired. Please request a new user activation email.`,
-  ACTIVATE_TOKEN_USR: `${errBase.ACTIVATE} The user could not be found in the system. Please request a new user activation email.`,
-
-  AUTH_EMAIL_UNDEFINED: `${errBase.AUTH} An email address wasn't provided. Please provide an email address and try again.`,
-  AUTH_PASSWORD_UNDEFINED: `${errBase.AUTH} A password wasn't provided. Please provide a password and try again.`,
+  // Environment variable check.
+  ENV_PORT: `PORT is not set. This is required for Expressjs to listen.`,
+  ENV_CRYPTO_KEY: `CRYPTO_KEY is not set. This is required for encrypting and decrypting data.`,
+  ENV_CRYPTO_ALGO: `CRYPTO_ALGO is not set. This is required for encrypting and decrypting data.`,
+  ENV_CRYPTO_IV_LENGTH: `CRYPTO_IV_LENGTH is not set. This is required for encrypting and decrypting data.`,
+  ENV_JWT_SECRET: `JWT_SECRET is not set. This is required for encoding and decoding JSON web tokens.`,
+  ENV_DB_USER: `DB_USER is not set. This is required for database communication.`,
+  ENV_DB_HOST: `DB_HOST is not set. This is required for database communication.`,
+  ENV_DB_DATABASE: `DB_DATABASE is not set. This is required for database communication.`,
+  ENV_DB_PASSWORD: `DB_PASSWORD is not set. This is required for database communication.`,
+  ENV_DB_PORT: `DB_PORT is not set. This is required for database communication.`,
+  // User service registration.
+  REG_USRNAME_UNDEF: `${errBase.REG} A username wasn't provided. Please provide a user name and try again.`,
+  REG_EMAIL_UNDEF: `${errBase.REG} An email address wasn't provided. Please provide an email address and try again.`,
+  REG_PASS_UNDEF: `${errBase.REG} A password wasn't provided. Please provide a password and try again.`,
+  REG_USRNAME_USED: `${errBase.REG} The username is already in use. Please change the requested username and try again.`,
+  REG_EMAIL_USED: `${errBase.REG} The email address is already in use. Please change the requested email address and try again.`,
+  REG_PASS_WEAK: `${errBase.REG} The password did not pass complexity requirements.`,
+  // User factory.
+  FAC_USR_PASS: `Password is not defined.`,
+  FAC_USR_HASH: `Error hashing password.`,
+  // User service activation.
+  ACTIV_TOKEN_UNDEF: `${errBase.ACTIVATE} The activation token wasn't provided. Please provide an activation token and try again.`,
+  ACTIV_TOKEN_DECODE: `${errBase.ACTIVATE} The activation token was corrupted. Please provide the complete and correct activation token and try again.`,
+  ACTIV_TOKEN_TYPE: `${errBase.ACTIVATE} The token was not made for activation. Please provide the correct activation token and try again.`,
+  ACTIV_TOKEN_EXP: `${errBase.ACTIVATE} The token has expired. Please request a new user activation email.`,
+  ACTIV_TOKEN_USR: `${errBase.ACTIVATE} The user could not be found in the system. Please request a new user activation email.`,
+  // User service authentication.
+  AUTH_EMAIL_UNDEF: `${errBase.AUTH} An email address wasn't provided. Please provide an email address and try again.`,
+  AUTH_PASS_UNDEF: `${errBase.AUTH} A password wasn't provided. Please provide a password and try again.`,
   AUTH_FAIL: `Unable to authenticate user.`,
-
-  TOKENWALL_UNDEFINED: `Token is required in req.headers.token.`,
+  // Tokenwall middleware.
+  TOKENWALL_UNDEF: `Token is required in req.headers.token.`,
   TOKENWALL_TYPE: `Token type is not access. Try again using a valid access token.`,
-  TOKENWALL_EXPIRED: `Token expired.`,
-
+  TOKENWALL_EXP: `Token expired.`,
+  // Laststop middleware.
   LASTSTOP_404: `The endpoint you are looking for can't be found.`,
   LASTSTOP_500: `Something went wrong.`,
+  // User model.
+  USR_EMAIL_UNDEF: `The user email address wasn't provided. Please provide an email address and try again.`,
+  USR_EMAIL_INVALID: `The user email address provided is not in a valid format. Please correct the email address and try again.`,
+  // Cryptography wrapper.
+  CRYPTO_KEY: `Crypto key is not defined.`,
+  CRYPTO_IV_LENGTH: `IV length is not defined.`,
+  CRYPTO_ALGO: `Algorithm is not defined.`,
+  // Email transactional wrapper.
+  EMAIL_FROM: `Email FROM address is not defined.`,
+  EMAIL_TO: `Email TO address is not defined.`,
+  EMAIL_SUBJECT: `Email SUBJECT is not defined.`,
+  EMAIL_BODY: `Email BODY is not defined.`,
+  EMAIL_MS_API_KEY: `MailerSend API Key is not defined.`,
+  // JWT wrapper.
+  JWT_SECRET_KEY: `JWT error. Secret key is not defined.`,
+  JWT_USER_ID: `JWT error. User ID is not defined.`,
+  JWT_TYPE: `JWT error. Type is not defined.`,
+  JWT_TOKEN: `JWT error. Token is not defined.`,
 }
 type errMessageType = typeof errMsg
 export type errMessageKeyType = keyof errMessageType
@@ -100,6 +137,9 @@ export type errMessageValueType = errMessageType[keyof errMessageType]
  * Logging messages.
  */
 export const logMsg = {
+  // Root controller.
+  LOG_ROOT_SUCCESS: `Root route succeeded.`,
+  // User controller.
   LOG_REG_SUCCESS: `New user registration succeeded.`,
   LOG_ACTIVATE_SUCCESS: `New user activation succeeded.`,
   LOG_AUTHENTICATE_SUCCESS: `User authentication succeeded.`,

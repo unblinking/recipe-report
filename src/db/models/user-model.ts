@@ -24,6 +24,9 @@
  * @module
  */
 
+import { Err } from '../../wrappers/error'
+import { errMsg } from '../../constants'
+
 /**
  * User model interface.
  *
@@ -162,8 +165,11 @@ export class UserModel implements IUserModel {
   private emailAddressSanityCheck(email_address: string | undefined): void {
     // A regular expression to do a quick sanity-check.
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!email_address) throw new Error(`User email address is not defined.`)
-    if (!regex.test(email_address))
-      throw new Error(`Seemingly invalid user email address.`)
+    if (!email_address) {
+      throw new Err(`USR_EMAIL_UNDEF`, errMsg.USR_EMAIL_UNDEF)
+    }
+    if (!regex.test(email_address)) {
+      throw new Err(`USR_EMAIL_INVALID`, errMsg.USR_EMAIL_INVALID)
+    }
   }
 }

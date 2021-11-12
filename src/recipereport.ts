@@ -26,7 +26,7 @@
  * @module
  */
 
-import { RequestHandler, json, urlencoded } from 'express'
+import { RequestHandler, json } from 'express'
 import Helmet from 'helmet'
 
 import { logger } from './wrappers/log'
@@ -49,7 +49,6 @@ const middlewares: Array<RequestHandler> = [
     referrerPolicy: { policy: 'same-origin' },
   }),
   json(),
-  urlencoded({ extended: true }),
   callHistory,
 ]
 

@@ -27,52 +27,30 @@
  */
 
 import { logger } from './wrappers/log'
+import { Err } from './wrappers/error'
+import { errMsg } from './constants'
 
 export const envVarCheck = (): void => {
   logger.trace(`envvarcheck.ts envVarCheck()`)
   if (!process.env.NODE_ENV) {
     logger.warn(`NODE_ENV is not set. Assuming environment is not production.`)
   }
-  if (!process.env.PORT)
-    throw new Error(
-      `PORT is not set. This is required for Expressjs to listen.`
-    )
+  if (!process.env.PORT) throw new Err(`ENV_PORT`, errMsg.ENV_PORT)
   if (!process.env.CRYPTO_KEY)
-    throw new Error(
-      `CRYPTO_KEY is not set. This is required for encrypting and decrypting data.`
-    )
+    throw new Err(`ENV_CRYPTO_KEY`, errMsg.ENV_CRYPTO_KEY)
   if (!process.env.CRYPTO_ALGO)
-    throw new Error(
-      `CRYPTO_ALGO is not set. This is required for encrypting and decrypting data.`
-    )
+    throw new Err(`ENV_CRYPTO_ALGO`, errMsg.ENV_CRYPTO_ALGO)
   if (!process.env.CRYPTO_IV_LENGTH)
-    throw new Error(
-      `CRYPTO_IV_LENGTH is not set. This is required for encrypting and decrypting data.`
-    )
+    throw new Err(`ENV_CRYPTO_IV_LENGTH`, errMsg.ENV_CRYPTO_IV_LENGTH)
   if (!process.env.JWT_SECRET)
-    throw new Error(
-      `JWT_SECRET is not set. This is required for encoding and decoding JSON web tokens.`
-    )
-  if (!process.env.DB_USER)
-    throw new Error(
-      `DB_USER is not set. This is required for database communication.`
-    )
-  if (!process.env.DB_HOST)
-    throw new Error(
-      `DB_HOST is not set. This is required for database communication.`
-    )
+    throw new Err(`ENV_JWT_SECRET`, errMsg.ENV_JWT_SECRET)
+  if (!process.env.DB_USER) throw new Err(`ENV_DB_USER`, errMsg.ENV_DB_USER)
+  if (!process.env.DB_HOST) throw new Err(`ENV_DB_HOST`, errMsg.ENV_DB_HOST)
   if (!process.env.DB_DATABASE)
-    throw new Error(
-      `DB_DATABASE is not set. This is required for database communication.`
-    )
+    throw new Err(`ENV_DB_DATABASE`, errMsg.ENV_DB_DATABASE)
   if (!process.env.DB_PASSWORD)
-    throw new Error(
-      `DB_PASSWORD is not set. This is required for database communication.`
-    )
-  if (!process.env.DB_PORT)
-    throw new Error(
-      `DB_PORT is not set. This is required for database communication.`
-    )
+    throw new Err(`ENV_DB_PASSWORD`, errMsg.ENV_DB_PASSWORD)
+  if (!process.env.DB_PORT) throw new Err(`ENV_DB_PORT`, errMsg.ENV_DB_PORT)
   if (!process.env.FLYWAY_URL) {
     logger.warn(`FLYWAY_URL is not set. Database migrations are disabled.`)
   }

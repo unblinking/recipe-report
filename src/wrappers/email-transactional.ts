@@ -32,6 +32,8 @@
 import { MailerSend, EmailParams, Sender, Recipient } from 'mailer-send-ts'
 import { EmailMessageModel } from '../db/models/email-message-model'
 import { logger } from '../wrappers/log'
+import { Err } from '../wrappers/error'
+import { errMsg } from '../constants'
 
 /**
  * Send an email.
@@ -40,20 +42,20 @@ import { logger } from '../wrappers/log'
 export async function sendEmail(email: EmailMessageModel): Promise<void> {
   logger.trace(`email-transactional sendEmail()`)
   if (!email.from) {
-    throw new Error(`Email FROM address is not defined.`)
+    throw new Err(`EMAIL_FROM`, errMsg.EMAIL_FROM)
   }
   if (!email.to) {
-    throw new Error(`Email TO address is not defined.`)
+    throw new Err(`EMAIL_TO`, errMsg.EMAIL_TO)
   }
   if (!email.subject) {
-    throw new Error(`Email SUBJECT is not defined.`)
+    throw new Err(`EMAIL_SUBJECT`, errMsg.EMAIL_SUBJECT)
   }
   if (!email.body) {
-    throw new Error(`Email BODY is not defined.`)
+    throw new Err(`EMAIL_BODY`, errMsg.EMAIL_BODY)
   }
   if (process.env.NODE_ENV === `production`) {
     if (!process.env.MAILER_SEND_KEY) {
-      throw new Error(`MailerSend API Key is not defined.`)
+      throw new Err(`EMAIL_MS_API_KEY`, errMsg.EMAIL_MS_API_KEY)
     }
     const mailerSend = new MailerSend({ apiKey: process.env.MAILER_SEND_KEY })
     const sentFrom = new Sender(email.from, `Recipe.Report`)

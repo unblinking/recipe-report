@@ -1,5 +1,9 @@
 /**
- * Helper functions for the controllers.
+ * A wrapper around the Error class.
+ *
+ * Instantiate error objects with a custom name in one line, with type safety
+ * enforced for the name and message. Error messages must be defined in the
+ * global constants before they may be used.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -24,40 +28,23 @@
  * @module
  */
 
-import { Response } from 'express'
-import { Responder } from '../services/responder-service'
-import { httpStatus, httpStatusValueType } from '../constants'
-import { logger } from '../wrappers/log'
+import {
+  errBaseValueType,
+  errMessageKeyType,
+  errMessageValueType,
+} from '../constants'
 
-export const success = async (
-  res: Response,
-  code?: httpStatusValueType,
-  log?: string,
-  data?: Record<string, unknown>
-) => {
-  logger.info(log as string)
-  const respond = new Responder(code)
-  respond.success(res, data)
-}
-
-export const fail = async (
-  res: Response,
-  code?: httpStatusValueType,
-  log?: string,
-  data?: Record<string, unknown>
-) => {
-  logger.info(log as string)
-  const respond = new Responder(code)
-  respond.fail(res, data)
-}
-
-export const error = async (
-  message: string,
-  res: Response,
-  code?: httpStatusValueType,
-  log?: string
-) => {
-  logger.error(log as string)
-  const respond = new Responder(code)
-  respond.error(res, message, httpStatus.INTERNAL_ERROR)
+/**
+ * Extended class based on the Error class.
+ * Set a name and message all at once. Remarkable!
+ */
+export class Err extends Error {
+  constructor(
+    name: errMessageKeyType | errBaseValueType,
+    message: errMessageValueType
+  ) {
+    super(message)
+    this.name = name
+    Object.setPrototypeOf(this, new.target.prototype)
+  }
 }

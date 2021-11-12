@@ -29,6 +29,8 @@
 
 import jwt from 'jwt-simple'
 import { encrypt, decrypt } from './cryptography'
+import { Err } from '../wrappers/error'
+import { errMsg } from '../constants'
 
 export enum tokenType {
   NONE = 0, // Invalid (falsey) value by design.
@@ -55,11 +57,11 @@ export const encodeToken = (
   // Determine our secret, from environment variable.
   const secret: string = process.env.JWT_SECRET as string
   // Verify that we aren't missing anything important.
-  if (!secret) throw new Error(`JWT error. Secret key is not defined.`)
-  if (!userId) throw new Error(`JWT error. User ID is not defined.`)
+  if (!secret) throw new Err(`JWT_SECRET_KEY`, errMsg.JWT_SECRET_KEY)
+  if (!userId) throw new Err(`JWT_USER_ID`, errMsg.JWT_USER_ID)
   // Note: tokenType.NONE is zero, which is a falsey value, so that would cause
   // an error here just as if type was undefined.
-  if (!type) throw new Error(`JWT error. Type is not defined.`)
+  if (!type) throw new Err(`JWT_TYPE`, errMsg.JWT_TYPE)
   // Instantiate the payload.
   const payload: Payload = {
     id: userId,
@@ -83,8 +85,8 @@ export const decodeToken = (token: string | undefined): Payload => {
   // Determine our secret, from environment variable.
   const secret: string = process.env.JWT_SECRET as string
   // Verify that we aren't missing anything important.
-  if (!secret) throw new Error(`JWT error. Secret key is not defined.`)
-  if (!token) throw new Error(`JWT error. Token is not defined.`)
+  if (!secret) throw new Err(`JWT_SECRET_KEY`, errMsg.JWT_SECRET_KEY)
+  if (!token) throw new Err(`JWT_TOKEN`, errMsg.JWT_TOKEN)
   // Decode the JWT. The signature of the token is verified.
   const decodedToken: string = jwt.decode(token, secret, false, 'HS512')
   // Decrypt and parse the payload.

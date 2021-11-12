@@ -1,9 +1,6 @@
 /**
  * Base class for all repositories to extend from.
  *
- * Defines basic CRUD operations with PostgreSQL.
- * @see {@link https://medium.com/@erickwendel/generic-repository-with-typescript-and-node-js-731c10a1b98e}
- *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
  * @license GNU AGPLv3 or later
@@ -30,6 +27,34 @@
 import { PoolClient, QueryResult } from 'pg'
 import { IRead, IWrite } from './interfaces'
 
+/**
+ * This is the abstract class used as the base repository class for all of the
+ * other repository classes.
+ *
+ * This has been written so that we have the basic CRUD operations ready to go.
+ *
+ * These are written as parameterized queries to avoid SQL injection
+ * vulnerabilities. The node-postgres library supports parameterized queries
+ * and will pass the query text unaltered as well as the parameters to the
+ * PostgreSQL server, where the parameters are safely substituted into the query
+ * with battle-tested parameter substitution code on the server itself.
+ *
+ * I have included some private helper methods below the public CRUD methods.
+ * The private helpers are:
+ * - cols: Get a list of column names for defined values in the item.
+ * - vals: Get a list of column values for defined values in the item.
+ * - pars: Get a list of parameters (i.e. "$1, $2") based on the number of
+ *         defined values in the item.
+ * Using these helpers we can quickly run a parameterized query for any item
+ * passed to the CRUD methods from any of the repositories. For more specialized
+ * operations, the methods will be inside the individual repository classes.
+ *
+ * See the node-postgres page about queries:
+ * @see {@link https://node-postgres.com/features/queries}
+ *
+ * Some ideas were based on the concepts discussed in this article:
+ * @see {@link https://medium.com/@erickwendel/generic-repository-with-typescript-and-node-js-731c10a1b98e}
+ */
 export abstract class BaseRepo<T> implements IRead, IWrite<T> {
   public db: PoolClient
   private table: string

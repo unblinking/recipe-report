@@ -41,7 +41,7 @@ export interface RequestWithUser extends Request {
 
 export class TestTokenController implements IController {
   router: Router = Router()
-  path: string = `/testtoken`
+  path: string = `/v1/testtoken`
 
   constructor() {
     this.initRoutes()

@@ -40,7 +40,7 @@ import { errBase, logMsg, outcomes } from '../constants'
 
 export class UserController implements IController {
   router: Router = Router()
-  path: string = `/user`
+  path: string = `/v1/user`
 
   constructor() {
     this.initRoutes()
@@ -68,10 +68,11 @@ export class UserController implements IController {
           success(res, code, logMsg.LOG_REG_SUCCESS)
           break
         case outcomes.FAIL:
-          fail(res, code, serviceResponse.error?.message)
+          const errMsg = serviceResponse.err?.message
+          fail(res, code, errMsg, { message: errMsg })
           break
         default:
-          error(errBase.REG, res, code, serviceResponse.error?.message)
+          error(errBase.REG, res, code, serviceResponse.err?.message)
           break
       }
     } catch (err) {
@@ -94,10 +95,11 @@ export class UserController implements IController {
           success(res, code, logMsg.LOG_ACTIVATE_SUCCESS)
           break
         case outcomes.FAIL:
-          fail(res, code, serviceResponse.error?.message)
+          const errMsg = serviceResponse.err?.message
+          fail(res, code, errMsg, { message: errMsg })
           break
         default:
-          error(errBase.ACTIVATE, res, code, serviceResponse.error?.message)
+          error(errBase.ACTIVATE, res, code, serviceResponse.err?.message)
           break
       }
     } catch (err) {
@@ -117,13 +119,16 @@ export class UserController implements IController {
       const code = serviceResponse.statusCode
       switch (serviceResponse.outcome) {
         case outcomes.SUCCESS:
-          success(res, code, logMsg.LOG_AUTHENTICATE_SUCCESS)
+          success(res, code, logMsg.LOG_AUTHENTICATE_SUCCESS, {
+            token: serviceResponse.item?.token,
+          })
           break
         case outcomes.FAIL:
-          fail(res, code, serviceResponse.error?.message)
+          const errMsg = serviceResponse.err?.message
+          fail(res, code, errMsg, { message: errMsg })
           break
         default:
-          error(errBase.AUTH, res, code, serviceResponse.error?.message)
+          error(errBase.AUTH, res, code, serviceResponse.err?.message)
           break
       }
     } catch (err) {
