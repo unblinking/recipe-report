@@ -47,9 +47,18 @@ export class UserController implements IController {
   }
 
   public initRoutes = (): void => {
-    this.router.post(`/register`, this.register)
-    this.router.get(`/activate/:token`, this.activate)
-    this.router.post(`/login`, this.authenticate)
+    // Root CRUD.
+    this.router.post(`/`, this.register) // Create (new user)
+    /* NOT IMPLEMENTED YET
+    this.router.get(`/:id`, this.find) // Read (find user by id)
+    this.router.put(`/:id`, this.update) // Update (update user by id)
+    this.router.delete(`/:id`, this.delete) // Delete (delete user by id)
+    */
+    // Session.
+    this.router.post(`/session`, this.authenticate) // Create (user session)
+    // Activation.
+    this.router.put(`/activation/:token`, this.activate) // Update (user activation status)
+    // Errors.
     this.router.use(fiveHundred)
   }
 
