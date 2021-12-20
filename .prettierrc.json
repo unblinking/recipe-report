@@ -1,4 +1,14 @@
 {
+  "printWidth": 80,
   "semi": false,
-  "singleQuote": true
+  "singleQuote": true,
+  "trailingComma": "all",
+  "arrowParens": "always",
+  "jsxSingleQuote": false,
+  "importOrder": ["<THIRD_PARTY_MODULES>", ".\/api\/", ".\/data\/", ".\/domain\/", ".\/service\/", ".\/utils", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "importOrderCaseInsensitive": true,
+  "parser": "typescript",
+  "importOrderParserPlugins" : ["classProperties", "decorators-legacy", "typescript"]
 }
