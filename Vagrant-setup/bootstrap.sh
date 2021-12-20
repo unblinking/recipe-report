@@ -1,8 +1,8 @@
 #!/bin/sh -e
 
 # Edit the following to change the name of the database user that will be created:
-APP_DB_USER=user
-APP_DB_PASS=pass
+APP_DB_USER=dbuser
+APP_DB_PASS=dbpass
 
 # Edit the following to change the name of the database that is created (defaults to the user name)
 APP_DB_NAME=recipedb
