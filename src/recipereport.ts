@@ -25,58 +25,90 @@
  *
  * @module
  */
-
-import { RequestHandler, json } from 'express'
+import { json, RequestHandler } from 'express'
 import Helmet from 'helmet'
+import { injectable, multiInject } from 'inversify'
 
-import { logger } from './wrappers/log'
-import { graffiti } from './factories/fun-factory'
-import { envVarCheck } from './envvarcheck'
-import { listen } from './wrappers/app'
+import { listen } from './api/app'
+import { IBaseController } from './api/controllers/base-controller'
+import { callHistory } from './api/middlewares/callhistory'
 
-import { callHistory } from './middlewares/callhistory'
+import { errMsg } from './data/constants'
+import { graffiti } from './data/factories/fun-factory'
 
-import { IController } from './controllers/interfaces'
-import { RootController } from './controllers/root-controller'
-import { TokenController } from './controllers/token-controller'
-import { UserController } from './controllers/user-controller'
+import { Err, log } from './utils'
 
-const port: number = parseInt(process.env.PORT as string, 10)
+import { TYPES } from './types'
 
-const middlewares: Array<RequestHandler> = [
-  Helmet({
-    contentSecurityPolicy: { directives: { defaultSrc: ["'self'"] } },
-    referrerPolicy: { policy: 'same-origin' },
-  }),
-  json(),
-  callHistory,
-]
-
-const controllers: Array<IController> = [
-  new RootController(),
-  new TokenController(),
-  new UserController(),
-]
-
-export const start = (): void => {
-  try {
-    logger.trace(`recipereport.ts start()`)
-    graffiti()
-    envVarCheck()
-    listen(middlewares, controllers, port)
-  } catch (e) {
-    logger.fatal((e as Error).message)
-    process.exit(1)
-  }
+export interface IRecipeReport {
+  start(): void
 }
 
-/**
- * If the file is being run directly, start the Recipe.Report API now.
- *
- * ```bash
- * node dist/recipereport.js
- * ```
- */
-if (require.main === module) {
-  start()
+@injectable()
+export class RecipeReport implements IRecipeReport {
+  private _controllers: IBaseController[]
+
+  public constructor(
+    @multiInject(TYPES.IBaseController) controllers: IBaseController[],
+  ) {
+    this._controllers = controllers
+  }
+
+  /// Environment variables roll call. Shabooya, sha sha shabooya ROLL CALL!
+  /// This confirms that necessary environment variables have been defined.
+  private _envVarCheck = (): void => {
+    log.trace(`envvarcheck.ts envVarCheck()`)
+    if (!process.env.NODE_ENV) {
+      log.warn(`NODE_ENV is not set. Assuming environment is not production.`)
+    }
+    if (!process.env.PORT) throw new Err(`ENV_PORT`, errMsg.ENV_PORT)
+    if (!process.env.CRYPTO_KEY)
+      throw new Err(`ENV_CRYPTO_KEY`, errMsg.ENV_CRYPTO_KEY)
+    if (!process.env.CRYPTO_ALGO)
+      throw new Err(`ENV_CRYPTO_ALGO`, errMsg.ENV_CRYPTO_ALGO)
+    if (!process.env.CRYPTO_IV_LENGTH)
+      throw new Err(`ENV_CRYPTO_IV_LENGTH`, errMsg.ENV_CRYPTO_IV_LENGTH)
+    if (!process.env.JWT_SECRET)
+      throw new Err(`ENV_JWT_SECRET`, errMsg.ENV_JWT_SECRET)
+    if (!process.env.DB_USER) throw new Err(`ENV_DB_USER`, errMsg.ENV_DB_USER)
+    if (!process.env.DB_HOST) throw new Err(`ENV_DB_HOST`, errMsg.ENV_DB_HOST)
+    if (!process.env.DB_DATABASE)
+      throw new Err(`ENV_DB_DATABASE`, errMsg.ENV_DB_DATABASE)
+    if (!process.env.DB_PASSWORD)
+      throw new Err(`ENV_DB_PASSWORD`, errMsg.ENV_DB_PASSWORD)
+    if (!process.env.DB_PORT) throw new Err(`ENV_DB_PORT`, errMsg.ENV_DB_PORT)
+    if (!process.env.FLYWAY_URL) {
+      log.warn(`FLYWAY_URL is not set. Database migrations are disabled.`)
+    }
+    if (!process.env.FLYWAY_MIGRATIONS) {
+      log.warn(
+        `FLYWAY_MIGRATIONS is not set. Database migrations are disabled.`,
+      )
+    }
+    if (!process.env.MY_LOG_TARGETS) {
+      log.warn(`MY_LOG_TARGETS is not set. Logging is disabled.`)
+    }
+  }
+
+  public start = (): void => {
+    try {
+      log.trace(`recipereport.ts start()`)
+      graffiti()
+      this._envVarCheck()
+      const middlewares: Array<RequestHandler> = [
+        Helmet({
+          contentSecurityPolicy: { directives: { defaultSrc: ["'self'"] } },
+          referrerPolicy: { policy: 'same-origin' },
+        }),
+        json(),
+        callHistory,
+      ]
+      const controllers: Array<IBaseController> = this._controllers
+      const port: number = parseInt(process.env.PORT as string, 10)
+      listen(middlewares, controllers, port)
+    } catch (e) {
+      log.fatal((e as Error).message)
+      process.exit(1)
+    }
+  }
 }

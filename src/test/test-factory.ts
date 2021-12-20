@@ -25,8 +25,8 @@
  *
  * @module
  */
+import { IUserModel, UserModel } from '../domain/models/user-model'
 
-import { IUserModel, UserModel } from '../db/models/user-model'
 // import { encodeToken } from '../wrappers/token'
 
 const userId = `9aa98e23-24ec-4403-8517-ca27968cfe25`

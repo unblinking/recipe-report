@@ -23,21 +23,23 @@
  *
  * @module
  */
+import { IUserModel } from '../domain/models/user-model'
+
+import { JwtService, Payload, tokenType } from '../service/jwt-service'
 
 import { TestFactory } from './test-factory'
-import { IUserModel } from '../db/models/user-model'
-import { decodeToken, encodeToken, Payload, tokenType } from '../wrappers/token'
 
 describe(`JSON Web Token actions.`, () => {
   test(`Encodes an activation JWT.`, () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const userDto: IUserModel = testFactory.userNewDto()
+    const jwt = new JwtService()
     // Act.
-    const token: string = encodeToken(
+    const token: string = jwt.encode(
       userDto.id as string,
       tokenType.ACTIVATION,
-      new Date().getTime()
+      new Date().getTime(),
     )
     // Assert.
     expect(token).toBeTruthy()
@@ -47,11 +49,12 @@ describe(`JSON Web Token actions.`, () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const userDto: IUserModel = testFactory.userNewDto()
+    const jwt = new JwtService()
     // Act.
-    const token: string = encodeToken(
+    const token: string = jwt.encode(
       userDto.id as string,
       tokenType.ACCESS,
-      new Date().getTime()
+      new Date().getTime(),
     )
     // Assert.
     expect(token).toBeTruthy()
@@ -61,8 +64,9 @@ describe(`JSON Web Token actions.`, () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const userDto: IUserModel = testFactory.userNewDto()
+    const jwt = new JwtService()
     // Act.
-    const token: string = encodeToken(userDto.id as string, tokenType.ACCESS)
+    const token: string = jwt.encode(userDto.id as string, tokenType.ACCESS)
     // Assert.
     expect(token).toBeTruthy()
   })
@@ -71,8 +75,9 @@ describe(`JSON Web Token actions.`, () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const token: string = testFactory.tokenActivation()
+    const jwt = new JwtService()
     // Act.
-    const payload: Payload = decodeToken(token)
+    const payload: Payload = jwt.decode(token)
     // Assert.
     expect(payload.id).toBeTruthy()
     expect(payload.type).toEqual(tokenType.ACTIVATION)
@@ -84,8 +89,9 @@ describe(`JSON Web Token actions.`, () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const token: string = testFactory.tokenAccess()
+    const jwt = new JwtService()
     // Act.
-    const payload: Payload = decodeToken(token)
+    const payload: Payload = jwt.decode(token)
     // Assert.
     expect(payload.id).toBeTruthy()
     expect(payload.type).toEqual(tokenType.ACCESS)
@@ -99,17 +105,19 @@ describe(`JSON Web Token actions.`, () => {
     const userDto: IUserModel = testFactory.userNewDto()
     const backupJwtSecret = process.env.JWT_SECRET
     delete process.env.JWT_SECRET
+    const jwt = new JwtService()
     // Act and assert.
     expect(() => {
-      encodeToken(userDto.id as string, tokenType.ACCESS, new Date().getTime())
+      jwt.encode(userDto.id as string, tokenType.ACCESS, new Date().getTime())
     }).toThrow(`JWT error. Secret key is not defined.`)
     process.env.JWT_SECRET = backupJwtSecret
   })
 
   test(`Fails to encode without User ID.`, () => {
     // Arrange, act, and assert.
+    const jwt = new JwtService()
     expect(() => {
-      encodeToken(``, tokenType.ACCESS, new Date().getTime())
+      jwt.encode(``, tokenType.ACCESS, new Date().getTime())
     }).toThrow(`JWT error. User ID is not defined.`)
   })
 
@@ -117,9 +125,10 @@ describe(`JSON Web Token actions.`, () => {
     // Arrange
     const testFactory: TestFactory = new TestFactory()
     const userDto: IUserModel = testFactory.userNewDto()
+    const jwt = new JwtService()
     // Act, and assert.
     expect(() => {
-      encodeToken(userDto.id as string, tokenType.NONE, new Date().getTime())
+      jwt.encode(userDto.id as string, tokenType.NONE, new Date().getTime())
     }).toThrow(`JWT error. Type is not defined.`)
   })
 
@@ -129,17 +138,19 @@ describe(`JSON Web Token actions.`, () => {
     const token: string = testFactory.tokenActivation()
     const backupJwtSecret = process.env.JWT_SECRET
     delete process.env.JWT_SECRET
+    const jwt = new JwtService()
     // Act and assert.
     expect(() => {
-      decodeToken(token)
+      jwt.decode(token)
     }).toThrow(`JWT error. Secret key is not defined.`)
     process.env.JWT_SECRET = backupJwtSecret
   })
 
   test(`Fails to decodes without token.`, () => {
     // Arrange, act, and assert.
+    const jwt = new JwtService()
     expect(() => {
-      decodeToken(``)
+      jwt.decode(``)
     }).toThrow(`JWT error. Token is not defined.`)
   })
 })
