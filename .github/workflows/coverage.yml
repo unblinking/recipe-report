@@ -1,4 +1,4 @@
-name: Running Code Coverage
+name: Build
 
 on: [pull_request]
 
@@ -16,15 +16,18 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: 14.18.1
+        node-version: 14.18.2
 
-    - name: Install dependencies
+    - name: Install
       run: yarn install
 
-    - name: Generate coverage report
+    - name: Build
+      run: yarn run build
+
+    - name: Test
       run: yarn run testonly
 
-    - name: Upload coverage to Codecov
+    - name: Codecov
       uses: codecov/codecov-action@v2
       with:
         verbose: true

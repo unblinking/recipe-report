@@ -22,7 +22,6 @@ Optionally, to start you could prepare and build the source code. Run the `yarn 
 yarn run prettier
 yarn run linter
 yarn run test
-yarn run docs
 yarn run build
 ```
 
