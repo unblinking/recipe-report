@@ -1,7 +1,9 @@
 /**
  * Recipe.Report API Server
  *
- * This is the production mode 'main' script for the Recipe.Report API server.
+ * Verify all required environment variables are present, prepare the
+ * middlewares, controllers, and port, and tell Express.js to listen for new
+ * requests to come in.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021

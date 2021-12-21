@@ -25,32 +25,12 @@
  */
 import { IUserModel, UserModel } from '../../domain/models/user-model'
 
-import { Err } from '../../utils'
-
-import { errMsg } from '../constants'
-import { PostgreSQL } from '../data-access'
-
 export interface IUserFactory {
   create(userProps: IUserModel): Promise<UserModel>
 }
 
 export class UserFactory implements IUserFactory {
   public async create(props: IUserModel): Promise<UserModel> {
-    const postgreSQL = new PostgreSQL()
-
-    // Hash the provided plaintext password.
-    // I wanted to put this in the user model, but could not find a great way
-    // to put an async/await in the model.
-    if (!props.password) throw new Err(`FAC_USR_PASS`, errMsg.FAC_USR_PASS)
-    const queryResult = await postgreSQL.hashAndSalt(props.password)
-    if (queryResult.rowCount < 1 || !queryResult.rows[0].crypt)
-      throw new Err(`FAC_USR_HASH`, errMsg.FAC_USR_HASH)
-    const hashedPassword = queryResult.rows[0].crypt
-
-    // Set the hashed password in the properties we will use to
-    // create the user object instance.
-    props.password = hashedPassword
-
     // Set the current date that we are creating this user.
     props.date_created = new Date()
 

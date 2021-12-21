@@ -29,6 +29,16 @@
  */
 
 /**
+ * Database table names.
+ */
+export const dbTables = {
+  USERS: `users`,
+} as const
+type dbTablesType = typeof dbTables
+export type dbTablesKeyType = keyof dbTablesType
+export type dbTablesValueType = dbTablesType[keyof dbTablesType]
+
+/**
  * HTTP response status codes.
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Status}
  */
@@ -90,9 +100,7 @@ export const errMsg = {
   REG_USRNAME_USED: `${errBase.REG} The username is already in use. Please change the requested username and try again.`,
   REG_EMAIL_USED: `${errBase.REG} The email address is already in use. Please change the requested email address and try again.`,
   REG_PASS_WEAK: `${errBase.REG} The password did not pass complexity requirements.`,
-  // User factory.
-  FAC_USR_PASS: `Password is not defined.`,
-  FAC_USR_HASH: `Error hashing password.`,
+  REG_USR_HASH: `${errBase.REG} Error hashing password.`,
   // User service activation.
   ACTIV_TOKEN_UNDEF: `${errBase.ACTIVATE} The activation token wasn't provided. Please provide an activation token and try again.`,
   ACTIV_TOKEN_DECODE: `${errBase.ACTIVATE} The activation token was corrupted. Please provide the complete and correct activation token and try again.`,
@@ -128,6 +136,8 @@ export const errMsg = {
   JWT_USER_ID: `JWT error. User ID is not defined.`,
   JWT_TYPE: `JWT error. Type is not defined.`,
   JWT_TOKEN: `JWT error. Token is not defined.`,
+  // Unit of work.
+  UOW_CLIENT: `UOW error. Pool client is not defined.`,
 }
 type errMessageType = typeof errMsg
 export type errMessageKeyType = keyof errMessageType

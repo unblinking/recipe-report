@@ -31,7 +31,7 @@ const TYPES = {
   IRecipeReport: Symbol.for('IRecipeReport'),
   IBaseController: Symbol.for('IBaseConroller'),
   IDataAccessLayer: Symbol.for('IDataAccessLayer'),
-  IUserRepo: Symbol.for('IUserRepo'),
+  IUnitOfWork: Symbol.for('IUnitOfWork'),
 }
 
 export { TYPES }

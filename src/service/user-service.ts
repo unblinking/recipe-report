@@ -27,9 +27,8 @@ import { inject, injectable } from 'inversify'
 import { QueryResult } from 'pg'
 
 import { errBase, errMsg, httpStatus, outcomes } from '../data/constants'
-import { PostgreSQL } from '../data/data-access'
 import { UserFactory } from '../data/factories/user-factory'
-import { IUserRepo } from '../data/repositories/user-repo'
+import { IUnitOfWork } from '../data/repositories/unit-of-work'
 
 import { AuthenticationModel } from '../domain/models/authentication-model'
 import { DomainConverter } from '../domain/models/domainconverter'
@@ -47,6 +46,7 @@ import { UserModel } from '../domain/models/user-model'
 
 import { Err } from '../utils'
 
+import { container } from '../ioc.config'
 import { TYPES } from '../types'
 import { IEmailService } from './email-service'
 import { JwtService, Payload, tokenType } from './jwt-service'
@@ -69,14 +69,9 @@ export interface IUserService {
 @injectable()
 export class UserService implements IUserService {
   private _emailService: IEmailService
-  private _userRepo: IUserRepo
 
-  public constructor(
-    @inject(TYPES.IEmailService) emailService: IEmailService,
-    @inject(TYPES.IUserRepo) userRepo: IUserRepo,
-  ) {
+  public constructor(@inject(TYPES.IEmailService) emailService: IEmailService) {
     this._emailService = emailService
-    this._userRepo = userRepo
   }
 
   /**
@@ -110,14 +105,18 @@ export class UserService implements IUserService {
         return res
       }
 
-      // Get a client to use the database with the user repository.
-      const db = await new PostgreSQL().getClient()
-      const userRepo = new UserRepo(db)
+      // Use the database.
+      // Get a new instance of uow from the DI container.
+      const uow = container.get<IUnitOfWork>(TYPES.IUnitOfWork)
+      await uow.connect()
+      await uow.begin()
 
       // Verify that the username does not already exist in the db.
-      const countByUsername = await userRepo.countByUsername(req.item?.username)
+      const countByUsername = await uow.users.countByUsername(
+        req.item?.username,
+      )
       if (countByUsername > 0) {
-        db.release() // Release the database now before we return.
+        await uow.rollback()
         res.setOutcome(outcomes.FAIL)
         res.setErr(new Err(`REG_USRNAME_USED`, errMsg.REG_USRNAME_USED))
         res.setStatusCode(httpStatus.CONFLICT)
@@ -125,11 +124,11 @@ export class UserService implements IUserService {
       }
 
       // Verify that the email address does not already exist in the db.
-      const countByEmailAddress = await userRepo.countByEmailAddress(
+      const countByEmailAddress = await uow.users.countByEmailAddress(
         req.item.email_address,
       )
       if (countByEmailAddress > 0) {
-        db.release() // Release the database now before we return.
+        await uow.rollback()
         res.setOutcome(outcomes.FAIL)
         res.setErr(new Err(`REG_EMAIL_USED`, errMsg.REG_EMAIL_USED))
         res.setStatusCode(httpStatus.CONFLICT)
@@ -144,7 +143,7 @@ export class UserService implements IUserService {
         req.item.username,
       )
       if (!passwordResult.success) {
-        db.release() // Release the database now before we return.
+        await uow.rollback()
         res.setOutcome(outcomes.FAIL)
         res.setErr(
           new Err(
@@ -156,6 +155,17 @@ export class UserService implements IUserService {
         return res
       }
 
+      // Hash the provided plaintext password.
+      const plainText = req.item.password
+      const hashAndSaltResult = await uow.users.hashAndSalt(plainText)
+      if (hashAndSaltResult.rowCount < 1 || !hashAndSaltResult.rows[0].crypt)
+        throw new Err(`REG_USR_HASH`, errMsg.REG_USR_HASH)
+      const hashed = hashAndSaltResult.rows[0].crypt
+
+      // Set the hashed password in the properties we will use to
+      // create the user object instance.
+      req.item.password = hashed
+
       // Create the user now.
       let repoResult: QueryResult
       try {
@@ -165,9 +175,9 @@ export class UserService implements IUserService {
         // Dehydrate the new user into a DTO for the repository.
         const userDehydrated = DomainConverter.toDto<UserModel>(newUser)
         // User repository saves user to the db.
-        repoResult = await userRepo.createOne(userDehydrated)
+        repoResult = await uow.users.createOne(userDehydrated)
       } catch (e) {
-        db.release() // Release the database now before we return.
+        await uow.rollback()
         const err = e as Err
         switch (err.name) {
           case `USR_EMAIL_UNDEF`:
@@ -193,7 +203,7 @@ export class UserService implements IUserService {
       }
 
       // Done using the database now.
-      db.release()
+      await uow.commit()
 
       // Hydrate a user instance from the repository results.
       const userHydrated = DomainConverter.fromDto<UserModel>(
@@ -272,15 +282,18 @@ export class UserService implements IUserService {
         return res
       }
 
-      // Get a client to use the database with the user repository.
-      const db = await new PostgreSQL().getClient()
-      const userRepo = new UserRepo(db)
+      // Use the database.
+      // Get a new instance of uow from the DI container.
+      const uow = container.get<IUnitOfWork>(TYPES.IUnitOfWork)
+      await uow.connect()
+      await uow.begin()
 
       // Find the user in the database
-      const findResult = await userRepo.readOne(payload.id)
+      const findResult = await uow.users.readOne(payload.id)
 
       // If user is not found, throw error.
       if (findResult.rowCount < 1) {
+        await uow.rollback()
         res.setOutcome(outcomes.FAIL)
         res.setErr(new Err(`ACTIV_TOKEN_USR`, errMsg.ACTIV_TOKEN_USR))
         res.setStatusCode(httpStatus.BAD_REQUEST)
@@ -296,6 +309,7 @@ export class UserService implements IUserService {
       // Verify that the user is not already activated.
       if (userHydrated.date_activated !== null) {
         // If they are already activated, just return a success message now.
+        await uow.rollback()
         res.setOutcome(outcomes.SUCCESS)
         return res
       }
@@ -305,10 +319,10 @@ export class UserService implements IUserService {
       // Dehydrate the activated user into a DTO for the repository.
       const userDehydrated = DomainConverter.toDto<UserModel>(userHydrated)
       // Save the activated user.
-      const updateResult = await userRepo.updateOne(userDehydrated)
+      const updateResult = await uow.users.updateOne(userDehydrated)
 
       // Done using the database now.
-      db.release()
+      await uow.commit()
 
       // Hydrate the user instance from the repository results, again.
       const userActivatedHydrated = DomainConverter.fromDto<UserModel>(
@@ -353,17 +367,28 @@ export class UserService implements IUserService {
         return res
       }
 
+      // Use the database.
+      // Get a new instance of uow from the DI container.
+      const uow = container.get<IUnitOfWork>(TYPES.IUnitOfWork)
+      await uow.connect()
+      await uow.begin()
+
       // Try to authenticate in the database.
-      const postgreSQL = new PostgreSQL()
-      const queryResult = await postgreSQL.authenticate(req.item)
+      const queryResult = await uow.users.authenticate(req.item)
 
       // Error if authentication failed.
       if (queryResult.rowCount !== 1) {
+        await uow.rollback()
         res.setOutcome(outcomes.FAIL)
         res.setErr(new Err(`AUTH`, errBase.AUTH)) // Just the short message.
         res.setStatusCode(httpStatus.UNAUTHORIZED)
         return res
       }
+
+      // TODO: Update the user's last login date in the database.
+
+      // Done using the database now.
+      await uow.commit()
 
       // Create a JWT for the user's access.
       const userId = queryResult.rows[0].id

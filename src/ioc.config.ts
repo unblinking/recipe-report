@@ -33,7 +33,7 @@ import { UserController } from './api/controllers/user-controller'
 
 import { DataAccessLayer, IDataAccessLayer } from './data/data-access'
 import { EmailFactory, IEmailFactory } from './data/factories/email-factory'
-import { IUserRepo, UserRepo } from './data/repositories/user-repo'
+import { IUnitOfWork, UnitOfWork } from './data/repositories/unit-of-work'
 
 import { EmailService, IEmailService } from './service/email-service'
 import { IUserService, UserService } from './service/user-service'
@@ -43,13 +43,20 @@ import { TYPES } from './types'
 
 const container = new Container()
 
+// Add the RecipeReport class to the container.
+container.bind<IRecipeReport>(TYPES.IRecipeReport).to(RecipeReport)
+
+// Add the controllers to the container.
+container.bind<IBaseController>(TYPES.IBaseController).to(RootController)
+container.bind<IBaseController>(TYPES.IBaseController).to(UserController)
+
+// Add data handlers to the container.
+container.bind<IDataAccessLayer>(TYPES.IDataAccessLayer).to(DataAccessLayer)
 container.bind<IEmailFactory>(TYPES.IEmailFactory).to(EmailFactory)
+container.bind<IUnitOfWork>(TYPES.IUnitOfWork).to(UnitOfWork).inTransientScope()
+
+// Add services to the container.
 container.bind<IEmailService>(TYPES.IEmailService).to(EmailService)
 container.bind<IUserService>(TYPES.IUserService).to(UserService)
-container.bind<IBaseController>(TYPES.IBaseController).to(UserController)
-container.bind<IBaseController>(TYPES.IBaseController).to(RootController)
-container.bind<IRecipeReport>(TYPES.IRecipeReport).to(RecipeReport)
-container.bind<IDataAccessLayer>(TYPES.IDataAccessLayer).to(DataAccessLayer)
-container.bind<IUserRepo>(TYPES.IRecipeReport).to(UserRepo)
 
 export { container }

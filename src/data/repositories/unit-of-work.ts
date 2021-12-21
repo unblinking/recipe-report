@@ -25,41 +25,61 @@
  * @module
  */
 import { inject, injectable } from 'inversify'
-import { TYPES } from 'types'
+import { PoolClient } from 'pg'
 
+import { Err } from '../../utils'
+
+import { TYPES } from '../../types'
+import { errMsg } from '../constants'
 import { IDataAccessLayer } from '../data-access'
-import { IUserRepo } from './user-repo'
+import { IUserRepo, UserRepo } from './user-repo'
 
 export interface IUnitOfWork {
+  connect(): Promise<void>
   begin(): Promise<void>
   commit(): Promise<void>
   rollback(): Promise<void>
+  users: IUserRepo
 }
 
 @injectable()
 export class UnitOfWork implements IUnitOfWork {
-  private _dataAccessLayer: IDataAccessLayer
-  private _userRepo: IUserRepo
+  private _dal: IDataAccessLayer
+  private _userRepo: IUserRepo | undefined
+  private _client: PoolClient | undefined
 
   public constructor(
     @inject(TYPES.IDataAccessLayer) dataAccessLayer: IDataAccessLayer,
-    @inject(TYPES.IUserRepo) userRepo: IUserRepo,
   ) {
-    this._dataAccessLayer = dataAccessLayer
-    this._userRepo = userRepo
+    this._dal = dataAccessLayer
+  }
+
+  public connect = async (): Promise<void> => {
+    this._client = await this._dal.getClient()
   }
 
   public begin = async (): Promise<void> => {
-    // Begin a transaction.
+    if (!this._client) throw new Err('UOW_CLIENT', errMsg.UOW_CLIENT)
+    await this._client.query('BEGIN')
   }
 
   public commit = async (): Promise<void> => {
-    // Commit a transaction.
+    if (!this._client) throw new Err('UOW_CLIENT', errMsg.UOW_CLIENT)
+    await this._client.query('COMMIT')
+    await this._client.release()
   }
 
   public rollback = async (): Promise<void> => {
-    // Rollback a transaction.
+    if (!this._client) throw new Err('UOW_CLIENT', errMsg.UOW_CLIENT)
+    await this._client.query('ROLLBACK')
+    await this._client.release()
   }
 
-  public users
+  public get users(): IUserRepo {
+    if (!this._client) throw new Err('UOW_CLIENT', errMsg.UOW_CLIENT)
+    if (!this._userRepo) {
+      this._userRepo = new UserRepo(this._client)
+    }
+    return this._userRepo
+  }
 }

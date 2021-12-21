@@ -25,15 +25,7 @@
  */
 import { PoolClient, QueryResult } from 'pg'
 
-interface IRead {
-  readOne(id: string): Promise<QueryResult>
-}
-
-interface IWrite<T> {
-  createOne(item: T): Promise<QueryResult>
-  updateOne(item: T): Promise<QueryResult>
-  deleteOne(id: string): Promise<boolean>
-}
+import { dbTablesValueType } from '../constants'
 
 /**
  * This is the abstract class used as the base repository class for all of the
@@ -63,34 +55,41 @@ interface IWrite<T> {
  * Some ideas were based on the concepts discussed in this article:
  * @see {@link https://medium.com/@erickwendel/generic-repository-with-typescript-and-node-js-731c10a1b98e}
  */
-export abstract class BaseRepo<T> implements IRead, IWrite<T> {
-  public db: PoolClient
-  private table: string
+export interface IBaseRepo<T> {
+  createOne(item: T): Promise<QueryResult>
+  readOne(id: string): Promise<QueryResult>
+  updateOne(item: T): Promise<QueryResult>
+  deleteOne(id: string): Promise<boolean>
+}
 
-  constructor(db: PoolClient, table: string) {
-    this.db = db
-    this.table = table
+export abstract class BaseRepo<T> implements IBaseRepo<T> {
+  public client: PoolClient
+  private _table: dbTablesValueType
+
+  constructor(client: PoolClient, table: dbTablesValueType) {
+    this.client = client
+    this._table = table
   }
 
   public createOne = async (item: T): Promise<QueryResult> => {
-    const query = `INSERT INTO ${this.table} (${this.cols(
+    const query = `INSERT INTO ${this._table} (${this.cols(
       item,
     )}) VALUES (${this.pars(item)}) RETURNING *`
-    const result = await this.db.query(query, this.vals(item))
+    const result = await this.client.query(query, this.vals(item))
     return result
   }
 
   public readOne = async (id: string): Promise<QueryResult> => {
-    const query = `SELECT * FROM ${this.table} WHERE id = $1`
-    const result = await this.db.query(query, [id])
+    const query = `SELECT * FROM ${this._table} WHERE id = $1`
+    const result = await this.client.query(query, [id])
     return result
   }
 
   public updateOne = async (item: T): Promise<QueryResult> => {
-    const query = `UPDATE ${this.table} SET (${this.cols(item)}) = (${this.pars(
+    const query = `UPDATE ${this._table} SET (${this.cols(
       item,
-    )}) WHERE id = $1 RETURNING *`
-    const result = await this.db.query(query, this.vals(item))
+    )}) = (${this.pars(item)}) WHERE id = $1 RETURNING *`
+    const result = await this.client.query(query, this.vals(item))
     return result
   }
 
