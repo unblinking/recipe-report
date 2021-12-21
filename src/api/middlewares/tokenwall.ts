@@ -46,7 +46,7 @@ export const tokenwall = (
   try {
     const token: string = req.headers.token as string
     if (!token) throw new Err(`TOKENWALL_UNDEF`, errMsg.TOKENWALL_UNDEF)
-    const jwt = new JwtService(process.env.JWT_SECRET)
+    const jwt = new JwtService()
     const payload: Payload = jwt.decode(token)
 
     // Verify that the token is for access.

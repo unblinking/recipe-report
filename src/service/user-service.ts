@@ -212,7 +212,7 @@ export class UserService implements IUserService {
       )
 
       // Create a JWT for the new user's activation email.
-      const jwt = new JwtService(process.env.JWT_SECRET)
+      const jwt = new JwtService()
       const token = jwt.encode(
         userHydrated.id as string,
         tokenType.ACTIVATION,
@@ -256,7 +256,7 @@ export class UserService implements IUserService {
       // Decode and decrypt the token.
       let payload: Payload
       try {
-        const jwt = new JwtService(process.env.JWT_SECRET)
+        const jwt = new JwtService()
         payload = jwt.decode(req.item?.token)
       } catch {
         res.setOutcome(outcomes.FAIL)
@@ -393,7 +393,7 @@ export class UserService implements IUserService {
       // Create a JWT for the user's access.
       const userId = queryResult.rows[0].id
       const ttl = new Date().getTime() + 24 * 60 * 60 * 1000 // 24 hours.
-      const jwt = new JwtService(process.env.JWT_SECRET)
+      const jwt = new JwtService()
       const token = jwt.encode(userId, tokenType.ACCESS, ttl)
 
       // Put the token into an authentication model.

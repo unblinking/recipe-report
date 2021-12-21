@@ -53,12 +53,6 @@ export interface Payload {
 }
 
 export class JwtService implements IJwtService {
-  private _secret: string
-
-  constructor(secret: string | undefined) {
-    this._secret = secret ? secret : (process.env.JWT_SECRET as string)
-  }
-
   /**
    * Encode a JWT and encrypt its payload.
    * @returns A JWT containing an encrypted payload.
@@ -68,7 +62,10 @@ export class JwtService implements IJwtService {
     type: tokenType,
     ttl: number = new Date().getTime() + 60 * 60 * 24 * 1000, // 24 hours.
   ): string => {
+    // Determine our secret, from environment variable.
+    const secret: string = process.env.JWT_SECRET as string
     // Verify that we aren't missing anything important.
+    if (!secret) throw new Err(`JWT_SECRET_KEY`, errMsg.JWT_SECRET_KEY)
     if (!id) throw new Err(`JWT_USER_ID`, errMsg.JWT_USER_ID)
     // Note: tokenType.NONE is zero, a falsey value, so that would cause
     // an error here just as if type was undefined.
@@ -80,7 +77,7 @@ export class JwtService implements IJwtService {
     const stringified: string = JSON.stringify(payload)
     const encrypted: string = encrypt(stringified)
     // Encode a JWT, containing the encrypted payload, and return it.
-    const encoded: string = jwt.encode(encrypted, this._secret, 'HS512')
+    const encoded: string = jwt.encode(encrypted, secret, 'HS512')
     return encoded
   }
 
@@ -89,10 +86,13 @@ export class JwtService implements IJwtService {
    * @returns A decrypted payload from a JWT.
    */
   public decode = (token: string | undefined): Payload => {
+    // Determine our secret, from environment variable.
+    const secret: string = process.env.JWT_SECRET as string
     // Verify that we aren't missing anything important.
+    if (!secret) throw new Err(`JWT_SECRET_KEY`, errMsg.JWT_SECRET_KEY)
     if (!token) throw new Err(`JWT_TOKEN`, errMsg.JWT_TOKEN)
     // Decode the JWT. The signature of the token is verified.
-    const decoded: string = jwt.decode(token, this._secret, false, 'HS512')
+    const decoded: string = jwt.decode(token, secret, false, 'HS512')
     // Decrypt and parse the payload.
     const decrypted: string = decrypt(decoded)
     const parsed: Payload = JSON.parse(decrypted)
