@@ -30,7 +30,7 @@ import {
   errBaseValueType,
   errMessageKeyType,
   errMessageValueType,
-} from './data/constants'
+} from 'data/constants'
 
 /**
  * What rolls down stairs, Alone or in pairs, And over your neightbor's dog?
@@ -45,7 +45,7 @@ import {
  * @see {@link https://github.com/huafu/bs-logger bs-logger}
  */
 export const log = createLogger({
-  targets: process.env.MY_LOG_TARGETS,
+  targets: process.env.RR_LOG_TARGETS,
 })
 
 /**

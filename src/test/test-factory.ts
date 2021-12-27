@@ -25,33 +25,44 @@
  *
  * @module
  */
-import { IUserModel, UserModel } from '../domain/models/user-model'
-
-// import { encodeToken } from '../wrappers/token'
-
-const userId = `9aa98e23-24ec-4403-8517-ca27968cfe25`
+import { IUserDto, User } from 'domain/models/user'
+import { EmailAddress } from 'domain/value-objects/email-address'
+import { Password } from 'domain/value-objects/password'
+import { Username } from 'domain/value-objects/username'
 
 export class TestFactory {
-  public userNewDto(): IUserModel {
-    const userDto: IUserModel = {
-      id: userId,
-      username: `noreplyuser`,
+  public userNewDto(): IUserDto {
+    const userDto: IUserDto = {
+      name: `noreplyuser`,
       password: `$2a$08$PPhEIhC/lPgUMRAXpvrYL.ehrApeV7pdsGU6/DSufUFvuhiFtqR4C`,
       email_address: `noreply@recipe.report`,
-      date_created: new Date(),
+      date_created: new Date().toString(),
     }
     return userDto
   }
 
-  public userNew(): UserModel {
-    const userDto = this.userNewDto()
-    const user: UserModel = new UserModel(userDto)
+  public userNew(): User {
+    const user: User = User.create({
+      name: new Username(`noreplyuser`),
+      password: new Password(
+        `$2a$08$PPhEIhC/lPgUMRAXpvrYL.ehrApeV7pdsGU6/DSufUFvuhiFtqR4C`,
+      ),
+      email_address: new EmailAddress(`noreply@recipe.report`),
+      date_created: new Date(),
+    })
     return user
   }
 
-  public userActivated(): UserModel {
-    const user = this.userNew()
-    user.setDateActivated(new Date())
+  public userActivated(): User {
+    const user: User = User.create({
+      name: new Username(`noreplyuser`),
+      password: new Password(
+        `$2a$08$PPhEIhC/lPgUMRAXpvrYL.ehrApeV7pdsGU6/DSufUFvuhiFtqR4C`,
+      ),
+      email_address: new EmailAddress(`noreply@recipe.report`),
+      date_created: new Date(),
+      date_activated: new Date(),
+    })
     return user
   }
 

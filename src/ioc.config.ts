@@ -25,38 +25,36 @@
  * @module
  */
 import { Container } from 'inversify'
-import 'reflect-metadata'
 
-import { IBaseController } from './api/controllers/base-controller'
-import { RootController } from './api/controllers/root-controller'
-import { UserController } from './api/controllers/user-controller'
+import { DataAccessLayer, IDataAccessLayer } from 'data/data-access'
+import { IUnitOfWork, UnitOfWork } from 'data/repositories/unit-of-work'
 
-import { DataAccessLayer, IDataAccessLayer } from './data/data-access'
-import { EmailFactory, IEmailFactory } from './data/factories/email-factory'
-import { IUnitOfWork, UnitOfWork } from './data/repositories/unit-of-work'
+import { EmailService, IEmailService } from 'service/email-service'
+import { IJwtService, JwtService } from 'service/jwt-service'
+import { IUserService, UserService } from 'service/user-service'
 
-import { EmailService, IEmailService } from './service/email-service'
-import { IUserService, UserService } from './service/user-service'
+import { IBaseController } from 'api/controllers/base-controller'
+import { RootController } from 'api/controllers/root-controller'
+import { UserController } from 'api/controllers/user-controller'
 
-import { IRecipeReport, RecipeReport } from './recipereport'
-import { TYPES } from './types'
+import { IRecipeReport, RecipeReport } from 'root/recipereport'
 
-const container = new Container()
+import { SYMBOLS } from './symbols'
+
+export const container = new Container()
 
 // Add the RecipeReport class to the container.
-container.bind<IRecipeReport>(TYPES.IRecipeReport).to(RecipeReport)
+container.bind<IRecipeReport>(SYMBOLS.IRecipeReport).to(RecipeReport)
 
 // Add the controllers to the container.
-container.bind<IBaseController>(TYPES.IBaseController).to(RootController)
-container.bind<IBaseController>(TYPES.IBaseController).to(UserController)
+container.bind<IBaseController>(SYMBOLS.IBaseController).to(RootController)
+container.bind<IBaseController>(SYMBOLS.IBaseController).to(UserController)
 
 // Add data handlers to the container.
-container.bind<IDataAccessLayer>(TYPES.IDataAccessLayer).to(DataAccessLayer)
-container.bind<IEmailFactory>(TYPES.IEmailFactory).to(EmailFactory)
-container.bind<IUnitOfWork>(TYPES.IUnitOfWork).to(UnitOfWork).inTransientScope()
+container.bind<IDataAccessLayer>(SYMBOLS.IDataAccessLayer).to(DataAccessLayer)
+container.bind<IUnitOfWork>(SYMBOLS.IUnitOfWork).to(UnitOfWork)
 
 // Add services to the container.
-container.bind<IEmailService>(TYPES.IEmailService).to(EmailService)
-container.bind<IUserService>(TYPES.IUserService).to(UserService)
-
-export { container }
+container.bind<IEmailService>(SYMBOLS.IEmailService).to(EmailService)
+container.bind<IJwtService>(SYMBOLS.IJwtService).to(JwtService)
+container.bind<IUserService>(SYMBOLS.IUserService).to(UserService)

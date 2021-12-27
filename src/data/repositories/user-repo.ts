@@ -25,79 +25,89 @@
  */
 import { PoolClient, QueryResult } from 'pg'
 
-import { IUserAuthenticationRequest } from '../../domain/models/service-requests'
-import { UserModel } from '../../domain/models/user-model'
+import { IUser, User } from 'domain/models/user'
+import { UniqueId } from 'domain/value-objects/uid'
 
-import { dbTables } from '../constants'
-import { BaseRepo, IBaseRepo } from './base-repo'
+import { dbTables, errBase, errMsg } from 'data/constants'
+import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
 
-export interface IUserRepo extends IBaseRepo<UserModel> {
-  countByUsername(username: string): Promise<number>
-  countByEmailAddress(email_address: string): Promise<number>
-  hashAndSalt(password: string): Promise<QueryResult>
-  authenticate(props: IUserAuthenticationRequest): Promise<QueryResult>
+import { Err } from 'root/utils'
+
+export interface IUserRepo extends IBaseRepo {
+  create(user: IUser): Promise<User>
+  authenticate(user: IUser): Promise<User>
 }
 
-export class UserRepo extends BaseRepo<UserModel> implements IUserRepo {
+export class UserRepo extends BaseRepo<User> implements IUserRepo {
   constructor(client: PoolClient) {
     super(client, dbTables.USERS)
   }
 
-  public countByUsername = async (username: string): Promise<number> => {
-    const query = `SELECT username FROM ${dbTables.USERS} WHERE username = $1`
-    const result = await this.client.query(query, [username])
-    const count = result.rowCount
-    return count
+  public create = async (user: IUser): Promise<User> => {
+    // Verify no existing user by username or email address.
+    const countName = await this._countByColumn('name', user.name.toString())
+    if (countName > 0) {
+      throw new Err(`REG_USRNAME_USED`, errMsg.REG_USRNAME_USED)
+    }
+    const countEmail = await this._countByColumn(
+      'email_address',
+      user.email_address.toString(),
+    )
+    if (countEmail > 0) {
+      throw new Err(`REG_EMAIL_USED`, errMsg.REG_EMAIL_USED)
+    }
+
+    // Save the user into the database.
+    const query = `SELECT * FROM rr.users_create($1, $2, $3, $4)`
+    const result: QueryResult = await this.client.query(query, [
+      user.name,
+      user.password,
+      user.email_address,
+      user.role,
+    ])
+
+    // Return domain object from database query results.
+    return User.create(result.rows[0], result.rows[0].id)
   }
 
-  public countByEmailAddress = async (
-    email_address: string,
-  ): Promise<number> => {
-    const query = `SELECT email_address FROM ${dbTables.USERS} WHERE email_address = $1`
-    const result = await this.client.query(query, [email_address])
-    const count = result.rowCount
-    return count
-  }
-
-  /**
-   * Hash and salt a string.
-   *
-   * The pgcrypto module provides cryptographic functions for PostgreSQL.
-   * Using the pgcrypto crypt function, and gen_salt with the blowfish algorithm
-   * and iteration count of 8.
-   *
-   * @memberof DataAccessLayer
-   * @see {@link https://www.postgresql.org/docs/8.3/pgcrypto.html pgcrypto}
-   * @returns The hashed and salted string.
-   */
-  public hashAndSalt = async (password: string): Promise<QueryResult> => {
-    const query: string = `SELECT crypt($1, gen_salt('bf', 8))`
-    // Use this.pool.query, so that this query isn't logged like other queries.
-    const result = await this.client.query(query, [password])
-    return result
-  }
-
-  /**
-   * Authenticate a user.
-   *
-   * Given a user's email and plain text password, use the pgcrypto module to
-   * determine if the password is correct. It will compare the password hash
-   * that we have in the database to a hash of the plaintext password we were
-   * given.
-   *
-   * @memberof DataAccessLayer
-   * @returns The QueryResult object containing the user.id value for the
-   * authenticated user, or no rows if authentication failed.
-   */
-  public authenticate = async (
-    props: IUserAuthenticationRequest,
-  ): Promise<QueryResult> => {
+  public authenticate = async (user: IUser): Promise<User> => {
     const query = `SELECT id FROM users WHERE email_address = $1 AND password = crypt($2, password)`
     // Use this.pool.query, so that this query isn't logged like other queries.
-    const result = await this.client.query(query, [
-      props.email_address,
-      props.password,
+    const result: QueryResult = await this.client.query(query, [
+      user.email_address,
+      user.password,
     ])
-    return result
+    if (result.rowCount !== 1) {
+      throw new Err(`AUTH`, errBase.AUTH)
+    }
+    // Update the authenticated user's last login date in the database.
+    await this._lastLogin(result.rows[0].id)
+
+    // Return domain object from database query results.
+    return User.create(result.rows[0], result.rows[0].id)
   }
+
+  //#region Private methods
+
+  private _countByColumn = async (
+    column: string,
+    value: string,
+  ): Promise<number> => {
+    const query = `SELECT $1 FROM ${dbTables.USERS} WHERE $1 = $2`
+    const result = await this.client.query(query, [column, value])
+    const count = result.rowCount
+    return count
+  }
+
+  private _lastLogin = async (id: UniqueId): Promise<void> => {
+    const query: string = `UPDATE ${dbTables.USERS} SET $1 = $2 WHERE $3 = $4`
+    await this.client.query(query, [
+      `date_last_login`,
+      Date.toString(),
+      `id`,
+      id.toString(),
+    ])
+  }
+
+  //#endregion
 }

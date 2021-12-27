@@ -1,5 +1,5 @@
 /**
- * The application entry point and composition root.
+ * Inversion-of-control symbols.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -23,15 +23,13 @@
  *
  * @module
  */
-import { IRecipeReport } from 'root/recipereport'
 
-import { container } from './ioc.config'
-import { SYMBOLS } from './symbols'
-
-// Composition root: https://blog.ploeh.dk/2011/07/28/CompositionRoot/
-// Time to compose the entire object graph! Exciting!
-const recipeReport = container.get<IRecipeReport>(SYMBOLS.IRecipeReport)
-// const recipeReport = new RecipeReport()
-
-// Now we pull down on the propeller and see if this thing will start.
-recipeReport.start()
+export const SYMBOLS = {
+  IRecipeReport: Symbol.for('IRecipeReport'),
+  IBaseController: Symbol.for('IBaseConroller'),
+  IDataAccessLayer: Symbol.for('IDataAccessLayer'),
+  IUnitOfWork: Symbol.for('IUnitOfWork'),
+  IEmailService: Symbol.for('IEmailService'),
+  IJwtService: Symbol.for('IJwtService'),
+  IUserService: Symbol.for('IUserService'),
+}

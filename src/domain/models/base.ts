@@ -1,5 +1,5 @@
 /**
- * User authentication model.
+ * Base model abstract class.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -23,35 +23,14 @@
  *
  * @module
  */
+import { UniqueId } from 'domain/value-objects/uid'
 
-/**
- * User authentication model interface.
- *
- * @export
- * @interface IAuthenticationModel
- */
-export interface IAuthenticationModel {
-  token?: string
-}
+export abstract class Model<T> {
+  protected readonly _id: UniqueId
+  protected _props: T
 
-/**
- * User authentication model concrete class.
- *
- * @export
- * @class AuthenticationModel
- * @implements {IAuthenticationModel}
- */
-export class AuthenticationModel implements IAuthenticationModel {
-  private _state: IAuthenticationModel = {}
-
-  constructor(props: IAuthenticationModel) {
-    this.setToken(props.token)
-  }
-
-  public get token(): string | undefined {
-    return this._state.token
-  }
-  public setToken(token: string | undefined): void {
-    this._state.token = token
+  public constructor(props: T, id?: UniqueId) {
+    this._id = id ? id : new UniqueId()
+    this._props = props
   }
 }

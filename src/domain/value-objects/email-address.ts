@@ -1,5 +1,5 @@
 /**
- * The application entry point and composition root.
+ * Email address value object.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -23,15 +23,21 @@
  *
  * @module
  */
-import { IRecipeReport } from 'root/recipereport'
 
-import { container } from './ioc.config'
-import { SYMBOLS } from './symbols'
+export class EmailAddress {
+  private _value: string
 
-// Composition root: https://blog.ploeh.dk/2011/07/28/CompositionRoot/
-// Time to compose the entire object graph! Exciting!
-const recipeReport = container.get<IRecipeReport>(SYMBOLS.IRecipeReport)
-// const recipeReport = new RecipeReport()
+  public constructor(value: string) {
+    this._value = value
+  }
 
-// Now we pull down on the propeller and see if this thing will start.
-recipeReport.start()
+  public get email_address(): string {
+    return this._value
+  }
+
+  public valid(value: string): boolean {
+    if (!value) return false
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return regex.test(value)
+  }
+}

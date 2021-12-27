@@ -27,12 +27,12 @@
 import { inject, injectable } from 'inversify'
 import { PoolClient } from 'pg'
 
-import { Err } from '../../utils'
+import { errMsg } from 'data/constants'
+import { IDataAccessLayer } from 'data/data-access'
+import { IUserRepo, UserRepo } from 'data/repositories/user-repo'
 
-import { TYPES } from '../../types'
-import { errMsg } from '../constants'
-import { IDataAccessLayer } from '../data-access'
-import { IUserRepo, UserRepo } from './user-repo'
+import { SYMBOLS } from 'root/symbols'
+import { Err } from 'root/utils'
 
 export interface IUnitOfWork {
   connect(): Promise<void>
@@ -49,7 +49,7 @@ export class UnitOfWork implements IUnitOfWork {
   private _client: PoolClient | undefined
 
   public constructor(
-    @inject(TYPES.IDataAccessLayer) dataAccessLayer: IDataAccessLayer,
+    @inject(SYMBOLS.IDataAccessLayer) dataAccessLayer: IDataAccessLayer,
   ) {
     this._dal = dataAccessLayer
   }
@@ -66,13 +66,13 @@ export class UnitOfWork implements IUnitOfWork {
   public commit = async (): Promise<void> => {
     if (!this._client) throw new Err('UOW_CLIENT', errMsg.UOW_CLIENT)
     await this._client.query('COMMIT')
-    await this._client.release()
+    this._client.release()
   }
 
   public rollback = async (): Promise<void> => {
     if (!this._client) throw new Err('UOW_CLIENT', errMsg.UOW_CLIENT)
     await this._client.query('ROLLBACK')
-    await this._client.release()
+    this._client.release()
   }
 
   public get users(): IUserRepo {

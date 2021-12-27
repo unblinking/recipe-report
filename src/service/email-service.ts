@@ -23,36 +23,31 @@
  *
  * @module
  */
-import { inject, injectable } from 'inversify'
+import { injectable } from 'inversify'
 import { EmailParams, MailerSend, Recipient, Sender } from 'mailer-send-ts'
+import 'reflect-metadata'
 
-import { errMsg } from '../data/constants'
-import { IEmailFactory } from '../data/factories/email-factory'
+import { Email } from 'domain/models/email'
+import { EmailAddress } from 'domain/value-objects/email-address'
 
-import { EmailModel } from '../domain/models/email-model'
-import { UserModel } from '../domain/models/user-model'
+import { errMsg } from 'data/constants'
 
-import { Err, log } from '../utils'
-
-import { TYPES } from '../types'
+import { Err, log } from 'root/utils'
 
 export interface IEmailService {
-  sendActivation(user: UserModel, token: string): Promise<void>
+  sendActivation(emailAddress: EmailAddress, token: string): Promise<void>
 }
 
 @injectable()
 export class EmailService implements IEmailService {
-  private _emailFactory: IEmailFactory
-
-  constructor(@inject(TYPES.IEmailFactory) emailFactory: IEmailFactory) {
-    this._emailFactory = emailFactory
-  }
-
-  public async sendActivation(user: UserModel, token: string): Promise<void> {
+  public async sendActivation(
+    emailAddress: EmailAddress,
+    token: string,
+  ): Promise<void> {
     // Instantiate the email object.
-    const email = this._emailFactory.activation(user, token)
+    const email = Email.createActivation(emailAddress, token)
     // Send the email.
-    log.info(`Sending activation email to user ${user.id}.`)
+    log.info(`Sending activation email to ${emailAddress}.`)
     await this._sendTransactional(email)
   }
 
@@ -60,7 +55,7 @@ export class EmailService implements IEmailService {
    * Send an email.
    * @param {EmailModel} Email model.
    */
-  private async _sendTransactional(email: EmailModel): Promise<void> {
+  private async _sendTransactional(email: Email): Promise<void> {
     log.trace(`email-transactional-service send()`)
     if (!email.from) {
       throw new Err(`EMAIL_FROM`, errMsg.EMAIL_FROM)
@@ -75,12 +70,16 @@ export class EmailService implements IEmailService {
       throw new Err(`EMAIL_BODY`, errMsg.EMAIL_BODY)
     }
     if (process.env.NODE_ENV === `production`) {
-      if (!process.env.MAILER_SEND_KEY) {
+      if (!process.env.RR_MAILER_SEND_KEY) {
         throw new Err(`EMAIL_MS_API_KEY`, errMsg.EMAIL_MS_API_KEY)
       }
-      const mailerSend = new MailerSend({ apiKey: process.env.MAILER_SEND_KEY })
-      const sentFrom = new Sender(email.from, `Recipe.Report`)
-      const recipients = [new Recipient(email.to, email.to)]
+      const mailerSend = new MailerSend({
+        apiKey: process.env.RR_MAILER_SEND_KEY,
+      })
+      const sentFrom = new Sender(email.from.toString(), `Recipe.Report`)
+      const recipients = [
+        new Recipient(email.to.toString(), email.to.toString()),
+      ]
       const emailParams = new EmailParams()
         .setFrom(sentFrom)
         .setTo(recipients)

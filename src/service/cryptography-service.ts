@@ -37,13 +37,13 @@
  */
 import Crypto from 'crypto'
 
-import { errMsg } from '../data/constants'
+import { errMsg } from 'data/constants'
 
-import { Err } from '../utils'
+import { Err } from 'root/utils'
 
-const key: string = process.env.CRYPTO_KEY as string
-const ivLength: number = parseInt(process.env.CRYPTO_IV_LENGTH as string, 10)
-const algorithm: string = process.env.CRYPTO_ALGO as string
+const key: string = process.env.RR_CRYPTO_KEY as string
+const ivLength: number = parseInt(process.env.RR_CRYPTO_IV_LENGTH as string, 10)
+const algorithm: string = process.env.RR_CRYPTO_ALGO as string
 
 const varCheck = (): void => {
   if (!key) throw new Err(`CRYPTO_KEY`, errMsg.CRYPTO_KEY)

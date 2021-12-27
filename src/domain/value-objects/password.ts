@@ -1,5 +1,5 @@
 /**
- * Password service.
+ * Password value object.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -33,6 +33,9 @@ import {
 import zxcvbnCommonPackage from '@zxcvbn-ts/language-common'
 import zxcvbnEnPackage from '@zxcvbn-ts/language-en'
 
+import { EmailAddress } from 'domain/value-objects/email-address'
+import { Username } from 'domain/value-objects/username'
+
 export interface PasswordResult {
   success: boolean
   message?: string
@@ -50,26 +53,20 @@ export interface ZxcvbnResult {
   calcTime: number
 }
 
-interface IPasswordService {
-  confirmStrength(
-    password: string,
-    email: string,
-    username: string,
-  ): Promise<PasswordResult>
-}
+export class Password {
+  private _value: string
 
-export class PasswordService implements IPasswordService {
-  /**
-   * Check the complexity of a new user password before allowing it.
-   * @param password
-   * @param email
-   * @param username
-   * @returns PasswordResult
-   */
-  public async confirmStrength(
-    password: string,
-    email: string,
-    username: string,
+  public constructor(value: string) {
+    this._value = value
+  }
+
+  public get id(): string {
+    return this._value
+  }
+
+  public async isStrong(
+    name: Username,
+    email_address: EmailAddress,
   ): Promise<PasswordResult> {
     const options = {
       translations: zxcvbnEnPackage.translations,
@@ -77,11 +74,11 @@ export class PasswordService implements IPasswordService {
       dictionary: {
         ...zxcvbnCommonPackage.dictionary,
         ...zxcvbnEnPackage.dictionary,
-        userInputs: [email, username],
+        userInputs: [name.toString(), email_address.toString()],
       },
     }
     ZxcvbnOptions.setOptions(options)
-    const result: ZxcvbnResult = await zxcvbn(password)
+    const result: ZxcvbnResult = await zxcvbn(this._value)
     const score: number = result.score
     const warnings: number = result.feedback.warning ? 1 : 0
     const suggestions: number = result.feedback.suggestions.length

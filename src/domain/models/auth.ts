@@ -1,5 +1,5 @@
 /**
- * Inversion-of-control types (symbols).
+ * User authentication model.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -23,15 +23,32 @@
  *
  * @module
  */
+import { Model } from 'domain/models/base'
 
-const TYPES = {
-  IEmailFactory: Symbol.for('IEmailFactory'),
-  IEmailService: Symbol.for('IEmailService'),
-  IUserService: Symbol.for('IUserService'),
-  IRecipeReport: Symbol.for('IRecipeReport'),
-  IBaseController: Symbol.for('IBaseConroller'),
-  IDataAccessLayer: Symbol.for('IDataAccessLayer'),
-  IUnitOfWork: Symbol.for('IUnitOfWork'),
+import { errMsg } from 'data/constants'
+
+import { Err } from 'root/utils'
+
+export interface IAuth {
+  token: string
 }
 
-export { TYPES }
+export class Auth extends Model<IAuth> {
+  public get token(): string {
+    return this._props.token
+  }
+
+  // Private constructor to control instantiation via factory method.
+  private constructor(props: IAuth) {
+    super(props)
+  }
+
+  // Factory method here instead of a factory class.
+  public static create(props: IAuth): Auth {
+    if (!props.token) {
+      throw new Err(`TOKEN_INVALID`, errMsg.TOKEN_INVALID)
+    }
+
+    return new Auth(props)
+  }
+}

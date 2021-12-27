@@ -30,17 +30,18 @@
 import { json, RequestHandler } from 'express'
 import Helmet from 'helmet'
 import { injectable, multiInject } from 'inversify'
+import 'reflect-metadata'
 
-import { listen } from './api/app'
-import { IBaseController } from './api/controllers/base-controller'
-import { callHistory } from './api/middlewares/callhistory'
+import { errMsg } from 'data/constants'
+import { graffiti } from 'data/factories/fun-factory'
 
-import { errMsg } from './data/constants'
-import { graffiti } from './data/factories/fun-factory'
+import { listen } from 'api/app'
+import { IBaseController } from 'api/controllers/base-controller'
+import { callHistory } from 'api/middlewares/callhistory'
 
-import { Err, log } from './utils'
+import { Err, log } from 'root/utils'
 
-import { TYPES } from './types'
+import { SYMBOLS } from './symbols'
 
 export interface IRecipeReport {
   start(): void
@@ -51,7 +52,7 @@ export class RecipeReport implements IRecipeReport {
   private _controllers: IBaseController[]
 
   public constructor(
-    @multiInject(TYPES.IBaseController) controllers: IBaseController[],
+    @multiInject(SYMBOLS.IBaseController) controllers: IBaseController[],
   ) {
     this._controllers = controllers
   }
@@ -63,32 +64,33 @@ export class RecipeReport implements IRecipeReport {
     if (!process.env.NODE_ENV) {
       log.warn(`NODE_ENV is not set. Assuming environment is not production.`)
     }
-    if (!process.env.PORT) throw new Err(`ENV_PORT`, errMsg.ENV_PORT)
-    if (!process.env.CRYPTO_KEY)
-      throw new Err(`ENV_CRYPTO_KEY`, errMsg.ENV_CRYPTO_KEY)
-    if (!process.env.CRYPTO_ALGO)
-      throw new Err(`ENV_CRYPTO_ALGO`, errMsg.ENV_CRYPTO_ALGO)
-    if (!process.env.CRYPTO_IV_LENGTH)
-      throw new Err(`ENV_CRYPTO_IV_LENGTH`, errMsg.ENV_CRYPTO_IV_LENGTH)
-    if (!process.env.JWT_SECRET)
-      throw new Err(`ENV_JWT_SECRET`, errMsg.ENV_JWT_SECRET)
-    if (!process.env.DB_USER) throw new Err(`ENV_DB_USER`, errMsg.ENV_DB_USER)
-    if (!process.env.DB_HOST) throw new Err(`ENV_DB_HOST`, errMsg.ENV_DB_HOST)
-    if (!process.env.DB_DATABASE)
-      throw new Err(`ENV_DB_DATABASE`, errMsg.ENV_DB_DATABASE)
-    if (!process.env.DB_PASSWORD)
-      throw new Err(`ENV_DB_PASSWORD`, errMsg.ENV_DB_PASSWORD)
-    if (!process.env.DB_PORT) throw new Err(`ENV_DB_PORT`, errMsg.ENV_DB_PORT)
-    if (!process.env.FLYWAY_URL) {
-      log.warn(`FLYWAY_URL is not set. Database migrations are disabled.`)
+    if (!process.env.RR_PORT) throw new Err(`ENV_RR_PORT`, errMsg.ENV_RR_PORT)
+    if (!process.env.RR_CRYPTO_KEY)
+      throw new Err(`ENV_RR_CRYPTO_KEY`, errMsg.ENV_RR_CRYPTO_KEY)
+    if (!process.env.RR_CRYPTO_ALGO)
+      throw new Err(`ENV_RR_CRYPTO_ALGO`, errMsg.ENV_RR_CRYPTO_ALGO)
+    if (!process.env.RR_CRYPTO_IV_LENGTH)
+      throw new Err(`ENV_RR_CRYPTO_IV_LENGTH`, errMsg.ENV_RR_CRYPTO_IV_LENGTH)
+    if (!process.env.RR_JWT_SECRET)
+      throw new Err(`ENV_RR_JWT_SECRET`, errMsg.ENV_RR_JWT_SECRET)
+    if (!process.env.RRDB_USER)
+      throw new Err(`ENV_RRDB_USER`, errMsg.ENV_RRDB_USER)
+    if (!process.env.RRDB_HOST)
+      throw new Err(`ENV_RRDB_HOST`, errMsg.ENV_RRDB_HOST)
+    if (!process.env.RRDB_DATABASE)
+      throw new Err(`ENV_RRDB_DATABASE`, errMsg.ENV_RRDB_DATABASE)
+    if (!process.env.RRDB_PASSWORD)
+      throw new Err(`ENV_RRDB_PASSWORD`, errMsg.ENV_RRDB_PASSWORD)
+    if (!process.env.RRDB_PORT)
+      throw new Err(`ENV_RRDB_PORT`, errMsg.ENV_RRDB_PORT)
+    if (!process.env.RRDB_URL) {
+      log.warn(`RRDB_URL is not set. Database migrations are disabled.`)
     }
-    if (!process.env.FLYWAY_MIGRATIONS) {
-      log.warn(
-        `FLYWAY_MIGRATIONS is not set. Database migrations are disabled.`,
-      )
+    if (!process.env.RRDB_MIGRATIONS) {
+      log.warn(`RRDB_MIGRATIONS is not set. Database migrations are disabled.`)
     }
-    if (!process.env.MY_LOG_TARGETS) {
-      log.warn(`MY_LOG_TARGETS is not set. Logging is disabled.`)
+    if (!process.env.RR_LOG_TARGETS) {
+      log.warn(`RR_LOG_TARGETS is not set. Logging is disabled.`)
     }
   }
 
@@ -106,7 +108,7 @@ export class RecipeReport implements IRecipeReport {
         callHistory,
       ]
       const controllers: Array<IBaseController> = this._controllers
-      const port: number = parseInt(process.env.PORT as string, 10)
+      const port: number = parseInt(process.env.RR_PORT as string, 10)
       listen(middlewares, controllers, port)
     } catch (e) {
       log.fatal((e as Error).message)

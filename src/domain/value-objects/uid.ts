@@ -1,5 +1,5 @@
 /**
- * Email model.
+ * UUID value object.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -23,49 +23,21 @@
  *
  * @module
  */
+import { v4 as uuid, validate } from 'uuid'
 
-export interface IEmailModel {
-  from?: string
-  to?: string
-  subject?: string
-  body?: string
-}
+export class UniqueId {
+  private _value: string
 
-export class EmailModel implements IEmailModel {
-  private _state: IEmailModel = {}
-
-  constructor(props: IEmailModel) {
-    this.set_from(props.from)
-    this.set_to(props.to)
-    this.set_subject(props.subject)
-    this.set_body(props.body)
+  public constructor(value?: string) {
+    this._value = value ? value : uuid()
   }
 
-  public get from(): string | undefined {
-    return this._state.from
-  }
-  public set_from(from: string | undefined): void {
-    this._state.from = from
+  public get id(): string {
+    return this._value
   }
 
-  public get to(): string | undefined {
-    return this._state.to
-  }
-  public set_to(to: string | undefined): void {
-    this._state.to = to
-  }
-
-  public get subject(): string | undefined {
-    return this._state.subject
-  }
-  public set_subject(subject: string | undefined): void {
-    this._state.subject = subject
-  }
-
-  public get body(): string | undefined {
-    return this._state.body
-  }
-  public set_body(body: string | undefined): void {
-    this._state.body = body
+  public valid(): boolean {
+    if (!this.id) return false
+    return validate(this.id)
   }
 }

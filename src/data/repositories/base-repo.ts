@@ -25,7 +25,7 @@
  */
 import { PoolClient, QueryResult } from 'pg'
 
-import { dbTablesValueType } from '../constants'
+import { dbTablesValueType } from 'data/constants'
 
 /**
  * This is the abstract class used as the base repository class for all of the
@@ -55,47 +55,51 @@ import { dbTablesValueType } from '../constants'
  * Some ideas were based on the concepts discussed in this article:
  * @see {@link https://medium.com/@erickwendel/generic-repository-with-typescript-and-node-js-731c10a1b98e}
  */
-export interface IBaseRepo<T> {
+export interface IBaseRepo {
+  client: PoolClient
+  /*
   createOne(item: T): Promise<QueryResult>
   readOne(id: string): Promise<QueryResult>
   updateOne(item: T): Promise<QueryResult>
-  deleteOne(id: string): Promise<boolean>
+  deleteOne(id: string): Promise<QueryResult>
+  */
 }
 
-export abstract class BaseRepo<T> implements IBaseRepo<T> {
+export abstract class BaseRepo<T> implements IBaseRepo {
   public client: PoolClient
-  private _table: dbTablesValueType
+  protected _table: dbTablesValueType
 
   constructor(client: PoolClient, table: dbTablesValueType) {
     this.client = client
     this._table = table
   }
 
-  public createOne = async (item: T): Promise<QueryResult> => {
-    const query = `INSERT INTO ${this._table} (${this.cols(
+  protected _createOne = async (item: T): Promise<QueryResult> => {
+    const query = `INSERT INTO ${this._table} (${this._cols(
       item,
-    )}) VALUES (${this.pars(item)}) RETURNING *`
-    const result = await this.client.query(query, this.vals(item))
+    )}) VALUES (${this._pars(item)}) RETURNING *`
+    const result = await this.client.query(query, this._vals(item))
     return result
   }
 
-  public readOne = async (id: string): Promise<QueryResult> => {
+  protected _readOne = async (id: string): Promise<QueryResult> => {
     const query = `SELECT * FROM ${this._table} WHERE id = $1`
     const result = await this.client.query(query, [id])
     return result
   }
 
-  public updateOne = async (item: T): Promise<QueryResult> => {
-    const query = `UPDATE ${this._table} SET (${this.cols(
+  protected _updateOne = async (item: T): Promise<QueryResult> => {
+    const query = `UPDATE ${this._table} SET (${this._cols(
       item,
-    )}) = (${this.pars(item)}) WHERE id = $1 RETURNING *`
-    const result = await this.client.query(query, this.vals(item))
+    )}) = (${this._pars(item)}) WHERE id = $1 RETURNING *`
+    const result = await this.client.query(query, this._vals(item))
     return result
   }
 
-  public deleteOne = async (id: string): Promise<boolean> => {
-    console.log(id)
-    throw new Error('Method not implemented.')
+  protected _deleteOne = async (id: string): Promise<QueryResult> => {
+    const query = `DELETE FROM ${this._table} WHERE id = $1`
+    const result = await this.client.query(query, [id])
+    return result
   }
 
   /**
@@ -106,7 +110,7 @@ export abstract class BaseRepo<T> implements IBaseRepo<T> {
    * @memberof BaseRepo
    * @returns A comma separated list of column names.
    */
-  private cols = (item: T): string => {
+  private _cols = (item: T): string => {
     const columnsArray: string[] = []
     Object.keys(item).forEach((column) => {
       const value: string = item[column]
@@ -126,7 +130,7 @@ export abstract class BaseRepo<T> implements IBaseRepo<T> {
    * @memberof BaseRepo
    * @returns An array of values as strings.
    */
-  private vals = (item: T): string[] => {
+  private _vals = (item: T): string[] => {
     const values: string[] = []
     Object.keys(item).forEach((column) => {
       const value: string = item[column]
@@ -146,7 +150,7 @@ export abstract class BaseRepo<T> implements IBaseRepo<T> {
    * @memberof BaseRepo
    * @returns A comma separated list of parameter placeholders.
    */
-  private pars = (item: T): string => {
+  private _pars = (item: T): string => {
     const columnsArray: string[] = []
     Object.keys(item).forEach((column) => {
       const value: string = item[column]

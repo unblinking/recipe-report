@@ -26,16 +26,18 @@
  *
  * @module
  */
+import { injectable } from 'inversify'
 import jwt from 'jwt-simple'
+import 'reflect-metadata'
 
-import { errMsg } from '../data/constants'
+import { errMsg } from 'data/constants'
 
-import { Err } from '../utils'
+import { decrypt, encrypt } from 'service/cryptography-service'
 
-import { decrypt, encrypt } from './cryptography-service'
+import { Err } from 'root/utils'
 
-interface IJwtService {
-  encode(userId: string, type: tokenType, ttl: number): string
+export interface IJwtService {
+  encode(id: string | undefined, type: tokenType, ttl: number): string
   decode(token: string | undefined): Payload
 }
 
@@ -52,18 +54,19 @@ export interface Payload {
   ttl: number
 }
 
+@injectable()
 export class JwtService implements IJwtService {
   /**
    * Encode a JWT and encrypt its payload.
    * @returns A JWT containing an encrypted payload.
    */
   public encode = (
-    id: string,
+    id: string | undefined,
     type: tokenType,
     ttl: number = new Date().getTime() + 60 * 60 * 24 * 1000, // 24 hours.
   ): string => {
     // Determine our secret, from environment variable.
-    const secret: string = process.env.JWT_SECRET as string
+    const secret: string = process.env.RR_JWT_SECRET as string
     // Verify that we aren't missing anything important.
     if (!secret) throw new Err(`JWT_SECRET_KEY`, errMsg.JWT_SECRET_KEY)
     if (!id) throw new Err(`JWT_USER_ID`, errMsg.JWT_USER_ID)
@@ -87,7 +90,7 @@ export class JwtService implements IJwtService {
    */
   public decode = (token: string | undefined): Payload => {
     // Determine our secret, from environment variable.
-    const secret: string = process.env.JWT_SECRET as string
+    const secret: string = process.env.RR_JWT_SECRET as string
     // Verify that we aren't missing anything important.
     if (!secret) throw new Err(`JWT_SECRET_KEY`, errMsg.JWT_SECRET_KEY)
     if (!token) throw new Err(`JWT_TOKEN`, errMsg.JWT_TOKEN)

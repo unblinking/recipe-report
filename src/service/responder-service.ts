@@ -27,9 +27,9 @@
  */
 import { Response } from 'express'
 
-import { httpStatus, httpStatusValueType } from '../data/constants'
+import { httpStatus, httpStatusValueType } from 'data/constants'
 
-import { log } from '../utils'
+import { log } from 'root/utils'
 
 /**
  * Jsend interface definition.
