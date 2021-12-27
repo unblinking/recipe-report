@@ -5,7 +5,7 @@
   "trailingComma": "all",
   "arrowParens": "always",
   "jsxSingleQuote": false,
-  "importOrder": ["<THIRD_PARTY_MODULES>", ".\/api\/", ".\/data\/", ".\/domain\/", ".\/service\/", ".\/utils", "^[./]"],
+  "importOrder": ["<THIRD_PARTY_MODULES>", "^domain/(.*)$", "^data/(.*)$", "^service/(.*)$", "^api/(.*)$", "^root/(.*)$", "^test/(.*)$", "^[./]"],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
   "importOrderCaseInsensitive": true,

@@ -24,8 +24,6 @@
  * @module
  */
 
-// import { logger } from '../wrappers/log'
-
 const version: string = process.env.npm_package_version as string
 const stage: string = `Alpha`
 const mode: string = (process.env.NODE_ENV as string) || `development`

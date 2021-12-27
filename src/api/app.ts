@@ -26,11 +26,10 @@
 import cors from 'cors'
 import express, { Application, RequestHandler } from 'express'
 
-import { IBaseController } from '../api/controllers/base-controller'
+import { IBaseController } from 'api/controllers/base-controller'
+import { fiveHundred, fourOhFour } from 'api/middlewares/laststop'
 
-import { log } from '../utils'
-
-import { fiveHundred, fourOhFour } from './middlewares/laststop'
+import { log } from 'root/utils'
 
 export const listen = (
   middlewares: Array<RequestHandler>,

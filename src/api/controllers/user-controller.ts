@@ -26,20 +26,22 @@
 import { NextFunction, Request, Response, Router } from 'express'
 import { inject, injectable } from 'inversify'
 
-import { errBase, logMsg, outcomes } from '../../data/constants'
-
 import {
-  UserActivationRequest,
-  UserAuthenticationRequest,
+  // UserActivationRequest,
+  // UserAuthenticationRequest,
   UserRegistrationRequest,
-} from '../../domain/models/service-requests'
+} from 'domain/service/service-requests'
 
-import { IUserService } from '../../service/user-service'
+import { errBase, errMsg, httpStatus, logMsg, outcomes } from 'data/constants'
 
-import { TYPES } from '../../types'
-import { fiveHundred } from '../middlewares/laststop'
-import { IBaseController } from './base-controller'
-import { error, fail, success } from './controller-response'
+import { IUserService } from 'service/user-service'
+
+import { IBaseController } from 'api/controllers/base-controller'
+import { error, fail, success } from 'api/controllers/controller-response'
+import { fiveHundred } from 'api/middlewares/laststop'
+
+import { SYMBOLS } from 'root/symbols'
+import { Err, log } from 'root/utils'
 
 @injectable()
 export class UserController implements IBaseController {
@@ -47,35 +49,34 @@ export class UserController implements IBaseController {
   router: Router = Router()
   path: string = `/v1/user`
 
-  constructor(@inject(TYPES.IUserService) userService: IUserService) {
+  public constructor(@inject(SYMBOLS.IUserService) userService: IUserService) {
     this._userService = userService
     this.initRoutes()
   }
 
   public initRoutes = (): void => {
-    // Root CRUD.
-    this.router.post(`/`, this.register) // Create (new user)
+    this.router.post(`/`, this.create) // Create user
     /* NOT IMPLEMENTED YET
-    this.router.get(`/:id`, this.find) // Read (find user by id)
-    this.router.put(`/:id`, this.update) // Update (update user by id)
-    this.router.delete(`/:id`, this.delete) // Delete (delete user by id)
+    this.router.get(`/:id`, this.find) // Read user
+    this.router.put(`/:id`, this.update) // Update user
+    this.router.delete(`/:id`, this.delete) // Delete user
     */
-    // Session.
-    this.router.post(`/session`, this.authenticate) // Create (user session)
-    // Activation.
-    this.router.put(`/activation/:token`, this.activate) // Update (user activation status)
-    // Errors.
-    this.router.use(fiveHundred)
+    // this.router.post(`/session`, this.authenticate) // Create user session
+    // this.router.put(`/activation/:token`, this.activate) // Update user activation status
+    this.router.use(fiveHundred) // Error handling.
   }
 
-  private register = async (
+  private create = async (
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
+    log.trace(`user-controller.ts register()`)
     try {
-      const serviceRequest = new UserRegistrationRequest({ ...req.body })
-      const serviceResponse = await this._userService.register(serviceRequest)
+      const serviceRequest = await UserRegistrationRequest.create({
+        ...req.body,
+      })
+      const serviceResponse = await this._userService.create(serviceRequest)
       const code = serviceResponse.statusCode
       switch (serviceResponse.outcome) {
         case outcomes.SUCCESS:
@@ -91,17 +92,26 @@ export class UserController implements IBaseController {
           break
       }
     } catch (err) {
-      next(err)
+      const e = err as Err
+      if (e.name == errMsg.NAME_INVALID.toString()) {
+        fail(res, httpStatus.BAD_REQUEST, e.message, { message: e.message })
+      } else {
+        next(err)
+      }
     }
   }
 
+  /*
   private activate = async (
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
+    log.trace(`user-controller.ts activate()`)
     try {
-      const serviceRequest = new UserActivationRequest({ ...req.params })
+      const serviceRequest = UserActivationRequest.create({
+        token: req.params.token,
+      })
       const serviceResponse = await this._userService.activate(serviceRequest)
       const code = serviceResponse.statusCode
       switch (serviceResponse.outcome) {
@@ -127,8 +137,9 @@ export class UserController implements IBaseController {
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
+    log.trace(`user-controller.ts authenticate()`)
     try {
-      const serviceRequest = new UserAuthenticationRequest({ ...req.body })
+      const serviceRequest = UserAuthenticationRequest.create({ ...req.body })
       const serviceResponse = await this._userService.authenticate(
         serviceRequest,
       )
@@ -152,4 +163,5 @@ export class UserController implements IBaseController {
       next(err)
     }
   }
+  */
 }

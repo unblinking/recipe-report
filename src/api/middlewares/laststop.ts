@@ -27,11 +27,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from 'express'
 
-import { errMsg, httpStatus } from '../../data/constants'
+import { errMsg, httpStatus } from 'data/constants'
 
-import { Responder } from '../../service/responder-service'
+import { Responder } from 'service/responder-service'
 
-import { log } from '../../utils'
+import { log } from 'root/utils'
 
 /**
  * Four, oh four! Not found, my dude.

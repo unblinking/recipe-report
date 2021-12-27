@@ -26,11 +26,13 @@
 import { NextFunction, Request, Response, Router } from 'express'
 import { injectable } from 'inversify'
 
-import { httpStatus, logMsg } from '../../data/constants'
+import { httpStatus, logMsg } from 'data/constants'
 
-import { fiveHundred } from '../middlewares/laststop'
-import { IBaseController } from './base-controller'
-import { success } from './controller-response'
+import { IBaseController } from 'api/controllers/base-controller'
+import { success } from 'api/controllers/controller-response'
+import { fiveHundred } from 'api/middlewares/laststop'
+
+import { log } from 'root/utils'
 
 @injectable()
 export class RootController implements IBaseController {
@@ -43,7 +45,7 @@ export class RootController implements IBaseController {
 
   public initRoutes = (): void => {
     this.router.get(`/`, this.curtsy)
-    this.router.use(fiveHundred)
+    this.router.use(fiveHundred) // Error handling.
   }
 
   private curtsy = async (
@@ -51,6 +53,7 @@ export class RootController implements IBaseController {
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
+    log.trace(`root-controller.ts curtsy()`)
     try {
       const code = httpStatus.OK
       const welcomeMsg = `Welcome to the Recipe.Report API server. This is the root route. For documentation please go to https://docs.recipe.report/`

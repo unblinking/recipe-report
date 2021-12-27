@@ -9,17 +9,16 @@
   },
   "scripts": {
     "flyway": "wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/7.3.0/flyway-commandline-7.3.0-linux-x64.tar.gz | tar xvz",
-    "migratedev": "eval $(egrep -v '^#' .env.dev | xargs) ./flyway-7.3.0/flyway -configFiles=flyway.conf migrate",
-    "migrateprod": "./flyway-7.3.0/flyway -configFiles=flyway.conf migrate",
+    "migrate": "./flyway-7.3.0/flyway -configFiles=flyway.conf migrate",
     "prettier": "prettier --write src/**",
     "linter": "eslint --ext .js,.jsx,.ts,.tsx src/",
     "pretest": "echo \"Checking for available dependency updates\" && ncu",
     "test": "jest --coverage",
     "testonly": "jest --colors --coverage",
     "posttest": "echo \"Testing has completed\"",
-    "build": "tsc",
-    "develop": "ts-node -r dotenv/config src/main.ts dotenv_config_path=.env.dev",
-    "start": "NODE_ENV=production node dist/main.js"
+    "build": "tsc && tsc-alias",
+    "develop": "ts-node -r tsconfig-paths/register src/main.ts",
+    "start": "node dist/main.js"
   },
   "author": "jmg1138 https://github.com/jmg1138",
   "main": "app.js",
@@ -41,10 +40,11 @@
     "@types/express": "4.17.13",
     "@types/jest": "27.0.3",
     "@types/jwt-simple": "0.5.33",
-    "@types/node": "17.0.0",
-    "@types/pg": "8.6.2",
-    "@typescript-eslint/eslint-plugin": "5.7.0",
-    "@typescript-eslint/parser": "5.7.0",
+    "@types/node": "17.0.2",
+    "@types/pg": "8.6.3",
+    "@types/uuid": "8.3.3",
+    "@typescript-eslint/eslint-plugin": "5.8.0",
+    "@typescript-eslint/parser": "5.8.0",
     "@zxcvbn-ts/core": "1.2.0",
     "@zxcvbn-ts/language-common": "1.0.2",
     "@zxcvbn-ts/language-en": "1.2.0",
@@ -57,6 +57,10 @@
     "mailer-send-ts": "1.6.0",
     "pg": "8.7.1",
     "reflect-metadata": "^0.1.13",
-    "typescript": "4.5.4"
-  }
+    "tsc-alias": "1.5.0",
+    "tsconfig-paths": "3.12.0",
+    "typescript": "4.5.4",
+    "uuid": "8.3.2"
+  },
+  "packageManager": "yarn@3.1.1"
 }

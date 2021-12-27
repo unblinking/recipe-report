@@ -36,3 +36,10 @@ Local command to access the database via psql:
 ```
 PGUSER=dbuser PGPASSWORD=dbpass psql -h localhost -p 15432 recipedb
 ```
+
+Rollback all migrations:
+
+```sql
+DROP SCHEMA rr CASCADE;
+DROP TABLE flyway_schema_history;
+```

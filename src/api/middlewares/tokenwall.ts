@@ -27,12 +27,12 @@
  */
 import { NextFunction, Request, Response } from 'express'
 
-import { errMsg, httpStatus } from '../../data/constants'
+import { errMsg, httpStatus } from 'data/constants'
 
-import { JwtService, Payload, tokenType } from '../../service/jwt-service'
-import { Responder } from '../../service/responder-service'
+import { JwtService, Payload, tokenType } from 'service/jwt-service'
+import { Responder } from 'service/responder-service'
 
-import { Err, log } from '../../utils'
+import { Err, log } from 'root/utils'
 
 export interface RequestWithUser extends Request {
   userId?: string
@@ -43,6 +43,7 @@ export const tokenwall = (
   _res: Response,
   next: NextFunction,
 ): void => {
+  log.trace(`tokenwall.ts tokenwall()`)
   try {
     const token: string = req.headers.token as string
     if (!token) throw new Err(`TOKENWALL_UNDEF`, errMsg.TOKENWALL_UNDEF)

@@ -25,8 +25,9 @@
  */
 import { injectable } from 'inversify'
 import { Pool, PoolClient, QueryResult } from 'pg'
+import 'reflect-metadata'
 
-import { log } from '../utils'
+import { log } from 'root/utils'
 
 export interface IDataAccessLayer {
   query(text: string, params: Array<string>): Promise<QueryResult>
@@ -41,16 +42,16 @@ export interface IDataAccessLayer {
 @injectable()
 export class DataAccessLayer implements IDataAccessLayer {
   private _pool: Pool = new Pool({
-    user: process.env.DB_USER as string,
-    host: process.env.DB_HOST as string,
-    database: process.env.DB_DATABASE as string,
-    password: process.env.DB_PASSWORD as string,
-    port: parseInt(process.env.DB_PORT as string, 10),
+    user: process.env.RRDB_USER as string,
+    host: process.env.RRDB_HOST as string,
+    database: process.env.RRDB_DATABASE as string,
+    password: process.env.RRDB_PASSWORD as string,
+    port: parseInt(process.env.RRDB_PORT as string, 10),
     ssl:
       process.env.NODE_ENV == 'production'
         ? {
             rejectUnauthorized: false,
-            ca: process.env.DB_CA_CERT,
+            ca: process.env.RRDB_CA_CERT,
           }
         : false,
   })

@@ -27,11 +27,11 @@
  */
 import { Response } from 'express'
 
-import { httpStatus, httpStatusValueType } from '../../data/constants'
+import { httpStatus, httpStatusValueType } from 'data/constants'
 
-import { Responder } from '../../service/responder-service'
+import { Responder } from 'service/responder-service'
 
-import { log } from '../../utils'
+import { log } from 'root/utils'
 
 export const success = async (
   res: Response,

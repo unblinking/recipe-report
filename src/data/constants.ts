@@ -32,7 +32,7 @@
  * Database table names.
  */
 export const dbTables = {
-  USERS: `users`,
+  USERS: `rr.users`,
 } as const
 type dbTablesType = typeof dbTables
 export type dbTablesKeyType = keyof dbTablesType
@@ -83,24 +83,23 @@ export type errBaseValueType = keyof errBaseType
  */
 export const errMsg = {
   // Environment variable check.
-  ENV_PORT: `PORT is not set. This is required for Expressjs to listen.`,
-  ENV_CRYPTO_KEY: `CRYPTO_KEY is not set. This is required for encrypting and decrypting data.`,
-  ENV_CRYPTO_ALGO: `CRYPTO_ALGO is not set. This is required for encrypting and decrypting data.`,
-  ENV_CRYPTO_IV_LENGTH: `CRYPTO_IV_LENGTH is not set. This is required for encrypting and decrypting data.`,
-  ENV_JWT_SECRET: `JWT_SECRET is not set. This is required for encoding and decoding JSON web tokens.`,
-  ENV_DB_USER: `DB_USER is not set. This is required for database communication.`,
-  ENV_DB_HOST: `DB_HOST is not set. This is required for database communication.`,
-  ENV_DB_DATABASE: `DB_DATABASE is not set. This is required for database communication.`,
-  ENV_DB_PASSWORD: `DB_PASSWORD is not set. This is required for database communication.`,
-  ENV_DB_PORT: `DB_PORT is not set. This is required for database communication.`,
-  // User service registration.
+  ENV_RR_PORT: `PORT is not set. This is required for Expressjs to listen.`,
+  ENV_RR_CRYPTO_KEY: `CRYPTO_KEY is not set. This is required for encrypting and decrypting data.`,
+  ENV_RR_CRYPTO_ALGO: `CRYPTO_ALGO is not set. This is required for encrypting and decrypting data.`,
+  ENV_RR_CRYPTO_IV_LENGTH: `CRYPTO_IV_LENGTH is not set. This is required for encrypting and decrypting data.`,
+  ENV_RR_JWT_SECRET: `JWT_SECRET is not set. This is required for encoding and decoding JSON web tokens.`,
+  ENV_RRDB_USER: `DB_USER is not set. This is required for database communication.`,
+  ENV_RRDB_HOST: `DB_HOST is not set. This is required for database communication.`,
+  ENV_RRDB_DATABASE: `DB_DATABASE is not set. This is required for database communication.`,
+  ENV_RRDB_PASSWORD: `DB_PASSWORD is not set. This is required for database communication.`,
+  ENV_RRDB_PORT: `DB_PORT is not set. This is required for database communication.`,
+  // User registration.
+  REG_REQUIRED_UNDEF: `${errBase.REG} Missing required field(s): "name", "password", and "email address".`,
   REG_USRNAME_UNDEF: `${errBase.REG} A username wasn't provided. Please provide a user name and try again.`,
   REG_EMAIL_UNDEF: `${errBase.REG} An email address wasn't provided. Please provide an email address and try again.`,
   REG_PASS_UNDEF: `${errBase.REG} A password wasn't provided. Please provide a password and try again.`,
   REG_USRNAME_USED: `${errBase.REG} The username is already in use. Please change the requested username and try again.`,
   REG_EMAIL_USED: `${errBase.REG} The email address is already in use. Please change the requested email address and try again.`,
-  REG_PASS_WEAK: `${errBase.REG} The password did not pass complexity requirements.`,
-  REG_USR_HASH: `${errBase.REG} Error hashing password.`,
   // User service activation.
   ACTIV_TOKEN_UNDEF: `${errBase.ACTIVATE} The activation token wasn't provided. Please provide an activation token and try again.`,
   ACTIV_TOKEN_DECODE: `${errBase.ACTIVATE} The activation token was corrupted. Please provide the complete and correct activation token and try again.`,
@@ -118,9 +117,13 @@ export const errMsg = {
   // Laststop middleware.
   LASTSTOP_404: `The endpoint you are looking for can't be found.`,
   LASTSTOP_500: `Something went wrong.`,
-  // User model.
-  USR_EMAIL_UNDEF: `The user email address wasn't provided. Please provide an email address and try again.`,
-  USR_EMAIL_INVALID: `The user email address provided is not in a valid format. Please correct the email address and try again.`,
+  // Model validation.
+  MISSING_REQ: `One or more required fields are missing.`,
+  UID_INVALID: `The supplied UUID is not a valid v4 UUID.`,
+  NAME_INVALID: `The name field is not in a valid format. Usename must be 1 to 50 characters in length, and contain only A-Z and 0-9.`,
+  EMAIL_INVALID: `The email address is not in a valid format.`,
+  PASS_WEAK: `The password did not pass complexity requirements.`,
+  TOKEN_INVALID: `The token is not in a valid format.`,
   // Cryptography wrapper.
   CRYPTO_KEY: `Crypto key is not defined.`,
   CRYPTO_IV_LENGTH: `IV length is not defined.`,
@@ -138,6 +141,8 @@ export const errMsg = {
   JWT_TOKEN: `JWT error. Token is not defined.`,
   // Unit of work.
   UOW_CLIENT: `UOW error. Pool client is not defined.`,
+  // Repositories.
+  HASH_SALT: `Error hashing password.`,
 }
 type errMessageType = typeof errMsg
 export type errMessageKeyType = keyof errMessageType

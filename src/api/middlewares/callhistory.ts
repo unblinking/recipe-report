@@ -1,6 +1,5 @@
 /**
  * CallHistory middleware.
- *
  * Keep a history of all API calls.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
@@ -27,7 +26,7 @@
  */
 import { NextFunction, Request, Response } from 'express'
 
-import { log } from '../../utils'
+import { log } from 'root/utils'
 
 /**
  * Call history for API calls.
