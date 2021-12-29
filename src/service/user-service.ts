@@ -119,6 +119,15 @@ export class UserService implements IUserService {
       )
     } catch (e) {
       await uow.rollback()
+      const errName = Err.getErrName(e)
+      if (errName == 'REG_USRNAME_USED' || errName == 'REG_EMAIL_USED') {
+        return new UserRegistrationResponse(
+          outcomes.FAIL,
+          e as Err,
+          undefined, // No item to return.
+          httpStatus.BAD_REQUEST,
+        )
+      }
       return new UserRegistrationResponse(
         outcomes.ERROR,
         e as Err,

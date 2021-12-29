@@ -28,20 +28,60 @@
  * Extended class based on the Error class.
  * Set a name and message all at once. Remarkable!
  *
+ * Some of the helpers below were created based on ...
+ * https://kentcdodds.com/blog/get-a-catch-block-error-message-with-typescript
+ *
  * Instantiate error objects with a custom name in one line, with type safety
  * enforced for the name and message. Error messages must be defined in the
  * global constants before they may be used.
  */
 export class Err extends Error {
-  constructor(
-    name: errMessageKeyType | errBaseValueType,
-    message: errMessageValueType,
+  public constructor(
+    name: errMessageKeyType | errBaseKeyType,
+    message: errMessageValueType | errBaseValueType,
   ) {
     super(message)
     this.name = name
     Object.setPrototypeOf(this, new.target.prototype)
   }
+
+  // Type-guard using a type-predicate method.
+  public static isErr(error: unknown): error is Err {
+    return (
+      typeof error === 'object' &&
+      error !== null &&
+      'name' in error &&
+      typeof (error as Record<string, unknown>).name === 'string' &&
+      'message' in error &&
+      typeof (error as Record<string, unknown>).message === 'string'
+    )
+  }
+
+  // Try to convert an object into an Err.
+  public static toErr(maybeError: unknown): Err {
+    if (Err.isErr(maybeError)) {
+      return maybeError
+    } else {
+      try {
+        return new Err(`UNKNOWN`, JSON.stringify(maybeError))
+      } catch {
+        // Fallback in case there's an error stringifying the maybeError
+        // like with circular references for example.
+        return new Err(`UNKNOWN`, String(maybeError))
+      }
+    }
+  }
+
+  public static getErrName(error: unknown): string {
+    return Err.toErr(error).name
+  }
+
+  public static getErrMessage(error: unknown): string {
+    return Err.toErr(error).message
+  }
 }
+
+//#region Error message constants.
 
 /**
  * Error message base statements.
@@ -118,7 +158,11 @@ export const errMsg = {
   UOW_CLIENT: `UOW error. Pool client is not defined.`,
   // Repositories.
   HASH_SALT: `Error hashing password.`,
+  // Unknown.
+  UNKNOWN: `Unknown error.`,
 }
 type errMessageType = typeof errMsg
 export type errMessageKeyType = keyof errMessageType
 export type errMessageValueType = errMessageType[keyof errMessageType]
+
+//#endregion

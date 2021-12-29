@@ -70,6 +70,7 @@ export class UserMap {
     }
   }
 
+  // Type-guard using a type-predicate method.
   public static isUser(raw: unknown): raw is IUser {
     if (!(raw as IUser).name) return false
     if (!(raw as IUser).password) return false
