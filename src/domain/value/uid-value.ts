@@ -1,6 +1,5 @@
 /**
- * CallHistory middleware.
- * Keep a history of all API calls.
+ * UUID value object.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -24,18 +23,31 @@
  *
  * @module
  */
-import { NextFunction, Request, Response } from 'express'
+import { v4 as uuid, validate } from 'uuid'
 
-import { log } from 'service/log-service'
+import { Err, errMsg } from 'domain/models/err-model'
+import { ValueObject } from 'domain/value/base-value'
 
-/**
- * Call history for API calls.
- */
-export const callHistory = (
-  req: Request,
-  _res: Response,
-  next: NextFunction,
-): void => {
-  log.info(`Request: ${req.method} ${req.path}`)
-  next()
+export interface IUniqueId {
+  value: string
+}
+
+export class UniqueId extends ValueObject<IUniqueId> {
+  public get value(): string {
+    return this.props.value
+  }
+
+  private constructor(props: IUniqueId) {
+    super(props)
+  }
+
+  public static create(id?: string): UniqueId {
+    if (!id) {
+      id = uuid()
+    }
+    if (!validate(id)) {
+      throw new Err(`UID_INVALID`, errMsg.UID_INVALID)
+    }
+    return new UniqueId({ value: id })
+  }
 }

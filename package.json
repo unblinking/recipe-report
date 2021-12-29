@@ -12,10 +12,9 @@
     "migrate": "./flyway-7.3.0/flyway -configFiles=flyway.conf migrate",
     "prettier": "prettier --write src/**",
     "linter": "eslint --ext .js,.jsx,.ts,.tsx src/",
-    "pretest": "echo \"Checking for available dependency updates\" && ncu",
-    "test": "jest --coverage",
-    "testonly": "jest --colors --coverage",
-    "posttest": "echo \"Testing has completed\"",
+    "updates": "echo \"Checking for available dependency updates\" && ncu",
+    "test": "jest --colors --coverage",
+    "testonly": "jest --colors",
     "build": "tsc && tsc-alias",
     "develop": "ts-node -r tsconfig-paths/register src/main.ts",
     "start": "node dist/main.js"

@@ -23,22 +23,19 @@
  *
  * @module
  */
-import { Model } from 'domain/models/base'
-import { EmailAddress } from 'domain/value-objects/email-address'
-import { Password } from 'domain/value-objects/password'
-import { UniqueId } from 'domain/value-objects/uid'
-import { Username } from 'domain/value-objects/username'
-
-import { errMsg } from 'data/constants'
-
-import { Err } from 'root/utils'
+import { UserMap } from 'domain/maps/user-map'
+import { Model } from 'domain/models/base-model'
+import { Err, errMsg } from 'domain/models/err-model'
+import { EmailAddress } from 'domain/value/email-address-value'
+import { Password } from 'domain/value/password-value'
+import { UniqueId } from 'domain/value/uid-value'
+import { Username } from 'domain/value/username-value'
 
 export interface IUserDto {
   id?: string
   name?: string
   password?: string
   email_address?: string
-  role?: string
   date_created?: string
   date_activated?: string
   date_last_login?: string
@@ -49,7 +46,6 @@ export interface IUser {
   name: Username
   password: Password
   email_address: EmailAddress
-  role?: string
   date_created?: Date
   date_activated?: Date
   date_last_login?: Date
@@ -71,10 +67,6 @@ export class User extends Model<IUser> {
 
   public get email_address(): EmailAddress {
     return this._props.email_address
-  }
-
-  public get role(): string | undefined {
-    return this._props.role
   }
 
   public get date_created(): Date | undefined {
@@ -100,9 +92,8 @@ export class User extends Model<IUser> {
 
   // Factory method here instead of a factory class.
   public static create(props: IUser, id?: UniqueId): User {
-    // If id is provided, verify it is valid.
-    if (id && !new UniqueId(id.toString()).valid()) {
-      throw new Err(`UID_INVALID`, errMsg.UID_INVALID)
+    if (!UserMap.isUser(props)) {
+      throw new Err(`MISSING_REQ`, `${errMsg.MISSING_REQ}`)
     }
     return new User(props, id)
   }
@@ -110,38 +101,4 @@ export class User extends Model<IUser> {
   public isActive(): boolean {
     return this._props.date_activated ? true : false
   }
-
-  public static toDomain(userDto: IUserDto): User {
-    if (!isUser(userDto)) {
-      throw new Err(`MISSING_REQ`, errMsg.MISSING_REQ)
-    }
-    return User.create(userDto)
-  }
-
-  public static toDto(user: User): IUserDto {
-    return {
-      id: user.id.toString(),
-      name: user.name.toString(),
-      password: user.password.toString(),
-      email_address: user.email_address.toString(),
-      role: user.role?.toString(),
-      date_created: user.date_created?.toString(),
-      date_activated: user.date_activated?.toString(),
-      date_last_login: user.date_last_login?.toString(),
-      date_deleted: user.date_deleted?.toString(),
-    }
-  }
-}
-
-export const isUser = (props: unknown): props is IUser => {
-  if (!(props as IUser).name) return false
-  if (!(props as IUser).password) return false
-  if (!(props as IUser).email_address) return false
-  return true
-}
-
-export const isUserAuth = (props: unknown): props is IUser => {
-  if (!(props as IUser).password) return false
-  if (!(props as IUser).email_address) return false
-  return true
 }

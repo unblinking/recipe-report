@@ -27,12 +27,11 @@ import { injectable } from 'inversify'
 import { EmailParams, MailerSend, Recipient, Sender } from 'mailer-send-ts'
 import 'reflect-metadata'
 
-import { Email } from 'domain/models/email'
-import { EmailAddress } from 'domain/value-objects/email-address'
+import { Email } from 'domain/models/email-model'
+import { Err, errMsg } from 'domain/models/err-model'
+import { EmailAddress } from 'domain/value/email-address-value'
 
-import { errMsg } from 'data/constants'
-
-import { Err, log } from 'root/utils'
+import { log } from 'service/log-service'
 
 export interface IEmailService {
   sendActivation(emailAddress: EmailAddress, token: string): Promise<void>
@@ -76,10 +75,8 @@ export class EmailService implements IEmailService {
       const mailerSend = new MailerSend({
         apiKey: process.env.RR_MAILER_SEND_KEY,
       })
-      const sentFrom = new Sender(email.from.toString(), `Recipe.Report`)
-      const recipients = [
-        new Recipient(email.to.toString(), email.to.toString()),
-      ]
+      const sentFrom = new Sender(email.from.value, `Recipe.Report`)
+      const recipients = [new Recipient(email.to.value, email.to.value)]
       const emailParams = new EmailParams()
         .setFrom(sentFrom)
         .setTo(recipients)

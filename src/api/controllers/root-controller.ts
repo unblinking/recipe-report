@@ -28,11 +28,11 @@ import { injectable } from 'inversify'
 
 import { httpStatus, logMsg } from 'data/constants'
 
+import { log } from 'service/log-service'
+
 import { IBaseController } from 'api/controllers/base-controller'
 import { success } from 'api/controllers/controller-response'
 import { fiveHundred } from 'api/middlewares/laststop'
-
-import { log } from 'root/utils'
 
 @injectable()
 export class RootController implements IBaseController {

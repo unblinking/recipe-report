@@ -30,11 +30,9 @@ import { injectable } from 'inversify'
 import jwt from 'jwt-simple'
 import 'reflect-metadata'
 
-import { errMsg } from 'data/constants'
+import { Err, errMsg } from 'domain/models/err-model'
 
 import { decrypt, encrypt } from 'service/cryptography-service'
-
-import { Err } from 'root/utils'
 
 export interface IJwtService {
   encode(id: string | undefined, type: tokenType, ttl: number): string

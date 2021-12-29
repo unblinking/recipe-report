@@ -25,44 +25,25 @@
  *
  * @module
  */
-import { IUserDto, User } from 'domain/models/user'
-import { EmailAddress } from 'domain/value-objects/email-address'
-import { Password } from 'domain/value-objects/password'
-import { Username } from 'domain/value-objects/username'
+import { User } from 'domain/models/user-model'
+import { EmailAddress } from 'domain/value/email-address-value'
+import { Password } from 'domain/value/password-value'
+import { UniqueId } from 'domain/value/uid-value'
+import { Username } from 'domain/value/username-value'
 
 export class TestFactory {
-  public userNewDto(): IUserDto {
-    const userDto: IUserDto = {
-      name: `noreplyuser`,
-      password: `$2a$08$PPhEIhC/lPgUMRAXpvrYL.ehrApeV7pdsGU6/DSufUFvuhiFtqR4C`,
-      email_address: `noreply@recipe.report`,
-      date_created: new Date().toString(),
-    }
-    return userDto
-  }
-
-  public userNew(): User {
-    const user: User = User.create({
-      name: new Username(`noreplyuser`),
-      password: new Password(
-        `$2a$08$PPhEIhC/lPgUMRAXpvrYL.ehrApeV7pdsGU6/DSufUFvuhiFtqR4C`,
-      ),
-      email_address: new EmailAddress(`noreply@recipe.report`),
-      date_created: new Date(),
-    })
-    return user
-  }
-
-  public userActivated(): User {
-    const user: User = User.create({
-      name: new Username(`noreplyuser`),
-      password: new Password(
-        `$2a$08$PPhEIhC/lPgUMRAXpvrYL.ehrApeV7pdsGU6/DSufUFvuhiFtqR4C`,
-      ),
-      email_address: new EmailAddress(`noreply@recipe.report`),
-      date_created: new Date(),
-      date_activated: new Date(),
-    })
+  public async userNew(): Promise<User> {
+    const user: User = User.create(
+      {
+        name: Username.create(`noreplyuser`),
+        password: await Password.create(
+          `$2a$08$PPhEIhC/lPgUMRAXpvrYL.ehrApeV7pdsGU6/DSufUFvuhiFtqR4C`,
+        ),
+        email_address: EmailAddress.create(`noreply@recipe.report`),
+        date_created: new Date(),
+      },
+      UniqueId.create(),
+    )
     return user
   }
 

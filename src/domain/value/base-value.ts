@@ -1,5 +1,5 @@
 /**
- * Username value object.
+ * Base value object abstract class.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -24,19 +24,10 @@
  * @module
  */
 
-export class Username {
-  private _value: string
+export abstract class ValueObject<T> {
+  public readonly props: T
 
-  public constructor(value: string) {
-    this._value = value
-  }
-
-  public get username(): string {
-    return this._value
-  }
-
-  public valid(value: string): boolean {
-    if (!value.match('^[A-Za-z0-9]+$')) return false
-    return value.length >= 1 && value.length <= 50
+  public constructor(props: T) {
+    this.props = Object.freeze(props)
   }
 }

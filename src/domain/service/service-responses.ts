@@ -23,12 +23,10 @@
  *
  * @module
  */
-import { Auth } from 'domain/models/auth'
-import { IUserDto } from 'domain/models/user'
+import { Err } from 'domain/models/err-model'
+import { IUserDto } from 'domain/models/user-model'
 
 import { httpStatusValueType, outcomes, outcomeValueType } from 'data/constants'
-
-import { Err } from 'root/utils'
 
 abstract class ServiceResponse<T> {
   // What was the outcome?
@@ -84,4 +82,4 @@ export class UserRegistrationResponse extends ServiceResponse<IUserDto> {}
 
 export class UserActivationResponse extends ServiceResponse<IUserDto> {}
 
-export class UserAuthenticationResponse extends ServiceResponse<Auth> {}
+export class UserAuthenticationResponse extends ServiceResponse<string> {}

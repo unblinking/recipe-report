@@ -27,7 +27,7 @@ import { injectable } from 'inversify'
 import { Pool, PoolClient, QueryResult } from 'pg'
 import 'reflect-metadata'
 
-import { log } from 'root/utils'
+import { log } from 'service/log-service'
 
 export interface IDataAccessLayer {
   query(text: string, params: Array<string>): Promise<QueryResult>

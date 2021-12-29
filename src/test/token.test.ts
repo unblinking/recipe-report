@@ -23,21 +23,21 @@
  *
  * @module
  */
-import { IUserDto } from 'domain/models/user'
+import { User } from 'domain/models/user-model'
 
 import { JwtService, Payload, tokenType } from 'service/jwt-service'
 
 import { TestFactory } from 'test/test-factory'
 
 describe(`JSON Web Token actions.`, () => {
-  test(`Encodes an activation JWT.`, () => {
+  test(`Encodes an activation JWT.`, async () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
-    const userDto: IUserDto = testFactory.userNewDto()
+    const user: User = await testFactory.userNew()
     const jwt = new JwtService()
     // Act.
     const token: string = jwt.encode(
-      userDto.id as string,
+      user.id.value,
       tokenType.ACTIVATION,
       new Date().getTime(),
     )
@@ -45,14 +45,14 @@ describe(`JSON Web Token actions.`, () => {
     expect(token).toBeTruthy()
   })
 
-  test(`Encodes an access JWT.`, () => {
+  test(`Encodes an access JWT.`, async () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
-    const userDto: IUserDto = testFactory.userNewDto()
+    const user: User = await testFactory.userNew()
     const jwt = new JwtService()
     // Act.
     const token: string = jwt.encode(
-      userDto.id as string,
+      user.id.value,
       tokenType.ACCESS,
       new Date().getTime(),
     )
@@ -60,13 +60,13 @@ describe(`JSON Web Token actions.`, () => {
     expect(token).toBeTruthy()
   })
 
-  test(`Encodes an access JWT even when TTL is not defined.`, () => {
+  test(`Encodes an access JWT even when TTL is not defined.`, async () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
-    const userDto: IUserDto = testFactory.userNewDto()
+    const user: User = await testFactory.userNew()
     const jwt = new JwtService()
     // Act.
-    const token: string = jwt.encode(userDto.id as string, tokenType.ACCESS)
+    const token: string = jwt.encode(user.id.value, tokenType.ACCESS)
     // Assert.
     expect(token).toBeTruthy()
   })
@@ -99,16 +99,16 @@ describe(`JSON Web Token actions.`, () => {
     expect(payload.ttl).toBeTruthy()
   })
 
-  test(`Fails to encode without JWT_SECRET.`, () => {
+  test(`Fails to encode without JWT_SECRET.`, async () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
-    const userDto: IUserDto = testFactory.userNewDto()
+    const user: User = await testFactory.userNew()
     const backupJwtSecret = process.env.RR_JWT_SECRET
     delete process.env.RR_JWT_SECRET
     const jwt = new JwtService()
     // Act and assert.
     expect(() => {
-      jwt.encode(userDto.id as string, tokenType.ACCESS, new Date().getTime())
+      jwt.encode(user.id.value, tokenType.ACCESS, new Date().getTime())
     }).toThrow(`JWT error. Secret key is not defined.`)
     process.env.RR_JWT_SECRET = backupJwtSecret
   })
@@ -121,14 +121,14 @@ describe(`JSON Web Token actions.`, () => {
     }).toThrow(`JWT error. User ID is not defined.`)
   })
 
-  test(`Fails to encode without token type.`, () => {
+  test(`Fails to encode without token type.`, async () => {
     // Arrange
     const testFactory: TestFactory = new TestFactory()
-    const userDto: IUserDto = testFactory.userNewDto()
+    const user: User = await testFactory.userNew()
     const jwt = new JwtService()
     // Act, and assert.
     expect(() => {
-      jwt.encode(userDto.id as string, tokenType.NONE, new Date().getTime())
+      jwt.encode(user.id.value, tokenType.NONE, new Date().getTime())
     }).toThrow(`JWT error. Type is not defined.`)
   })
 

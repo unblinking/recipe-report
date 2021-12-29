@@ -29,9 +29,8 @@ import { Response } from 'express'
 
 import { httpStatus, httpStatusValueType } from 'data/constants'
 
+import { log } from 'service/log-service'
 import { Responder } from 'service/responder-service'
-
-import { log } from 'root/utils'
 
 export const success = async (
   res: Response,

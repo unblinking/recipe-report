@@ -1,5 +1,5 @@
 /**
- * Email address value object.
+ * Base model abstract class.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -23,21 +23,14 @@
  *
  * @module
  */
+import { UniqueId } from 'domain/value/uid-value'
 
-export class EmailAddress {
-  private _value: string
+export abstract class Model<T> {
+  protected readonly _id: UniqueId
+  protected _props: T
 
-  public constructor(value: string) {
-    this._value = value
-  }
-
-  public get email_address(): string {
-    return this._value
-  }
-
-  public valid(value: string): boolean {
-    if (!value) return false
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return regex.test(value)
+  public constructor(props: T, id?: UniqueId) {
+    this._id = id ? id : UniqueId.create()
+    this._props = props
   }
 }

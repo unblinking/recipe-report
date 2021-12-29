@@ -1,23 +1,18 @@
 import type { Config } from '@jest/types'
+import { pathsToModuleNameMapper } from 'ts-jest'
+
+import { compilerOptions } from './tsconfig.json'
 
 export default async (): Promise<Config.InitialOptions> => {
   return {
-    collectCoverageFrom: [
-      "src/**/*.ts"
-    ],
-    roots: [
-      "<rootDir>/src"
-    ],
-    testMatch: [
-      "**/__tests__/**/*.+(ts)",
-      "**/?(*.)+(spec|test).+(ts)"
-    ],
+    collectCoverageFrom: ['src/**/*.ts'],
+    roots: ['<rootDir>/src'],
+    testMatch: ['**/__tests__/**/*.+(ts)', '**/?(*.)+(spec|test).+(ts)'],
     transform: {
-      "^.+\\.(ts)$": "ts-jest"
+      '^.+\\.(ts)$': 'ts-jest',
     },
-    setupFiles: [
-        "./jest.setup.ts"
-    ],
     verbose: true,
+    moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
+    modulePaths: ['<rootDir>/src'],
   }
 }

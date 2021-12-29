@@ -43,7 +43,6 @@
  *              name VARCHAR(50) - 50 char limit for display purposes.
  *              password TEXT - Salted/hashed passwords using pgcrypto.
  *              email_address TEXT - 
- *              role TEXT -
  *              date_created TIMESTAMPTZ - 
  *              date_activated TIMESTAMPTZ - 
  *              date_last_login TIMESTAMPTZ - 
@@ -53,7 +52,6 @@ CREATE TYPE rr.user_type AS (
     name VARCHAR ( 50 ),
     password TEXT,
     email_address TEXT,
-    role TEXT,
     date_created TIMESTAMPTZ,
     date_activated TIMESTAMPTZ,
     date_last_login TIMESTAMPTZ
@@ -68,7 +66,6 @@ COMMENT ON TYPE rr.user_type IS 'Type for an individual user record including lo
  *              name - Unique, and not null.
  *              password - Not null.
  *              email_address - Unique, and not null.
- *              role - Not null.
  *              date_created - Not null.
  *              date_activated - 
  *              date_last_login - 
@@ -78,16 +75,13 @@ CREATE TABLE IF NOT EXISTS rr.users OF rr.user_type (
     name WITH OPTIONS UNIQUE NOT NULL,
     password WITH OPTIONS NOT NULL,
     email_address WITH OPTIONS UNIQUE NOT NULL,
-    role WITH OPTIONS NOT NULL CHECK (role IN ('basic', 'manager', 'admin')) DEFAULT 'basic',
     date_created WITH OPTIONS NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-CREATE INDEX user_role_index ON rr.users (role);
 COMMENT ON TABLE rr.users IS 'Table to store user records.';
 COMMENT ON COLUMN rr.users.id IS 'UUID primary key.';
 COMMENT ON COLUMN rr.users.name IS 'Unique display name.';
 COMMENT ON COLUMN rr.users.password IS 'Salted/Hashed password using the pgcrypto crypt function, and gen_salt with the blowfish algorithm and iteration count of 8.';
 COMMENT ON COLUMN rr.users.email_address IS 'Unique email address.';
-COMMENT ON COLUMN rr.users.role IS 'Security level role.';
 COMMENT ON COLUMN rr.users.date_created IS 'Datetime the user was created in the database.';
 COMMENT ON COLUMN rr.users.date_activated IS 'Datetime the user was activated for login.';
 COMMENT ON COLUMN rr.users.date_last_login IS 'Datetime the user last logged into the system successfully.';
@@ -99,15 +93,13 @@ COMMENT ON COLUMN rr.users.date_last_login IS 'Datetime the user last logged int
  * Parameters:  name VARCHAR(50) - Unique user display name.
  *              password TEXT - Plain text user password that will be salted/hashed.
  *              email_address TEXT - 
- *              role TEXT - 
  * Usage:       SELECT * FROM rr.users_create('foo', 'p@$$w0rd', 'foo@recipe.report', 'basic');
  * Returns:     The record that was created.
  */
 CREATE OR REPLACE FUNCTION rr.users_create (
     name VARCHAR( 50 ),
     password TEXT,
-    email_address TEXT,
-    role TEXT
+    email_address TEXT
 )
     RETURNS SETOF rr.users
     LANGUAGE PLPGSQL
@@ -121,8 +113,8 @@ BEGIN
 
     RETURN QUERY
     INSERT
-    INTO rr.users (name, password, email_address, role)
-    VALUES ($1, saltedhash, $3, $4)
+    INTO rr.users (name, password, email_address)
+    VALUES ($1, saltedhash, $3)
     RETURNING *;
 END;
 $$;

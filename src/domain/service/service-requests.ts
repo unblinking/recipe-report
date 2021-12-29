@@ -23,7 +23,7 @@
  *
  * @module
  */
-import { IUserDto } from 'domain/models/user'
+import { IUserDto } from 'domain/models/user-model'
 
 abstract class ServiceRequest<T> {
   protected _item: T

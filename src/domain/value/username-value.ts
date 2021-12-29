@@ -1,5 +1,5 @@
 /**
- * Base model abstract class.
+ * Username value object.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -23,14 +23,31 @@
  *
  * @module
  */
-import { UniqueId } from 'domain/value-objects/uid'
+import { Err, errMsg } from 'domain/models/err-model'
 
-export abstract class Model<T> {
-  protected readonly _id: UniqueId
-  protected _props: T
+import { ValueObject } from './base-value'
 
-  public constructor(props: T, id?: UniqueId) {
-    this._id = id ? id : new UniqueId()
-    this._props = props
+export interface IUsername {
+  value: string
+}
+
+export class Username extends ValueObject<IUsername> {
+  public get value(): string {
+    return this.props.value
+  }
+
+  private constructor(props: IUsername) {
+    super(props)
+  }
+
+  public static create(username: string): Username {
+    if (
+      !username.match('^[A-Za-z0-9]+$') ||
+      username.length < 2 ||
+      username.length > 50
+    ) {
+      throw new Err(`NAME_INVALID`, errMsg.NAME_INVALID)
+    }
+    return new Username({ value: username })
   }
 }

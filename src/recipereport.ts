@@ -32,14 +32,15 @@ import Helmet from 'helmet'
 import { injectable, multiInject } from 'inversify'
 import 'reflect-metadata'
 
-import { errMsg } from 'data/constants'
+import { Err, errMsg } from 'domain/models/err-model'
+
 import { graffiti } from 'data/factories/fun-factory'
+
+import { log } from 'service/log-service'
 
 import { listen } from 'api/app'
 import { IBaseController } from 'api/controllers/base-controller'
 import { callHistory } from 'api/middlewares/callhistory'
-
-import { Err, log } from 'root/utils'
 
 import { SYMBOLS } from './symbols'
 

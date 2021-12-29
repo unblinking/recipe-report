@@ -1,5 +1,5 @@
 /**
- * UUID value object.
+ * Log service.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -23,21 +23,20 @@
  *
  * @module
  */
-import { v4 as uuid, validate } from 'uuid'
+import { createLogger } from 'bs-logger'
 
-export class UniqueId {
-  private _value: string
-
-  public constructor(value?: string) {
-    this._value = value ? value : uuid()
-  }
-
-  public get id(): string {
-    return this._value
-  }
-
-  public valid(): boolean {
-    if (!this.id) return false
-    return validate(this.id)
-  }
-}
+/**
+ * What rolls down stairs, Alone or in pairs, And over your neightbor's dog?
+ * What's great for a snack, And fits on your back? It's log, log, log.
+ * It's log, log, log, It's big, it's heavy, it's wood.
+ * It's log, it's log, It's better than bad, it's good.
+ * Everyone wants a log. You're gonna log it, log.
+ * Come on and get your log. Everyone needs a log.
+ * Log log log. Log from blammo!
+ *
+ * A wrapper around bs-logger.
+ * @see {@link https://github.com/huafu/bs-logger bs-logger}
+ */
+export const log = createLogger({
+  targets: process.env.RR_LOG_TARGETS,
+})

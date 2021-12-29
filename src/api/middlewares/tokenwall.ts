@@ -27,12 +27,13 @@
  */
 import { NextFunction, Request, Response } from 'express'
 
-import { errMsg, httpStatus } from 'data/constants'
+import { Err, errMsg } from 'domain/models/err-model'
+
+import { httpStatus } from 'data/constants'
 
 import { JwtService, Payload, tokenType } from 'service/jwt-service'
+import { log } from 'service/log-service'
 import { Responder } from 'service/responder-service'
-
-import { Err, log } from 'root/utils'
 
 export interface RequestWithUser extends Request {
   userId?: string

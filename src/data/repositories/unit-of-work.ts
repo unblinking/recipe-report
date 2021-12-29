@@ -27,12 +27,12 @@
 import { inject, injectable } from 'inversify'
 import { PoolClient } from 'pg'
 
-import { errMsg } from 'data/constants'
+import { Err, errMsg } from 'domain/models/err-model'
+
 import { IDataAccessLayer } from 'data/data-access'
 import { IUserRepo, UserRepo } from 'data/repositories/user-repo'
 
 import { SYMBOLS } from 'root/symbols'
-import { Err } from 'root/utils'
 
 export interface IUnitOfWork {
   connect(): Promise<void>
@@ -70,7 +70,10 @@ export class UnitOfWork implements IUnitOfWork {
   }
 
   public rollback = async (): Promise<void> => {
-    if (!this._client) throw new Err('UOW_CLIENT', errMsg.UOW_CLIENT)
+    // If there is no client, there is nothing to rollback or release.
+    if (!this._client) {
+      return
+    }
     await this._client.query('ROLLBACK')
     this._client.release()
   }

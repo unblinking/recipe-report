@@ -1,5 +1,5 @@
 /**
- * User authentication model.
+ * Email address value object.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -23,32 +23,28 @@
  *
  * @module
  */
-import { Model } from 'domain/models/base'
+import { Err, errMsg } from 'domain/models/err-model'
 
-import { errMsg } from 'data/constants'
+import { ValueObject } from './base-value'
 
-import { Err } from 'root/utils'
-
-export interface IAuth {
-  token: string
+export interface IEmailAddress {
+  value: string
 }
 
-export class Auth extends Model<IAuth> {
-  public get token(): string {
-    return this._props.token
+export class EmailAddress extends ValueObject<IEmailAddress> {
+  public get value(): string {
+    return this.props.value
   }
 
-  // Private constructor to control instantiation via factory method.
-  private constructor(props: IAuth) {
+  private constructor(props: IEmailAddress) {
     super(props)
   }
 
-  // Factory method here instead of a factory class.
-  public static create(props: IAuth): Auth {
-    if (!props.token) {
-      throw new Err(`TOKEN_INVALID`, errMsg.TOKEN_INVALID)
+  public static create(emailAddress: string): EmailAddress {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!regex.test(emailAddress)) {
+      throw new Err(`EMAIL_INVALID`, errMsg.EMAIL_INVALID)
     }
-
-    return new Auth(props)
+    return new EmailAddress({ value: emailAddress })
   }
 }

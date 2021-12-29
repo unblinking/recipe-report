@@ -1,5 +1,5 @@
 /**
- * Email model.
+ * Email templates.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -23,72 +23,7 @@
  *
  * @module
  */
-import { Model } from 'domain/models/base'
-import { EmailAddress } from 'domain/value-objects/email-address'
-import { UniqueId } from 'domain/value-objects/uid'
-
-import { errMsg } from 'data/constants'
-
-import { Err } from 'root/utils'
-
-export interface IEmailDto {
-  from?: EmailAddress
-  to?: EmailAddress
-  subject?: string
-  body?: string
-}
-
-export interface IEmail {
-  from: EmailAddress
-  to: EmailAddress
-  subject: string
-  body: string
-}
-
-export class Email extends Model<IEmail> {
-  public get from(): EmailAddress {
-    return this._props.from
-  }
-
-  public get to(): EmailAddress {
-    return this._props.to
-  }
-
-  public get subject(): string {
-    return this._props.subject
-  }
-
-  public get body(): string {
-    return this._props.body
-  }
-
-  private constructor(props: IEmail, id?: UniqueId) {
-    super(props, id)
-  }
-
-  public static create(props: IEmail): Email {
-    if (!props.from.valid) throw new Err('EMAIL_INVALID', errMsg.EMAIL_INVALID)
-    if (!props.to.valid) throw new Err('EMAIL_INVALID', errMsg.EMAIL_INVALID)
-
-    return new Email(props)
-  }
-
-  public static createActivation(
-    emailAddress: EmailAddress,
-    token: string,
-  ): Email {
-    const from = noReplyAddress
-    const to = new EmailAddress(emailAddress.toString())
-    if (!to || !to.valid) throw new Err('EMAIL_INVALID', errMsg.EMAIL_INVALID)
-
-    return Email.create({
-      from: from,
-      to: to,
-      subject: subjectActivation,
-      body: activationTemplate(to, token),
-    })
-  }
-}
+import { EmailAddress } from 'domain/value/email-address-value'
 
 const getProtocol = (): string => {
   let protocol = `http`
@@ -106,10 +41,10 @@ const getHostname = (): string => {
   return hostname
 }
 
-const noReplyAddress = new EmailAddress(`no-reply@recipe.report`)
-const subjectActivation = `Recipe.Report new user account activation required.`
+export const addressNoReply = EmailAddress.create(`no-reply@recipe.report`)
 
-export const activationTemplate = (to: EmailAddress, token: string): string => {
+export const subjectActivation = `Recipe.Report new user account activation required.`
+export const templateActivation = (to: EmailAddress, token: string): string => {
   return `
 Hello ${to},
 

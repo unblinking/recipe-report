@@ -25,8 +25,9 @@
  */
 import { inject, injectable } from 'inversify'
 
-import { Auth } from 'domain/models/auth'
-import { isUser, isUserAuth, User } from 'domain/models/user'
+import { UserMap } from 'domain/maps/user-map'
+import { Err, errMsg } from 'domain/models/err-model'
+import { User } from 'domain/models/user-model'
 import {
   // UserActivationRequest,
   UserAuthenticationRequest,
@@ -37,17 +38,17 @@ import {
   UserAuthenticationResponse,
   UserRegistrationResponse,
 } from 'domain/service/service-responses'
-import { Password, PasswordResult } from 'domain/value-objects/password'
+import { isStrongPassword, PasswordResult } from 'domain/value/password-value'
 
-import { errMsg, httpStatus, outcomes } from 'data/constants'
+import { httpStatus, outcomes } from 'data/constants'
 import { IUnitOfWork } from 'data/repositories/unit-of-work'
 
 import { IEmailService } from 'service/email-service'
 import { IJwtService, tokenType } from 'service/jwt-service'
+import { log } from 'service/log-service'
 
 import { container } from 'root/ioc.config'
 import { SYMBOLS } from 'root/symbols'
-import { Err, log } from 'root/utils'
 
 export interface IUserService {
   create(
@@ -77,25 +78,17 @@ export class UserService implements IUserService {
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 
     try {
-      // Verify the request DTO has required fields.
-      if (!isUser(req.user)) {
-        return new UserRegistrationResponse(
-          outcomes.FAIL,
-          new Err(`REG_REQUIRED_UNDEF`, errMsg.REG_REQUIRED_UNDEF),
-          undefined, // No item to return.
-          httpStatus.BAD_REQUEST,
-        )
-      }
-
-      // Verify that the password is strong.
-      const passwordResult: PasswordResult = await new Password(
-        req.user.password.toString(),
-      ).isStrong(req.user.name, req.user.email_address)
-      if (!passwordResult.success) {
-        throw new Err(
-          `PASS_WEAK`,
-          `${errMsg.PASS_WEAK} ${passwordResult.message}`,
-        )
+      // Verify sufficient password strength.
+      // This is done in the password value object model, but here we check
+      // again while passing the username and email address, so that they can
+      // be considered while determining the password strength.
+      const strength: PasswordResult = await isStrongPassword(
+        req.user.password,
+        req.user.name,
+        req.user.email_address,
+      )
+      if (!strength.success) {
+        throw new Err(`PASS_WEAK`, `${errMsg.PASS_WEAK} ${strength.message}`)
       }
 
       // Connect to the database and begin a transaction.
@@ -103,11 +96,11 @@ export class UserService implements IUserService {
       await uow.begin()
 
       // Create the user in persistence.
-      const user: User = await uow.users.create(User.toDomain(req.user))
+      const user: User = await uow.users.create(UserMap.toDomain(req.user))
 
       // Create a JWT for the new user's activation email.
       const token = this._jwt.encode(
-        user.id.toString(),
+        user.id.value,
         tokenType.ACTIVATION,
         new Date().getTime() + 24 * 60 * 60 * 1000, // 24 hours.
       )
@@ -121,7 +114,7 @@ export class UserService implements IUserService {
       return new UserRegistrationResponse(
         outcomes.SUCCESS,
         undefined, // No error to return.
-        User.toDto(user),
+        UserMap.toDto(user),
         httpStatus.OK,
       )
     } catch (e) {
@@ -249,10 +242,10 @@ export class UserService implements IUserService {
 
     try {
       // Verify the request DTO has required fields.
-      if (!isUserAuth(req.user)) {
+      if (!req.user.email_address || !req.user.password) {
         return new UserAuthenticationResponse(
           outcomes.FAIL,
-          new Err(`REG_REQUIRED_UNDEF`, errMsg.REG_REQUIRED_UNDEF),
+          new Err(`AUTH_REQUIRED_UNDEF`, errMsg.AUTH_REQUIRED_UNDEF),
           undefined, // No item to return.
           httpStatus.BAD_REQUEST,
         )
@@ -263,14 +256,14 @@ export class UserService implements IUserService {
       await uow.begin()
 
       // Find the matching user in the database.
-      const user = await uow.users.authenticate(User.toDomain(req.user))
+      const user = await uow.users.authenticate(UserMap.toDomain(req.user))
 
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
 
       // Create a JWT for the user's access.
       const token = this._jwt.encode(
-        user.id.toString(),
+        user.id.value,
         tokenType.ACCESS,
         new Date().getTime() + 24 * 60 * 60 * 1000, // 24 hours.
       )
@@ -278,7 +271,7 @@ export class UserService implements IUserService {
       return new UserAuthenticationResponse(
         outcomes.SUCCESS,
         undefined,
-        Auth.create({ token: token }),
+        token,
         httpStatus.OK,
       )
     } catch (e) {

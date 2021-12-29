@@ -26,14 +26,16 @@
 import { NextFunction, Request, Response, Router } from 'express'
 import { inject, injectable } from 'inversify'
 
+import { Err, errBase, errMsg } from 'domain/models/err-model'
 import {
   // UserActivationRequest,
   // UserAuthenticationRequest,
   UserRegistrationRequest,
 } from 'domain/service/service-requests'
 
-import { errBase, errMsg, httpStatus, logMsg, outcomes } from 'data/constants'
+import { httpStatus, logMsg, outcomes } from 'data/constants'
 
+import { log } from 'service/log-service'
 import { IUserService } from 'service/user-service'
 
 import { IBaseController } from 'api/controllers/base-controller'
@@ -41,7 +43,6 @@ import { error, fail, success } from 'api/controllers/controller-response'
 import { fiveHundred } from 'api/middlewares/laststop'
 
 import { SYMBOLS } from 'root/symbols'
-import { Err, log } from 'root/utils'
 
 @injectable()
 export class UserController implements IBaseController {

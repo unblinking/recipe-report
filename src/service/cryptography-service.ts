@@ -37,9 +37,7 @@
  */
 import Crypto from 'crypto'
 
-import { errMsg } from 'data/constants'
-
-import { Err } from 'root/utils'
+import { Err, errMsg } from 'domain/models/err-model'
 
 const key: string = process.env.RR_CRYPTO_KEY as string
 const ivLength: number = parseInt(process.env.RR_CRYPTO_IV_LENGTH as string, 10)

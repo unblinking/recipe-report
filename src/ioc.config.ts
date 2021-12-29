@@ -38,8 +38,7 @@ import { RootController } from 'api/controllers/root-controller'
 import { UserController } from 'api/controllers/user-controller'
 
 import { IRecipeReport, RecipeReport } from 'root/recipereport'
-
-import { SYMBOLS } from './symbols'
+import { SYMBOLS } from 'root/symbols'
 
 export const container = new Container()
 
