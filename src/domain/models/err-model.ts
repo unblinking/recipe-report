@@ -109,7 +109,7 @@ export const errMsg = {
   EMAIL_SUBJECT: `Email SUBJECT is not defined.`,
   EMAIL_BODY: `Email BODY is not defined.`,
   EMAIL_MS_API_KEY: `MailerSend API Key is not defined.`,
-  // JWT wrapper.
+  // JWT service.
   JWT_SECRET_KEY: `JWT error. Secret key is not defined.`,
   JWT_USER_ID: `JWT error. User ID is not defined.`,
   JWT_TYPE: `JWT error. Type is not defined.`,

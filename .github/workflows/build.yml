@@ -7,6 +7,14 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      NODE_ENV: development
+      RR_PORT: 1138
+      RR_CRYPTO_KEY: MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT
+      RR_CRYPTO_ALGO: aes-256-cbc
+      RR_CRYPTO_IV_LENGTH: 16
+      RR_JWT_SECRET: devTestEnvironment
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
