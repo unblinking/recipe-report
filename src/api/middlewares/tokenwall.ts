@@ -31,12 +31,15 @@ import { Err, errMsg } from 'domain/models/err-model'
 
 import { httpStatus } from 'data/constants'
 
-import { JwtService, Payload, tokenType } from 'service/jwt-service'
+import { IJwtService, Payload, tokenType } from 'service/jwt-service'
 import { log } from 'service/log-service'
 import { Responder } from 'service/responder-service'
 
+import { container } from 'root/ioc.config'
+import { SYMBOLS } from 'root/symbols'
+
 export interface RequestWithUser extends Request {
-  userId?: string
+  requestingUserId?: string
 }
 
 export const tokenwall = (
@@ -48,7 +51,7 @@ export const tokenwall = (
   try {
     const token: string = req.headers.token as string
     if (!token) throw new Err(`TOKENWALL_UNDEF`, errMsg.TOKENWALL_UNDEF)
-    const jwt = new JwtService()
+    const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     const payload: Payload = jwt.decode(token)
 
     // Verify that the token is for access.
@@ -60,8 +63,7 @@ export const tokenwall = (
     if (payload.ttl < now) throw new Err(`TOKENWALL_EXP`, errMsg.TOKENWALL_EXP)
 
     // Add the user Id from the payload to the request.
-    const userId: string = payload.id
-    req.userId = userId
+    req.requestingUserId = payload.id
 
     // Allow the request to continue on.
     next()

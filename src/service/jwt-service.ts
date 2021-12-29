@@ -26,16 +26,18 @@
  *
  * @module
  */
-import { injectable } from 'inversify'
+import { inject, injectable } from 'inversify'
 import jwt from 'jwt-simple'
 import 'reflect-metadata'
 
 import { Err, errMsg } from 'domain/models/err-model'
 
-import { decrypt, encrypt } from 'service/cryptography-service'
+import { ICryptoService } from 'service/crypto-service'
+
+import { SYMBOLS } from 'root/symbols'
 
 export interface IJwtService {
-  encode(id: string | undefined, type: tokenType, ttl: number): string
+  encode(id: string | undefined, type: tokenType, ttl?: number): string
   decode(token: string | undefined): Payload
 }
 
@@ -54,6 +56,14 @@ export interface Payload {
 
 @injectable()
 export class JwtService implements IJwtService {
+  private _crypto: ICryptoService
+
+  public constructor(
+    @inject(SYMBOLS.ICryptoService) cryptoService: ICryptoService,
+  ) {
+    this._crypto = cryptoService
+  }
+
   /**
    * Encode a JWT and encrypt its payload.
    * @returns A JWT containing an encrypted payload.
@@ -76,7 +86,7 @@ export class JwtService implements IJwtService {
     const payload: Payload = { id: id, type: type, iat: iat, ttl: ttl }
     // Stringify and encrypt the payload.
     const stringified: string = JSON.stringify(payload)
-    const encrypted: string = encrypt(stringified)
+    const encrypted: string = this._crypto.encrypt(stringified)
     // Encode a JWT, containing the encrypted payload, and return it.
     const encoded: string = jwt.encode(encrypted, secret, 'HS512')
     return encoded
@@ -95,7 +105,7 @@ export class JwtService implements IJwtService {
     // Decode the JWT. The signature of the token is verified.
     const decoded: string = jwt.decode(token, secret, false, 'HS512')
     // Decrypt and parse the payload.
-    const decrypted: string = decrypt(decoded)
+    const decrypted: string = this._crypto.decrypt(decoded)
     const parsed: Payload = JSON.parse(decrypted)
     return parsed
   }

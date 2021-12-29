@@ -26,9 +26,13 @@
 
 export const SYMBOLS = {
   IRecipeReport: Symbol.for('IRecipeReport'),
+
   IBaseController: Symbol.for('IBaseConroller'),
+
   IDataAccessLayer: Symbol.for('IDataAccessLayer'),
   IUnitOfWork: Symbol.for('IUnitOfWork'),
+
+  ICryptoService: Symbol.for('ICryptoService'),
   IEmailService: Symbol.for('IEmailService'),
   IJwtService: Symbol.for('IJwtService'),
   IUserService: Symbol.for('IUserService'),

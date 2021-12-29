@@ -29,6 +29,7 @@ import { Container } from 'inversify'
 import { DataAccessLayer, IDataAccessLayer } from 'data/data-access'
 import { IUnitOfWork, UnitOfWork } from 'data/repositories/unit-of-work'
 
+import { CryptoService, ICryptoService } from 'service/crypto-service'
 import { EmailService, IEmailService } from 'service/email-service'
 import { IJwtService, JwtService } from 'service/jwt-service'
 import { IUserService, UserService } from 'service/user-service'
@@ -54,6 +55,7 @@ container.bind<IDataAccessLayer>(SYMBOLS.IDataAccessLayer).to(DataAccessLayer)
 container.bind<IUnitOfWork>(SYMBOLS.IUnitOfWork).to(UnitOfWork)
 
 // Add services to the container.
+container.bind<ICryptoService>(SYMBOLS.ICryptoService).to(CryptoService)
 container.bind<IEmailService>(SYMBOLS.IEmailService).to(EmailService)
 container.bind<IJwtService>(SYMBOLS.IJwtService).to(JwtService)
 container.bind<IUserService>(SYMBOLS.IUserService).to(UserService)

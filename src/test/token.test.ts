@@ -25,7 +25,10 @@
  */
 import { User } from 'domain/models/user-model'
 
-import { JwtService, Payload, tokenType } from 'service/jwt-service'
+import { IJwtService, Payload, tokenType } from 'service/jwt-service'
+
+import { container } from 'root/ioc.config'
+import { SYMBOLS } from 'root/symbols'
 
 import { TestFactory } from 'test/test-factory'
 
@@ -34,7 +37,7 @@ describe(`JSON Web Token actions.`, () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const user: User = await testFactory.userNew()
-    const jwt = new JwtService()
+    const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     // Act.
     const token: string = jwt.encode(
       user.id.value,
@@ -49,7 +52,7 @@ describe(`JSON Web Token actions.`, () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const user: User = await testFactory.userNew()
-    const jwt = new JwtService()
+    const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     // Act.
     const token: string = jwt.encode(
       user.id.value,
@@ -64,7 +67,7 @@ describe(`JSON Web Token actions.`, () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const user: User = await testFactory.userNew()
-    const jwt = new JwtService()
+    const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     // Act.
     const token: string = jwt.encode(user.id.value, tokenType.ACCESS)
     // Assert.
@@ -75,7 +78,7 @@ describe(`JSON Web Token actions.`, () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const token: string = testFactory.tokenActivation()
-    const jwt = new JwtService()
+    const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     // Act.
     const payload: Payload = jwt.decode(token)
     // Assert.
@@ -89,7 +92,7 @@ describe(`JSON Web Token actions.`, () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const token: string = testFactory.tokenAccess()
-    const jwt = new JwtService()
+    const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     // Act.
     const payload: Payload = jwt.decode(token)
     // Assert.
@@ -105,7 +108,7 @@ describe(`JSON Web Token actions.`, () => {
     const user: User = await testFactory.userNew()
     const backupJwtSecret = process.env.RR_JWT_SECRET
     delete process.env.RR_JWT_SECRET
-    const jwt = new JwtService()
+    const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     // Act and assert.
     expect(() => {
       jwt.encode(user.id.value, tokenType.ACCESS, new Date().getTime())
@@ -115,7 +118,7 @@ describe(`JSON Web Token actions.`, () => {
 
   test(`Fails to encode without User ID.`, () => {
     // Arrange, act, and assert.
-    const jwt = new JwtService()
+    const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     expect(() => {
       jwt.encode(``, tokenType.ACCESS, new Date().getTime())
     }).toThrow(`JWT error. User ID is not defined.`)
@@ -125,7 +128,7 @@ describe(`JSON Web Token actions.`, () => {
     // Arrange
     const testFactory: TestFactory = new TestFactory()
     const user: User = await testFactory.userNew()
-    const jwt = new JwtService()
+    const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     // Act, and assert.
     expect(() => {
       jwt.encode(user.id.value, tokenType.NONE, new Date().getTime())
@@ -138,7 +141,7 @@ describe(`JSON Web Token actions.`, () => {
     const token: string = testFactory.tokenActivation()
     const backupJwtSecret = process.env.RR_JWT_SECRET
     delete process.env.RR_JWT_SECRET
-    const jwt = new JwtService()
+    const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     // Act and assert.
     expect(() => {
       jwt.decode(token)
@@ -148,7 +151,7 @@ describe(`JSON Web Token actions.`, () => {
 
   test(`Fails to decodes without token.`, () => {
     // Arrange, act, and assert.
-    const jwt = new JwtService()
+    const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     expect(() => {
       jwt.decode(``)
     }).toThrow(`JWT error. Token is not defined.`)
