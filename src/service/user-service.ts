@@ -26,7 +26,13 @@
 import { inject, injectable } from 'inversify'
 
 import { UserMap } from 'domain/maps/user-map'
-import { Err, errMsg } from 'domain/models/err-model'
+import {
+  Err,
+  errClient,
+  errMsg,
+  errUser,
+  isErrClient,
+} from 'domain/models/err-model'
 import { User } from 'domain/models/user-model'
 import {
   // UserActivationRequest,
@@ -51,9 +57,10 @@ import { container } from 'root/ioc.config'
 import { SYMBOLS } from 'root/symbols'
 
 export interface IUserService {
-  create(
-    userRegistrationRequest: UserRegistrationRequest,
-  ): Promise<UserRegistrationResponse>
+  create(req: UserRegistrationRequest): Promise<UserRegistrationResponse>
+  authenticate(
+    req: UserAuthenticationRequest,
+  ): Promise<UserAuthenticationResponse>
 }
 
 @injectable()
@@ -79,16 +86,18 @@ export class UserService implements IUserService {
 
     try {
       // Verify sufficient password strength.
-      // This is done in the password value object model, but here we check
-      // again while passing the username and email address, so that they can
-      // be considered while determining the password strength.
+      // We pass the username and email address, so that they can be considered
+      // while determining the password strength.
       const strength: PasswordResult = await isStrongPassword(
         req.user.password,
         req.user.name,
         req.user.email_address,
       )
       if (!strength.success) {
-        throw new Err(`PASS_WEAK`, `${errMsg.PASS_WEAK} ${strength.message}`)
+        throw new Err(
+          `PASSWORD_WEAK`,
+          `${errClient.PASSWORD_WEAK} ${strength.message}`,
+        )
       }
 
       // Connect to the database and begin a transaction.
@@ -96,7 +105,7 @@ export class UserService implements IUserService {
       await uow.begin()
 
       // Create the user in persistence.
-      const user: User = await uow.users.create(UserMap.toDomain(req.user))
+      const user: User = await uow.users.create(UserMap.dtoToDomain(req.user))
 
       // Create a JWT for the new user's activation email.
       const token = this._jwt.encode(
@@ -114,23 +123,31 @@ export class UserService implements IUserService {
       return new UserRegistrationResponse(
         outcomes.SUCCESS,
         undefined, // No error to return.
-        UserMap.toDto(user),
+        UserMap.domainToDto(user),
         httpStatus.OK,
       )
     } catch (e) {
+      // Attempt a rollback. If no database client exists, nothing will happen.
       await uow.rollback()
-      const errName = Err.getErrName(e)
-      if (errName == 'REG_USRNAME_USED' || errName == 'REG_EMAIL_USED') {
+
+      // The caught e could be anything. Turn it into an Err.
+      const err = Err.toErr(e)
+
+      // If the error message can be client facing, return BAD_REQUEST.
+      if (isErrClient(err.name)) {
+        err.message = `${errUser.REGISTER} ${err.message}`
         return new UserRegistrationResponse(
           outcomes.FAIL,
-          e as Err,
+          err,
           undefined, // No item to return.
           httpStatus.BAD_REQUEST,
         )
       }
+
+      // Do not leak internal error details, return INTERNAL_ERROR.
       return new UserRegistrationResponse(
         outcomes.ERROR,
-        e as Err,
+        err,
         undefined, // No item to return.
         httpStatus.INTERNAL_ERROR,
       )
@@ -252,20 +269,19 @@ export class UserService implements IUserService {
     try {
       // Verify the request DTO has required fields.
       if (!req.user.email_address || !req.user.password) {
-        return new UserAuthenticationResponse(
-          outcomes.FAIL,
-          new Err(`AUTH_REQUIRED_UNDEF`, errMsg.AUTH_REQUIRED_UNDEF),
-          undefined, // No item to return.
-          httpStatus.BAD_REQUEST,
-        )
+        throw new Err(`AUTH_REQUIRED_UNDEF`, errMsg.AUTH_REQUIRED_UNDEF)
       }
 
       // Connect to the database and begin a transaction.
       await uow.connect()
       await uow.begin()
 
+      // Set a placeholder name. We can't create the domain user without a name,
+      // but the user repo authenticate method will not read the name.
+      req.user.name = 'authenticate'
+
       // Find the matching user in the database.
-      const user = await uow.users.authenticate(UserMap.toDomain(req.user))
+      const user = await uow.users.authenticate(UserMap.dtoToDomain(req.user))
 
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
@@ -279,15 +295,32 @@ export class UserService implements IUserService {
 
       return new UserAuthenticationResponse(
         outcomes.SUCCESS,
-        undefined,
+        undefined, // No error to return.
         token,
         httpStatus.OK,
       )
     } catch (e) {
+      // Attempt a rollback. If no database client exists, nothing will happen.
       await uow.rollback()
+
+      // The caught e could be anything. Turn it into an Err.
+      const err = Err.toErr(e)
+
+      // If the error message can be client facing, return BAD_REQUEST.
+      if (isErrClient(err.name)) {
+        err.message = `${errUser.REGISTER} ${err.message}`
+        return new UserAuthenticationResponse(
+          outcomes.FAIL,
+          err,
+          undefined, // No item to return.
+          httpStatus.BAD_REQUEST,
+        )
+      }
+
+      // Do not leak internal error details, return INTERNAL_ERROR.
       return new UserAuthenticationResponse(
         outcomes.ERROR,
-        e as Err,
+        err,
         undefined, // No item to return.
         httpStatus.INTERNAL_ERROR,
       )

@@ -23,7 +23,7 @@
  *
  * @module
  */
-import { Err, errMsg } from 'domain/models/err-model'
+import { Err, errClient } from 'domain/models/err-model'
 
 import { ValueObject } from './base-value'
 
@@ -46,7 +46,7 @@ export class Username extends ValueObject<IUsername> {
       username.length < 2 ||
       username.length > 50
     ) {
-      throw new Err(`NAME_INVALID`, errMsg.NAME_INVALID)
+      throw new Err(`NAME_INVALID`, errClient.NAME_INVALID)
     }
     return new Username({ value: username })
   }

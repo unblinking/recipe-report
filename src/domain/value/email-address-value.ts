@@ -23,7 +23,7 @@
  *
  * @module
  */
-import { Err, errMsg } from 'domain/models/err-model'
+import { Err, errClient } from 'domain/models/err-model'
 
 import { ValueObject } from './base-value'
 
@@ -43,7 +43,7 @@ export class EmailAddress extends ValueObject<IEmailAddress> {
   public static create(emailAddress: string): EmailAddress {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!regex.test(emailAddress)) {
-      throw new Err(`EMAIL_INVALID`, errMsg.EMAIL_INVALID)
+      throw new Err(`EMAIL_INVALID`, errClient.EMAIL_INVALID)
     }
     return new EmailAddress({ value: emailAddress })
   }

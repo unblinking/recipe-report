@@ -28,7 +28,7 @@ import { EmailParams, MailerSend, Recipient, Sender } from 'mailer-send-ts'
 import 'reflect-metadata'
 
 import { Email } from 'domain/models/email-model'
-import { Err, errMsg } from 'domain/models/err-model'
+import { Err, errInternal } from 'domain/models/err-model'
 import { EmailAddress } from 'domain/value/email-address-value'
 
 import { log } from 'service/log-service'
@@ -57,20 +57,20 @@ export class EmailService implements IEmailService {
   private async _sendTransactional(email: Email): Promise<void> {
     log.trace(`email-transactional-service send()`)
     if (!email.from) {
-      throw new Err(`EMAIL_FROM`, errMsg.EMAIL_FROM)
+      throw new Err(`EMAIL_FROM`, errInternal.EMAIL_FROM)
     }
     if (!email.to) {
-      throw new Err(`EMAIL_TO`, errMsg.EMAIL_TO)
+      throw new Err(`EMAIL_TO`, errInternal.EMAIL_TO)
     }
     if (!email.subject) {
-      throw new Err(`EMAIL_SUBJECT`, errMsg.EMAIL_SUBJECT)
+      throw new Err(`EMAIL_SUBJECT`, errInternal.EMAIL_SUBJECT)
     }
     if (!email.body) {
-      throw new Err(`EMAIL_BODY`, errMsg.EMAIL_BODY)
+      throw new Err(`EMAIL_BODY`, errInternal.EMAIL_BODY)
     }
     if (process.env.NODE_ENV === `production`) {
       if (!process.env.RR_MAILER_SEND_KEY) {
-        throw new Err(`EMAIL_MS_API_KEY`, errMsg.EMAIL_MS_API_KEY)
+        throw new Err(`EMAIL_MS_API_KEY`, errInternal.EMAIL_MS_API_KEY)
       }
       const mailerSend = new MailerSend({
         apiKey: process.env.RR_MAILER_SEND_KEY,

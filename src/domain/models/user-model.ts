@@ -25,7 +25,7 @@
  */
 import { UserMap } from 'domain/maps/user-map'
 import { Model } from 'domain/models/base-model'
-import { Err, errMsg } from 'domain/models/err-model'
+import { Err, errClient } from 'domain/models/err-model'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { Password } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
@@ -93,7 +93,7 @@ export class User extends Model<IUser> {
   // Factory method here instead of a factory class.
   public static create(props: IUser, id?: UniqueId): User {
     if (!UserMap.isUser(props)) {
-      throw new Err(`MISSING_REQ`, `${errMsg.MISSING_REQ}`)
+      throw new Err(`MISSING_REQ`, `User: ${errClient.MISSING_REQ}`)
     }
     return new User(props, id)
   }

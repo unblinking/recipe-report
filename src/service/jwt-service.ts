@@ -30,7 +30,7 @@ import { inject, injectable } from 'inversify'
 import jwt from 'jwt-simple'
 import 'reflect-metadata'
 
-import { Err, errMsg } from 'domain/models/err-model'
+import { Err, errInternal } from 'domain/models/err-model'
 
 import { ICryptoService } from 'service/crypto-service'
 
@@ -76,11 +76,11 @@ export class JwtService implements IJwtService {
     // Determine our secret, from environment variable.
     const secret: string = process.env.RR_JWT_SECRET as string
     // Verify that we aren't missing anything important.
-    if (!secret) throw new Err(`JWT_SECRET_KEY`, errMsg.JWT_SECRET_KEY)
-    if (!id) throw new Err(`JWT_USER_ID`, errMsg.JWT_USER_ID)
+    if (!secret) throw new Err(`JWT_SECRET_KEY`, errInternal.JWT_SECRET_KEY)
+    if (!id) throw new Err(`JWT_USER_ID`, errInternal.JWT_USER_ID)
     // Note: tokenType.NONE is zero, a falsey value, so that would cause
     // an error here just as if type was undefined.
-    if (!type) throw new Err(`JWT_TYPE`, errMsg.JWT_TYPE)
+    if (!type) throw new Err(`JWT_TYPE`, errInternal.JWT_TYPE)
     // Instantiate the payload.
     const iat = new Date().getTime()
     const payload: Payload = { id: id, type: type, iat: iat, ttl: ttl }
@@ -100,8 +100,8 @@ export class JwtService implements IJwtService {
     // Determine our secret, from environment variable.
     const secret: string = process.env.RR_JWT_SECRET as string
     // Verify that we aren't missing anything important.
-    if (!secret) throw new Err(`JWT_SECRET_KEY`, errMsg.JWT_SECRET_KEY)
-    if (!token) throw new Err(`JWT_TOKEN`, errMsg.JWT_TOKEN)
+    if (!secret) throw new Err(`JWT_SECRET_KEY`, errInternal.JWT_SECRET_KEY)
+    if (!token) throw new Err(`JWT_TOKEN`, errInternal.JWT_TOKEN)
     // Decode the JWT. The signature of the token is verified.
     const decoded: string = jwt.decode(token, secret, false, 'HS512')
     // Decrypt and parse the payload.

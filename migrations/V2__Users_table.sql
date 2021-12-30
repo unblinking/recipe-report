@@ -119,3 +119,90 @@ BEGIN
 END;
 $$;
 COMMENT ON FUNCTION rr.users_create IS 'Function to create a record in the users table.';
+
+/**
+ * Function:    rr.users_update_date_last_login
+ * Author:      Joshua Gray
+ * Description: Function to update a record in the users table with a new date_last_login.
+ * Parameters:  id UUID - Primary key id for the record to be updated.
+ * Usage:       SELECT * FROM rr.users_update_date_last_login('00000000-0000-0000-0000-000000000000');
+ * Returns:     True if the user date_last_login was updated, and false if not.
+ */
+CREATE OR REPLACE FUNCTION rr.users_update_date_last_login (
+    id UUID
+)
+    RETURNS BOOLEAN
+    LANGUAGE PLPGSQL
+    AS
+$$
+DECLARE
+    now TIMESTAMPTZ;
+BEGIN
+    SELECT CURRENT_TIMESTAMP INTO now;
+
+    UPDATE rr.users
+    SET date_last_login = now
+    WHERE rr.users.id = $1;
+    RETURN FOUND;
+END;
+$$;
+COMMENT ON FUNCTION rr.users_update_date_last_login IS 'Function to update a record in the users table with a new date_last_login.';
+
+/**
+ * Function:    rr.users_authenticate
+ * Author:      Joshua Gray
+ * Description: Function to authenticate a user by email address and password.
+ * Parameters:  email_address TEXT - 
+ *              password TEXT -
+ * Usage:       SELECT * FROM rr.users_authenticate('foo@recipe.report', 'passwordfoo');
+ * Returns:     The user record if found.
+ */
+CREATE OR REPLACE FUNCTION rr.users_authenticate (
+    email_address TEXT,
+    password TEXT
+)
+    RETURNS SETOF rr.users
+    LANGUAGE PLPGSQL
+    AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT *
+    FROM rr.users
+    WHERE rr.users.email_address = $1
+        AND rr.users.password = crypt($2, rr.users.password);
+END;
+$$;
+COMMENT ON FUNCTION rr.users_authenticate IS 'Function to authenticate a user by email address and password.';
+
+/**
+ * Function:    rr.users_count_by_column_value
+ * Author:      Joshua Gray
+ * Description: Function to return the count of user records that match a given column/value.
+ * Parameters:  column_name TEXT - The name of the column to match on.
+ *              column_value TEXT - The value of the column to match on.
+ * Usage:       SELECT * FROM rr.users_count_by_column_value('name', 'foo');
+ * Returns:     An integer count of the number of matching records found.
+ */
+CREATE OR REPLACE FUNCTION rr.users_count_by_column_value (
+    column_name TEXT,
+    column_value TEXT
+)
+    RETURNS integer
+    LANGUAGE PLPGSQL
+    AS
+$$
+DECLARE
+    row_count integer;
+    query text := 'SELECT COUNT(*) FROM rr.users';
+BEGIN
+    IF column_name IS NOT NULL THEN
+        query := query || ' WHERE ' || quote_ident(column_name) || ' = $1';
+    END IF;
+    EXECUTE query
+    USING column_value
+    INTO row_count;
+    RETURN row_count;
+END;
+$$;
+COMMENT ON FUNCTION rr.users_count_by_column_value IS 'Function to count records from the users table by the specified column/value.';

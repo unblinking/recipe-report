@@ -37,8 +37,18 @@
  */
 export class Err extends Error {
   public constructor(
-    name: errMessageKeyType | errBaseKeyType,
-    message: errMessageValueType | errBaseValueType,
+    name:
+      | errMessageKeyType
+      | errEnvKeyType
+      | errUserKeyType
+      | errClientKeyType
+      | errInternalKeyType,
+    message:
+      | errMessageValueType
+      | errEnvValueType
+      | errUserValueType
+      | errClientValueType
+      | errInternalValueType,
   ) {
     super(message)
     this.name = name
@@ -46,60 +56,48 @@ export class Err extends Error {
   }
 
   // Type-guard using a type-predicate method.
-  public static isErr(error: unknown): error is Err {
+  // Do our best to determine if the unknown is an Err.
+  public static isErr(unknown: unknown): unknown is Err {
     return (
-      typeof error === 'object' &&
-      error !== null &&
-      'name' in error &&
-      typeof (error as Record<string, unknown>).name === 'string' &&
-      'message' in error &&
-      typeof (error as Record<string, unknown>).message === 'string'
+      typeof unknown === 'object' &&
+      unknown !== null &&
+      'name' in unknown &&
+      typeof (unknown as Record<string, unknown>).name === 'string' &&
+      'message' in unknown &&
+      typeof (unknown as Record<string, unknown>).message === 'string'
     )
   }
 
-  // Try to convert an object into an Err.
-  public static toErr(maybeError: unknown): Err {
-    if (Err.isErr(maybeError)) {
-      return maybeError
+  // Convert an object into an Err.
+  // Used in the catch of a try/catch. The caught object might be anything.
+  // Here we take that object and return it as an Err.
+  public static toErr(unknown: unknown): Err {
+    if (Err.isErr(unknown)) {
+      return unknown
     } else {
       try {
-        return new Err(`UNKNOWN`, JSON.stringify(maybeError))
+        return new Err(`UNKNOWN`, JSON.stringify(unknown))
       } catch {
-        // Fallback in case there's an error stringifying the maybeError
+        // Fallback in case there's an error stringifying the unknown object
         // like with circular references for example.
-        return new Err(`UNKNOWN`, String(maybeError))
+        return new Err(`UNKNOWN`, String(unknown))
       }
     }
   }
 
-  public static getErrName(error: unknown): string {
-    return Err.toErr(error).name
+  public static getErrName(unknown: unknown): string {
+    return Err.toErr(unknown).name
   }
 
-  public static getErrMessage(error: unknown): string {
-    return Err.toErr(error).message
+  public static getErrMessage(unknown: unknown): string {
+    return Err.toErr(unknown).message
   }
 }
 
 //#region Error message constants.
 
-/**
- * Error message base statements.
- */
-export const errBase = {
-  REG: `The user couldn't be registered.`, // User registration endpoint.
-  ACTIVATE: `The user couldn't be activated.`, // User activation endpoint.
-  AUTH: `The user couldn't be authenticated.`, // User authentication endpoint.
-}
-type errBaseType = typeof errBase
-export type errBaseKeyType = keyof errBaseType
-export type errBaseValueType = keyof errBaseType
-
-/**
- * Error messages.
- */
-export const errMsg = {
-  // Environment variable check.
+// Environment variable error messages.
+export const errEnv = {
   ENV_RR_PORT: `RR_PORT is not set. This is required for Expressjs to listen.`,
   ENV_RR_CRYPTO_KEY: `RR_CRYPTO_KEY is not set. This is required for encrypting and decrypting data.`,
   ENV_RR_CRYPTO_ALGO: `RR_CRYPTO_ALGO is not set. This is required for encrypting and decrypting data.`,
@@ -110,56 +108,74 @@ export const errMsg = {
   ENV_RRDB_DATABASE: `RRDB_DATABASE is not set. This is required for database communication.`,
   ENV_RRDB_PASSWORD: `RRDB_PASSWORD is not set. This is required for database communication.`,
   ENV_RRDB_PORT: `RRDB_PORT is not set. This is required for database communication.`,
-  // User registration.
-  REG_REQUIRED_UNDEF: `${errBase.REG} Missing required field(s): "name", "password", and "email address".`,
-  REG_USRNAME_UNDEF: `${errBase.REG} A username wasn't provided. Please provide a user name and try again.`,
-  REG_EMAIL_UNDEF: `${errBase.REG} An email address wasn't provided. Please provide an email address and try again.`,
-  REG_PASS_UNDEF: `${errBase.REG} A password wasn't provided. Please provide a password and try again.`,
-  REG_USRNAME_USED: `${errBase.REG} The username is already in use. Please change the requested username and try again.`,
-  REG_EMAIL_USED: `${errBase.REG} The email address is already in use. Please change the requested email address and try again.`,
-  // User service activation.
-  ACTIV_TOKEN_UNDEF: `${errBase.ACTIVATE} The activation token wasn't provided. Please provide an activation token and try again.`,
-  ACTIV_TOKEN_DECODE: `${errBase.ACTIVATE} The activation token was corrupted. Please provide the complete and correct activation token and try again.`,
-  ACTIV_TOKEN_TYPE: `${errBase.ACTIVATE} The token was not made for activation. Please provide the correct activation token and try again.`,
-  ACTIV_TOKEN_EXP: `${errBase.ACTIVATE} The token has expired. Please request a new user activation email.`,
-  ACTIV_TOKEN_USR: `${errBase.ACTIVATE} The user could not be found in the system. Please request a new user activation email.`,
-  // User service authentication.
-  AUTH_REQUIRED_UNDEF: `${errBase.AUTH} Missing required field(s): "email_address" and "password".`,
-  // Tokenwall middleware.
-  TOKENWALL_UNDEF: `Token is required in req.headers.token.`,
+}
+type errEnvType = typeof errEnv
+export type errEnvKeyType = keyof errEnvType
+export type errEnvValueType = errEnvType[keyof errEnvType]
+
+// Basic user related error messages.
+export const errUser = {
+  REGISTER: `The user couldn't be registered.`,
+  ACTIVATE: `The user couldn't be activated.`,
+  AUTHENTICATE: `The user couldn't be authenticated.`,
+}
+type errUserType = typeof errUser
+export type errUserKeyType = keyof errUserType
+export type errUserValueType = errUserType[keyof errUserType]
+
+export const errClient = {
+  MISSING_REQ: `One or more required fields are missing.`,
+  NAME_INVALID: `The name field is not in a valid format. Usename must be 2 to 50 characters in length, and contain only A-Z and 0-9.`,
+  NAME_USED: `The name is already in use. Please change the requested name and try again.`,
+  EMAIL_INVALID: `The email address is not in a valid format.`,
+  EMAIL_USED: `The email address is already in use. Please change the requested email address and try again.`,
+  PASSWORD_WEAK: `The password did not pass complexity requirements.`,
+  UID_INVALID: `The supplied UUID is not a valid v4 UUID.`,
+  TOKEN_INVALID: `The token is not in a valid format.`,
+  TOKENWALL_UNDEF: `Token is required.`,
   TOKENWALL_TYPE: `Token type is not access. Try again using a valid access token.`,
-  TOKENWALL_EXP: `Token expired.`,
-  // Laststop middleware.
+  TOKENWALL_EXP: `Token has expired.`,
   LASTSTOP_404: `The endpoint you are looking for can't be found.`,
   LASTSTOP_500: `Something went wrong.`,
-  // Model validation.
-  MISSING_REQ: `One or more required fields are missing.`,
-  UID_INVALID: `The supplied UUID is not a valid v4 UUID.`,
-  NAME_INVALID: `The name field is not in a valid format. Usename must be 1 to 50 characters in length, and contain only A-Z and 0-9.`,
-  EMAIL_INVALID: `The email address is not in a valid format.`,
-  PASS_WEAK: `The password did not pass complexity requirements.`,
-  TOKEN_INVALID: `The token is not in a valid format.`,
-  // Cryptography wrapper.
+}
+type errClientType = typeof errClient
+export type errClientKeyType = keyof errClientType
+export type errClientValueType = errClientType[keyof errClientType]
+export const isErrClient = (key: string): key is errClientKeyType => {
+  return Object.keys(errClient).includes(key)
+}
+
+export const errInternal = {
   CRYPTO_KEY: `Crypto key is not defined.`,
   CRYPTO_IV_LENGTH: `IV length is not defined.`,
   CRYPTO_ALGO: `Algorithm is not defined.`,
-  // Email transactional wrapper.
+  JWT_SECRET_KEY: `JWT error. Secret key is not defined.`,
+  JWT_USER_ID: `JWT error. User ID is not defined.`,
+  JWT_TYPE: `JWT error. Type is not defined.`,
+  JWT_TOKEN: `JWT error. Token is not defined.`,
+  UOW_CLIENT: `UOW error. Pool client is not defined.`,
+  DOMAIN_OBJECT: `Error creating domain object.`,
   EMAIL_FROM: `Email FROM address is not defined.`,
   EMAIL_TO: `Email TO address is not defined.`,
   EMAIL_SUBJECT: `Email SUBJECT is not defined.`,
   EMAIL_BODY: `Email BODY is not defined.`,
   EMAIL_MS_API_KEY: `MailerSend API Key is not defined.`,
-  // JWT service.
-  JWT_SECRET_KEY: `JWT error. Secret key is not defined.`,
-  JWT_USER_ID: `JWT error. User ID is not defined.`,
-  JWT_TYPE: `JWT error. Type is not defined.`,
-  JWT_TOKEN: `JWT error. Token is not defined.`,
-  // Unit of work.
-  UOW_CLIENT: `UOW error. Pool client is not defined.`,
-  // Repositories.
-  HASH_SALT: `Error hashing password.`,
-  // Unknown.
   UNKNOWN: `Unknown error.`,
+}
+type errInternalType = typeof errInternal
+export type errInternalKeyType = keyof errInternalType
+export type errInternalValueType = errInternalType[keyof errInternalType]
+
+export const errMsg = {
+  // User service activation.
+  ACTIV_TOKEN_UNDEF: `${errUser.ACTIVATE} The activation token wasn't provided. Please provide an activation token and try again.`,
+  ACTIV_TOKEN_DECODE: `${errUser.ACTIVATE} The activation token was corrupted. Please provide the complete and correct activation token and try again.`,
+  ACTIV_TOKEN_TYPE: `${errUser.ACTIVATE} The token was not made for activation. Please provide the correct activation token and try again.`,
+  ACTIV_TOKEN_EXP: `${errUser.ACTIVATE} The token has expired. Please request a new user activation email.`,
+  ACTIV_TOKEN_USR: `${errUser.ACTIVATE} The user could not be found in the system. Please request a new user activation email.`,
+
+  // User service authentication.
+  AUTH_REQUIRED_UNDEF: `${errUser.AUTHENTICATE} Missing required field(s): "email_address" and "password".`,
 }
 type errMessageType = typeof errMsg
 export type errMessageKeyType = keyof errMessageType

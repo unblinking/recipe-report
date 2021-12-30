@@ -27,7 +27,7 @@
 import { inject, injectable } from 'inversify'
 import { PoolClient } from 'pg'
 
-import { Err, errMsg } from 'domain/models/err-model'
+import { Err, errInternal } from 'domain/models/err-model'
 
 import { IDataAccessLayer } from 'data/data-access'
 import { IUserRepo, UserRepo } from 'data/repositories/user-repo'
@@ -59,12 +59,12 @@ export class UnitOfWork implements IUnitOfWork {
   }
 
   public begin = async (): Promise<void> => {
-    if (!this._client) throw new Err('UOW_CLIENT', errMsg.UOW_CLIENT)
+    if (!this._client) throw new Err('UOW_CLIENT', errInternal.UOW_CLIENT)
     await this._client.query('BEGIN')
   }
 
   public commit = async (): Promise<void> => {
-    if (!this._client) throw new Err('UOW_CLIENT', errMsg.UOW_CLIENT)
+    if (!this._client) throw new Err('UOW_CLIENT', errInternal.UOW_CLIENT)
     await this._client.query('COMMIT')
     this._client.release()
   }
@@ -79,7 +79,7 @@ export class UnitOfWork implements IUnitOfWork {
   }
 
   public get users(): IUserRepo {
-    if (!this._client) throw new Err('UOW_CLIENT', errMsg.UOW_CLIENT)
+    if (!this._client) throw new Err('UOW_CLIENT', errInternal.UOW_CLIENT)
     if (!this._userRepo) {
       this._userRepo = new UserRepo(this._client)
     }

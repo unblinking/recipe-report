@@ -23,7 +23,7 @@
  *
  * @module
  */
-import { Err, errMsg } from 'domain/models/err-model'
+import { Err, errInternal } from 'domain/models/err-model'
 import { IUser, IUserDto, User } from 'domain/models/user-model'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { Password } from 'domain/value/password-value'
@@ -31,9 +31,9 @@ import { UniqueId } from 'domain/value/uid-value'
 import { Username } from 'domain/value/username-value'
 
 export class UserMap {
-  public static toDomain(userDto: IUserDto): User {
+  public static dtoToDomain(userDto: IUserDto): User {
     if (!this.isUser(userDto)) {
-      throw new Err(`MISSING_REQ`, errMsg.MISSING_REQ)
+      throw new Err(`DOMAIN_OBJECT`, `UserMap: ${errInternal.DOMAIN_OBJECT}`)
     }
     return User.create(
       {
@@ -57,7 +57,33 @@ export class UserMap {
     )
   }
 
-  public static toDto(user: User): IUserDto {
+  public static dbToDomain(dbResult: IUserDto, id: string): User {
+    if (!this.isUser(dbResult)) {
+      throw new Err(`DOMAIN_OBJECT`, `UserMap: ${errInternal.DOMAIN_OBJECT}`)
+    }
+    return User.create(
+      {
+        name: Username.create(dbResult.name),
+        password: Password.create(dbResult.password),
+        email_address: EmailAddress.create(dbResult.email_address),
+        date_created: dbResult.date_created
+          ? new Date(dbResult.date_created)
+          : undefined,
+        date_activated: dbResult.date_activated
+          ? new Date(dbResult.date_activated)
+          : undefined,
+        date_last_login: dbResult.date_last_login
+          ? new Date(dbResult.date_last_login)
+          : undefined,
+        date_deleted: dbResult.date_deleted
+          ? new Date(dbResult.date_deleted)
+          : undefined,
+      },
+      UniqueId.create(id),
+    )
+  }
+
+  public static domainToDto(user: User): IUserDto {
     return {
       id: user.id.value,
       name: user.name.value,

@@ -24,13 +24,13 @@
  * @module
  */
 import { Email, IEmail, IEmailDto } from 'domain/models/email-model'
-import { Err, errMsg } from 'domain/models/err-model'
+import { Err, errInternal } from 'domain/models/err-model'
 import { EmailAddress } from 'domain/value/email-address-value'
 
 export class EmailMap {
   public static toDomain(emailDto: IEmailDto): Email {
     if (!this.isEmail(emailDto)) {
-      throw new Err(`MISSING_REQ`, errMsg.MISSING_REQ)
+      throw new Err(`DOMAIN_OBJECT`, `EmailMap: ${errInternal.DOMAIN_OBJECT}`)
     }
     return Email.create({
       from: EmailAddress.create(emailDto.from),

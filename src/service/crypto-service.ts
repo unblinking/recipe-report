@@ -38,16 +38,16 @@
 import Crypto from 'crypto'
 import { injectable } from 'inversify'
 
-import { Err, errMsg } from 'domain/models/err-model'
+import { Err, errInternal } from 'domain/models/err-model'
 
 const key: string = process.env.RR_CRYPTO_KEY as string
 const ivLength: number = parseInt(process.env.RR_CRYPTO_IV_LENGTH as string, 10)
 const algorithm: string = process.env.RR_CRYPTO_ALGO as string
 
 const varCheck = (): void => {
-  if (!key) throw new Err(`CRYPTO_KEY`, errMsg.CRYPTO_KEY)
-  if (!ivLength) throw new Err(`CRYPTO_IV_LENGTH`, errMsg.CRYPTO_IV_LENGTH)
-  if (!algorithm) throw new Err(`CRYPTO_ALGO`, errMsg.CRYPTO_ALGO)
+  if (!key) throw new Err(`CRYPTO_KEY`, errInternal.CRYPTO_KEY)
+  if (!ivLength) throw new Err(`CRYPTO_IV_LENGTH`, errInternal.CRYPTO_IV_LENGTH)
+  if (!algorithm) throw new Err(`CRYPTO_ALGO`, errInternal.CRYPTO_ALGO)
 }
 
 export interface ICryptoService {

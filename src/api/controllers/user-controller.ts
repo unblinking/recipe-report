@@ -26,10 +26,10 @@
 import { NextFunction, Request, Response, Router } from 'express'
 import { inject, injectable } from 'inversify'
 
-import { Err, errBase, errMsg } from 'domain/models/err-model'
+import { Err, errUser, isErrClient } from 'domain/models/err-model'
 import {
   // UserActivationRequest,
-  // UserAuthenticationRequest,
+  UserAuthenticationRequest,
   UserRegistrationRequest,
 } from 'domain/service/service-requests'
 
@@ -62,7 +62,7 @@ export class UserController implements IBaseController {
     this.router.put(`/:id`, this.update) // Update user
     this.router.delete(`/:id`, this.delete) // Delete user
     */
-    // this.router.post(`/session`, this.authenticate) // Create user session
+    this.router.post(`/session`, this.authenticate) // Create session
     // this.router.put(`/activation/:token`, this.activate) // Update user activation status
     this.router.use(fiveHundred) // Error handling.
   }
@@ -74,7 +74,7 @@ export class UserController implements IBaseController {
   ): Promise<void> => {
     log.trace(`user-controller.ts register()`)
     try {
-      const serviceRequest = await UserRegistrationRequest.create({
+      const serviceRequest = UserRegistrationRequest.create({
         ...req.body,
       })
       const serviceResponse = await this._userService.create(serviceRequest)
@@ -89,13 +89,15 @@ export class UserController implements IBaseController {
           })
           break
         default:
-          error(errBase.REG, res, code, serviceResponse.err?.message)
+          error(errUser.REGISTER, res, code, serviceResponse.err?.message)
           break
       }
-    } catch (err) {
-      const e = err as Err
-      if (e.name == errMsg.NAME_INVALID.toString()) {
-        fail(res, httpStatus.BAD_REQUEST, e.message, { message: e.message })
+    } catch (e) {
+      // The caught e could be anything. Turn it into an Err.
+      const err = Err.toErr(e)
+      if (isErrClient(err.name)) {
+        err.message = `${errUser.REGISTER} ${err.message}`
+        fail(res, httpStatus.BAD_REQUEST, err.message, { message: err.message })
       } else {
         next(err)
       }
@@ -132,6 +134,7 @@ export class UserController implements IBaseController {
       next(err)
     }
   }
+  */
 
   private authenticate = async (
     req: Request,
@@ -148,7 +151,7 @@ export class UserController implements IBaseController {
       switch (serviceResponse.outcome) {
         case outcomes.SUCCESS:
           success(res, code, logMsg.LOG_AUTHENTICATE_SUCCESS, {
-            token: serviceResponse.item?.token,
+            token: serviceResponse.item,
           })
           break
         case outcomes.FAIL:
@@ -157,12 +160,18 @@ export class UserController implements IBaseController {
           })
           break
         default:
-          error(errBase.AUTH, res, code, serviceResponse.err?.message)
+          error(errUser.AUTHENTICATE, res, code, serviceResponse.err?.message)
           break
       }
-    } catch (err) {
-      next(err)
+    } catch (e) {
+      // The caught e could be anything. Turn it into an Err.
+      const err = Err.toErr(e)
+      if (isErrClient(err.name)) {
+        err.message = `${errUser.AUTHENTICATE} ${err.message}`
+        fail(res, httpStatus.BAD_REQUEST, err.message, { message: err.message })
+      } else {
+        next(err)
+      }
     }
   }
-  */
 }

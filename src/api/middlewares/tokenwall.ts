@@ -27,7 +27,7 @@
  */
 import { NextFunction, Request, Response } from 'express'
 
-import { Err, errMsg } from 'domain/models/err-model'
+import { Err, errClient } from 'domain/models/err-model'
 
 import { httpStatus } from 'data/constants'
 
@@ -50,17 +50,18 @@ export const tokenwall = (
   log.trace(`tokenwall.ts tokenwall()`)
   try {
     const token: string = req.headers.token as string
-    if (!token) throw new Err(`TOKENWALL_UNDEF`, errMsg.TOKENWALL_UNDEF)
+    if (!token) throw new Err(`TOKENWALL_UNDEF`, errClient.TOKENWALL_UNDEF)
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     const payload: Payload = jwt.decode(token)
 
     // Verify that the token is for access.
     if (payload.type !== tokenType.ACCESS)
-      throw new Err(`TOKENWALL_TYPE`, errMsg.TOKENWALL_TYPE)
+      throw new Err(`TOKENWALL_TYPE`, errClient.TOKENWALL_TYPE)
 
     // Verify that the token hasn't expired.
     const now = new Date().getTime()
-    if (payload.ttl < now) throw new Err(`TOKENWALL_EXP`, errMsg.TOKENWALL_EXP)
+    if (payload.ttl < now)
+      throw new Err(`TOKENWALL_EXP`, errClient.TOKENWALL_EXP)
 
     // Add the user Id from the payload to the request.
     req.requestingUserId = payload.id

@@ -25,7 +25,7 @@
  */
 import { v4 as uuid, validate } from 'uuid'
 
-import { Err, errMsg } from 'domain/models/err-model'
+import { Err, errClient } from 'domain/models/err-model'
 import { ValueObject } from 'domain/value/base-value'
 
 export interface IUniqueId {
@@ -46,7 +46,7 @@ export class UniqueId extends ValueObject<IUniqueId> {
       id = uuid()
     }
     if (!validate(id)) {
-      throw new Err(`UID_INVALID`, errMsg.UID_INVALID)
+      throw new Err(`UID_INVALID`, errClient.UID_INVALID)
     }
     return new UniqueId({ value: id })
   }

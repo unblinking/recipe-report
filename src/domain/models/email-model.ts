@@ -25,7 +25,7 @@
  */
 import { EmailMap } from 'domain/maps/email-map'
 import { Model } from 'domain/models/base-model'
-import { Err, errMsg } from 'domain/models/err-model'
+import { Err, errClient } from 'domain/models/err-model'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { UniqueId } from 'domain/value/uid-value'
 
@@ -74,7 +74,7 @@ export class Email extends Model<IEmail> {
   // Factory method here instead of a factory class.
   public static create(props: IEmail): Email {
     if (!EmailMap.isEmail(props)) {
-      throw new Err(`MISSING_REQ`, `${errMsg.MISSING_REQ}`)
+      throw new Err(`MISSING_REQ`, `Email: ${errClient.MISSING_REQ}`)
     }
     return new Email(props)
   }
