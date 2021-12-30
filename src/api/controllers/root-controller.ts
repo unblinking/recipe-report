@@ -48,11 +48,7 @@ export class RootController implements IBaseController {
     this.router.use(fiveHundred) // Error handling.
   }
 
-  private curtsy = async (
-    _req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
+  private curtsy = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
     log.trace(`root-controller.ts curtsy()`)
     try {
       const code = httpStatus.OK

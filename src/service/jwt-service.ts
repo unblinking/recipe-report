@@ -58,9 +58,7 @@ export interface Payload {
 export class JwtService implements IJwtService {
   private _crypto: ICryptoService
 
-  public constructor(
-    @inject(SYMBOLS.ICryptoService) cryptoService: ICryptoService,
-  ) {
+  public constructor(@inject(SYMBOLS.ICryptoService) cryptoService: ICryptoService) {
     this._crypto = cryptoService
   }
 

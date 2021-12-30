@@ -29,11 +29,7 @@ import { Err, errClient } from 'domain/models/err-model'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { UniqueId } from 'domain/value/uid-value'
 
-import {
-  addressNoReply,
-  subjectActivation,
-  templateActivation,
-} from 'data/email-templates'
+import { addressNoReply, subjectActivation, templateActivation } from 'data/email-templates'
 
 export interface IEmailDto {
   from?: string

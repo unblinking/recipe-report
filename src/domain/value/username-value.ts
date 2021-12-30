@@ -41,11 +41,7 @@ export class Username extends ValueObject<IUsername> {
   }
 
   public static create(username: string): Username {
-    if (
-      !username.match('^[A-Za-z0-9]+$') ||
-      username.length < 2 ||
-      username.length > 50
-    ) {
+    if (!username.match('^[A-Za-z0-9]+$') || username.length < 2 || username.length > 50) {
       throw new Err(`NAME_INVALID`, errClient.NAME_INVALID)
     }
     return new Username({ value: username })

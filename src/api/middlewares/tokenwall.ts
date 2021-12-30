@@ -42,11 +42,7 @@ export interface RequestWithUser extends Request {
   requestingUserId?: string
 }
 
-export const tokenwall = (
-  req: RequestWithUser,
-  _res: Response,
-  next: NextFunction,
-): void => {
+export const tokenwall = (req: RequestWithUser, _res: Response, next: NextFunction): void => {
   log.trace(`tokenwall.ts tokenwall()`)
   try {
     const token: string = req.headers.token as string
@@ -55,13 +51,14 @@ export const tokenwall = (
     const payload: Payload = jwt.decode(token)
 
     // Verify that the token is for access.
-    if (payload.type !== tokenType.ACCESS)
+    if (payload.type !== tokenType.ACCESS) {
       throw new Err(`TOKENWALL_TYPE`, errClient.TOKENWALL_TYPE)
-
+    }
     // Verify that the token hasn't expired.
     const now = new Date().getTime()
-    if (payload.ttl < now)
+    if (payload.ttl < now) {
       throw new Err(`TOKENWALL_EXP`, errClient.TOKENWALL_EXP)
+    }
 
     // Add the user Id from the payload to the request.
     req.requestingUserId = payload.id

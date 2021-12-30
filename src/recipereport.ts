@@ -52,9 +52,7 @@ export interface IRecipeReport {
 export class RecipeReport implements IRecipeReport {
   private _controllers: IBaseController[]
 
-  public constructor(
-    @multiInject(SYMBOLS.IBaseController) controllers: IBaseController[],
-  ) {
+  public constructor(@multiInject(SYMBOLS.IBaseController) controllers: IBaseController[]) {
     this._controllers = controllers
   }
 
@@ -66,24 +64,16 @@ export class RecipeReport implements IRecipeReport {
       log.warn(`NODE_ENV is not set. Assuming environment is not production.`)
     }
     if (!process.env.RR_PORT) throw new Err(`ENV_RR_PORT`, errEnv.ENV_RR_PORT)
-    if (!process.env.RR_CRYPTO_KEY)
-      throw new Err(`ENV_RR_CRYPTO_KEY`, errEnv.ENV_RR_CRYPTO_KEY)
-    if (!process.env.RR_CRYPTO_ALGO)
-      throw new Err(`ENV_RR_CRYPTO_ALGO`, errEnv.ENV_RR_CRYPTO_ALGO)
+    if (!process.env.RR_CRYPTO_KEY) throw new Err(`ENV_RR_CRYPTO_KEY`, errEnv.ENV_RR_CRYPTO_KEY)
+    if (!process.env.RR_CRYPTO_ALGO) throw new Err(`ENV_RR_CRYPTO_ALGO`, errEnv.ENV_RR_CRYPTO_ALGO)
     if (!process.env.RR_CRYPTO_IV_LENGTH)
       throw new Err(`ENV_RR_CRYPTO_IV_LENGTH`, errEnv.ENV_RR_CRYPTO_IV_LENGTH)
-    if (!process.env.RR_JWT_SECRET)
-      throw new Err(`ENV_RR_JWT_SECRET`, errEnv.ENV_RR_JWT_SECRET)
-    if (!process.env.RRDB_USER)
-      throw new Err(`ENV_RRDB_USER`, errEnv.ENV_RRDB_USER)
-    if (!process.env.RRDB_HOST)
-      throw new Err(`ENV_RRDB_HOST`, errEnv.ENV_RRDB_HOST)
-    if (!process.env.RRDB_DATABASE)
-      throw new Err(`ENV_RRDB_DATABASE`, errEnv.ENV_RRDB_DATABASE)
-    if (!process.env.RRDB_PASSWORD)
-      throw new Err(`ENV_RRDB_PASSWORD`, errEnv.ENV_RRDB_PASSWORD)
-    if (!process.env.RRDB_PORT)
-      throw new Err(`ENV_RRDB_PORT`, errEnv.ENV_RRDB_PORT)
+    if (!process.env.RR_JWT_SECRET) throw new Err(`ENV_RR_JWT_SECRET`, errEnv.ENV_RR_JWT_SECRET)
+    if (!process.env.RRDB_USER) throw new Err(`ENV_RRDB_USER`, errEnv.ENV_RRDB_USER)
+    if (!process.env.RRDB_HOST) throw new Err(`ENV_RRDB_HOST`, errEnv.ENV_RRDB_HOST)
+    if (!process.env.RRDB_DATABASE) throw new Err(`ENV_RRDB_DATABASE`, errEnv.ENV_RRDB_DATABASE)
+    if (!process.env.RRDB_PASSWORD) throw new Err(`ENV_RRDB_PASSWORD`, errEnv.ENV_RRDB_PASSWORD)
+    if (!process.env.RRDB_PORT) throw new Err(`ENV_RRDB_PORT`, errEnv.ENV_RRDB_PORT)
     if (!process.env.RRDB_URL) {
       log.warn(`RRDB_URL is not set. Database migrations are disabled.`)
     }

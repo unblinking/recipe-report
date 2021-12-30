@@ -88,10 +88,7 @@ export class Responder implements Jsend {
    *      correspond to those POST values.
    * @memberof Responder
    */
-  public fail = (
-    res: Response,
-    data?: Record<string, unknown> | string,
-  ): void => {
+  public fail = (res: Response, data?: Record<string, unknown> | string): void => {
     log.info(`Responder|Fail|${this.statusCode}`)
     res.status(this.statusCode).json({
       status: 'fail',

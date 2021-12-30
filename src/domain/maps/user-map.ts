@@ -40,18 +40,10 @@ export class UserMap {
         name: Username.create(userDto.name),
         password: Password.create(userDto.password),
         email_address: EmailAddress.create(userDto.email_address),
-        date_created: userDto.date_created
-          ? new Date(userDto.date_created)
-          : undefined,
-        date_activated: userDto.date_activated
-          ? new Date(userDto.date_activated)
-          : undefined,
-        date_last_login: userDto.date_last_login
-          ? new Date(userDto.date_last_login)
-          : undefined,
-        date_deleted: userDto.date_deleted
-          ? new Date(userDto.date_deleted)
-          : undefined,
+        date_created: userDto.date_created ? new Date(userDto.date_created) : undefined,
+        date_activated: userDto.date_activated ? new Date(userDto.date_activated) : undefined,
+        date_last_login: userDto.date_last_login ? new Date(userDto.date_last_login) : undefined,
+        date_deleted: userDto.date_deleted ? new Date(userDto.date_deleted) : undefined,
       },
       UniqueId.create(userDto.id),
     )
@@ -66,18 +58,10 @@ export class UserMap {
         name: Username.create(dbResult.name),
         password: Password.create(dbResult.password),
         email_address: EmailAddress.create(dbResult.email_address),
-        date_created: dbResult.date_created
-          ? new Date(dbResult.date_created)
-          : undefined,
-        date_activated: dbResult.date_activated
-          ? new Date(dbResult.date_activated)
-          : undefined,
-        date_last_login: dbResult.date_last_login
-          ? new Date(dbResult.date_last_login)
-          : undefined,
-        date_deleted: dbResult.date_deleted
-          ? new Date(dbResult.date_deleted)
-          : undefined,
+        date_created: dbResult.date_created ? new Date(dbResult.date_created) : undefined,
+        date_activated: dbResult.date_activated ? new Date(dbResult.date_activated) : undefined,
+        date_last_login: dbResult.date_last_login ? new Date(dbResult.date_last_login) : undefined,
+        date_deleted: dbResult.date_deleted ? new Date(dbResult.date_deleted) : undefined,
       },
       UniqueId.create(id),
     )

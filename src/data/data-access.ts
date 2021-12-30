@@ -62,10 +62,7 @@ export class DataAccessLayer implements IDataAccessLayer {
    * @memberof DataAccessLayer
    * @returns The QueryResult object.
    */
-  public query = async (
-    text: string,
-    params: Array<string>,
-  ): Promise<QueryResult> => {
+  public query = async (text: string, params: Array<string>): Promise<QueryResult> => {
     const start: number = Date.now()
     const result: QueryResult<never> = await this._pool.query(text, params)
     const duration: number = Date.now() - start

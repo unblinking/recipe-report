@@ -48,9 +48,7 @@ export class UnitOfWork implements IUnitOfWork {
   private _userRepo: IUserRepo | undefined
   private _client: PoolClient | undefined
 
-  public constructor(
-    @inject(SYMBOLS.IDataAccessLayer) dataAccessLayer: IDataAccessLayer,
-  ) {
+  public constructor(@inject(SYMBOLS.IDataAccessLayer) dataAccessLayer: IDataAccessLayer) {
     this._dal = dataAccessLayer
   }
 

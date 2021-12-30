@@ -75,9 +75,9 @@ export abstract class BaseRepo<T> implements IBaseRepo {
   }
 
   protected _createOne = async (item: T): Promise<QueryResult> => {
-    const query = `INSERT INTO ${this._table} (${this._cols(
+    const query = `INSERT INTO ${this._table} (${this._cols(item)}) VALUES (${this._pars(
       item,
-    )}) VALUES (${this._pars(item)}) RETURNING *`
+    )}) RETURNING *`
     const result = await this.client.query(query, this._vals(item))
     return result
   }
@@ -89,9 +89,9 @@ export abstract class BaseRepo<T> implements IBaseRepo {
   }
 
   protected _updateOne = async (item: T): Promise<QueryResult> => {
-    const query = `UPDATE ${this._table} SET (${this._cols(
+    const query = `UPDATE ${this._table} SET (${this._cols(item)}) = (${this._pars(
       item,
-    )}) = (${this._pars(item)}) WHERE id = $1 RETURNING *`
+    )}) WHERE id = $1 RETURNING *`
     const result = await this.client.query(query, this._vals(item))
     return result
   }

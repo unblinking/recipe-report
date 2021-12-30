@@ -39,11 +39,7 @@ describe(`JSON Web Token actions.`, () => {
     const user: User = await testFactory.userNew()
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     // Act.
-    const token: string = jwt.encode(
-      user.id.value,
-      tokenType.ACTIVATION,
-      new Date().getTime(),
-    )
+    const token: string = jwt.encode(user.id.value, tokenType.ACTIVATION, new Date().getTime())
     // Assert.
     expect(token).toBeTruthy()
   })
@@ -54,11 +50,7 @@ describe(`JSON Web Token actions.`, () => {
     const user: User = await testFactory.userNew()
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     // Act.
-    const token: string = jwt.encode(
-      user.id.value,
-      tokenType.ACCESS,
-      new Date().getTime(),
-    )
+    const token: string = jwt.encode(user.id.value, tokenType.ACCESS, new Date().getTime())
     // Assert.
     expect(token).toBeTruthy()
   })

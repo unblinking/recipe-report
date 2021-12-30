@@ -39,10 +39,7 @@ export interface IEmailService {
 
 @injectable()
 export class EmailService implements IEmailService {
-  public async sendActivation(
-    emailAddress: EmailAddress,
-    token: string,
-  ): Promise<void> {
+  public async sendActivation(emailAddress: EmailAddress, token: string): Promise<void> {
     // Instantiate the email object.
     const email = Email.createActivation(emailAddress, token)
     // Send the email.

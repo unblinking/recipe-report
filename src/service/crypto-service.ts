@@ -69,11 +69,7 @@ export class CryptoService implements ICryptoService {
     // Cipher object.
     // Create a cipher object with the defined algorithm, crypto key, and
     // the random initialization vector we just generated.
-    const cipher: Crypto.Cipher = Crypto.createCipheriv(
-      algorithm,
-      Buffer.from(key),
-      iv,
-    )
+    const cipher: Crypto.Cipher = Crypto.createCipheriv(algorithm, Buffer.from(key), iv)
     // Buffer from updating the cipher with the plantext.
     let encrypted: Buffer = cipher.update(plainText)
     // Join the buffer objects into a single buffer object.
@@ -101,11 +97,7 @@ export class CryptoService implements ICryptoService {
     // De-cipher object.
     // Create a decipher object with the defined algorithm, crypto key, and
     // the initialization vector we just sliced off of the encrypted buffer.
-    const decipher: Crypto.Decipher = Crypto.createDecipheriv(
-      algorithm,
-      Buffer.from(key),
-      iv,
-    )
+    const decipher: Crypto.Decipher = Crypto.createDecipheriv(algorithm, Buffer.from(key), iv)
     // Buffer from updating the decipher with the encrypted text.
     let decrypted: Buffer = decipher.update(encryptedText)
     // Join the buffer objects into a single buffer object.

@@ -37,18 +37,8 @@
  */
 export class Err extends Error {
   public constructor(
-    name:
-      | errMessageKeyType
-      | errEnvKeyType
-      | errUserKeyType
-      | errClientKeyType
-      | errInternalKeyType,
-    message:
-      | errMessageValueType
-      | errEnvValueType
-      | errUserValueType
-      | errClientValueType
-      | errInternalValueType,
+    name: errEnvKeyType | errUserKeyType | errClientKeyType | errInternalKeyType,
+    message: errEnvValueType | errUserValueType | errClientValueType | errInternalValueType,
   ) {
     super(message)
     this.name = name
@@ -132,6 +122,8 @@ export const errClient = {
   PASSWORD_WEAK: `The password did not pass complexity requirements.`,
   UID_INVALID: `The supplied UUID is not a valid v4 UUID.`,
   TOKEN_INVALID: `The token is not in a valid format.`,
+  TOKEN_TYPE: `The token type is not valid. Please provide the correct token and try again.`,
+  TOKEN_EXP: `The token has expired. Please request a new token and try again.`,
   TOKENWALL_UNDEF: `Token is required.`,
   TOKENWALL_TYPE: `Token type is not access. Try again using a valid access token.`,
   TOKENWALL_EXP: `Token has expired.`,
@@ -165,20 +157,5 @@ export const errInternal = {
 type errInternalType = typeof errInternal
 export type errInternalKeyType = keyof errInternalType
 export type errInternalValueType = errInternalType[keyof errInternalType]
-
-export const errMsg = {
-  // User service activation.
-  ACTIV_TOKEN_UNDEF: `${errUser.ACTIVATE} The activation token wasn't provided. Please provide an activation token and try again.`,
-  ACTIV_TOKEN_DECODE: `${errUser.ACTIVATE} The activation token was corrupted. Please provide the complete and correct activation token and try again.`,
-  ACTIV_TOKEN_TYPE: `${errUser.ACTIVATE} The token was not made for activation. Please provide the correct activation token and try again.`,
-  ACTIV_TOKEN_EXP: `${errUser.ACTIVATE} The token has expired. Please request a new user activation email.`,
-  ACTIV_TOKEN_USR: `${errUser.ACTIVATE} The user could not be found in the system. Please request a new user activation email.`,
-
-  // User service authentication.
-  AUTH_REQUIRED_UNDEF: `${errUser.AUTHENTICATE} Missing required field(s): "email_address" and "password".`,
-}
-type errMessageType = typeof errMsg
-export type errMessageKeyType = keyof errMessageType
-export type errMessageValueType = errMessageType[keyof errMessageType]
 
 //#endregion

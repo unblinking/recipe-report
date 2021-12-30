@@ -37,11 +37,7 @@ import { Responder } from 'service/responder-service'
 /**
  * Four, oh four! Not found, my dude.
  */
-export const fourOhFour = (
-  req: Request,
-  _res: Response,
-  _next: NextFunction,
-): void => {
+export const fourOhFour = (req: Request, _res: Response, _next: NextFunction): void => {
   log.info(`${errClient.LASTSTOP_404} ${req.method} ${req.path}`)
   const respond = new Responder(httpStatus.NOT_FOUND)
   respond.fail(_res, errClient.LASTSTOP_404)
@@ -57,12 +53,7 @@ export const fourOhFour = (
  */
 // Because this API is built with separate express.Router router instances, this
 // error handling middleware must be used at the end of every controller/router.
-export const fiveHundred = (
-  err: Error,
-  _req: Request,
-  res: Response,
-  next: NextFunction,
-): void => {
+export const fiveHundred = (err: Error, _req: Request, res: Response, next: NextFunction): void => {
   log.error(`${errClient.LASTSTOP_500} ${err.name} ${err.message}`)
   // Cannot set headers after they are sent to the client!
   // https://expressjs.com/en/guide/error-handling.html

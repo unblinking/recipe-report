@@ -45,10 +45,7 @@ export class UserRegistrationRequest extends ServiceRequest<IUserDto> {
     super(user, requestingUser)
   }
 
-  public static create(
-    user: IUserDto,
-    requestingUser?: IUserDto,
-  ): UserRegistrationRequest {
+  public static create(user: IUserDto, requestingUser?: IUserDto): UserRegistrationRequest {
     return new UserRegistrationRequest(user, requestingUser)
   }
 }
@@ -62,10 +59,7 @@ export class UserActivationRequest extends ServiceRequest<string> {
     super(token, requestingUser)
   }
 
-  public static create(
-    token: string,
-    requestingUser?: IUserDto,
-  ): UserActivationRequest {
+  public static create(token: string, requestingUser?: IUserDto): UserActivationRequest {
     return new UserActivationRequest(token, requestingUser)
   }
 }
@@ -79,10 +73,7 @@ export class UserAuthenticationRequest extends ServiceRequest<IUserDto> {
     super(user, requestingUser)
   }
 
-  public static create(
-    user: IUserDto,
-    requestingUser?: IUserDto,
-  ): UserAuthenticationRequest {
+  public static create(user: IUserDto, requestingUser?: IUserDto): UserAuthenticationRequest {
     return new UserAuthenticationRequest(user, requestingUser)
   }
 }
