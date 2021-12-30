@@ -121,6 +121,35 @@ $$;
 COMMENT ON FUNCTION rr.users_create IS 'Function to create a record in the users table.';
 
 /**
+ * Function:    rr.users_activate
+ * Author:      Joshua Gray
+ * Description: Function to update a record in the users table with a new date_activated.
+ * Parameters:  id UUID - Primary key id for the record to be updated.
+ * Usage:       SELECT * FROM rr.users_activate('00000000-0000-0000-0000-000000000000');
+ * Returns:     The record that was updated.
+ */
+CREATE OR REPLACE FUNCTION rr.users_activate (
+    id UUID
+)
+    RETURNS SETOF rr.users
+    LANGUAGE PLPGSQL
+    AS
+$$
+DECLARE
+    now TIMESTAMPTZ;
+BEGIN
+    SELECT CURRENT_TIMESTAMP INTO now;
+
+    RETURN QUERY
+    UPDATE rr.users
+    SET date_activated = now
+    WHERE rr.users.id = $1
+    RETURNING *;
+END;
+$$;
+COMMENT ON FUNCTION rr.users_activate IS 'Function to update a record in the users table with a new date_activated.';
+
+/**
  * Function:    rr.users_update_date_last_login
  * Author:      Joshua Gray
  * Description: Function to update a record in the users table with a new date_last_login.

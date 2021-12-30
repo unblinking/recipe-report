@@ -28,7 +28,7 @@ import { inject, injectable } from 'inversify'
 
 import { Err, errUser, isErrClient } from 'domain/models/err-model'
 import {
-  // UserActivationRequest,
+  UserActivationRequest,
   UserAuthenticationRequest,
   UserRegistrationRequest,
 } from 'domain/service/service-requests'
@@ -63,15 +63,11 @@ export class UserController implements IBaseController {
     this.router.delete(`/:id`, this.delete) // Delete user
     */
     this.router.post(`/session`, this.authenticate) // Create session
-    // this.router.put(`/activation/:token`, this.activate) // Update user activation status
+    this.router.put(`/activation/:token`, this.activate) // Update user activation status
     this.router.use(fiveHundred) // Error handling.
   }
 
-  private create = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
+  private create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     log.trace(`user-controller.ts register()`)
     try {
       const serviceRequest = UserRegistrationRequest.create({
@@ -81,7 +77,7 @@ export class UserController implements IBaseController {
       const code = serviceResponse.statusCode
       switch (serviceResponse.outcome) {
         case outcomes.SUCCESS:
-          success(res, code, logMsg.LOG_REG_SUCCESS)
+          success(res, code, logMsg.LOG_REG_SUCCESS, { user: serviceResponse.item })
           break
         case outcomes.FAIL:
           fail(res, code, serviceResponse.err?.message, {
@@ -104,22 +100,15 @@ export class UserController implements IBaseController {
     }
   }
 
-  /*
-  private activate = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
+  private activate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     log.trace(`user-controller.ts activate()`)
     try {
-      const serviceRequest = UserActivationRequest.create({
-        token: req.params.token,
-      })
+      const serviceRequest = UserActivationRequest.create(req.params.token)
       const serviceResponse = await this._userService.activate(serviceRequest)
       const code = serviceResponse.statusCode
       switch (serviceResponse.outcome) {
         case outcomes.SUCCESS:
-          success(res, code, logMsg.LOG_ACTIVATE_SUCCESS)
+          success(res, code, logMsg.LOG_ACTIVATE_SUCCESS, { user: serviceResponse.item })
           break
         case outcomes.FAIL:
           fail(res, code, serviceResponse.err?.message, {
@@ -127,26 +116,26 @@ export class UserController implements IBaseController {
           })
           break
         default:
-          error(errBase.ACTIVATE, res, code, serviceResponse.err?.message)
+          error(errUser.ACTIVATE, res, code, serviceResponse.err?.message)
           break
       }
-    } catch (err) {
-      next(err)
+    } catch (e) {
+      // The caught e could be anything. Turn it into an Err.
+      const err = Err.toErr(e)
+      if (isErrClient(err.name)) {
+        err.message = `${errUser.ACTIVATE} ${err.message}`
+        fail(res, httpStatus.BAD_REQUEST, err.message, { message: err.message })
+      } else {
+        next(err)
+      }
     }
   }
-  */
 
-  private authenticate = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
+  private authenticate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     log.trace(`user-controller.ts authenticate()`)
     try {
       const serviceRequest = UserAuthenticationRequest.create({ ...req.body })
-      const serviceResponse = await this._userService.authenticate(
-        serviceRequest,
-      )
+      const serviceResponse = await this._userService.authenticate(serviceRequest)
       const code = serviceResponse.statusCode
       switch (serviceResponse.outcome) {
         case outcomes.SUCCESS:

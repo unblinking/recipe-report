@@ -26,31 +26,26 @@
 import { inject, injectable } from 'inversify'
 
 import { UserMap } from 'domain/maps/user-map'
-import {
-  Err,
-  errClient,
-  errMsg,
-  errUser,
-  isErrClient,
-} from 'domain/models/err-model'
+import { Err, errClient, errUser, isErrClient } from 'domain/models/err-model'
 import { User } from 'domain/models/user-model'
 import {
-  // UserActivationRequest,
+  UserActivationRequest,
   UserAuthenticationRequest,
   UserRegistrationRequest,
 } from 'domain/service/service-requests'
 import {
-  // UserActivationResponse,
+  UserActivationResponse,
   UserAuthenticationResponse,
   UserRegistrationResponse,
 } from 'domain/service/service-responses'
 import { isStrongPassword, PasswordResult } from 'domain/value/password-value'
+import { UniqueId } from 'domain/value/uid-value'
 
 import { httpStatus, outcomes } from 'data/constants'
 import { IUnitOfWork } from 'data/repositories/unit-of-work'
 
 import { IEmailService } from 'service/email-service'
-import { IJwtService, tokenType } from 'service/jwt-service'
+import { IJwtService, Payload, tokenType } from 'service/jwt-service'
 import { log } from 'service/log-service'
 
 import { container } from 'root/ioc.config'
@@ -58,9 +53,8 @@ import { SYMBOLS } from 'root/symbols'
 
 export interface IUserService {
   create(req: UserRegistrationRequest): Promise<UserRegistrationResponse>
-  authenticate(
-    req: UserAuthenticationRequest,
-  ): Promise<UserAuthenticationResponse>
+  activate(req: UserActivationRequest): Promise<UserActivationResponse>
+  authenticate(req: UserAuthenticationRequest): Promise<UserAuthenticationResponse>
 }
 
 @injectable()
@@ -76,9 +70,7 @@ export class UserService implements IUserService {
     this._jwt = jwtService
   }
 
-  public async create(
-    req: UserRegistrationRequest,
-  ): Promise<UserRegistrationResponse> {
+  public async create(req: UserRegistrationRequest): Promise<UserRegistrationResponse> {
     log.trace(`user-service.ts register()`)
 
     // Get a new instance of uow from the DI container.
@@ -94,10 +86,7 @@ export class UserService implements IUserService {
         req.user.email_address,
       )
       if (!strength.success) {
-        throw new Err(
-          `PASSWORD_WEAK`,
-          `${errClient.PASSWORD_WEAK} ${strength.message}`,
-        )
+        throw new Err(`PASSWORD_WEAK`, `${errClient.PASSWORD_WEAK} ${strength.message}`)
       }
 
       // Connect to the database and begin a transaction.
@@ -154,113 +143,75 @@ export class UserService implements IUserService {
     }
   }
 
-  /*
-  public async activate(
-    req: UserActivationRequest,
-  ): Promise<UserActivationResponse> {
+  public async activate(req: UserActivationRequest): Promise<UserActivationResponse> {
     log.trace(`user-service.ts activate()`)
 
+    // Get a new instance of uow from the DI container.
+    const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
+
     try {
-      // Verify that the required arguments were passed as expected.
-      if (!req.item?.token) {
-        res.setOutcome(outcomes.FAIL)
-        res.setErr(new Err(`ACTIV_TOKEN_UNDEF`, errMsg.ACTIV_TOKEN_UNDEF))
-        res.setStatusCode(httpStatus.BAD_REQUEST)
-        return res
+      // Verify the request DTO has the required token.
+      if (!req.token) {
+        throw new Err(`MISSING_REQ`, `${errClient.MISSING_REQ} token`)
       }
 
       // Decode and decrypt the token.
-      let payload: Payload
-      try {
-        payload = this._jwt.decode(req.item?.token)
-      } catch {
-        res.setOutcome(outcomes.FAIL)
-        res.setErr(new Err(`ACTIV_TOKEN_DECODE`, errMsg.ACTIV_TOKEN_DECODE))
-        res.setStatusCode(httpStatus.BAD_REQUEST)
-        return res
-      }
-
+      const payload: Payload = this._jwt.decode(req.token)
       // Verify that the token is for activation.
       if (payload.type !== tokenType.ACTIVATION) {
-        res.setOutcome(outcomes.FAIL)
-        res.setErr(new Err(`ACTIV_TOKEN_TYPE`, errMsg.ACTIV_TOKEN_TYPE))
-        res.setStatusCode(httpStatus.BAD_REQUEST)
-        return res
+        throw new Err(`TOKEN_TYPE`, errClient.TOKEN_TYPE)
       }
-
       // Verify that the token hasn't expired.
       const now = new Date().getTime()
       if (payload.ttl < now) {
-        res.setOutcome(outcomes.FAIL)
-        res.setErr(new Err(`ACTIV_TOKEN_EXP`, errMsg.ACTIV_TOKEN_EXP))
-        res.setStatusCode(httpStatus.BAD_REQUEST)
-        return res
+        throw new Err(`TOKEN_EXP`, errClient.TOKEN_EXP)
       }
 
-      // Use the database.
-      // Get a new instance of uow from the DI container.
-      const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
+      // Connect to the database and begin a transaction.
       await uow.connect()
       await uow.begin()
 
-      // Find the user in the database
-      const findResult = await uow.users.readOne(payload.id)
+      // Activate the user.
+      const user = await uow.users.activate(UniqueId.create(payload.id))
 
-      // If user is not found, throw error.
-      if (findResult.rowCount < 1) {
-        await uow.rollback()
-        res.setOutcome(outcomes.FAIL)
-        res.setErr(new Err(`ACTIV_TOKEN_USR`, errMsg.ACTIV_TOKEN_USR))
-        res.setStatusCode(httpStatus.BAD_REQUEST)
-        return res
-      }
-
-      // Hydrate a user instance from the repository results.
-      const userHydrated = DomainConverter.fromDto<UserModel>(
-        UserModel,
-        findResult.rows[0],
-      )
-
-      // Verify that the user is not already activated.
-      if (userHydrated.date_activated !== null) {
-        // If they are already activated, just return a success message now.
-        await uow.rollback()
-        res.setOutcome(outcomes.SUCCESS)
-        return res
-      }
-
-      // Set the user as activated
-      userHydrated.setDateActivated(new Date())
-      // Dehydrate the activated user into a DTO for the repository.
-      const userDehydrated = DomainConverter.toDto<IUserModel>(userHydrated)
-      // Save the activated user.
-      const updateResult = await uow.users.updateOne(userDehydrated)
-
-      // Done using the database now.
+      // Commit the database transaction (also releases the connection.)
       await uow.commit()
 
-      // Hydrate the user instance from the repository results, again.
-      const userActivatedHydrated = DomainConverter.fromDto<UserModel>(
-        UserModel,
-        updateResult.rows[0],
+      return new UserActivationResponse(
+        outcomes.SUCCESS,
+        undefined, // No error to return.
+        UserMap.domainToDto(user),
+        httpStatus.OK,
       )
-
-      res.setItem(userActivatedHydrated)
-      res.setOutcome(outcomes.SUCCESS)
     } catch (e) {
-      res.setOutcome(outcomes.ERROR)
-      res.setErr(e as Err)
-      res.setStatusCode(httpStatus.INTERNAL_ERROR)
-      return res
+      // Attempt a rollback. If no database client exists, nothing will happen.
+      await uow.rollback()
+
+      // The caught e could be anything. Turn it into an Err.
+      const err = Err.toErr(e)
+
+      // If the error message can be client facing, return BAD_REQUEST.
+      if (isErrClient(err.name)) {
+        err.message = `${errUser.REGISTER} ${err.message}`
+        return new UserActivationResponse(
+          outcomes.FAIL,
+          err,
+          undefined, // No item to return.
+          httpStatus.BAD_REQUEST,
+        )
+      }
+
+      // Do not leak internal error details, return INTERNAL_ERROR.
+      return new UserActivationResponse(
+        outcomes.ERROR,
+        err,
+        undefined, // No item to return.
+        httpStatus.INTERNAL_ERROR,
+      )
     }
-
-    return res
   }
-  */
 
-  public async authenticate(
-    req: UserAuthenticationRequest,
-  ): Promise<UserAuthenticationResponse> {
+  public async authenticate(req: UserAuthenticationRequest): Promise<UserAuthenticationResponse> {
     log.trace(`user-service.ts authenticate()`)
 
     // Get a new instance of uow from the DI container.
@@ -269,7 +220,7 @@ export class UserService implements IUserService {
     try {
       // Verify the request DTO has required fields.
       if (!req.user.email_address || !req.user.password) {
-        throw new Err(`AUTH_REQUIRED_UNDEF`, errMsg.AUTH_REQUIRED_UNDEF)
+        throw new Err(`MISSING_REQ`, `${errClient.MISSING_REQ} email_address, password`)
       }
 
       // Connect to the database and begin a transaction.
