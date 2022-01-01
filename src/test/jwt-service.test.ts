@@ -1,5 +1,5 @@
 /**
- * Token related unit tests.
+ * JwtService tests.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -32,8 +32,8 @@ import { SYMBOLS } from 'root/symbols'
 
 import { TestFactory } from 'test/test-factory'
 
-describe(`JSON Web Token actions.`, () => {
-  test(`Encodes an activation JWT.`, async () => {
+describe(`JwtService tests.`, () => {
+  test(`Encodes an activation token.`, async () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const user: User = await testFactory.userNew()
@@ -44,7 +44,7 @@ describe(`JSON Web Token actions.`, () => {
     expect(token).toBeTruthy()
   })
 
-  test(`Encodes an access JWT.`, async () => {
+  test(`Encodes an access token.`, async () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const user: User = await testFactory.userNew()
@@ -55,7 +55,7 @@ describe(`JSON Web Token actions.`, () => {
     expect(token).toBeTruthy()
   })
 
-  test(`Encodes an access JWT even when TTL is not defined.`, async () => {
+  test(`Encodes an access token even when TTL is not defined.`, async () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const user: User = await testFactory.userNew()
@@ -66,7 +66,7 @@ describe(`JSON Web Token actions.`, () => {
     expect(token).toBeTruthy()
   })
 
-  test(`Decodes an activation JWT.`, () => {
+  test(`Decodes an activation token.`, () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const token: string = testFactory.tokenActivation()
@@ -80,7 +80,7 @@ describe(`JSON Web Token actions.`, () => {
     expect(payload.ttl).toBeTruthy()
   })
 
-  test(`Decodes an access JWT.`, () => {
+  test(`Decodes an access token.`, () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const token: string = testFactory.tokenAccess()
@@ -94,7 +94,7 @@ describe(`JSON Web Token actions.`, () => {
     expect(payload.ttl).toBeTruthy()
   })
 
-  test(`Fails to encode without JWT_SECRET.`, async () => {
+  test(`Fails to encode a token without env var JWT_SECRET.`, async () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const user: User = await testFactory.userNew()
@@ -108,7 +108,7 @@ describe(`JSON Web Token actions.`, () => {
     process.env.RR_JWT_SECRET = backupJwtSecret
   })
 
-  test(`Fails to encode without User ID.`, () => {
+  test(`Fails to encode a token without a iser id.`, () => {
     // Arrange, act, and assert.
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     expect(() => {
@@ -116,7 +116,7 @@ describe(`JSON Web Token actions.`, () => {
     }).toThrow(`JWT error. User ID is not defined.`)
   })
 
-  test(`Fails to encode without token type.`, async () => {
+  test(`Fails to encode a token without a specified token type.`, async () => {
     // Arrange
     const testFactory: TestFactory = new TestFactory()
     const user: User = await testFactory.userNew()
@@ -127,7 +127,7 @@ describe(`JSON Web Token actions.`, () => {
     }).toThrow(`JWT error. Type is not defined.`)
   })
 
-  test(`Fails to decodes without JWT_SECRET.`, () => {
+  test(`Fails to decode a token without env var JWT_SECRET.`, () => {
     // Arrange.
     const testFactory: TestFactory = new TestFactory()
     const token: string = testFactory.tokenActivation()
@@ -141,7 +141,7 @@ describe(`JSON Web Token actions.`, () => {
     process.env.RR_JWT_SECRET = backupJwtSecret
   })
 
-  test(`Fails to decodes without token.`, () => {
+  test(`Fails to decodes without a token.`, () => {
     // Arrange, act, and assert.
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     expect(() => {
