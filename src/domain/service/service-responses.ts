@@ -78,8 +78,6 @@ abstract class ServiceResponse<T> {
   }
 }
 
-export class UserRegistrationResponse extends ServiceResponse<IUserDto> {}
+export class UserResponse extends ServiceResponse<IUserDto> {}
 
-export class UserActivationResponse extends ServiceResponse<IUserDto> {}
-
-export class UserAuthenticationResponse extends ServiceResponse<string> {}
+export class StringResponse extends ServiceResponse<string> {}

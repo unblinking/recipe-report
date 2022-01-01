@@ -105,7 +105,10 @@ export type errEnvValueType = errEnvType[keyof errEnvType]
 
 // Basic user related error messages.
 export const errUser = {
-  REGISTER: `The user couldn't be registered.`,
+  CREATE: `The user couldn't be created.`,
+  READ: `The user couldn't be found.`,
+  UPDATE: `The user couldn't be updated.`,
+  DELETE: `The user couldn't be deleted.`,
   ACTIVATE: `The user couldn't be activated.`,
   AUTHENTICATE: `The user couldn't be authenticated.`,
 }

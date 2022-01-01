@@ -24,6 +24,7 @@
  * @module
  */
 import { IUserDto } from 'domain/models/user-model'
+import { UniqueId } from 'domain/value/uid-value'
 
 abstract class ServiceRequest<T> {
   protected _item: T
@@ -36,7 +37,7 @@ abstract class ServiceRequest<T> {
   }
 }
 
-export class UserRegistrationRequest extends ServiceRequest<IUserDto> {
+export class UserRequest extends ServiceRequest<IUserDto> {
   public get user(): IUserDto {
     return this._item
   }
@@ -45,35 +46,35 @@ export class UserRegistrationRequest extends ServiceRequest<IUserDto> {
     super(user, requestingUser)
   }
 
-  public static create(user: IUserDto, requestingUser?: IUserDto): UserRegistrationRequest {
-    return new UserRegistrationRequest(user, requestingUser)
+  public static create(user: IUserDto, requestingUser?: IUserDto): UserRequest {
+    return new UserRequest(user, requestingUser)
   }
 }
 
-export class UserActivationRequest extends ServiceRequest<string> {
-  public get token(): string {
+export class UuidRequest extends ServiceRequest<UniqueId> {
+  public get id(): UniqueId {
     return this._item
   }
 
-  private constructor(token: string, requestingUser?: IUserDto) {
-    super(token, requestingUser)
+  private constructor(id: UniqueId, requestingUser?: IUserDto) {
+    super(id, requestingUser)
   }
 
-  public static create(token: string, requestingUser?: IUserDto): UserActivationRequest {
-    return new UserActivationRequest(token, requestingUser)
+  public static create(id: string, requestingUser?: IUserDto): UuidRequest {
+    return new UuidRequest(UniqueId.create(id), requestingUser)
   }
 }
 
-export class UserAuthenticationRequest extends ServiceRequest<IUserDto> {
-  public get user(): IUserDto {
+export class StringRequest extends ServiceRequest<string> {
+  public get item(): string {
     return this._item
   }
 
-  private constructor(user: IUserDto, requestingUser?: IUserDto) {
-    super(user, requestingUser)
+  private constructor(item: string, requestingUser?: IUserDto) {
+    super(item, requestingUser)
   }
 
-  public static create(user: IUserDto, requestingUser?: IUserDto): UserAuthenticationRequest {
-    return new UserAuthenticationRequest(user, requestingUser)
+  public static create(item: string, requestingUser?: IUserDto): StringRequest {
+    return new StringRequest(item, requestingUser)
   }
 }

@@ -28,16 +28,8 @@ import { inject, injectable } from 'inversify'
 import { UserMap } from 'domain/maps/user-map'
 import { Err, errClient, errUser, isErrClient } from 'domain/models/err-model'
 import { User } from 'domain/models/user-model'
-import {
-  UserActivationRequest,
-  UserAuthenticationRequest,
-  UserRegistrationRequest,
-} from 'domain/service/service-requests'
-import {
-  UserActivationResponse,
-  UserAuthenticationResponse,
-  UserRegistrationResponse,
-} from 'domain/service/service-responses'
+import { StringRequest, UserRequest, UuidRequest } from 'domain/service/service-requests'
+import { StringResponse, UserResponse } from 'domain/service/service-responses'
 import { isStrongPassword, PasswordResult } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
 
@@ -52,9 +44,12 @@ import { container } from 'root/ioc.config'
 import { SYMBOLS } from 'root/symbols'
 
 export interface IUserService {
-  create(req: UserRegistrationRequest): Promise<UserRegistrationResponse>
-  activate(req: UserActivationRequest): Promise<UserActivationResponse>
-  authenticate(req: UserAuthenticationRequest): Promise<UserAuthenticationResponse>
+  create(req: UserRequest): Promise<UserResponse>
+  read(req: UuidRequest): Promise<UserResponse>
+  update(req: UserRequest): Promise<UserResponse>
+  delete(req: UuidRequest): Promise<UserResponse>
+  activate(req: StringRequest): Promise<UserResponse>
+  authenticate(req: UserRequest): Promise<StringResponse>
 }
 
 @injectable()
@@ -70,8 +65,8 @@ export class UserService implements IUserService {
     this._jwt = jwtService
   }
 
-  public async create(req: UserRegistrationRequest): Promise<UserRegistrationResponse> {
-    log.trace(`user-service.ts register()`)
+  public async create(req: UserRequest): Promise<UserResponse> {
+    log.trace(`user-service.ts create()`)
 
     // Get a new instance of uow from the DI container.
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
@@ -109,7 +104,7 @@ export class UserService implements IUserService {
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
 
-      return new UserRegistrationResponse(
+      return new UserResponse(
         outcomes.SUCCESS,
         undefined, // No error to return.
         UserMap.domainToDto(user),
@@ -124,8 +119,8 @@ export class UserService implements IUserService {
 
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        err.message = `${errUser.REGISTER} ${err.message}`
-        return new UserRegistrationResponse(
+        err.message = `${errUser.CREATE} ${err.message}`
+        return new UserResponse(
           outcomes.FAIL,
           err,
           undefined, // No item to return.
@@ -134,7 +129,7 @@ export class UserService implements IUserService {
       }
 
       // Do not leak internal error details, return INTERNAL_ERROR.
-      return new UserRegistrationResponse(
+      return new UserResponse(
         outcomes.ERROR,
         err,
         undefined, // No item to return.
@@ -143,20 +138,33 @@ export class UserService implements IUserService {
     }
   }
 
-  public async activate(req: UserActivationRequest): Promise<UserActivationResponse> {
+  public async read(req: UuidRequest): Promise<UserResponse> {
+    console.log(`User service read request`)
+    console.log(req)
+    return new UserResponse(outcomes.ERROR, undefined, undefined, httpStatus.INTERNAL_ERROR)
+  }
+
+  public async update(req: UserRequest): Promise<UserResponse> {
+    console.log(`User service update request`)
+    console.log(req)
+    return new UserResponse(outcomes.ERROR, undefined, undefined, httpStatus.INTERNAL_ERROR)
+  }
+
+  public async delete(req: UuidRequest): Promise<UserResponse> {
+    console.log(`User service delete request`)
+    console.log(req)
+    return new UserResponse(outcomes.ERROR, undefined, undefined, httpStatus.INTERNAL_ERROR)
+  }
+
+  public async activate(req: StringRequest): Promise<UserResponse> {
     log.trace(`user-service.ts activate()`)
 
     // Get a new instance of uow from the DI container.
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 
     try {
-      // Verify the request DTO has the required token.
-      if (!req.token) {
-        throw new Err(`MISSING_REQ`, `${errClient.MISSING_REQ} token`)
-      }
-
       // Decode and decrypt the token.
-      const payload: Payload = this._jwt.decode(req.token)
+      const payload: Payload = this._jwt.decode(req.item)
       // Verify that the token is for activation.
       if (payload.type !== tokenType.ACTIVATION) {
         throw new Err(`TOKEN_TYPE`, errClient.TOKEN_TYPE)
@@ -177,7 +185,7 @@ export class UserService implements IUserService {
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
 
-      return new UserActivationResponse(
+      return new UserResponse(
         outcomes.SUCCESS,
         undefined, // No error to return.
         UserMap.domainToDto(user),
@@ -192,8 +200,8 @@ export class UserService implements IUserService {
 
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        err.message = `${errUser.REGISTER} ${err.message}`
-        return new UserActivationResponse(
+        err.message = `${errUser.ACTIVATE} ${err.message}`
+        return new UserResponse(
           outcomes.FAIL,
           err,
           undefined, // No item to return.
@@ -202,7 +210,7 @@ export class UserService implements IUserService {
       }
 
       // Do not leak internal error details, return INTERNAL_ERROR.
-      return new UserActivationResponse(
+      return new UserResponse(
         outcomes.ERROR,
         err,
         undefined, // No item to return.
@@ -211,17 +219,19 @@ export class UserService implements IUserService {
     }
   }
 
-  public async authenticate(req: UserAuthenticationRequest): Promise<UserAuthenticationResponse> {
+  public async authenticate(req: UserRequest): Promise<StringResponse> {
     log.trace(`user-service.ts authenticate()`)
 
     // Get a new instance of uow from the DI container.
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 
     try {
+      /*
       // Verify the request DTO has required fields.
       if (!req.user.email_address || !req.user.password) {
         throw new Err(`MISSING_REQ`, `${errClient.MISSING_REQ} email_address, password`)
       }
+      */
 
       // Connect to the database and begin a transaction.
       await uow.connect()
@@ -244,7 +254,7 @@ export class UserService implements IUserService {
         new Date().getTime() + 24 * 60 * 60 * 1000, // 24 hours.
       )
 
-      return new UserAuthenticationResponse(
+      return new StringResponse(
         outcomes.SUCCESS,
         undefined, // No error to return.
         token,
@@ -259,8 +269,8 @@ export class UserService implements IUserService {
 
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        err.message = `${errUser.REGISTER} ${err.message}`
-        return new UserAuthenticationResponse(
+        err.message = `${errUser.AUTHENTICATE} ${err.message}`
+        return new StringResponse(
           outcomes.FAIL,
           err,
           undefined, // No item to return.
@@ -269,7 +279,7 @@ export class UserService implements IUserService {
       }
 
       // Do not leak internal error details, return INTERNAL_ERROR.
-      return new UserAuthenticationResponse(
+      return new StringResponse(
         outcomes.ERROR,
         err,
         undefined, // No item to return.

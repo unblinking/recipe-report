@@ -94,7 +94,7 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
   private _countByColumn = async (column: string, value: string): Promise<number> => {
     const query: string = `SELECT * FROM rr.users_count_by_column_value($1, $2)`
     const result: QueryResult = await this.client.query(query, [column, value])
-    const count: number = result.rows[0].count
+    const count: number = result.rows[0].users_count_by_column_value
     return count
   }
 
