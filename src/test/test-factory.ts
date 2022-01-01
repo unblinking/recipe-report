@@ -25,11 +25,18 @@
  *
  * @module
  */
-import { User } from 'domain/models/user-model'
+import express, { Application, json } from 'express'
+import { injectable } from 'inversify'
+
+import { IUserDto, User } from 'domain/models/user-model'
+import { UserRequest } from 'domain/service/service-requests'
+import { UserResponse } from 'domain/service/service-responses'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { Password } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
 import { Username } from 'domain/value/username-value'
+
+import { httpStatus, outcomes } from 'data/constants'
 
 export class TestFactory {
   public async userNew(): Promise<User> {
@@ -55,5 +62,27 @@ export class TestFactory {
   public tokenAccess(): string {
     const token = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.IkkvcGgyZGwrNDllclByWkxYZWpCZVVIaXFUbW1HMEZyNEFRQkRDdTlERlZmZWZBN2Jkb0hpT2xzNmJvTkhFTkovTDNCNjhjNG0rUWphYWtrM3YzT09vUWdNSm1ib0ZKQlQ1ZHVNS1JVVXA2NDJ6bkxWaEp6am5KK3pQWXU1N29GNnJ6YVZ0L3BQdWpjenJpRTVsSS9EUT09Ig.JzmOzo2oTy9Bt2bHmZbWypUG4pnR9KXnVsoagcioBDTcoJutgkhEzSxqyIFY9you73c2z6-4dS9wc8H8F4o_Pw`
     return token
+  }
+}
+
+export const mockExpressApp: Application = express().set('json spaces', 2).use(json())
+
+export const mockUserDto: IUserDto = {
+  name: 'foo',
+  password: 'passwordfoo',
+  email_address: 'foo@recipe.report',
+  date_created: new Date().toString(),
+}
+
+// Mock UserService that simply returns success with the req.user object.
+@injectable()
+export class MockUserServiceSuccess {
+  public async create(req: UserRequest): Promise<UserResponse> {
+    return new UserResponse(
+      outcomes.SUCCESS,
+      undefined, // No error to return.
+      req.user,
+      httpStatus.OK,
+    )
   }
 }

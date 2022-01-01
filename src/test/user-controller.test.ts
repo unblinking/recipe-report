@@ -23,39 +23,37 @@
  *
  * @module
  */
-import express, { Application } from 'express'
-import { Container, decorate, injectable } from 'inversify'
+import { Container } from 'inversify'
 import 'reflect-metadata'
 import request from 'supertest'
 
 import { UserController } from 'api/controllers/user-controller'
 
-import { IUserService, UserService } from 'root/service/user-service'
+import { mockExpressApp, mockUserDto, MockUserServiceSuccess } from './test-factory'
 
-decorate(injectable(), UserService)
-jest.mock('root/service/user-service')
-
-describe(`UserController tests.`, () => {
+describe(`UserController success`, () => {
   let container: Container
 
   beforeEach(() => {
     container = new Container()
-    container.bind<UserController>('controller').to(UserController)
-    container.bind<IUserService>(Symbol.for('IUserService')).to(UserService)
+    container.bind<UserController>('userController').to(UserController)
+    container.bind<MockUserServiceSuccess>(Symbol.for('IUserService')).to(MockUserServiceSuccess)
   })
 
   test(`Creates a user.`, async () => {
     // Arrange.
-    const app: Application = express().set('json spaces', 2)
-    const controller: UserController = container.get('controller')
+    const controller: UserController = container.get('userController')
     const router = controller.router
-    app.use('/', router)
+    mockExpressApp.use('/', router)
 
     // Act.
-    const res = await request(app).get('/')
+    const res = await request(mockExpressApp)
+      .post('/')
+      .set('Content-type', 'application/json')
+      .send(mockUserDto)
 
     // Assert.
-    expect(res.header['content-type']).toBe('text/html; charset=utf-8')
-    console.log(res)
+    expect(res.header['content-type']).toBe('application/json; charset=utf-8')
+    console.log(res.body)
   })
 })
