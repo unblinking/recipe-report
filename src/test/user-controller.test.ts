@@ -23,37 +23,77 @@
  *
  * @module
  */
+import express, { json } from 'express'
 import { Container } from 'inversify'
 import 'reflect-metadata'
 import request from 'supertest'
 
 import { UserController } from 'api/controllers/user-controller'
 
-import { mockExpressApp, mockUserDto, MockUserServiceSuccess } from './test-factory'
+import { MockUserServiceError, MockUserServiceFail, MockUserServiceSuccess } from 'test/mocks'
 
-describe(`UserController success`, () => {
+describe(`UserController success.`, () => {
   let container: Container
 
   beforeEach(() => {
+    jest.resetModules()
     container = new Container()
-    container.bind<UserController>('userController').to(UserController)
-    container.bind<MockUserServiceSuccess>(Symbol.for('IUserService')).to(MockUserServiceSuccess)
+    container.unbindAll()
   })
 
-  test(`Creates a user.`, async () => {
+  test(`Success response from UserService.`, async () => {
     // Arrange.
+    container.bind<UserController>('userController').to(UserController)
+    container.bind<MockUserServiceSuccess>(Symbol.for('IUserService')).to(MockUserServiceSuccess)
     const controller: UserController = container.get('userController')
     const router = controller.router
-    mockExpressApp.use('/', router)
+    const app = express().set('json spaces', 2).use(json())
+    app.use('/', router)
 
     // Act.
-    const res = await request(mockExpressApp)
-      .post('/')
-      .set('Content-type', 'application/json')
-      .send(mockUserDto)
+    const res = await request(app).post('/').set('Content-type', 'application/json')
 
     // Assert.
     expect(res.header['content-type']).toBe('application/json; charset=utf-8')
-    console.log(res.body)
+    expect(res.body.status).toBe('success')
+    expect(res.body.data.user).toBeTruthy
+  })
+
+  test(`Fail response from UserService.`, async () => {
+    // Arrange.
+    container.bind<UserController>('userController').to(UserController)
+    container.bind<MockUserServiceFail>(Symbol.for('IUserService')).to(MockUserServiceFail)
+
+    const controller: UserController = container.get('userController')
+    const router = controller.router
+    const app = express().set('json spaces', 2).use(json())
+    app.use('/', router)
+
+    // Act.
+    const res = await request(app).post('/').set('Content-type', 'application/json')
+
+    // Assert.
+    expect(res.header['content-type']).toBe('application/json; charset=utf-8')
+    expect(res.body.status).toBe('fail')
+    expect(res.body.err).toBeTruthy
+  })
+
+  test(`Error response from UserService.`, async () => {
+    // Arrange.
+    container.bind<UserController>('userController').to(UserController)
+    container.bind<MockUserServiceError>(Symbol.for('IUserService')).to(MockUserServiceError)
+
+    const controller: UserController = container.get('userController')
+    const router = controller.router
+    const app = express().set('json spaces', 2).use(json())
+    app.use('/', router)
+
+    // Act.
+    const res = await request(app).post('/').set('Content-type', 'application/json')
+
+    // Assert.
+    expect(res.header['content-type']).toBe('application/json; charset=utf-8')
+    expect(res.body.status).toBe('error')
+    expect(res.body.err).toBeTruthy
   })
 })
