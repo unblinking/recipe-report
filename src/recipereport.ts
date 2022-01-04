@@ -34,8 +34,6 @@ import 'reflect-metadata'
 
 import { Err, errEnv } from 'domain/models/err-model'
 
-import { graffiti } from 'data/factories/fun-factory'
-
 import { log } from 'service/log-service'
 
 import { listen } from 'api/app'
@@ -54,6 +52,28 @@ export class RecipeReport implements IRecipeReport {
 
   public constructor(@multiInject(SYMBOLS.IBaseController) controllers: IBaseController[]) {
     this._controllers = controllers
+  }
+
+  public start = (): void => {
+    try {
+      log.trace(`recipereport.ts start()`)
+      process.stdout.write(this._graffiti)
+      this._envVarCheck()
+      const middlewares: Array<RequestHandler> = [
+        Helmet({
+          contentSecurityPolicy: { directives: { defaultSrc: ["'self'"] } },
+          referrerPolicy: { policy: 'same-origin' },
+        }),
+        json(),
+        callHistory,
+      ]
+      const controllers: Array<IBaseController> = this._controllers
+      const port: number = parseInt(process.env.RR_PORT as string, 10)
+      listen(middlewares, controllers, port)
+    } catch (e) {
+      log.fatal((e as Error).message)
+      process.exit(1)
+    }
   }
 
   /// Environment variables roll call. Shabooya, sha sha shabooya ROLL CALL!
@@ -85,25 +105,27 @@ export class RecipeReport implements IRecipeReport {
     }
   }
 
-  public start = (): void => {
-    try {
-      log.trace(`recipereport.ts start()`)
-      graffiti()
-      this._envVarCheck()
-      const middlewares: Array<RequestHandler> = [
-        Helmet({
-          contentSecurityPolicy: { directives: { defaultSrc: ["'self'"] } },
-          referrerPolicy: { policy: 'same-origin' },
-        }),
-        json(),
-        callHistory,
-      ]
-      const controllers: Array<IBaseController> = this._controllers
-      const port: number = parseInt(process.env.RR_PORT as string, 10)
-      listen(middlewares, controllers, port)
-    } catch (e) {
-      log.fatal((e as Error).message)
-      process.exit(1)
-    }
-  }
+  // Fun. Playful frivolity.
+  private _version: string = process.env.npm_package_version as string
+  private _stage: string = `Alpha`
+  private _mode: string = (process.env.NODE_ENV as string) || `development`
+  private _license: string = process.env.npm_package_license as string
+  private _repository: string = `https://github.com/nothingworksright/api.recipe.report`
+  private _graffiti: string = `\x1b[1m\x1b[32m ____           _
+|  _ \\ ___  ___(_)_ __   ___
+| |_) / _ \\/ __| | '_ \\ / _ \\
+|  _ <  __/ (__| | |_) |  __/
+|_|_\\_\\___|\\___|_| .__/ \\___|
+|  _ \\ ___ _ __  |_|_  _ __| |_
+| |_) / _ \\ '_ \\ / _ \\| '__| __|
+|  _ <  __/ |_) | (_) | |  | |_
+|_| \\_\\___| .__/ \\___/|_|   \\__|
+\x1b[37m\x1b[33mAPI\x1b[1m\x1b[32m       |_|      \x1b[37m\x1b[33mversion ${this._version}\x1b[37m\x1b[21m
+
+Release is \x1b[36m${this._stage}\x1b[37m
+Running in \x1b[36m${this._mode}\x1b[37m mode
+License \x1b[36m${this._license}\x1b[37m
+Repository \x1b[36m${this._repository}\x1b[37m
+\x1b[0m
+`
 }

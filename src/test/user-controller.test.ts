@@ -36,9 +36,7 @@ describe(`UserController success.`, () => {
   let container: Container
 
   beforeEach(() => {
-    jest.resetModules()
     container = new Container()
-    container.unbindAll()
   })
 
   test(`Success response from UserService.`, async () => {
@@ -55,6 +53,8 @@ describe(`UserController success.`, () => {
 
     // Assert.
     expect(res.header['content-type']).toBe('application/json; charset=utf-8')
+    expect(res.statusCode).toBe(200)
+    expect(res.ok).toBe(true)
     expect(res.body.status).toBe('success')
     expect(res.body.data.user).toBeTruthy
   })
@@ -63,7 +63,6 @@ describe(`UserController success.`, () => {
     // Arrange.
     container.bind<UserController>('userController').to(UserController)
     container.bind<MockUserServiceFail>(Symbol.for('IUserService')).to(MockUserServiceFail)
-
     const controller: UserController = container.get('userController')
     const router = controller.router
     const app = express().set('json spaces', 2).use(json())
@@ -74,15 +73,17 @@ describe(`UserController success.`, () => {
 
     // Assert.
     expect(res.header['content-type']).toBe('application/json; charset=utf-8')
+    expect(res.statusCode).toBe(400)
+    expect(res.badRequest).toBe(true)
+    expect(res.clientError).toBe(true)
     expect(res.body.status).toBe('fail')
-    expect(res.body.err).toBeTruthy
+    expect(res.body.data.message).toBeTruthy
   })
 
   test(`Error response from UserService.`, async () => {
     // Arrange.
     container.bind<UserController>('userController').to(UserController)
     container.bind<MockUserServiceError>(Symbol.for('IUserService')).to(MockUserServiceError)
-
     const controller: UserController = container.get('userController')
     const router = controller.router
     const app = express().set('json spaces', 2).use(json())
@@ -93,7 +94,10 @@ describe(`UserController success.`, () => {
 
     // Assert.
     expect(res.header['content-type']).toBe('application/json; charset=utf-8')
+    expect(res.statusCode).toBe(500)
+    expect(res.serverError).toBe(true)
     expect(res.body.status).toBe('error')
     expect(res.body.err).toBeTruthy
+    expect(res.error).toBeTruthy
   })
 })
