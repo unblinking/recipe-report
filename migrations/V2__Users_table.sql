@@ -121,6 +121,30 @@ $$;
 COMMENT ON FUNCTION rr.users_create IS 'Function to create a record in the users table.';
 
 /**
+ * Function:    rr.users_read
+ * Author:      Joshua Gray
+ * Description: Function to read a user by id.
+ * Parameters:  id UUID
+ * Usage:       SELECT * FROM rr.users_read('00000000-0000-0000-0000-000000000000');
+ * Returns:     The user record if found.
+ */
+CREATE OR REPLACE FUNCTION rr.users_read (
+    id UUID
+)
+    RETURNS SETOF rr.users
+    LANGUAGE PLPGSQL
+    AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT *
+    FROM rr.users
+    WHERE rr.users.id = $1;
+END;
+$$;
+COMMENT ON FUNCTION rr.users_read IS 'Function to read a user by id.';
+
+/**
  * Function:    rr.users_activate
  * Author:      Joshua Gray
  * Description: Function to update a record in the users table with a new date_activated.

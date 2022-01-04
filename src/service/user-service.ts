@@ -139,9 +139,54 @@ export class UserService implements IUserService {
   }
 
   public async read(req: UuidRequest): Promise<UserResponse> {
-    console.log(`User service read request`)
-    console.log(req)
-    return new UserResponse(outcomes.ERROR, undefined, undefined, httpStatus.INTERNAL_ERROR)
+    log.trace(`user-service.ts read()`)
+
+    // Get a new instance of uow from the DI container.
+    const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
+
+    try {
+      // Connect to the database and begin a transaction.
+      await uow.connect()
+      await uow.begin()
+
+      // Read the user from persistence.
+      const user: User = await uow.users.read(req.id)
+
+      // Commit the database transaction (also releases the connection.)
+      await uow.commit()
+
+      return new UserResponse(
+        outcomes.SUCCESS,
+        undefined, // No error to return.
+        UserMap.domainToDto(user),
+        httpStatus.OK,
+      )
+    } catch (e) {
+      // Attempt a rollback. If no database client exists, nothing will happen.
+      await uow.rollback()
+
+      // The caught e could be anything. Turn it into an Err.
+      const err = Err.toErr(e)
+
+      // If the error message can be client facing, return BAD_REQUEST.
+      if (isErrClient(err.name)) {
+        err.message = `${errUser.READ} ${err.message}`
+        return new UserResponse(
+          outcomes.FAIL,
+          err,
+          undefined, // No item to return.
+          httpStatus.BAD_REQUEST,
+        )
+      }
+
+      // Do not leak internal error details, return INTERNAL_ERROR.
+      return new UserResponse(
+        outcomes.ERROR,
+        err,
+        undefined, // No item to return.
+        httpStatus.INTERNAL_ERROR,
+      )
+    }
   }
 
   public async update(req: UserRequest): Promise<UserResponse> {

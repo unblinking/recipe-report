@@ -35,6 +35,7 @@ import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
 
 export interface IUserRepo extends IBaseRepo {
   create(user: User): Promise<User>
+  read(id: UniqueId): Promise<User>
   activate(id: UniqueId): Promise<User>
   authenticate(user: User): Promise<User>
 }
@@ -59,6 +60,17 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
       user.password.value,
       user.email_address.value,
     ])
+    // Return domain object from database query results.
+    return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
+  }
+
+  public read = async (id: UniqueId): Promise<User> => {
+    // Find the user by their unique id.
+    const query: string = `SELECT * FROM rr.users_read($1)`
+    const result: QueryResult = await this.client.query(query, [id.value])
+    if (result.rowCount !== 1) {
+      throw new Err(`READ`, errUser.READ)
+    }
     // Return domain object from database query results.
     return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
   }
