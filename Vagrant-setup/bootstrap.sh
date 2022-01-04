@@ -1,11 +1,11 @@
 #!/bin/sh -e
 
 # Edit the following to change the name of the database user that will be created:
-APP_DB_USER=myapp
+APP_DB_USER=dbuser
 APP_DB_PASS=dbpass
 
 # Edit the following to change the name of the database that is created (defaults to the user name)
-APP_DB_NAME=$APP_DB_USER
+APP_DB_NAME=recipedb
 
 # Edit the following to change the version of PostgreSQL that is installed
 PG_VERSION=12
@@ -96,7 +96,7 @@ EOF
 # Install extensions.
 # We must be superuser to create this extension, so we must do it here.
 # This can't be done later during the database migration scripts.
-sudo -u postgres psql myapp -c 'CREATE EXTENSION pgcrypto;'
+sudo -u postgres psql $APP_DB_NAME -c 'CREATE EXTENSION pgcrypto;'
 
 # Tag the provision time:
 date > "$PROVISIONED_ON"
