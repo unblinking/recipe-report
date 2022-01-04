@@ -28,6 +28,7 @@
 import { NextFunction, Request, Response } from 'express'
 
 import { Err, errClient } from 'domain/models/err-model'
+import { UniqueId } from 'domain/value/uid-value'
 
 import { httpStatus } from 'data/constants'
 
@@ -39,17 +40,26 @@ import { container } from 'root/ioc.config'
 import { SYMBOLS } from 'root/symbols'
 
 export interface RequestWithUser extends Request {
-  requestingUserId?: string
+  authorizedId?: UniqueId
 }
 
 export const tokenwall = (req: RequestWithUser, _res: Response, next: NextFunction): void => {
   log.trace(`tokenwall.ts tokenwall()`)
   try {
-    const token: string = req.headers.token as string
+    const authorization: string = req.headers.authorization as string
+    const split = authorization.split(' ')
+    if (split.length !== 2) {
+      throw new Err('TOKEN_INVALID', errClient.TOKEN_INVALID)
+    }
+    const regex = /^Bearer$/i
+    const authScheme = split[0]
+    if (!regex.test(authScheme)) {
+      throw new Err('TOKEN_INVALID', errClient.TOKEN_INVALID)
+    }
+    const token = split[1]
     if (!token) throw new Err(`TOKENWALL_UNDEF`, errClient.TOKENWALL_UNDEF)
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     const payload: Payload = jwt.decode(token)
-
     // Verify that the token is for access.
     if (payload.type !== tokenType.ACCESS) {
       throw new Err(`TOKENWALL_TYPE`, errClient.TOKENWALL_TYPE)
@@ -59,10 +69,8 @@ export const tokenwall = (req: RequestWithUser, _res: Response, next: NextFuncti
     if (payload.ttl < now) {
       throw new Err(`TOKENWALL_EXP`, errClient.TOKENWALL_EXP)
     }
-
     // Add the user Id from the payload to the request.
-    req.requestingUserId = payload.id
-
+    req.authorizedId = UniqueId.create(payload.id)
     // Allow the request to continue on.
     next()
   } catch (e) {

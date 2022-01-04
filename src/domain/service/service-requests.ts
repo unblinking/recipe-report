@@ -29,11 +29,11 @@ import { UniqueId } from 'domain/value/uid-value'
 abstract class ServiceRequest<T> {
   protected _item: T
 
-  protected _requestingUser: IUserDto | undefined
+  protected authorizedId: UniqueId | undefined
 
-  constructor(item: T, requestingUser?: IUserDto) {
+  constructor(item: T, authorizedId?: UniqueId) {
     this._item = item
-    this._requestingUser = requestingUser
+    this.authorizedId = authorizedId
   }
 }
 
@@ -42,12 +42,12 @@ export class UserRequest extends ServiceRequest<IUserDto> {
     return this._item
   }
 
-  private constructor(user: IUserDto, requestingUser?: IUserDto) {
-    super(user, requestingUser)
+  private constructor(user: IUserDto, authorizedId?: UniqueId) {
+    super(user, authorizedId)
   }
 
-  public static create(user: IUserDto, requestingUser?: IUserDto): UserRequest {
-    return new UserRequest(user, requestingUser)
+  public static create(user: IUserDto, authorizedId?: UniqueId): UserRequest {
+    return new UserRequest(user, authorizedId)
   }
 }
 
@@ -56,12 +56,12 @@ export class UuidRequest extends ServiceRequest<UniqueId> {
     return this._item
   }
 
-  private constructor(id: UniqueId, requestingUser?: IUserDto) {
-    super(id, requestingUser)
+  private constructor(id: UniqueId, authorizedId?: UniqueId) {
+    super(id, authorizedId)
   }
 
-  public static create(id: string, requestingUser?: IUserDto): UuidRequest {
-    return new UuidRequest(UniqueId.create(id), requestingUser)
+  public static create(id: string, authorizedId?: UniqueId): UuidRequest {
+    return new UuidRequest(UniqueId.create(id), authorizedId)
   }
 }
 
@@ -70,11 +70,11 @@ export class StringRequest extends ServiceRequest<string> {
     return this._item
   }
 
-  private constructor(item: string, requestingUser?: IUserDto) {
-    super(item, requestingUser)
+  private constructor(item: string, authorizedId?: UniqueId) {
+    super(item, authorizedId)
   }
 
-  public static create(item: string, requestingUser?: IUserDto): StringRequest {
-    return new StringRequest(item, requestingUser)
+  public static create(item: string, authorizedId?: UniqueId): StringRequest {
+    return new StringRequest(item, authorizedId)
   }
 }

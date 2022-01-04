@@ -23,7 +23,7 @@
  *
  * @module
  */
-import { NextFunction, Request, Response, Router } from 'express'
+import { NextFunction, Response, Router } from 'express'
 import { inject, injectable } from 'inversify'
 
 import { Err, errUser, isErrClient } from 'domain/models/err-model'
@@ -37,6 +37,7 @@ import { IUserService } from 'service/user-service'
 import { IBaseController } from 'api/controllers/base-controller'
 import { error, fail, success } from 'api/controllers/controller-response'
 import { fiveHundred } from 'api/middlewares/laststop'
+import { RequestWithUser, tokenwall } from 'api/middlewares/tokenwall'
 
 import { SYMBOLS } from 'root/symbols'
 
@@ -53,15 +54,19 @@ export class UserController implements IBaseController {
 
   public initRoutes = (): void => {
     this.router.post(`/`, this.create)
-    this.router.get(`/:id`, this.read)
-    this.router.put(`/:id`, this.update)
-    this.router.delete(`/:id`, this.delete)
+    this.router.get(`/:id`, tokenwall, this.read)
+    this.router.put(`/:id`, tokenwall, this.update)
+    this.router.delete(`/:id`, tokenwall, this.delete)
     this.router.post(`/session`, this.authenticate)
     this.router.put(`/activation/:token`, this.activate)
     this.router.use(fiveHundred) // Error handling.
   }
 
-  private create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  private create = async (
+    req: RequestWithUser,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     log.trace(`user-controller.ts create()`)
     try {
       const svcReq = UserRequest.create({ ...req.body })
@@ -92,10 +97,10 @@ export class UserController implements IBaseController {
     }
   }
 
-  private read = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  private read = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     log.trace(`user-controller.ts read()`)
     try {
-      const svcReq = UuidRequest.create(req.params.id)
+      const svcReq = UuidRequest.create(req.params.id, req.authorizedId)
       const svcRes = await this._userService.read(svcReq)
       const code = svcRes.statusCode
       switch (svcRes.outcome) {
@@ -123,10 +128,14 @@ export class UserController implements IBaseController {
     }
   }
 
-  private update = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  private update = async (
+    req: RequestWithUser,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     log.trace(`user-controller.ts update()`)
     try {
-      const svcReq = UserRequest.create({ ...req.body })
+      const svcReq = UserRequest.create({ ...req.body }, req.authorizedId)
       const svcRes = await this._userService.update(svcReq)
       const code = svcRes.statusCode
       switch (svcRes.outcome) {
@@ -154,10 +163,14 @@ export class UserController implements IBaseController {
     }
   }
 
-  private delete = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  private delete = async (
+    req: RequestWithUser,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     log.trace(`user-controller.ts delete()`)
     try {
-      const svcReq = UuidRequest.create(req.params.id)
+      const svcReq = UuidRequest.create(req.params.id, req.authorizedId)
       const svcRes = await this._userService.delete(svcReq)
       const code = svcRes.statusCode
       switch (svcRes.outcome) {
@@ -185,7 +198,11 @@ export class UserController implements IBaseController {
     }
   }
 
-  private activate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  private activate = async (
+    req: RequestWithUser,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     log.trace(`user-controller.ts activate()`)
     try {
       const svcReq = StringRequest.create(req.params.token)
@@ -216,7 +233,11 @@ export class UserController implements IBaseController {
     }
   }
 
-  private authenticate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  private authenticate = async (
+    req: RequestWithUser,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     log.trace(`user-controller.ts authenticate()`)
     try {
       const svcReq = UserRequest.create({ ...req.body })
