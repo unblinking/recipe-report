@@ -46,6 +46,7 @@
  *              date_created TIMESTAMPTZ - 
  *              date_activated TIMESTAMPTZ - 
  *              date_last_login TIMESTAMPTZ - 
+ *              date_deleted TIMESTAMPTZ - 
  */
 CREATE TYPE rr.user_type AS (
     id              UUID,
@@ -54,7 +55,8 @@ CREATE TYPE rr.user_type AS (
     email_address   TEXT,
     date_created    TIMESTAMPTZ,
     date_activated  TIMESTAMPTZ,
-    date_last_login TIMESTAMPTZ
+    date_last_login TIMESTAMPTZ,
+    date_deleted    TIMESTAMPTZ
 );
 COMMENT ON TYPE rr.user_type IS 'Type for an individual user record including login credentials.';
 
@@ -69,6 +71,7 @@ COMMENT ON TYPE rr.user_type IS 'Type for an individual user record including lo
  *              date_created - Not null.
  *              date_activated - 
  *              date_last_login - 
+ *              date_deleted - 
  */
 CREATE TABLE IF NOT EXISTS rr.users OF rr.user_type (
     id            WITH OPTIONS PRIMARY KEY      DEFAULT gen_random_uuid(),
@@ -85,6 +88,7 @@ COMMENT ON COLUMN rr.users.email_address IS 'Unique email address.';
 COMMENT ON COLUMN rr.users.date_created IS 'Datetime the user was created in the database.';
 COMMENT ON COLUMN rr.users.date_activated IS 'Datetime the user was activated for login.';
 COMMENT ON COLUMN rr.users.date_last_login IS 'Datetime the user last logged into the system successfully.';
+COMMENT ON COLUMN rr.users.date_deleted IS 'Datetime the user was marked as deleted.';
 
 /**
  * Function:    rr.users_create
@@ -160,7 +164,7 @@ CREATE OR REPLACE FUNCTION rr.users_update (
     name          VARCHAR( 50 ) DEFAULT NULL,
     email_address TEXT          DEFAULT NULL
 )
-    RETURNS SETOF rr.users
+    RETURNS  SETOF rr.users
     LANGUAGE PLPGSQL
     AS
 $$
@@ -175,6 +179,35 @@ BEGIN
 END;
 $$;
 COMMENT ON FUNCTION rr.users_update IS 'Function to update a record in the users table.';
+
+/**
+ * Function:    rr.users_delete
+ * Author:      Joshua Gray
+ * Description: Function to delete a record in the users table (soft delete).
+ * Parameters:  id UUID - Primary key id for the record to be deleted.
+ * Usage:       SELECT * FROM rr.users_delete('00000000-0000-0000-0000-000000000000');
+ * Returns:     The record that was deleted.
+ */
+CREATE OR REPLACE FUNCTION rr.users_delete (
+    id UUID
+)
+    RETURNS  SETOF rr.users
+    LANGUAGE PLPGSQL
+    AS
+$$
+DECLARE
+    now TIMESTAMPTZ;
+BEGIN
+    SELECT CURRENT_TIMESTAMP INTO now;
+
+    RETURN QUERY
+    UPDATE rr.users
+    SET    date_deleted = now
+    WHERE  rr.users.id  = $1
+    RETURNING *;
+END;
+$$;
+COMMENT ON FUNCTION rr.users_delete IS 'Function to delete a record in the users table (soft delete).';
 
 /**
  * Function:    rr.users_activate
