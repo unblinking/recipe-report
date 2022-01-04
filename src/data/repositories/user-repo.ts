@@ -28,7 +28,10 @@ import { PoolClient, QueryResult } from 'pg'
 import { UserMap } from 'domain/maps/user-map'
 import { Err, errClient, errUser } from 'domain/models/err-model'
 import { User } from 'domain/models/user-model'
+import { EmailAddress } from 'domain/value/email-address-value'
+import { Password } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
+import { Username } from 'domain/value/username-value'
 
 import { dbTables } from 'data/constants'
 import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
@@ -36,8 +39,9 @@ import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
 export interface IUserRepo extends IBaseRepo {
   create(user: User): Promise<User>
   read(id: UniqueId): Promise<User>
+  update(id: UniqueId, name?: Username, email_address?: EmailAddress): Promise<User>
   activate(id: UniqueId): Promise<User>
-  authenticate(user: User): Promise<User>
+  authenticate(email_address: EmailAddress, password: Password): Promise<User>
 }
 
 export class UserRepo extends BaseRepo<User> implements IUserRepo {
@@ -75,6 +79,35 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
     return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
   }
 
+  // Update a user record (only name and email_address at this time).
+  // This cannot be used to update the user password.
+  public update = async (
+    id: UniqueId,
+    name?: Username,
+    email_address?: EmailAddress,
+  ): Promise<User> => {
+    // Verify the incoming user name and email_address aren't being used by any
+    // user, except of course if used by the user we are going to update now.
+    if (name != undefined && (await this._countByColumnNotId(id.value, 'name', name.value)) > 0) {
+      throw new Err(`NAME_USED`, errClient.NAME_USED)
+    }
+    if (
+      email_address != undefined &&
+      (await this._countByColumnNotId(id.value, 'email_address', email_address.value)) > 0
+    ) {
+      throw new Err(`EMAIL_USED`, errClient.EMAIL_USED)
+    }
+    // Update the user into the database.
+    const query: string = `SELECT * FROM rr.users_update($1, $2, $3)`
+    const result: QueryResult = await this.client.query(query, [
+      id.value,
+      name != undefined ? name.value : null,
+      email_address != undefined ? email_address.value : null,
+    ])
+    // Return domain object from database query results.
+    return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
+  }
+
   public activate = async (id: UniqueId): Promise<User> => {
     // TODO: Find the user and see if they're already activated?
     // Update a user's date_activated column.
@@ -87,12 +120,12 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
     return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
   }
 
-  public authenticate = async (user: User): Promise<User> => {
+  public authenticate = async (email_address: EmailAddress, password: Password): Promise<User> => {
     // Authenticate a user (find a match by email and password).
     const query: string = `SELECT * FROM rr.users_authenticate($1, $2)`
     const result: QueryResult = await this.client.query(query, [
-      user.email_address.value,
-      user.password.value,
+      email_address.value,
+      password.value,
     ])
     if (result.rowCount !== 1) {
       throw new Err(`AUTHENTICATE`, errUser.AUTHENTICATE)
@@ -103,10 +136,23 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
     return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
   }
 
+  // Function to return the count of user records that match a given column/value
   private _countByColumn = async (column: string, value: string): Promise<number> => {
     const query: string = `SELECT * FROM rr.users_count_by_column_value($1, $2)`
     const result: QueryResult = await this.client.query(query, [column, value])
     const count: number = result.rows[0].users_count_by_column_value
+    return count
+  }
+
+  // Function to return the count of user records, other than the specified user id, that match a given column/value
+  private _countByColumnNotId = async (
+    id: string,
+    column: string,
+    value: string,
+  ): Promise<number> => {
+    const query: string = `SELECT * FROM rr.users_count_by_column_value_not_id($1, $2, $3)`
+    const result: QueryResult = await this.client.query(query, [id, column, value])
+    const count: number = result.rows[0].users_count_by_id_column_value
     return count
   }
 

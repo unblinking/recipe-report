@@ -30,8 +30,10 @@ import { Err, errClient, errUser, isErrClient } from 'domain/models/err-model'
 import { User } from 'domain/models/user-model'
 import { StringRequest, UserRequest, UuidRequest } from 'domain/service/service-requests'
 import { StringResponse, UserResponse } from 'domain/service/service-responses'
-import { isStrongPassword, PasswordResult } from 'domain/value/password-value'
+import { EmailAddress } from 'domain/value/email-address-value'
+import { isStrongPassword, Password, PasswordResult } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
+import { Username } from 'domain/value/username-value'
 
 import { httpStatus, outcomes } from 'data/constants'
 import { IUnitOfWork } from 'data/repositories/unit-of-work'
@@ -190,9 +192,75 @@ export class UserService implements IUserService {
   }
 
   public async update(req: UserRequest): Promise<UserResponse> {
-    console.log(`User service update request`)
-    console.log(req)
-    return new UserResponse(outcomes.ERROR, undefined, undefined, httpStatus.INTERNAL_ERROR)
+    log.trace(`user-service.ts update()`)
+
+    // Get a new instance of uow from the DI container.
+    const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
+
+    try {
+      // Verify the request DTO has an id.
+      if (!req.user.id) {
+        throw new Err(`MISSING_REQ`, `${errClient.MISSING_REQ} id`)
+      }
+      // Verify the request DTO has a name or email_address.
+      // name and email_address are technically optional. Hopefully they're
+      // updating at least one of those two though.
+      if (!req.user.name && !req.user.email_address) {
+        throw new Err(
+          `MISSING_REQ`,
+          `${errClient.MISSING_REQ} at least one of name or email_address`,
+        )
+      }
+
+      // Connect to the database and begin a transaction.
+      await uow.connect()
+      await uow.begin()
+
+      const id = UniqueId.create(req.user.id)
+      const name = req.user.name != undefined ? Username.create(req.user.name) : undefined
+      const email_address =
+        req.user.email_address != undefined
+          ? EmailAddress.create(req.user.email_address)
+          : undefined
+
+      // Update the user in persistence.
+      const user: User = await uow.users.update(id, name, email_address)
+
+      // Commit the database transaction (also releases the connection.)
+      await uow.commit()
+
+      return new UserResponse(
+        outcomes.SUCCESS,
+        undefined, // No error to return.
+        UserMap.domainToDto(user),
+        httpStatus.OK,
+      )
+    } catch (e) {
+      // Attempt a rollback. If no database client exists, nothing will happen.
+      await uow.rollback()
+
+      // The caught e could be anything. Turn it into an Err.
+      const err = Err.toErr(e)
+
+      // If the error message can be client facing, return BAD_REQUEST.
+      if (isErrClient(err.name)) {
+        err.message = `${errUser.UPDATE} ${err.message}`
+        return new UserResponse(
+          outcomes.FAIL,
+          err,
+          undefined, // No item to return.
+          httpStatus.BAD_REQUEST,
+        )
+      }
+
+      // Do not leak internal error details, return INTERNAL_ERROR.
+      return new UserResponse(
+        outcomes.ERROR,
+        err,
+        undefined, // No item to return.
+        httpStatus.INTERNAL_ERROR,
+      )
+    }
   }
 
   public async delete(req: UuidRequest): Promise<UserResponse> {
@@ -271,23 +339,20 @@ export class UserService implements IUserService {
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 
     try {
-      /*
-      // Verify the request DTO has required fields.
+      // Verify the request DTO has email_address and password.
       if (!req.user.email_address || !req.user.password) {
         throw new Err(`MISSING_REQ`, `${errClient.MISSING_REQ} email_address, password`)
       }
-      */
 
       // Connect to the database and begin a transaction.
       await uow.connect()
       await uow.begin()
 
-      // Set a placeholder name. We can't create the domain user without a name,
-      // but the user repo authenticate method will not read the name.
-      req.user.name = 'authenticate'
+      const email_address = EmailAddress.create(req.user.email_address)
+      const password = Password.create(req.user.password)
 
       // Find the matching user in the database.
-      const user = await uow.users.authenticate(UserMap.dtoToDomain(req.user))
+      const user = await uow.users.authenticate(email_address, password)
 
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
