@@ -80,6 +80,8 @@ CREATE TABLE IF NOT EXISTS rr.users OF rr.user_type (
     email_address WITH OPTIONS UNIQUE NOT NULL,
     date_created  WITH OPTIONS        NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
+CREATE INDEX name_index ON rr.users (name);
+CREATE INDEX email_address_index ON rr.users (email_address);
 COMMENT ON TABLE rr.users IS 'Table to store user records.';
 COMMENT ON COLUMN rr.users.id IS 'UUID primary key.';
 COMMENT ON COLUMN rr.users.name IS 'Unique display name.';
