@@ -30,10 +30,10 @@ import { Err, errClient, errUser, isErrClient } from 'domain/models/err-model'
 import { User } from 'domain/models/user-model'
 import { StringRequest, UserRequest, UuidRequest } from 'domain/service/service-requests'
 import { StringResponse, UserResponse } from 'domain/service/service-responses'
+import { DisplayName } from 'domain/value/display-name-value'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { isStrongPassword, Password, PasswordResult } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
-import { Username } from 'domain/value/username-value'
 
 import { httpStatus, outcomes } from 'data/constants'
 import { IUnitOfWork } from 'data/repositories/unit-of-work'
@@ -217,7 +217,7 @@ export class UserService implements IUserService {
       await uow.begin()
 
       const id = UniqueId.create(req.user.id)
-      const name = req.user.name != undefined ? Username.create(req.user.name) : undefined
+      const name = req.user.name != undefined ? DisplayName.create(req.user.name) : undefined
       const email_address =
         req.user.email_address != undefined
           ? EmailAddress.create(req.user.email_address)

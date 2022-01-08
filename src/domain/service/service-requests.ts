@@ -23,6 +23,7 @@
  *
  * @module
  */
+import { IRoleDto } from 'domain/models/role-model'
 import { IUserDto } from 'domain/models/user-model'
 import { UniqueId } from 'domain/value/uid-value'
 
@@ -34,6 +35,34 @@ abstract class ServiceRequest<T> {
   constructor(item: T, authorizedId?: UniqueId) {
     this._item = item
     this.authorizedId = authorizedId
+  }
+}
+
+export class RoleRequest extends ServiceRequest<IRoleDto> {
+  public get role(): IRoleDto {
+    return this._item
+  }
+
+  private constructor(role: IRoleDto, authorizedId?: UniqueId) {
+    super(role, authorizedId)
+  }
+
+  public static create(role: IRoleDto, authorizedId?: UniqueId): RoleRequest {
+    return new RoleRequest(role, authorizedId)
+  }
+}
+
+export class StringRequest extends ServiceRequest<string> {
+  public get item(): string {
+    return this._item
+  }
+
+  private constructor(item: string, authorizedId?: UniqueId) {
+    super(item, authorizedId)
+  }
+
+  public static create(item: string, authorizedId?: UniqueId): StringRequest {
+    return new StringRequest(item, authorizedId)
   }
 }
 
@@ -62,19 +91,5 @@ export class UuidRequest extends ServiceRequest<UniqueId> {
 
   public static create(id: string, authorizedId?: UniqueId): UuidRequest {
     return new UuidRequest(UniqueId.create(id), authorizedId)
-  }
-}
-
-export class StringRequest extends ServiceRequest<string> {
-  public get item(): string {
-    return this._item
-  }
-
-  private constructor(item: string, authorizedId?: UniqueId) {
-    super(item, authorizedId)
-  }
-
-  public static create(item: string, authorizedId?: UniqueId): StringRequest {
-    return new StringRequest(item, authorizedId)
   }
 }

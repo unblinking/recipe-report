@@ -37,8 +37,13 @@
  */
 export class Err extends Error {
   public constructor(
-    name: errEnvKeyType | errUserKeyType | errClientKeyType | errInternalKeyType,
-    message: errEnvValueType | errUserValueType | errClientValueType | errInternalValueType,
+    name: errEnvKeyType | errUserKeyType | errRoleKeyType | errClientKeyType | errInternalKeyType,
+    message:
+      | errEnvValueType
+      | errUserValueType
+      | errRoleValueType
+      | errClientValueType
+      | errInternalValueType,
   ) {
     super(message)
     this.name = name
@@ -115,6 +120,17 @@ export const errUser = {
 type errUserType = typeof errUser
 export type errUserKeyType = keyof errUserType
 export type errUserValueType = errUserType[keyof errUserType]
+
+// Basic role related error messages.
+export const errRole = {
+  CREATE: `The role couldn't be created.`,
+  READ: `The role couldn't be found.`,
+  UPDATE: `The role couldn't be updated.`,
+  DELETE: `The role couldn't be deleted.`,
+}
+type errRoleType = typeof errUser
+export type errRoleKeyType = keyof errRoleType
+export type errRoleValueType = errRoleType[keyof errRoleType]
 
 export const errClient = {
   MISSING_REQ: `One or more required fields are missing.`,

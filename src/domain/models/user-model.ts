@@ -26,10 +26,10 @@
 import { UserMap } from 'domain/maps/user-map'
 import { Model } from 'domain/models/base-model'
 import { Err, errClient } from 'domain/models/err-model'
+import { DisplayName } from 'domain/value/display-name-value'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { Password } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
-import { Username } from 'domain/value/username-value'
 
 export interface IUserDto {
   id?: string
@@ -43,7 +43,7 @@ export interface IUserDto {
 }
 
 export interface IUser {
-  name: Username
+  name: DisplayName
   password: Password
   email_address: EmailAddress
   date_created?: Date
@@ -57,7 +57,7 @@ export class User extends Model<IUser> {
     return this._id
   }
 
-  public get name(): Username {
+  public get name(): DisplayName {
     return this._props.name
   }
 

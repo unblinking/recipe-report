@@ -99,7 +99,7 @@ COMMENT ON COLUMN rr.users.date_deleted IS 'Datetime the user was marked as dele
  * Parameters:  name VARCHAR(50) - Unique user display name.
  *              password TEXT - Plain text user password that will be salted/hashed.
  *              email_address TEXT - 
- * Usage:       SELECT * FROM rr.users_create('foo', 'p@$$w0rd', 'foo@recipe.report', 'basic');
+ * Usage:       SELECT * FROM rr.users_create('foo', 'p@$$w0rd', 'foo@recipe.report');
  * Returns:     The record that was created.
  */
 CREATE OR REPLACE FUNCTION rr.users_create (

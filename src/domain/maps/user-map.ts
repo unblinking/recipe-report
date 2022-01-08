@@ -25,10 +25,10 @@
  */
 import { Err, errInternal } from 'domain/models/err-model'
 import { IUser, IUserDto, User } from 'domain/models/user-model'
+import { DisplayName } from 'domain/value/display-name-value'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { Password } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
-import { Username } from 'domain/value/username-value'
 
 export class UserMap {
   public static dtoToDomain(userDto: IUserDto): User {
@@ -37,7 +37,7 @@ export class UserMap {
     }
     return User.create(
       {
-        name: Username.create(userDto.name),
+        name: DisplayName.create(userDto.name),
         password: Password.create(userDto.password),
         email_address: EmailAddress.create(userDto.email_address),
         date_created: userDto.date_created ? new Date(userDto.date_created) : undefined,
@@ -55,7 +55,7 @@ export class UserMap {
     }
     return User.create(
       {
-        name: Username.create(dbResult.name),
+        name: DisplayName.create(dbResult.name),
         password: Password.create(dbResult.password),
         email_address: EmailAddress.create(dbResult.email_address),
         date_created: dbResult.date_created ? new Date(dbResult.date_created) : undefined,

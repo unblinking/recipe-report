@@ -30,6 +30,7 @@ import { PoolClient } from 'pg'
 import { Err, errInternal } from 'domain/models/err-model'
 
 import { IDataAccessLayer } from 'data/data-access'
+import { IRoleRepo, RoleRepo } from 'data/repositories/role-repo'
 import { IUserRepo, UserRepo } from 'data/repositories/user-repo'
 
 import { SYMBOLS } from 'root/symbols'
@@ -40,13 +41,15 @@ export interface IUnitOfWork {
   commit(): Promise<void>
   rollback(): Promise<void>
   users: IUserRepo
+  roles: IRoleRepo
 }
 
 @injectable()
 export class UnitOfWork implements IUnitOfWork {
   private _dal: IDataAccessLayer
-  private _userRepo: IUserRepo | undefined
   private _client: PoolClient | undefined
+  private _userRepo: IUserRepo | undefined
+  private _roleRepo: IRoleRepo | undefined
 
   public constructor(@inject(SYMBOLS.IDataAccessLayer) dataAccessLayer: IDataAccessLayer) {
     this._dal = dataAccessLayer
@@ -82,5 +85,13 @@ export class UnitOfWork implements IUnitOfWork {
       this._userRepo = new UserRepo(this._client)
     }
     return this._userRepo
+  }
+
+  public get roles(): IRoleRepo {
+    if (!this._client) throw new Err('UOW_CLIENT', errInternal.UOW_CLIENT)
+    if (!this._roleRepo) {
+      this._roleRepo = new RoleRepo(this._client)
+    }
+    return this._roleRepo
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Inversion-of-control symbols.
+ * Role model.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -23,18 +23,46 @@
  *
  * @module
  */
+import { DisplayName } from 'domain/value/display-name-value'
+import { UniqueId } from 'domain/value/uid-value'
 
-export const SYMBOLS = {
-  IRecipeReport: Symbol.for('IRecipeReport'),
+import { Model } from './base-model'
 
-  IBaseController: Symbol.for('IBaseConroller'),
+export interface IRoleDto {
+  id?: string
+  name?: string
+  description?: string
+  date_created?: string
+}
 
-  IDataAccessLayer: Symbol.for('IDataAccessLayer'),
-  IUnitOfWork: Symbol.for('IUnitOfWork'),
+export interface IRole {
+  name: DisplayName
+  description: string
+  date_created?: Date
+}
 
-  ICryptoService: Symbol.for('ICryptoService'),
-  IEmailService: Symbol.for('IEmailService'),
-  IJwtService: Symbol.for('IJwtService'),
-  IRoleService: Symbol.for('IRoleService'),
-  IUserService: Symbol.for('IUserService'),
+export class Role extends Model<IRole> {
+  public get id(): UniqueId {
+    return this._id
+  }
+
+  public get name(): DisplayName {
+    return this._props.name
+  }
+
+  public get description(): string {
+    return this._props.description
+  }
+
+  public get date_created(): Date | undefined {
+    return this._props.date_created
+  }
+
+  private constructor(props: IRole, id?: UniqueId) {
+    super(props, id)
+  }
+
+  public static create(props: IRole, id?: UniqueId): Role {
+    return new Role(props, id)
+  }
 }

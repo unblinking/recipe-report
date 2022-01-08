@@ -24,6 +24,7 @@
  * @module
  */
 import { Err } from 'domain/models/err-model'
+import { IRoleDto } from 'domain/models/role-model'
 import { IUserDto } from 'domain/models/user-model'
 
 import { httpStatusValueType, outcomes, outcomeValueType } from 'data/constants'
@@ -78,6 +79,6 @@ abstract class ServiceResponse<T> {
   }
 }
 
-export class UserResponse extends ServiceResponse<IUserDto> {}
-
+export class RoleResponse extends ServiceResponse<IRoleDto> {}
 export class StringResponse extends ServiceResponse<string> {}
+export class UserResponse extends ServiceResponse<IUserDto> {}

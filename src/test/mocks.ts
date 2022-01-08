@@ -31,10 +31,10 @@ import { Err, errClient } from 'domain/models/err-model'
 import { IUserDto, User } from 'domain/models/user-model'
 import { UserRequest } from 'domain/service/service-requests'
 import { UserResponse } from 'domain/service/service-responses'
+import { DisplayName } from 'domain/value/display-name-value'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { Password } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
-import { Username } from 'domain/value/username-value'
 
 import { httpStatus, outcomes } from 'data/constants'
 
@@ -44,7 +44,7 @@ export const mockTokenAccess: string = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.Ikk
 
 export const mockUserDomain: User = User.create(
   {
-    name: Username.create(`noreplyuser`),
+    name: DisplayName.create(`noreplyuser`),
     password: Password.create(`$2a$08$PPhEIhC/lPgUMRAXpvrYL.ehrApeV7pdsGU6/DSufUFvuhiFtqR4C`),
     email_address: EmailAddress.create(`noreply@recipe.report`),
     date_created: new Date(),

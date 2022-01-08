@@ -72,3 +72,62 @@ COMMENT ON COLUMN rr.roles.id IS 'UUID primary key.';
 COMMENT ON COLUMN rr.roles.name IS 'Unique display name.';
 COMMENT ON COLUMN rr.roles.description IS 'Description of the role.';
 COMMENT ON COLUMN rr.roles.date_created IS 'Datetime the role was created in the database.';
+
+/**
+ * Function:    rr.roles_create
+ * Author:      Joshua Gray
+ * Description: Function to create a record in the roles table.
+ * Parameters:  name VARCHAR(50) - Unique display name.
+ *              description TEXT - 
+ * Usage:       SELECT * FROM rr.roles_create('foo', 'bar');
+ * Returns:     The record that was created.
+ */
+CREATE OR REPLACE FUNCTION rr.roles_create (
+    name        VARCHAR( 50 ),
+    description TEXT
+)
+    RETURNS  SETOF rr.roles
+    LANGUAGE PLPGSQL
+    AS
+$$
+BEGIN
+    RETURN QUERY
+    INSERT
+    INTO   rr.roles (name, description)
+    VALUES ($1, $2)
+    RETURNING *;
+END;
+$$;
+COMMENT ON FUNCTION rr.roles_create IS 'Function to create a record in the roles table.';
+
+/**
+ * Function:    rr.roles_count_by_column_value
+ * Author:      Joshua Gray
+ * Description: Function to return the count of role records that match a given column/value.
+ * Parameters:  column_name TEXT - The name of the column to match on.
+ *              column_value TEXT - The value of the column to match on.
+ * Usage:       SELECT * FROM rr.roles_count_by_column_value('name', 'foo');
+ * Returns:     An integer count of the number of matching records found.
+ */
+CREATE OR REPLACE FUNCTION rr.roles_count_by_column_value (
+    column_name  TEXT,
+    column_value TEXT
+)
+    RETURNS  integer
+    LANGUAGE PLPGSQL
+    AS
+$$
+DECLARE
+    row_count integer;
+    query     text := 'SELECT COUNT(*) FROM rr.roles';
+BEGIN
+    IF column_name IS NOT NULL THEN
+        query := query || ' WHERE ' || quote_ident(column_name) || ' = $1';
+    END IF;
+    EXECUTE query
+    USING   column_value
+    INTO    row_count;
+    RETURN  row_count;
+END;
+$$;
+COMMENT ON FUNCTION rr.roles_count_by_column_value IS 'Function to return the count of role records that match a given column/value';

@@ -33,6 +33,7 @@
  */
 export const dbTables = {
   USERS: `rr.users`,
+  ROLES: `rr.roles`,
 } as const
 type dbTablesType = typeof dbTables
 export type dbTablesKeyType = keyof dbTablesType

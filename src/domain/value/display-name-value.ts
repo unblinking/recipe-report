@@ -1,5 +1,5 @@
 /**
- * Username value object.
+ * Display-name value object.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -27,23 +27,23 @@ import { Err, errClient } from 'domain/models/err-model'
 
 import { ValueObject } from './base-value'
 
-export interface IUsername {
+export interface IDisplayName {
   value: string
 }
 
-export class Username extends ValueObject<IUsername> {
+export class DisplayName extends ValueObject<IDisplayName> {
   public get value(): string {
     return this.props.value
   }
 
-  private constructor(props: IUsername) {
+  private constructor(props: IDisplayName) {
     super(props)
   }
 
-  public static create(username: string): Username {
-    if (!username.match('^[A-Za-z0-9]+$') || username.length < 2 || username.length > 50) {
+  public static create(displayName: string): DisplayName {
+    if (!displayName.match('^[A-Za-z0-9]+$') || displayName.length < 2 || displayName.length > 50) {
       throw new Err(`NAME_INVALID`, errClient.NAME_INVALID)
     }
-    return new Username({ value: username })
+    return new DisplayName({ value: displayName })
   }
 }

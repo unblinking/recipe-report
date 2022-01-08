@@ -28,10 +28,10 @@ import { PoolClient, QueryResult } from 'pg'
 import { UserMap } from 'domain/maps/user-map'
 import { Err, errClient, errUser } from 'domain/models/err-model'
 import { User } from 'domain/models/user-model'
+import { DisplayName } from 'domain/value/display-name-value'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { Password } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
-import { Username } from 'domain/value/username-value'
 
 import { dbTables } from 'data/constants'
 import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
@@ -39,7 +39,7 @@ import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
 export interface IUserRepo extends IBaseRepo {
   create(user: User): Promise<User>
   read(id: UniqueId): Promise<User>
-  update(id: UniqueId, name?: Username, email_address?: EmailAddress): Promise<User>
+  update(id: UniqueId, name?: DisplayName, email_address?: EmailAddress): Promise<User>
   delete(id: UniqueId): Promise<User>
   activate(id: UniqueId): Promise<User>
   authenticate(email_address: EmailAddress, password: Password): Promise<User>
@@ -84,7 +84,7 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
   // This cannot be used to update the user password.
   public update = async (
     id: UniqueId,
-    name?: Username,
+    name?: DisplayName,
     email_address?: EmailAddress,
   ): Promise<User> => {
     // Verify the incoming user name and email_address aren't being used by any

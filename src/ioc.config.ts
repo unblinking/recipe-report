@@ -32,9 +32,11 @@ import { IUnitOfWork, UnitOfWork } from 'data/repositories/unit-of-work'
 import { CryptoService, ICryptoService } from 'service/crypto-service'
 import { EmailService, IEmailService } from 'service/email-service'
 import { IJwtService, JwtService } from 'service/jwt-service'
+import { IRoleService, RoleService } from 'service/role-service'
 import { IUserService, UserService } from 'service/user-service'
 
 import { IBaseController } from 'api/controllers/base-controller'
+import { RoleController } from 'api/controllers/role-controller'
 import { RootController } from 'api/controllers/root-controller'
 import { UserController } from 'api/controllers/user-controller'
 
@@ -47,6 +49,7 @@ export const container = new Container()
 container.bind<IRecipeReport>(SYMBOLS.IRecipeReport).to(RecipeReport)
 
 // Add the controllers to the container.
+container.bind<IBaseController>(SYMBOLS.IBaseController).to(RoleController)
 container.bind<IBaseController>(SYMBOLS.IBaseController).to(RootController)
 container.bind<IBaseController>(SYMBOLS.IBaseController).to(UserController)
 
@@ -58,4 +61,5 @@ container.bind<IUnitOfWork>(SYMBOLS.IUnitOfWork).to(UnitOfWork)
 container.bind<ICryptoService>(SYMBOLS.ICryptoService).to(CryptoService)
 container.bind<IEmailService>(SYMBOLS.IEmailService).to(EmailService)
 container.bind<IJwtService>(SYMBOLS.IJwtService).to(JwtService)
+container.bind<IRoleService>(SYMBOLS.IRoleService).to(RoleService)
 container.bind<IUserService>(SYMBOLS.IUserService).to(UserService)
