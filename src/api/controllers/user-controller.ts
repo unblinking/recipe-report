@@ -26,18 +26,18 @@
 import { NextFunction, Response, Router } from 'express'
 import { inject, injectable } from 'inversify'
 
-import { Err, errUser, isErrClient } from 'domain/models/err-model'
+import { Err, errClient, isErrClient } from 'domain/models/err-model'
 import { StringRequest, UserRequest, UuidRequest } from 'domain/service/service-requests'
 
-import { httpStatus, logMsg, outcomes } from 'data/constants'
+import { httpStatus, outcomes } from 'data/constants'
 
 import { log } from 'service/log-service'
 import { IUserService } from 'service/user-service'
 
 import { IBaseController } from 'api/controllers/base-controller'
-import { error, fail, success } from 'api/controllers/controller-response'
 import { fiveHundred } from 'api/middlewares/laststop'
 import { RequestWithUser, tokenwall } from 'api/middlewares/tokenwall'
+import { Responder } from 'api/responder'
 
 import { SYMBOLS } from 'root/symbols'
 
@@ -74,24 +74,23 @@ export class UserController implements IBaseController {
       const code = svcRes.statusCode
       switch (svcRes.outcome) {
         case outcomes.SUCCESS:
-          success(res, code, logMsg.LOG_REG_SUCCESS, { user: svcRes.item })
+          Responder.success(res, code, { user: svcRes.item })
           break
         case outcomes.FAIL:
-          fail(res, code, svcRes.err?.message, { message: svcRes.err?.message })
+          Responder.fail(res, code, svcRes.err?.message, svcRes.err?.name)
           break
         default:
-          error(errUser.CREATE, res, code, svcRes.err?.message)
+          Responder.error(res, code, svcRes.err?.message, svcRes.err?.name)
           break
       }
     } catch (e) {
       // The caught e could be anything. Turn it into an Err.
       const err = Err.toErr(e)
+      // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        // If the error message can be client facing, return BAD_REQUEST.
-        err.message = `${errUser.CREATE} ${err.message}`
-        fail(res, httpStatus.BAD_REQUEST, err.message, { message: err.message })
+        err.message = `${errClient.USER_CREATE} ${err.message}`
+        Responder.fail(res, httpStatus.BAD_REQUEST, err.message, err.name)
       } else {
-        // Do not leak internal error details, return INTERNAL_ERROR.
         next(err)
       }
     }
@@ -105,24 +104,23 @@ export class UserController implements IBaseController {
       const code = svcRes.statusCode
       switch (svcRes.outcome) {
         case outcomes.SUCCESS:
-          success(res, code, logMsg.LOG_REG_SUCCESS, { user: svcRes.item })
+          Responder.success(res, code, { user: svcRes.item })
           break
         case outcomes.FAIL:
-          fail(res, code, svcRes.err?.message, { message: svcRes.err?.message })
+          Responder.fail(res, code, svcRes.err?.message, svcRes.err?.name)
           break
         default:
-          error(errUser.READ, res, code, svcRes.err?.message)
+          Responder.error(res, code, svcRes.err?.message, svcRes.err?.name)
           break
       }
     } catch (e) {
       // The caught e could be anything. Turn it into an Err.
       const err = Err.toErr(e)
+      // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        // If the error message can be client facing, return BAD_REQUEST.
-        err.message = `${errUser.READ} ${err.message}`
-        fail(res, httpStatus.BAD_REQUEST, err.message, { message: err.message })
+        err.message = `${errClient.USER_READ} ${err.message}`
+        Responder.fail(res, httpStatus.BAD_REQUEST, err.message, err.name)
       } else {
-        // Do not leak internal error details, return INTERNAL_ERROR.
         next(err)
       }
     }
@@ -135,29 +133,31 @@ export class UserController implements IBaseController {
   ): Promise<void> => {
     log.trace(`user-controller.ts update()`)
     try {
+      if (req.params.id !== req.body.id) {
+        throw new Err(`ID_MISMATCH`, errClient.ID_MISMATCH)
+      }
       const svcReq = UserRequest.create({ ...req.body }, req.authorizedId)
       const svcRes = await this._userService.update(svcReq)
       const code = svcRes.statusCode
       switch (svcRes.outcome) {
         case outcomes.SUCCESS:
-          success(res, code, logMsg.LOG_REG_SUCCESS, { user: svcRes.item })
+          Responder.success(res, code, { user: svcRes.item })
           break
         case outcomes.FAIL:
-          fail(res, code, svcRes.err?.message, { message: svcRes.err?.message })
+          Responder.fail(res, code, svcRes.err?.message, svcRes.err?.name)
           break
         default:
-          error(errUser.UPDATE, res, code, svcRes.err?.message)
+          Responder.error(res, code, svcRes.err?.message, svcRes.err?.name)
           break
       }
     } catch (e) {
       // The caught e could be anything. Turn it into an Err.
       const err = Err.toErr(e)
+      // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        // If the error message can be client facing, return BAD_REQUEST.
-        err.message = `${errUser.UPDATE} ${err.message}`
-        fail(res, httpStatus.BAD_REQUEST, err.message, { message: err.message })
+        err.message = `${errClient.USER_UPDATE} ${err.message}`
+        Responder.fail(res, httpStatus.BAD_REQUEST, err.message, err.name)
       } else {
-        // Do not leak internal error details, return INTERNAL_ERROR.
         next(err)
       }
     }
@@ -175,24 +175,23 @@ export class UserController implements IBaseController {
       const code = svcRes.statusCode
       switch (svcRes.outcome) {
         case outcomes.SUCCESS:
-          success(res, code, logMsg.LOG_REG_SUCCESS, { user: svcRes.item })
+          Responder.success(res, code, { user: svcRes.item })
           break
         case outcomes.FAIL:
-          fail(res, code, svcRes.err?.message, { message: svcRes.err?.message })
+          Responder.fail(res, code, svcRes.err?.message, svcRes.err?.name)
           break
         default:
-          error(errUser.DELETE, res, code, svcRes.err?.message)
+          Responder.error(res, code, svcRes.err?.message, svcRes.err?.name)
           break
       }
     } catch (e) {
       // The caught e could be anything. Turn it into an Err.
       const err = Err.toErr(e)
+      // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        // If the error message can be client facing, return BAD_REQUEST.
-        err.message = `${errUser.DELETE} ${err.message}`
-        fail(res, httpStatus.BAD_REQUEST, err.message, { message: err.message })
+        err.message = `${errClient.USER_DELETE} ${err.message}`
+        Responder.fail(res, httpStatus.BAD_REQUEST, err.message, err.name)
       } else {
-        // Do not leak internal error details, return INTERNAL_ERROR.
         next(err)
       }
     }
@@ -210,24 +209,23 @@ export class UserController implements IBaseController {
       const code = svcRes.statusCode
       switch (svcRes.outcome) {
         case outcomes.SUCCESS:
-          success(res, code, logMsg.LOG_ACTIVATE_SUCCESS, { user: svcRes.item })
+          Responder.success(res, code, { user: svcRes.item })
           break
         case outcomes.FAIL:
-          fail(res, code, svcRes.err?.message, { message: svcRes.err?.message })
+          Responder.fail(res, code, svcRes.err?.message, svcRes.err?.name)
           break
         default:
-          error(errUser.ACTIVATE, res, code, svcRes.err?.message)
+          Responder.error(res, code, svcRes.err?.message, svcRes.err?.name)
           break
       }
     } catch (e) {
       // The caught e could be anything. Turn it into an Err.
       const err = Err.toErr(e)
+      // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        // If the error message can be client facing, return BAD_REQUEST.
-        err.message = `${errUser.ACTIVATE} ${err.message}`
-        fail(res, httpStatus.BAD_REQUEST, err.message, { message: err.message })
+        err.message = `${errClient.USER_ACTIVATE} ${err.message}`
+        Responder.fail(res, httpStatus.BAD_REQUEST, err.message, err.name)
       } else {
-        // Do not leak internal error details, return INTERNAL_ERROR.
         next(err)
       }
     }
@@ -245,24 +243,23 @@ export class UserController implements IBaseController {
       const code = svcRes.statusCode
       switch (svcRes.outcome) {
         case outcomes.SUCCESS:
-          success(res, code, logMsg.LOG_AUTHENTICATE_SUCCESS, { token: svcRes.item })
+          Responder.success(res, code, { token: svcRes.item })
           break
         case outcomes.FAIL:
-          fail(res, code, svcRes.err?.message, { message: svcRes.err?.message })
+          Responder.fail(res, code, svcRes.err?.message, svcRes.err?.name)
           break
         default:
-          error(errUser.AUTHENTICATE, res, code, svcRes.err?.message)
+          Responder.error(res, code, svcRes.err?.message, svcRes.err?.name)
           break
       }
     } catch (e) {
       // The caught e could be anything. Turn it into an Err.
       const err = Err.toErr(e)
+      // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        // If the error message can be client facing, return BAD_REQUEST.
-        err.message = `${errUser.AUTHENTICATE} ${err.message}`
-        fail(res, httpStatus.BAD_REQUEST, err.message, { message: err.message })
+        err.message = `${errClient.USER_AUTHENTICATE} ${err.message}`
+        Responder.fail(res, httpStatus.BAD_REQUEST, err.message, err.name)
       } else {
-        // Do not leak internal error details, return INTERNAL_ERROR.
         next(err)
       }
     }

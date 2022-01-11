@@ -26,7 +26,7 @@
 import { inject, injectable } from 'inversify'
 
 import { UserMap } from 'domain/maps/user-map'
-import { Err, errClient, errUser, isErrClient } from 'domain/models/err-model'
+import { Err, errClient, isErrClient } from 'domain/models/err-model'
 import { User } from 'domain/models/user-model'
 import { StringRequest, UserRequest, UuidRequest } from 'domain/service/service-requests'
 import { StringResponse, UserResponse } from 'domain/service/service-responses'
@@ -35,7 +35,6 @@ import { EmailAddress } from 'domain/value/email-address-value'
 import { isStrongPassword, Password, PasswordResult } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
 
-import { httpStatus, outcomes } from 'data/constants'
 import { IUnitOfWork } from 'data/repositories/unit-of-work'
 
 import { IEmailService } from 'service/email-service'
@@ -106,12 +105,7 @@ export class UserService implements IUserService {
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
 
-      return new UserResponse(
-        outcomes.SUCCESS,
-        undefined, // No error to return.
-        UserMap.domainToDto(user),
-        httpStatus.OK,
-      )
+      return UserResponse.success(UserMap.domainToDto(user))
     } catch (e) {
       // Attempt a rollback. If no database client exists, nothing will happen.
       await uow.rollback()
@@ -121,22 +115,12 @@ export class UserService implements IUserService {
 
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        err.message = `${errUser.CREATE} ${err.message}`
-        return new UserResponse(
-          outcomes.FAIL,
-          err,
-          undefined, // No item to return.
-          httpStatus.BAD_REQUEST,
-        )
+        err.message = `${errClient.USER_CREATE} ${err.message}`
+        return UserResponse.fail(err)
       }
 
       // Do not leak internal error details, return INTERNAL_ERROR.
-      return new UserResponse(
-        outcomes.ERROR,
-        err,
-        undefined, // No item to return.
-        httpStatus.INTERNAL_ERROR,
-      )
+      return UserResponse.error(err)
     }
   }
 
@@ -157,12 +141,7 @@ export class UserService implements IUserService {
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
 
-      return new UserResponse(
-        outcomes.SUCCESS,
-        undefined, // No error to return.
-        UserMap.domainToDto(user),
-        httpStatus.OK,
-      )
+      return UserResponse.success(UserMap.domainToDto(user))
     } catch (e) {
       // Attempt a rollback. If no database client exists, nothing will happen.
       await uow.rollback()
@@ -172,22 +151,12 @@ export class UserService implements IUserService {
 
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        err.message = `${errUser.READ} ${err.message}`
-        return new UserResponse(
-          outcomes.FAIL,
-          err,
-          undefined, // No item to return.
-          httpStatus.BAD_REQUEST,
-        )
+        err.message = `${errClient.USER_READ} ${err.message}`
+        return UserResponse.fail(err)
       }
 
       // Do not leak internal error details, return INTERNAL_ERROR.
-      return new UserResponse(
-        outcomes.ERROR,
-        err,
-        undefined, // No item to return.
-        httpStatus.INTERNAL_ERROR,
-      )
+      return UserResponse.error(err)
     }
   }
 
@@ -229,12 +198,7 @@ export class UserService implements IUserService {
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
 
-      return new UserResponse(
-        outcomes.SUCCESS,
-        undefined, // No error to return.
-        UserMap.domainToDto(user),
-        httpStatus.OK,
-      )
+      return UserResponse.success(UserMap.domainToDto(user))
     } catch (e) {
       // Attempt a rollback. If no database client exists, nothing will happen.
       await uow.rollback()
@@ -244,22 +208,12 @@ export class UserService implements IUserService {
 
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        err.message = `${errUser.UPDATE} ${err.message}`
-        return new UserResponse(
-          outcomes.FAIL,
-          err,
-          undefined, // No item to return.
-          httpStatus.BAD_REQUEST,
-        )
+        err.message = `${errClient.USER_UPDATE} ${err.message}`
+        return UserResponse.fail(err)
       }
 
       // Do not leak internal error details, return INTERNAL_ERROR.
-      return new UserResponse(
-        outcomes.ERROR,
-        err,
-        undefined, // No item to return.
-        httpStatus.INTERNAL_ERROR,
-      )
+      return UserResponse.error(err)
     }
   }
 
@@ -280,12 +234,7 @@ export class UserService implements IUserService {
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
 
-      return new UserResponse(
-        outcomes.SUCCESS,
-        undefined, // No error to return.
-        UserMap.domainToDto(user),
-        httpStatus.OK,
-      )
+      return UserResponse.success(UserMap.domainToDto(user))
     } catch (e) {
       // Attempt a rollback. If no database client exists, nothing will happen.
       await uow.rollback()
@@ -295,22 +244,12 @@ export class UserService implements IUserService {
 
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        err.message = `${errUser.DELETE} ${err.message}`
-        return new UserResponse(
-          outcomes.FAIL,
-          err,
-          undefined, // No item to return.
-          httpStatus.BAD_REQUEST,
-        )
+        err.message = `${errClient.USER_DELETE} ${err.message}`
+        return UserResponse.fail(err)
       }
 
       // Do not leak internal error details, return INTERNAL_ERROR.
-      return new UserResponse(
-        outcomes.ERROR,
-        err,
-        undefined, // No item to return.
-        httpStatus.INTERNAL_ERROR,
-      )
+      return UserResponse.error(err)
     }
   }
 
@@ -343,12 +282,7 @@ export class UserService implements IUserService {
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
 
-      return new UserResponse(
-        outcomes.SUCCESS,
-        undefined, // No error to return.
-        UserMap.domainToDto(user),
-        httpStatus.OK,
-      )
+      return UserResponse.success(UserMap.domainToDto(user))
     } catch (e) {
       // Attempt a rollback. If no database client exists, nothing will happen.
       await uow.rollback()
@@ -358,22 +292,12 @@ export class UserService implements IUserService {
 
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        err.message = `${errUser.ACTIVATE} ${err.message}`
-        return new UserResponse(
-          outcomes.FAIL,
-          err,
-          undefined, // No item to return.
-          httpStatus.BAD_REQUEST,
-        )
+        err.message = `${errClient.USER_ACTIVATE} ${err.message}`
+        return UserResponse.fail(err)
       }
 
       // Do not leak internal error details, return INTERNAL_ERROR.
-      return new UserResponse(
-        outcomes.ERROR,
-        err,
-        undefined, // No item to return.
-        httpStatus.INTERNAL_ERROR,
-      )
+      return UserResponse.error(err)
     }
   }
 
@@ -409,12 +333,7 @@ export class UserService implements IUserService {
         new Date().getTime() + 24 * 60 * 60 * 1000, // 24 hours.
       )
 
-      return new StringResponse(
-        outcomes.SUCCESS,
-        undefined, // No error to return.
-        token,
-        httpStatus.OK,
-      )
+      return StringResponse.success(token)
     } catch (e) {
       // Attempt a rollback. If no database client exists, nothing will happen.
       await uow.rollback()
@@ -424,22 +343,12 @@ export class UserService implements IUserService {
 
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        err.message = `${errUser.AUTHENTICATE} ${err.message}`
-        return new StringResponse(
-          outcomes.FAIL,
-          err,
-          undefined, // No item to return.
-          httpStatus.BAD_REQUEST,
-        )
+        err.message = `${errClient.USER_AUTHENTICATE} ${err.message}`
+        return StringResponse.fail(err)
       }
 
       // Do not leak internal error details, return INTERNAL_ERROR.
-      return new StringResponse(
-        outcomes.ERROR,
-        err,
-        undefined, // No item to return.
-        httpStatus.INTERNAL_ERROR,
-      )
+      return StringResponse.error(err)
     }
   }
 }

@@ -26,15 +26,15 @@
 import { NextFunction, Response, Router } from 'express'
 import { inject, injectable } from 'inversify'
 
-import { Err, errRole, isErrClient } from 'domain/models/err-model'
+import { Err, errClient, isErrClient } from 'domain/models/err-model'
 import { RoleRequest } from 'domain/service/service-requests'
 
-import { httpStatus, logMsg, outcomes } from 'data/constants'
+import { httpStatus, outcomes } from 'data/constants'
 
 import { IBaseController } from 'api/controllers/base-controller'
-import { error, fail, success } from 'api/controllers/controller-response'
 import { fiveHundred } from 'api/middlewares/laststop'
 import { RequestWithUser, tokenwall } from 'api/middlewares/tokenwall'
+import { Responder } from 'api/responder'
 
 import { log } from 'root/service/log-service'
 import { IRoleService } from 'root/service/role-service'
@@ -71,24 +71,23 @@ export class RoleController implements IBaseController {
       const code = svcRes.statusCode
       switch (svcRes.outcome) {
         case outcomes.SUCCESS:
-          success(res, code, logMsg.LOG_REG_SUCCESS, { user: svcRes.item })
+          Responder.success(res, code, { role: svcRes.item })
           break
         case outcomes.FAIL:
-          fail(res, code, svcRes.err?.message, { message: svcRes.err?.message })
+          Responder.fail(res, code, svcRes.err?.message, svcRes.err?.name)
           break
         default:
-          error(errRole.CREATE, res, code, svcRes.err?.message)
+          Responder.error(res, code, svcRes.err?.message, svcRes.err?.name)
           break
       }
     } catch (e) {
       // The caught e could be anything. Turn it into an Err.
       const err = Err.toErr(e)
+      // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        // If the error message can be client facing, return BAD_REQUEST.
-        err.message = `${errRole.CREATE} ${err.message}`
-        fail(res, httpStatus.BAD_REQUEST, err.message, { message: err.message })
+        err.message = `${errClient.ROLE_CREATE} ${err.message}`
+        Responder.fail(res, httpStatus.BAD_REQUEST, err.message, err.name)
       } else {
-        // Do not leak internal error details, return INTERNAL_ERROR.
         next(err)
       }
     }

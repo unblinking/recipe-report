@@ -27,14 +27,15 @@
  */
 import { NextFunction, Request, Response } from 'express'
 
-import { Err, errClient } from 'domain/models/err-model'
+import { Err, errClient, isErrClient } from 'domain/models/err-model'
 import { UniqueId } from 'domain/value/uid-value'
 
 import { httpStatus } from 'data/constants'
 
 import { IJwtService, Payload, tokenType } from 'service/jwt-service'
 import { log } from 'service/log-service'
-import { Responder } from 'service/responder-service'
+
+import { Responder } from 'api/responder'
 
 import { container } from 'root/ioc.config'
 import { SYMBOLS } from 'root/symbols'
@@ -74,12 +75,17 @@ export const tokenwall = (req: RequestWithUser, _res: Response, next: NextFuncti
     // Allow the request to continue on.
     next()
   } catch (e) {
-    log.warn(`Tokenwall error. ${(e as Err).message}`)
-    const data = {
-      errorName: `401 Unauthorized`,
-      errorMessage: (e as Err).message,
+    // The caught e could be anything. Turn it into an Err.
+    const err = Err.toErr(e)
+
+    // Log the error.
+    log.warn(`${err.name} ${err.message}`)
+
+    // If the error message can be client facing, include error details.
+    if (isErrClient(err.name)) {
+      Responder.fail(_res, httpStatus.UNAUTHORIZED, err.message, err.name)
+    } else {
+      Responder.error(_res, httpStatus.UNAUTHORIZED)
     }
-    const responder: Responder = new Responder(httpStatus.UNAUTHORIZED)
-    responder.fail(_res, data)
   }
 }

@@ -48,7 +48,6 @@ export const httpStatus = {
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
   NOT_FOUND: 404,
-  CONFLICT: 409,
   INTERNAL_ERROR: 500,
 } as const
 type httpStatusType = typeof httpStatus
@@ -66,15 +65,3 @@ export const outcomes = {
 type outcomeType = typeof outcomes
 export type outcomeKeyType = keyof outcomeType
 export type outcomeValueType = outcomeType[keyof outcomeType]
-
-/**
- * Logging messages.
- */
-export const logMsg = {
-  // Root controller.
-  LOG_ROOT_SUCCESS: `Root route succeeded.`,
-  // User controller.
-  LOG_REG_SUCCESS: `New user registration succeeded.`,
-  LOG_ACTIVATE_SUCCESS: `New user activation succeeded.`,
-  LOG_AUTHENTICATE_SUCCESS: `User authentication succeeded.`,
-}

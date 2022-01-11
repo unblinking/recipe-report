@@ -26,12 +26,11 @@
 import { injectable } from 'inversify'
 
 import { RoleMap } from 'domain/maps/role-map'
-import { Err, errRole, isErrClient } from 'domain/models/err-model'
+import { Err, errClient, isErrClient } from 'domain/models/err-model'
 import { Role } from 'domain/models/role-model'
 import { RoleRequest } from 'domain/service/service-requests'
 import { RoleResponse } from 'domain/service/service-responses'
 
-import { httpStatus, outcomes } from 'data/constants'
 import { IUnitOfWork } from 'data/repositories/unit-of-work'
 
 import { log } from 'service/log-service'
@@ -64,12 +63,7 @@ export class RoleService implements IRoleService {
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
 
-      return new RoleResponse(
-        outcomes.SUCCESS,
-        undefined, // No error to return.
-        RoleMap.domainToDto(role),
-        httpStatus.OK,
-      )
+      return RoleResponse.success(RoleMap.domainToDto(role))
     } catch (e) {
       // Attempt a rollback. If no database client exists, nothing will happen.
       await uow.rollback()
@@ -79,22 +73,12 @@ export class RoleService implements IRoleService {
 
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        err.message = `${errRole.CREATE} ${err.message}`
-        return new RoleResponse(
-          outcomes.FAIL,
-          err,
-          undefined, // No item to return.
-          httpStatus.BAD_REQUEST,
-        )
+        err.message = `${errClient.ROLE_CREATE} ${err.message}`
+        return RoleResponse.fail(err)
       }
 
       // Do not leak internal error details, return INTERNAL_ERROR.
-      return new RoleResponse(
-        outcomes.ERROR,
-        err,
-        undefined, // No item to return.
-        httpStatus.INTERNAL_ERROR,
-      )
+      return RoleResponse.error(err)
     }
   }
 }

@@ -37,13 +37,8 @@
  */
 export class Err extends Error {
   public constructor(
-    name: errEnvKeyType | errUserKeyType | errRoleKeyType | errClientKeyType | errInternalKeyType,
-    message:
-      | errEnvValueType
-      | errUserValueType
-      | errRoleValueType
-      | errClientValueType
-      | errInternalValueType,
+    name: errEnvKeyType | errClientKeyType | errInternalKeyType,
+    message: errEnvValueType | errClientValueType | errInternalValueType,
   ) {
     super(message)
     this.name = name
@@ -108,31 +103,8 @@ type errEnvType = typeof errEnv
 export type errEnvKeyType = keyof errEnvType
 export type errEnvValueType = errEnvType[keyof errEnvType]
 
-// Basic user related error messages.
-export const errUser = {
-  CREATE: `The user couldn't be created.`,
-  READ: `The user couldn't be found.`,
-  UPDATE: `The user couldn't be updated.`,
-  DELETE: `The user couldn't be deleted.`,
-  ACTIVATE: `The user couldn't be activated.`,
-  AUTHENTICATE: `The user couldn't be authenticated.`,
-}
-type errUserType = typeof errUser
-export type errUserKeyType = keyof errUserType
-export type errUserValueType = errUserType[keyof errUserType]
-
-// Basic role related error messages.
-export const errRole = {
-  CREATE: `The role couldn't be created.`,
-  READ: `The role couldn't be found.`,
-  UPDATE: `The role couldn't be updated.`,
-  DELETE: `The role couldn't be deleted.`,
-}
-type errRoleType = typeof errUser
-export type errRoleKeyType = keyof errRoleType
-export type errRoleValueType = errRoleType[keyof errRoleType]
-
 export const errClient = {
+  ID_MISMATCH: `The path UUID does not match the request body UUID.`,
   MISSING_REQ: `One or more required fields are missing.`,
   NAME_INVALID: `The name field is not in a valid format. Usename must be 2 to 50 characters in length, and contain only A-Z and 0-9.`,
   NAME_USED: `The name is already in use. Please change the requested name and try again.`,
@@ -148,6 +120,16 @@ export const errClient = {
   TOKENWALL_EXP: `Token has expired.`,
   LASTSTOP_404: `The endpoint you are looking for can't be found.`,
   LASTSTOP_500: `Something went wrong.`,
+  USER_CREATE: `The user couldn't be created.`,
+  USER_READ: `The user couldn't be found.`,
+  USER_UPDATE: `The user couldn't be updated.`,
+  USER_DELETE: `The user couldn't be deleted.`,
+  USER_ACTIVATE: `The user couldn't be activated.`,
+  USER_AUTHENTICATE: `The user couldn't be authenticated.`,
+  ROLE_CREATE: `The role couldn't be created.`,
+  ROLE_READ: `The role couldn't be found.`,
+  ROLE_UPDATE: `The role couldn't be updated.`,
+  ROLE_DELETE: `The role couldn't be deleted.`,
 }
 type errClientType = typeof errClient
 export type errClientKeyType = keyof errClientType

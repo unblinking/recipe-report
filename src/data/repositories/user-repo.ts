@@ -26,7 +26,7 @@
 import { PoolClient, QueryResult } from 'pg'
 
 import { UserMap } from 'domain/maps/user-map'
-import { Err, errClient, errUser } from 'domain/models/err-model'
+import { Err, errClient } from 'domain/models/err-model'
 import { User } from 'domain/models/user-model'
 import { DisplayName } from 'domain/value/display-name-value'
 import { EmailAddress } from 'domain/value/email-address-value'
@@ -74,7 +74,7 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
     const query: string = `SELECT * FROM rr.users_read($1)`
     const result: QueryResult = await this.client.query(query, [id.value])
     if (result.rowCount !== 1) {
-      throw new Err(`READ`, errUser.READ)
+      throw new Err(`USER_READ`, errClient.USER_READ)
     }
     // Return domain object from database query results.
     return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
@@ -105,6 +105,9 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
       name != undefined ? name.value : null,
       email_address != undefined ? email_address.value : null,
     ])
+    if (result.rowCount !== 1) {
+      throw new Err(`USER_READ`, errClient.USER_READ)
+    }
     // Return domain object from database query results.
     return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
   }
@@ -114,7 +117,7 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
     const query: string = `SELECT * FROM rr.users_delete($1)`
     const result: QueryResult = await this.client.query(query, [id.value])
     if (result.rowCount !== 1) {
-      throw new Err(`READ`, errUser.READ)
+      throw new Err(`USER_READ`, errClient.USER_READ)
     }
     // Return domain object from database query results.
     return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
@@ -126,7 +129,7 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
     const query: string = `SELECT * FROM rr.users_activate($1)`
     const result: QueryResult = await this.client.query(query, [id.value])
     if (result.rowCount !== 1) {
-      throw new Err(`ACTIVATE`, errUser.ACTIVATE)
+      throw new Err(`USER_ACTIVATE`, errClient.USER_ACTIVATE)
     }
     // Return domain object from database query results.
     return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
@@ -140,7 +143,7 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
       password.value,
     ])
     if (result.rowCount !== 1) {
-      throw new Err(`AUTHENTICATE`, errUser.AUTHENTICATE)
+      throw new Err(`USER_AUTHENTICATE`, errClient.USER_AUTHENTICATE)
     }
     // Update the authenticated user's last login date in the database.
     await this._updateLastLogin(result.rows[0].id)
@@ -172,7 +175,7 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
     const query: string = `SELECT * FROM rr.users_update_date_last_login($1)`
     const result: QueryResult = await this.client.query(query, [id])
     if (result.rows[0].users_update_date_last_login !== true) {
-      throw new Err(`AUTHENTICATE`, errUser.AUTHENTICATE)
+      throw new Err(`USER_AUTHENTICATE`, errClient.USER_AUTHENTICATE)
     }
   }
 }

@@ -32,15 +32,15 @@ import { errClient } from 'domain/models/err-model'
 import { httpStatus } from 'data/constants'
 
 import { log } from 'service/log-service'
-import { Responder } from 'service/responder-service'
+
+import { Responder } from 'api/responder'
 
 /**
  * Four, oh four! Not found, my dude.
  */
 export const fourOhFour = (req: Request, _res: Response, _next: NextFunction): void => {
   log.info(`${errClient.LASTSTOP_404} ${req.method} ${req.path}`)
-  const respond = new Responder(httpStatus.NOT_FOUND)
-  respond.fail(_res, errClient.LASTSTOP_404)
+  Responder.fail(_res, httpStatus.NOT_FOUND, errClient.LASTSTOP_404, `LASTSTOP_404`)
   // I do not pass the error along to next(err) here on purpose.
   // We already handled the 404 Not Found as much as we want to.
   // We already sent headers to the client, so even if we were to pass the error
@@ -69,6 +69,5 @@ export const fiveHundred = (err: Error, _req: Request, res: Response, next: Next
   // Ok, now we can delegate to our custom error handling.
   // For security, do not provide any internal error details.
   // Be vague here on purpose.
-  const respond = new Responder(httpStatus.INTERNAL_ERROR)
-  respond.error(res, errClient.LASTSTOP_500, httpStatus.INTERNAL_ERROR)
+  Responder.error(res, httpStatus.INTERNAL_ERROR, errClient.LASTSTOP_500, `LASTSTOP_500`)
 }

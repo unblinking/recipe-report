@@ -36,8 +36,6 @@ import { EmailAddress } from 'domain/value/email-address-value'
 import { Password } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
 
-import { httpStatus, outcomes } from 'data/constants'
-
 export const mockTokenActivation: string = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.ImNibEZSdVFwK044RFJ4akM4aW5uckZSaU1LVmpVYUVzb09xQmdwelc1Mjljdm9jLzBSMFZ4dFVmakdraTlWeXF2MHFvcU5Zdmd0aW1haFl6dHlMckRPY1Nrb0ZnanJ5Y0xDWno2Y1pBQXlYTzgxdi9kRE5WNkF3K3BkcXhqZXlTOWxtbEx0d2NZbG1HVFpZY2NjRUhKQT09Ig.fyE3vPgWjQawr68z2OtPT-pGtp43q04UKF5zlo9u4LU5bBb_Sg-5GqBbLFy9UiV_FJJIaSwrIe757fTNEvfeUw`
 
 export const mockTokenAccess: string = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.IkkvcGgyZGwrNDllclByWkxYZWpCZVVIaXFUbW1HMEZyNEFRQkRDdTlERlZmZWZBN2Jkb0hpT2xzNmJvTkhFTkovTDNCNjhjNG0rUWphYWtrM3YzT09vUWdNSm1ib0ZKQlQ1ZHVNS1JVVXA2NDJ6bkxWaEp6am5KK3pQWXU1N29GNnJ6YVZ0L3BQdWpjenJpRTVsSS9EUT09Ig.JzmOzo2oTy9Bt2bHmZbWypUG4pnR9KXnVsoagcioBDTcoJutgkhEzSxqyIFY9you73c2z6-4dS9wc8H8F4o_Pw`
@@ -75,12 +73,7 @@ export const mockUserDtoSavedComplete: IUserDto = {
 export class MockUserServiceSuccess {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async create(_req: UserRequest): Promise<UserResponse> {
-    return new UserResponse(
-      outcomes.SUCCESS,
-      undefined, // No error to return.
-      mockUserDtoSavedComplete,
-      httpStatus.OK,
-    )
+    return UserResponse.success(mockUserDtoSavedComplete)
   }
 }
 
@@ -89,12 +82,7 @@ export class MockUserServiceSuccess {
 export class MockUserServiceFail {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async create(_req: UserRequest): Promise<UserResponse> {
-    return new UserResponse(
-      outcomes.FAIL,
-      new Err('MISSING_REQ', errClient.MISSING_REQ),
-      undefined,
-      httpStatus.BAD_REQUEST,
-    )
+    return UserResponse.fail(new Err('MISSING_REQ', errClient.MISSING_REQ))
   }
 }
 
@@ -103,11 +91,6 @@ export class MockUserServiceFail {
 export class MockUserServiceError {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async create(_req: UserRequest): Promise<UserResponse> {
-    return new UserResponse(
-      outcomes.ERROR,
-      new Err('MISSING_REQ', errClient.MISSING_REQ),
-      undefined,
-      httpStatus.INTERNAL_ERROR,
-    )
+    return UserResponse.error(new Err('MISSING_REQ', errClient.MISSING_REQ))
   }
 }
