@@ -27,17 +27,17 @@ import { NextFunction, Response, Router } from 'express'
 import { inject, injectable } from 'inversify'
 
 import { Err, errClient, isErrClient } from 'domain/models/err-model'
-import { RoleRequest } from 'domain/service/service-requests'
+import { RoleRequest, UuidRequest } from 'domain/service/service-requests'
 
 import { httpStatus, outcomes } from 'data/constants'
+
+import { IRoleService } from 'service/role-service'
 
 import { IBaseController } from 'api/controllers/base-controller'
 import { fiveHundred } from 'api/middlewares/laststop'
 import { RequestWithUser, tokenwall } from 'api/middlewares/tokenwall'
 import { Responder } from 'api/responder'
 
-import { log } from 'root/service/log-service'
-import { IRoleService } from 'root/service/role-service'
 import { SYMBOLS } from 'root/symbols'
 
 @injectable()
@@ -53,9 +53,9 @@ export class RoleController implements IBaseController {
 
   public initRoutes = (): void => {
     this.router.post(`/`, tokenwall, this.create)
-    // this.router.get(`/:id`, tokenwall, this.read)
-    // this.router.put(`/:id`, tokenwall, this.update)
-    // this.router.delete(`/:id`, tokenwall, this.delete)
+    this.router.get(`/:id`, tokenwall, this.read)
+    this.router.put(`/:id`, tokenwall, this.update)
+    this.router.delete(`/:id`, tokenwall, this.delete)
     this.router.use(fiveHundred) // Error handling.
   }
 
@@ -64,7 +64,6 @@ export class RoleController implements IBaseController {
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
-    log.trace(`role-controller.ts create()`)
     try {
       const svcReq = RoleRequest.create({ ...req.body })
       const svcRes = await this._roleService.create(svcReq)
@@ -86,6 +85,104 @@ export class RoleController implements IBaseController {
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
         err.message = `${errClient.ROLE_CREATE} ${err.message}`
+        Responder.fail(res, httpStatus.BAD_REQUEST, err.message, err.name)
+      } else {
+        next(err)
+      }
+    }
+  }
+
+  private read = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const svcReq = UuidRequest.create(req.params.id, req.authorizedId)
+      const svcRes = await this._roleService.read(svcReq)
+      const code = svcRes.statusCode
+      switch (svcRes.outcome) {
+        case outcomes.SUCCESS:
+          Responder.success(res, code, { role: svcRes.item })
+          break
+        case outcomes.FAIL:
+          Responder.fail(res, code, svcRes.err?.message, svcRes.err?.name)
+          break
+        default:
+          Responder.error(res, code, svcRes.err?.message, svcRes.err?.name)
+          break
+      }
+    } catch (e) {
+      // The caught e could be anything. Turn it into an Err.
+      const err = Err.toErr(e)
+      // If the error message can be client facing, return BAD_REQUEST.
+      if (isErrClient(err.name)) {
+        err.message = `${errClient.ROLE_READ} ${err.message}`
+        Responder.fail(res, httpStatus.BAD_REQUEST, err.message, err.name)
+      } else {
+        next(err)
+      }
+    }
+  }
+
+  private update = async (
+    req: RequestWithUser,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      if (req.params.id !== req.body.id) {
+        throw new Err(`ID_MISMATCH`, errClient.ID_MISMATCH)
+      }
+      const svcReq = RoleRequest.create({ ...req.body }, req.authorizedId)
+      const svcRes = await this._roleService.update(svcReq)
+      const code = svcRes.statusCode
+      switch (svcRes.outcome) {
+        case outcomes.SUCCESS:
+          Responder.success(res, code, { role: svcRes.item })
+          break
+        case outcomes.FAIL:
+          Responder.fail(res, code, svcRes.err?.message, svcRes.err?.name)
+          break
+        default:
+          Responder.error(res, code, svcRes.err?.message, svcRes.err?.name)
+          break
+      }
+    } catch (e) {
+      // The caught e could be anything. Turn it into an Err.
+      const err = Err.toErr(e)
+      // If the error message can be client facing, return BAD_REQUEST.
+      if (isErrClient(err.name)) {
+        err.message = `${errClient.ROLE_UPDATE} ${err.message}`
+        Responder.fail(res, httpStatus.BAD_REQUEST, err.message, err.name)
+      } else {
+        next(err)
+      }
+    }
+  }
+
+  private delete = async (
+    req: RequestWithUser,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const svcReq = UuidRequest.create(req.params.id, req.authorizedId)
+      const svcRes = await this._roleService.delete(svcReq)
+      const code = svcRes.statusCode
+      switch (svcRes.outcome) {
+        case outcomes.SUCCESS:
+          Responder.success(res, code, { role: svcRes.item })
+          break
+        case outcomes.FAIL:
+          Responder.fail(res, code, svcRes.err?.message, svcRes.err?.name)
+          break
+        default:
+          Responder.error(res, code, svcRes.err?.message, svcRes.err?.name)
+          break
+      }
+    } catch (e) {
+      // The caught e could be anything. Turn it into an Err.
+      const err = Err.toErr(e)
+      // If the error message can be client facing, return BAD_REQUEST.
+      if (isErrClient(err.name)) {
+        err.message = `${errClient.ROLE_DELETE} ${err.message}`
         Responder.fail(res, httpStatus.BAD_REQUEST, err.message, err.name)
       } else {
         next(err)

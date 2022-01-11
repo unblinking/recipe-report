@@ -31,7 +31,6 @@ import { StringRequest, UserRequest, UuidRequest } from 'domain/service/service-
 
 import { httpStatus, outcomes } from 'data/constants'
 
-import { log } from 'service/log-service'
 import { IUserService } from 'service/user-service'
 
 import { IBaseController } from 'api/controllers/base-controller'
@@ -67,7 +66,6 @@ export class UserController implements IBaseController {
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
-    log.trace(`user-controller.ts create()`)
     try {
       const svcReq = UserRequest.create({ ...req.body })
       const svcRes = await this._userService.create(svcReq)
@@ -97,7 +95,6 @@ export class UserController implements IBaseController {
   }
 
   private read = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
-    log.trace(`user-controller.ts read()`)
     try {
       const svcReq = UuidRequest.create(req.params.id, req.authorizedId)
       const svcRes = await this._userService.read(svcReq)
@@ -131,7 +128,6 @@ export class UserController implements IBaseController {
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
-    log.trace(`user-controller.ts update()`)
     try {
       if (req.params.id !== req.body.id) {
         throw new Err(`ID_MISMATCH`, errClient.ID_MISMATCH)
@@ -168,7 +164,6 @@ export class UserController implements IBaseController {
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
-    log.trace(`user-controller.ts delete()`)
     try {
       const svcReq = UuidRequest.create(req.params.id, req.authorizedId)
       const svcRes = await this._userService.delete(svcReq)
@@ -202,7 +197,6 @@ export class UserController implements IBaseController {
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
-    log.trace(`user-controller.ts activate()`)
     try {
       const svcReq = StringRequest.create(req.params.token)
       const svcRes = await this._userService.activate(svcReq)
@@ -236,7 +230,6 @@ export class UserController implements IBaseController {
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
-    log.trace(`user-controller.ts authenticate()`)
     try {
       const svcReq = UserRequest.create({ ...req.body })
       const svcRes = await this._userService.authenticate(svcReq)

@@ -39,7 +39,6 @@ import { IUnitOfWork } from 'data/repositories/unit-of-work'
 
 import { IEmailService } from 'service/email-service'
 import { IJwtService, Payload, tokenType } from 'service/jwt-service'
-import { log } from 'service/log-service'
 
 import { container } from 'root/ioc.config'
 import { SYMBOLS } from 'root/symbols'
@@ -67,8 +66,6 @@ export class UserService implements IUserService {
   }
 
   public async create(req: UserRequest): Promise<UserResponse> {
-    log.trace(`user-service.ts create()`)
-
     // Get a new instance of uow from the DI container.
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 
@@ -89,7 +86,7 @@ export class UserService implements IUserService {
       await uow.connect()
       await uow.begin()
 
-      // Create the user in persistence.
+      // Create the entity in persistence.
       const user: User = await uow.users.create(UserMap.dtoToDomain(req.user))
 
       // Create a JWT for the new user's activation email.
@@ -125,8 +122,6 @@ export class UserService implements IUserService {
   }
 
   public async read(req: UuidRequest): Promise<UserResponse> {
-    log.trace(`user-service.ts read()`)
-
     // Get a new instance of uow from the DI container.
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 
@@ -135,7 +130,7 @@ export class UserService implements IUserService {
       await uow.connect()
       await uow.begin()
 
-      // Read the user from persistence.
+      // Read the entity from persistence.
       const user: User = await uow.users.read(req.id)
 
       // Commit the database transaction (also releases the connection.)
@@ -161,8 +156,6 @@ export class UserService implements IUserService {
   }
 
   public async update(req: UserRequest): Promise<UserResponse> {
-    log.trace(`user-service.ts update()`)
-
     // Get a new instance of uow from the DI container.
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 
@@ -192,7 +185,7 @@ export class UserService implements IUserService {
           ? EmailAddress.create(req.user.email_address)
           : undefined
 
-      // Update the user in persistence.
+      // Update the entity in persistence.
       const user: User = await uow.users.update(id, name, email_address)
 
       // Commit the database transaction (also releases the connection.)
@@ -218,8 +211,6 @@ export class UserService implements IUserService {
   }
 
   public async delete(req: UuidRequest): Promise<UserResponse> {
-    log.trace(`user-service.ts delete()`)
-
     // Get a new instance of uow from the DI container.
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 
@@ -228,7 +219,7 @@ export class UserService implements IUserService {
       await uow.connect()
       await uow.begin()
 
-      // Delete the user from persistence (soft delete).
+      // Delete the entity from persistence (soft delete).
       const user: User = await uow.users.delete(req.id)
 
       // Commit the database transaction (also releases the connection.)
@@ -254,8 +245,6 @@ export class UserService implements IUserService {
   }
 
   public async activate(req: StringRequest): Promise<UserResponse> {
-    log.trace(`user-service.ts activate()`)
-
     // Get a new instance of uow from the DI container.
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 
@@ -302,8 +291,6 @@ export class UserService implements IUserService {
   }
 
   public async authenticate(req: UserRequest): Promise<StringResponse> {
-    log.trace(`user-service.ts authenticate()`)
-
     // Get a new instance of uow from the DI container.
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 

@@ -28,18 +28,21 @@ import { injectable } from 'inversify'
 import { RoleMap } from 'domain/maps/role-map'
 import { Err, errClient, isErrClient } from 'domain/models/err-model'
 import { Role } from 'domain/models/role-model'
-import { RoleRequest } from 'domain/service/service-requests'
+import { RoleRequest, UuidRequest } from 'domain/service/service-requests'
 import { RoleResponse } from 'domain/service/service-responses'
+import { DisplayName } from 'domain/value/display-name-value'
+import { UniqueId } from 'domain/value/uid-value'
 
 import { IUnitOfWork } from 'data/repositories/unit-of-work'
-
-import { log } from 'service/log-service'
 
 import { container } from 'root/ioc.config'
 import { SYMBOLS } from 'root/symbols'
 
 export interface IRoleService {
   create(req: RoleRequest): Promise<RoleResponse>
+  read(req: UuidRequest): Promise<RoleResponse>
+  update(req: RoleRequest): Promise<RoleResponse>
+  delete(req: UuidRequest): Promise<RoleResponse>
 }
 
 @injectable()
@@ -47,8 +50,6 @@ export class RoleService implements IRoleService {
   // public constructor() {}
 
   public async create(req: RoleRequest): Promise<RoleResponse> {
-    log.trace(`role-service.ts create()`)
-
     // Get a new instance of uow from the DI container.
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 
@@ -57,7 +58,7 @@ export class RoleService implements IRoleService {
       await uow.connect()
       await uow.begin()
 
-      // Create the user in persistence.
+      // Create the entity in persistence.
       const role: Role = await uow.roles.create(RoleMap.dtoToDomain(req.role))
 
       // Commit the database transaction (also releases the connection.)
@@ -74,6 +75,123 @@ export class RoleService implements IRoleService {
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
         err.message = `${errClient.ROLE_CREATE} ${err.message}`
+        return RoleResponse.fail(err)
+      }
+
+      // Do not leak internal error details, return INTERNAL_ERROR.
+      return RoleResponse.error(err)
+    }
+  }
+
+  public async read(req: UuidRequest): Promise<RoleResponse> {
+    // Get a new instance of uow from the DI container.
+    const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
+
+    try {
+      // Connect to the database and begin a transaction.
+      await uow.connect()
+      await uow.begin()
+
+      // Read the entity from persistence.
+      const role: Role = await uow.roles.read(req.id)
+
+      // Commit the database transaction (also releases the connection.)
+      await uow.commit()
+
+      return RoleResponse.success(RoleMap.domainToDto(role))
+    } catch (e) {
+      // Attempt a rollback. If no database client exists, nothing will happen.
+      await uow.rollback()
+
+      // The caught e could be anything. Turn it into an Err.
+      const err = Err.toErr(e)
+
+      // If the error message can be client facing, return BAD_REQUEST.
+      if (isErrClient(err.name)) {
+        err.message = `${errClient.ROLE_READ} ${err.message}`
+        return RoleResponse.fail(err)
+      }
+
+      // Do not leak internal error details, return INTERNAL_ERROR.
+      return RoleResponse.error(err)
+    }
+  }
+
+  public async update(req: RoleRequest): Promise<RoleResponse> {
+    // Get a new instance of uow from the DI container.
+    const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
+
+    try {
+      // Verify the request DTO has an id.
+      if (!req.role.id) {
+        throw new Err(`MISSING_REQ`, `${errClient.MISSING_REQ} id`)
+      }
+      // Verify the request DTO has a name or description.
+      // name and description are technically optional. Hopefully they're
+      // updating at least one of those two though.
+      if (!req.role.name && !req.role.description) {
+        throw new Err(`MISSING_REQ`, `${errClient.MISSING_REQ} at least one of name or description`)
+      }
+
+      // Connect to the database and begin a transaction.
+      await uow.connect()
+      await uow.begin()
+
+      const id = UniqueId.create(req.role.id)
+      const name = req.role.name != undefined ? DisplayName.create(req.role.name) : undefined
+      const description = req.role.description != undefined ? req.role.description : undefined
+
+      // Update the entity in persistence.
+      const role: Role = await uow.roles.update(id, name, description)
+
+      // Commit the database transaction (also releases the connection.)
+      await uow.commit()
+
+      return RoleResponse.success(RoleMap.domainToDto(role))
+    } catch (e) {
+      // Attempt a rollback. If no database client exists, nothing will happen.
+      await uow.rollback()
+
+      // The caught e could be anything. Turn it into an Err.
+      const err = Err.toErr(e)
+
+      // If the error message can be client facing, return BAD_REQUEST.
+      if (isErrClient(err.name)) {
+        err.message = `${errClient.ROLE_UPDATE} ${err.message}`
+        return RoleResponse.fail(err)
+      }
+
+      // Do not leak internal error details, return INTERNAL_ERROR.
+      return RoleResponse.error(err)
+    }
+  }
+
+  public async delete(req: UuidRequest): Promise<RoleResponse> {
+    // Get a new instance of uow from the DI container.
+    const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
+
+    try {
+      // Connect to the database and begin a transaction.
+      await uow.connect()
+      await uow.begin()
+
+      // Delete the entity from persistence (soft delete).
+      const role: Role = await uow.roles.delete(req.id)
+
+      // Commit the database transaction (also releases the connection.)
+      await uow.commit()
+
+      return RoleResponse.success(RoleMap.domainToDto(role))
+    } catch (e) {
+      // Attempt a rollback. If no database client exists, nothing will happen.
+      await uow.rollback()
+
+      // The caught e could be anything. Turn it into an Err.
+      const err = Err.toErr(e)
+
+      // If the error message can be client facing, return BAD_REQUEST.
+      if (isErrClient(err.name)) {
+        err.message = `${errClient.ROLE_DELETE} ${err.message}`
         return RoleResponse.fail(err)
       }
 

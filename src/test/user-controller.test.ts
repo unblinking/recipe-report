@@ -56,7 +56,7 @@ describe(`UserController success.`, () => {
     expect(res.statusCode).toBe(200)
     expect(res.ok).toBe(true)
     expect(res.body.status).toBe('success')
-    expect(res.body.data.user).toBeTruthy
+    expect(res.body.data.user).toBeDefined
   })
 
   test(`Fail response from UserService.`, async () => {
@@ -77,7 +77,8 @@ describe(`UserController success.`, () => {
     expect(res.badRequest).toBe(true)
     expect(res.clientError).toBe(true)
     expect(res.body.status).toBe('fail')
-    expect(res.body.data.message).toBeTruthy
+    expect(res.body.message).toBeDefined
+    expect(res.body.code).toBeDefined
   })
 
   test(`Error response from UserService.`, async () => {
@@ -96,8 +97,8 @@ describe(`UserController success.`, () => {
     expect(res.header['content-type']).toBe('application/json; charset=utf-8')
     expect(res.statusCode).toBe(500)
     expect(res.serverError).toBe(true)
+    expect(res.error).toBeDefined
     expect(res.body.status).toBe('error')
-    expect(res.body.err).toBeTruthy
-    expect(res.error).toBeTruthy
+    expect(res.body.message).toBe('Something went wrong.')
   })
 })

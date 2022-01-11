@@ -159,7 +159,7 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
     return count
   }
 
-  // Function to return the count of user records, other than the specified user id, that match a given column/value
+  // Function to return the count of records, other than the specified record id, that match a given column/value
   private _countByColumnNotId = async (
     id: string,
     column: string,

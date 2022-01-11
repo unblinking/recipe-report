@@ -28,12 +28,17 @@ import { PoolClient, QueryResult } from 'pg'
 import { RoleMap } from 'domain/maps/role-map'
 import { Err, errClient } from 'domain/models/err-model'
 import { Role } from 'domain/models/role-model'
+import { DisplayName } from 'domain/value/display-name-value'
+import { UniqueId } from 'domain/value/uid-value'
 
 import { dbTables } from 'data/constants'
 import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
 
 export interface IRoleRepo extends IBaseRepo {
   create(role: Role): Promise<Role>
+  read(id: UniqueId): Promise<Role>
+  update(id: UniqueId, name?: DisplayName, description?: string): Promise<Role>
+  delete(id: UniqueId): Promise<Role>
 }
 
 export class RoleRepo extends BaseRepo<Role> implements IRoleRepo {
@@ -53,11 +58,65 @@ export class RoleRepo extends BaseRepo<Role> implements IRoleRepo {
     return RoleMap.dbToDomain(result.rows[0], result.rows[0].id)
   }
 
+  public read = async (id: UniqueId): Promise<Role> => {
+    // Find the role by their unique id.
+    const query: string = `SELECT * FROM rr.roles_read($1)`
+    const result: QueryResult = await this.client.query(query, [id.value])
+    if (result.rowCount !== 1) {
+      throw new Err(`ROLE_READ`, errClient.ROLE_READ)
+    }
+    // Return domain object from database query results.
+    return RoleMap.dbToDomain(result.rows[0], result.rows[0].id)
+  }
+
+  public update = async (id: UniqueId, name?: DisplayName, description?: string): Promise<Role> => {
+    // Verify the incoming role name isn't being used by any role, except of
+    // course if used by the role we are going to update now.
+    if (name != undefined && (await this._countByColumnNotId(id.value, 'name', name.value)) > 0) {
+      throw new Err(`NAME_USED`, errClient.NAME_USED)
+    }
+    // Update the role into the database.
+    const query: string = `SELECT * FROM rr.roles_update($1, $2, $3)`
+    const result: QueryResult = await this.client.query(query, [
+      id.value,
+      name != undefined ? name.value : null,
+      description != undefined ? description : null,
+    ])
+    if (result.rowCount !== 1) {
+      throw new Err(`ROLE_READ`, errClient.ROLE_READ)
+    }
+    // Return domain object from database query results.
+    return RoleMap.dbToDomain(result.rows[0], result.rows[0].id)
+  }
+
+  public delete = async (id: UniqueId): Promise<Role> => {
+    // Delete the role by their unique id.
+    const query: string = `SELECT * FROM rr.roles_delete($1)`
+    const result: QueryResult = await this.client.query(query, [id.value])
+    if (result.rowCount !== 1) {
+      throw new Err(`ROLE_READ`, errClient.ROLE_READ)
+    }
+    // Return domain object from database query results.
+    return RoleMap.dbToDomain(result.rows[0], result.rows[0].id)
+  }
+
   // Function to return the count of role records that match a given column/value
   private _countByColumn = async (column: string, value: string): Promise<number> => {
     const query: string = `SELECT * FROM rr.roles_count_by_column_value($1, $2)`
     const result: QueryResult = await this.client.query(query, [column, value])
     const count: number = result.rows[0].roles_count_by_column_value
+    return count
+  }
+
+  // Function to return the count of records, other than the specified record id, that match a given column/value
+  private _countByColumnNotId = async (
+    id: string,
+    column: string,
+    value: string,
+  ): Promise<number> => {
+    const query: string = `SELECT * FROM rr.roles_count_by_column_value_not_id($1, $2, $3)`
+    const result: QueryResult = await this.client.query(query, [id, column, value])
+    const count: number = result.rows[0].roles_count_by_id_column_value
     return count
   }
 }

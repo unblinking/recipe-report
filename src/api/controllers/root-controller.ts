@@ -28,8 +28,6 @@ import { injectable } from 'inversify'
 
 import { httpStatus } from 'data/constants'
 
-import { log } from 'service/log-service'
-
 import { IBaseController } from 'api/controllers/base-controller'
 import { fiveHundred } from 'api/middlewares/laststop'
 import { Responder } from 'api/responder'
@@ -49,7 +47,6 @@ export class RootController implements IBaseController {
   }
 
   private curtsy = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
-    log.trace(`root-controller.ts curtsy()`)
     try {
       const code = httpStatus.OK
       const welcomeMsg = `Welcome to the Recipe.Report API server. This is the root route. For documentation please go to https://docs.recipe.report/`
