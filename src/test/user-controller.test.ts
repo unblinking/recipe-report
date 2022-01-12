@@ -32,14 +32,14 @@ import { UserController } from 'api/controllers/user-controller'
 
 import { MockUserServiceError, MockUserServiceFail, MockUserServiceSuccess } from 'test/mocks'
 
-describe(`UserController success.`, () => {
+describe(`UserController tests.`, () => {
   let container: Container
 
   beforeEach(() => {
     container = new Container()
   })
 
-  test(`Success response from UserService.`, async () => {
+  test(`POST request with success response from service.`, async () => {
     // Arrange.
     container.bind<UserController>('userController').to(UserController)
     container.bind<MockUserServiceSuccess>(Symbol.for('IUserService')).to(MockUserServiceSuccess)
@@ -59,7 +59,7 @@ describe(`UserController success.`, () => {
     expect(res.body.data.user).toBeDefined
   })
 
-  test(`Fail response from UserService.`, async () => {
+  test(`POST request with fail response from service.`, async () => {
     // Arrange.
     container.bind<UserController>('userController').to(UserController)
     container.bind<MockUserServiceFail>(Symbol.for('IUserService')).to(MockUserServiceFail)
@@ -81,7 +81,7 @@ describe(`UserController success.`, () => {
     expect(res.body.code).toBeDefined
   })
 
-  test(`Error response from UserService.`, async () => {
+  test(`POST request with error response from service.`, async () => {
     // Arrange.
     container.bind<UserController>('userController').to(UserController)
     container.bind<MockUserServiceError>(Symbol.for('IUserService')).to(MockUserServiceError)

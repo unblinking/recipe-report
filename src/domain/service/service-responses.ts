@@ -24,6 +24,7 @@
  * @module
  */
 import { Err } from 'domain/models/err-model'
+import { IFeatureDto } from 'domain/models/feature-model'
 import { IRoleDto } from 'domain/models/role-model'
 import { IUserDto } from 'domain/models/user-model'
 
@@ -76,6 +77,29 @@ abstract class ServiceResponse<T> {
     this._err = err
     this._item = item
     this._statusCode = statusCode
+  }
+}
+
+export class FeatureResponse extends ServiceResponse<IFeatureDto> {
+  private constructor(
+    outcome: outcomeValueType = outcomes.ERROR,
+    statusCode: httpStatusValueType,
+    item?: IFeatureDto,
+    err?: Err,
+  ) {
+    super(outcome, statusCode, item, err)
+  }
+
+  public static success(item: IFeatureDto): FeatureResponse {
+    return new FeatureResponse(outcomes.SUCCESS, httpStatus.OK, item)
+  }
+
+  public static fail(err: Err): FeatureResponse {
+    return new FeatureResponse(outcomes.FAIL, httpStatus.BAD_REQUEST, undefined, err)
+  }
+
+  public static error(err: Err): FeatureResponse {
+    return new FeatureResponse(outcomes.ERROR, httpStatus.INTERNAL_ERROR, undefined, err)
   }
 }
 

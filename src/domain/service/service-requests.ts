@@ -23,6 +23,7 @@
  *
  * @module
  */
+import { IFeatureDto } from 'domain/models/feature-model'
 import { IRoleDto } from 'domain/models/role-model'
 import { IUserDto } from 'domain/models/user-model'
 import { UniqueId } from 'domain/value/uid-value'
@@ -35,6 +36,20 @@ abstract class ServiceRequest<T> {
   constructor(item: T, authorizedId?: UniqueId) {
     this._item = item
     this.authorizedId = authorizedId
+  }
+}
+
+export class FeatureRequest extends ServiceRequest<IFeatureDto> {
+  public get feature(): IFeatureDto {
+    return this._item
+  }
+
+  private constructor(feature: IFeatureDto, authorizedId?: UniqueId) {
+    super(feature, authorizedId)
+  }
+
+  public static create(feature: IFeatureDto, authorizedId?: UniqueId): FeatureRequest {
+    return new FeatureRequest(feature, authorizedId)
   }
 }
 

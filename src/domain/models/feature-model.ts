@@ -1,5 +1,5 @@
 /**
- * Role model.
+ * Feature model.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -28,7 +28,7 @@ import { UniqueId } from 'domain/value/uid-value'
 
 import { Model } from './base-model'
 
-export interface IRoleDto {
+export interface IFeatureDto {
   id?: string
   name?: string
   description?: string
@@ -36,14 +36,14 @@ export interface IRoleDto {
   date_deleted?: string
 }
 
-export interface IRole {
+export interface IFeature {
   name: DisplayName
   description: string
   date_created?: Date
   date_deleted?: Date
 }
 
-export class Role extends Model<IRole> {
+export class Feature extends Model<IFeature> {
   public get id(): UniqueId {
     return this._id
   }
@@ -64,11 +64,11 @@ export class Role extends Model<IRole> {
     return this._props.date_deleted
   }
 
-  private constructor(props: IRole, id?: UniqueId) {
+  private constructor(props: IFeature, id?: UniqueId) {
     super(props, id)
   }
 
-  public static create(props: IRole, id?: UniqueId): Role {
-    return new Role(props, id)
+  public static create(props: IFeature, id?: UniqueId): Feature {
+    return new Feature(props, id)
   }
 }

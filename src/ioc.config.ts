@@ -31,6 +31,7 @@ import { IUnitOfWork, UnitOfWork } from 'data/repositories/unit-of-work'
 
 import { CryptoService, ICryptoService } from 'service/crypto-service'
 import { EmailService, IEmailService } from 'service/email-service'
+import { FeatureService, IFeatureService } from 'service/feature-service'
 import { IJwtService, JwtService } from 'service/jwt-service'
 import { IRoleService, RoleService } from 'service/role-service'
 import { IUserService, UserService } from 'service/user-service'
@@ -60,6 +61,7 @@ container.bind<IUnitOfWork>(SYMBOLS.IUnitOfWork).to(UnitOfWork)
 // Add services to the container.
 container.bind<ICryptoService>(SYMBOLS.ICryptoService).to(CryptoService)
 container.bind<IEmailService>(SYMBOLS.IEmailService).to(EmailService)
+container.bind<IFeatureService>(SYMBOLS.IFeatureService).to(FeatureService)
 container.bind<IJwtService>(SYMBOLS.IJwtService).to(JwtService)
 container.bind<IRoleService>(SYMBOLS.IRoleService).to(RoleService)
 container.bind<IUserService>(SYMBOLS.IUserService).to(UserService)

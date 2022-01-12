@@ -130,6 +130,10 @@ export const errClient = {
   ROLE_READ: `The role couldn't be found.`,
   ROLE_UPDATE: `The role couldn't be updated.`,
   ROLE_DELETE: `The role couldn't be deleted.`,
+  FEATURE_CREATE: `The feature couldn't be created.`,
+  FEATURE_READ: `The feature couldn't be found.`,
+  FEATURE_UPDATE: `The feature couldn't be updated.`,
+  FEATURE_DELETE: `The feature couldn't be deleted.`,
 }
 type errClientType = typeof errClient
 export type errClientKeyType = keyof errClientType

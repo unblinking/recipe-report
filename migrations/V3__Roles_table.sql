@@ -43,6 +43,7 @@
  *              name VARCHAR (50) - 50 char limit for display purposes.
  *              description TEXT - 
  *              date_created TIMESTAMPTZ - 
+ *              date_deleted TIMESTAMPTZ - 
  */
 CREATE TYPE rr.role_type AS (
     id              UUID,

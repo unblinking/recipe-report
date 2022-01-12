@@ -30,6 +30,7 @@ import { PoolClient } from 'pg'
 import { Err, errInternal } from 'domain/models/err-model'
 
 import { IDataAccessLayer } from 'data/data-access'
+import { FeatureRepo, IFeatureRepo } from 'data/repositories/feature-repo'
 import { IRoleRepo, RoleRepo } from 'data/repositories/role-repo'
 import { IUserRepo, UserRepo } from 'data/repositories/user-repo'
 
@@ -40,16 +41,18 @@ export interface IUnitOfWork {
   begin(): Promise<void>
   commit(): Promise<void>
   rollback(): Promise<void>
-  users: IUserRepo
+  features: IFeatureRepo
   roles: IRoleRepo
+  users: IUserRepo
 }
 
 @injectable()
 export class UnitOfWork implements IUnitOfWork {
   private _dal: IDataAccessLayer
   private _client: PoolClient | undefined
-  private _userRepo: IUserRepo | undefined
+  private _featureRepo: IFeatureRepo | undefined
   private _roleRepo: IRoleRepo | undefined
+  private _userRepo: IUserRepo | undefined
 
   public constructor(@inject(SYMBOLS.IDataAccessLayer) dataAccessLayer: IDataAccessLayer) {
     this._dal = dataAccessLayer
@@ -79,12 +82,12 @@ export class UnitOfWork implements IUnitOfWork {
     this._client.release()
   }
 
-  public get users(): IUserRepo {
+  public get features(): IFeatureRepo {
     if (!this._client) throw new Err('UOW_CLIENT', errInternal.UOW_CLIENT)
-    if (!this._userRepo) {
-      this._userRepo = new UserRepo(this._client)
+    if (!this._featureRepo) {
+      this._featureRepo = new FeatureRepo(this._client)
     }
-    return this._userRepo
+    return this._featureRepo
   }
 
   public get roles(): IRoleRepo {
@@ -93,5 +96,13 @@ export class UnitOfWork implements IUnitOfWork {
       this._roleRepo = new RoleRepo(this._client)
     }
     return this._roleRepo
+  }
+
+  public get users(): IUserRepo {
+    if (!this._client) throw new Err('UOW_CLIENT', errInternal.UOW_CLIENT)
+    if (!this._userRepo) {
+      this._userRepo = new UserRepo(this._client)
+    }
+    return this._userRepo
   }
 }

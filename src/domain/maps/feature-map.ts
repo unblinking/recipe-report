@@ -1,5 +1,5 @@
 /**
- * Role mapper.
+ * Feature mapper.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -24,31 +24,31 @@
  * @module
  */
 import { Err, errInternal } from 'domain/models/err-model'
-import { IRole, IRoleDto, Role } from 'domain/models/role-model'
+import { Feature, IFeature, IFeatureDto } from 'domain/models/feature-model'
 import { DisplayName } from 'domain/value/display-name-value'
 import { UniqueId } from 'domain/value/uid-value'
 
-export class RoleMap {
-  public static dtoToDomain(roleDto: IRoleDto): Role {
-    if (!this.isRole(roleDto)) {
-      throw new Err(`DOMAIN_OBJECT`, `RoleMap: ${errInternal.DOMAIN_OBJECT}`)
+export class FeatureMap {
+  public static dtoToDomain(featureDto: IFeatureDto): Feature {
+    if (!this.isFeature(featureDto)) {
+      throw new Err(`DOMAIN_OBJECT`, `FeatureMap: ${errInternal.DOMAIN_OBJECT}`)
     }
-    return Role.create(
+    return Feature.create(
       {
-        name: DisplayName.create(roleDto.name),
-        description: roleDto.description,
-        date_created: roleDto.date_created ? new Date(roleDto.date_created) : undefined,
-        date_deleted: roleDto.date_deleted ? new Date(roleDto.date_deleted) : undefined,
+        name: DisplayName.create(featureDto.name),
+        description: featureDto.description,
+        date_created: featureDto.date_created ? new Date(featureDto.date_created) : undefined,
+        date_deleted: featureDto.date_deleted ? new Date(featureDto.date_deleted) : undefined,
       },
-      UniqueId.create(roleDto.id),
+      UniqueId.create(featureDto.id),
     )
   }
 
-  public static dbToDomain(dbResult: IRoleDto, id: string): Role {
-    if (!this.isRole(dbResult)) {
-      throw new Err(`DOMAIN_OBJECT`, `RoleMap: ${errInternal.DOMAIN_OBJECT}`)
+  public static dbToDomain(dbResult: IFeatureDto, id: string): Feature {
+    if (!this.isFeature(dbResult)) {
+      throw new Err(`DOMAIN_OBJECT`, `FeatureMap: ${errInternal.DOMAIN_OBJECT}`)
     }
-    return Role.create(
+    return Feature.create(
       {
         name: DisplayName.create(dbResult.name),
         description: dbResult.description,
@@ -59,20 +59,20 @@ export class RoleMap {
     )
   }
 
-  public static domainToDto(role: Role): IRoleDto {
+  public static domainToDto(feature: Feature): IFeatureDto {
     return {
-      id: role.id.value,
-      name: role.name.value,
-      description: role.description,
-      date_created: role.date_created?.toString(),
-      date_deleted: role.date_deleted?.toString(),
+      id: feature.id.value,
+      name: feature.name.value,
+      description: feature.description,
+      date_created: feature.date_created?.toString(),
+      date_deleted: feature.date_deleted?.toString(),
     }
   }
 
   // Type-guard using a type-predicate method.
-  public static isRole(raw: unknown): raw is IRole {
-    if (!(raw as IRole).name) return false
-    if (!(raw as IRole).description) return false
+  public static isFeature(raw: unknown): raw is IFeature {
+    if (!(raw as IFeature).name) return false
+    if (!(raw as IFeature).description) return false
     return true
   }
 }

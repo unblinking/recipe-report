@@ -32,8 +32,11 @@
  * Database table names.
  */
 export const dbTables = {
-  USERS: `rr.users`,
+  FEATURES: `rr.features`,
   ROLES: `rr.roles`,
+  ROLES_TO_FEATURES: `rr.roles_to_features`,
+  USERS: `rr.users`,
+  USERS_TO_ROLES: `rr.users_to_roles`,
 } as const
 type dbTablesType = typeof dbTables
 export type dbTablesKeyType = keyof dbTablesType

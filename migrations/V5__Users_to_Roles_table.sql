@@ -65,3 +65,82 @@ CREATE TABLE IF NOT EXISTS rr.users_to_roles OF rr.user_to_role_type (
 COMMENT ON TABLE rr.users_to_roles IS 'Table to store individual user_to_role links.';
 COMMENT ON COLUMN rr.users_to_roles.user_id IS 'UUID of a record from the rr.users table.';
 COMMENT ON COLUMN rr.users_to_roles.role_id IS 'UUID of a record from the rr.roles table.';
+
+/**
+ * Function:    rr.users_to_roles_create
+ * Author:      Joshua Gray
+ * Description: Function to create a record in the users_to_roles table.
+ * Parameters:  user_id UUID - 
+ *              role_id UUID - 
+ * Usage:       SELECT * FROM rr.users_to_roles_create('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000');
+ * Returns:     The record that was created.
+ */
+CREATE OR REPLACE FUNCTION rr.users_to_roles_create (
+    user_id UUID,
+    role_id UUID
+)
+    RETURNS  SETOF rr.users_to_roles
+    LANGUAGE PLPGSQL
+    AS
+$$
+BEGIN
+    RETURN QUERY
+    INSERT
+    INTO   rr.users_to_roles (user_id, role_id)
+    VALUES ($1, $2)
+    RETURNING *;
+END;
+$$;
+COMMENT ON FUNCTION rr.users_to_roles_create IS 'Function to create a record in the users_to_roles table.';
+
+/**
+ * Function:    rr.users_to_roles_read_by_user_id
+ * Author:      Joshua Gray
+ * Description: Function to read all users_to_roles link records by user_id.
+ * Parameters:  user_id UUID
+ * Usage:       SELECT * FROM rr.users_to_roles_read_by_user_id('00000000-0000-0000-0000-000000000000');
+ * Returns:     The userf_to_roles link records if found.
+ */
+CREATE OR REPLACE FUNCTION rr.users_to_roles_read_by_user_id (
+    user_id UUID
+)
+    RETURNS  SETOF rr.users_to_roles
+    LANGUAGE PLPGSQL
+    AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT *
+    FROM  rr.users_to_roles
+    WHERE rr.users_to_roles.user_id = $1;
+END;
+$$;
+COMMENT ON FUNCTION rr.users_to_roles_read_by_user_id IS 'Function to read all user_to_role link records by user_id.';
+
+/**
+ * Function:    rr.users_to_roles_delete
+ * Author:      Joshua Gray
+ * Description: Function to delete a record in the users_to_roles table (hard delete).
+ * Parameters:  user_id UUID - 
+ *              role_id UUID - 
+ * Usage:       SELECT * FROM rr.users_to_roles_delete('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000');
+ * Returns:     The record that was deleted.
+ */
+CREATE OR REPLACE FUNCTION rr.users_to_roles_delete (
+    user_id UUID,
+    role_id UUID
+)
+    RETURNS  SETOF rr.users_to_roles
+    LANGUAGE PLPGSQL
+    AS
+$$
+BEGIN
+    RETURN QUERY
+    DELETE
+    FROM  rr.users_to_roles
+    WHERE rr.users_to_roles.user_id = $1
+    AND   rr.users_to_roles.role_id = $2
+    RETURNING *;
+END;
+$$;
+COMMENT ON FUNCTION rr.users_to_roles_delete IS 'Function to delete a record in the users_to_roles table (hard delete).';

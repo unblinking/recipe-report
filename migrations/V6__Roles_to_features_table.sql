@@ -43,7 +43,7 @@
  *              feature_id UUID - 
  */
 CREATE TYPE rr.role_to_feature_type AS (
-    role_id UUID,
+    role_id    UUID,
     feature_id UUID
 );
 COMMENT ON TYPE rr.role_to_feature_type IS 'Type for an individual role_to_feature link.';
@@ -56,12 +56,91 @@ COMMENT ON TYPE rr.role_to_feature_type IS 'Type for an individual role_to_featu
  *              feature_id - 
  */
 CREATE TABLE IF NOT EXISTS rr.roles_to_features OF rr.role_to_feature_type (
-    role_id WITH OPTIONS NOT NULL,
+    role_id    WITH OPTIONS NOT NULL,
     feature_id WITH OPTIONS NOT NULL,
     PRIMARY KEY (role_id, feature_id),
-    CONSTRAINT fk_role_roles_to_features FOREIGN KEY (role_id) REFERENCES rr.roles (id) ON DELETE NO ACTION,
+    CONSTRAINT fk_role_roles_to_features    FOREIGN KEY (role_id)    REFERENCES rr.roles (id)    ON DELETE NO ACTION,
     CONSTRAINT fk_feature_roles_to_features FOREIGN KEY (feature_id) REFERENCES rr.features (id) ON DELETE NO ACTION
 );
 COMMENT ON TABLE rr.roles_to_features IS 'Table to store individual role_to_feature links.';
 COMMENT ON COLUMN rr.roles_to_features.role_id IS 'UUID of a record from the rr.roles table.';
 COMMENT ON COLUMN rr.roles_to_features.feature_id IS 'UUID of a record from the rr.featires table.';
+
+/**
+ * Function:    rr.roles_to_features_create
+ * Author:      Joshua Gray
+ * Description: Function to create a record in the roles_to_features table.
+ * Parameters:  role_id UUID - 
+ *              feature_id UUID - 
+ * Usage:       SELECT * FROM rr.roles_to_features_create('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000');
+ * Returns:     The record that was created.
+ */
+CREATE OR REPLACE FUNCTION rr.roles_to_features_create (
+    role_id    UUID,
+    feature_id UUID
+)
+    RETURNS  SETOF rr.roles_to_features
+    LANGUAGE PLPGSQL
+    AS
+$$
+BEGIN
+    RETURN QUERY
+    INSERT
+    INTO   rr.roles_to_features (role_id, feature_id)
+    VALUES ($1, $2)
+    RETURNING *;
+END;
+$$;
+COMMENT ON FUNCTION rr.roles_to_features_create IS 'Function to create a record in the roles_to_features table.';
+
+/**
+ * Function:    rr.roles_to_features_read_by_role_id
+ * Author:      Joshua Gray
+ * Description: Function to read all roles_to_features link records by role_id.
+ * Parameters:  role_id UUID
+ * Usage:       SELECT * FROM rr.roles_to_features_read_by_role_id('00000000-0000-0000-0000-000000000000');
+ * Returns:     The roles_to_features link records if found.
+ */
+CREATE OR REPLACE FUNCTION rr.roles_to_features_read_by_role_id (
+    role_id UUID
+)
+    RETURNS  SETOF rr.roles_to_features
+    LANGUAGE PLPGSQL
+    AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT *
+    FROM   rr.roles_to_features
+    WHERE  rr.roles_to_features.role_id = $1;
+END;
+$$;
+COMMENT ON FUNCTION rr.roles_to_features_read_by_role_id IS 'Function to read all roles_to_features link records by role_id.';
+
+/**
+ * Function:    rr.roles_to_features_delete
+ * Author:      Joshua Gray
+ * Description: Function to delete a record in the roles_to_features table (hard delete).
+ * Parameters:  role_id UUID - 
+ *              feature_id UUID - 
+ * Usage:       SELECT * FROM rr.roles_to_features_delete('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000');
+ * Returns:     The record that was deleted.
+ */
+CREATE OR REPLACE FUNCTION rr.roles_to_features_delete (
+    role_id    UUID,
+    feature_id UUID
+)
+    RETURNS  SETOF rr.roles_to_features
+    LANGUAGE PLPGSQL
+    AS
+$$
+BEGIN
+    RETURN QUERY
+    DELETE
+    FROM  rr.roles_to_features
+    WHERE rr.roles_to_features.role_id = $1
+    AND   rr.roles_to_features.feature_id = $2
+    RETURNING *;
+END;
+$$;
+COMMENT ON FUNCTION rr.roles_to_features_delete IS 'Function to delete a record in the roles_to_features table (hard delete).';
