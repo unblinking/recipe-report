@@ -24,6 +24,7 @@
  * @module
  */
 import { DisplayName } from 'domain/value/display-name-value'
+import { SmallInt } from 'domain/value/smallint-value'
 import { UniqueId } from 'domain/value/uid-value'
 
 import { Model } from './base-model'
@@ -32,6 +33,7 @@ export interface IRoleDto {
   id?: string
   name?: string
   description?: string
+  level?: number
   date_created?: string
   date_deleted?: string
 }
@@ -39,6 +41,7 @@ export interface IRoleDto {
 export interface IRole {
   name: DisplayName
   description: string
+  level: SmallInt
   date_created?: Date
   date_deleted?: Date
 }
@@ -54,6 +57,10 @@ export class Role extends Model<IRole> {
 
   public get description(): string {
     return this._props.description
+  }
+
+  public get level(): SmallInt {
+    return this._props.level
   }
 
   public get date_created(): Date | undefined {

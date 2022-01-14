@@ -31,6 +31,7 @@ import { Role } from 'domain/models/role-model'
 import { RoleRequest, UuidRequest } from 'domain/service/service-requests'
 import { RoleResponse } from 'domain/service/service-responses'
 import { DisplayName } from 'domain/value/display-name-value'
+import { SmallInt } from 'domain/value/smallint-value'
 import { UniqueId } from 'domain/value/uid-value'
 
 import { IUnitOfWork } from 'data/repositories/unit-of-work'
@@ -126,11 +127,14 @@ export class RoleService implements IRoleService {
       if (!req.role.id) {
         throw new Err(`MISSING_REQ`, `${errClient.MISSING_REQ} id`)
       }
-      // Verify the request DTO has a name or description.
-      // name and description are technically optional. Hopefully they're
-      // updating at least one of those two though.
-      if (!req.role.name && !req.role.description) {
-        throw new Err(`MISSING_REQ`, `${errClient.MISSING_REQ} at least one of name or description`)
+      // Verify the request DTO has a name or description or level.
+      // Each property is options, but hopefully they're updating at least one
+      // of those.
+      if (!req.role.name && !req.role.description && !req.role.level) {
+        throw new Err(
+          `MISSING_REQ`,
+          `${errClient.MISSING_REQ} at least one of name, description, or level`,
+        )
       }
 
       // Connect to the database and begin a transaction.
@@ -140,9 +144,10 @@ export class RoleService implements IRoleService {
       const id = UniqueId.create(req.role.id)
       const name = req.role.name != undefined ? DisplayName.create(req.role.name) : undefined
       const description = req.role.description != undefined ? req.role.description : undefined
+      const level = req.role.level != undefined ? SmallInt.create(req.role.level) : undefined
 
       // Update the entity in persistence.
-      const role: Role = await uow.roles.update(id, name, description)
+      const role: Role = await uow.roles.update(id, name, description, level)
 
       // Commit the database transaction (also releases the connection.)
       await uow.commit()

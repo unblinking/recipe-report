@@ -26,6 +26,7 @@
 import { Err, errInternal } from 'domain/models/err-model'
 import { IRole, IRoleDto, Role } from 'domain/models/role-model'
 import { DisplayName } from 'domain/value/display-name-value'
+import { SmallInt } from 'domain/value/smallint-value'
 import { UniqueId } from 'domain/value/uid-value'
 
 export class RoleMap {
@@ -37,6 +38,7 @@ export class RoleMap {
       {
         name: DisplayName.create(roleDto.name),
         description: roleDto.description,
+        level: SmallInt.create(roleDto.level),
         date_created: roleDto.date_created ? new Date(roleDto.date_created) : undefined,
         date_deleted: roleDto.date_deleted ? new Date(roleDto.date_deleted) : undefined,
       },
@@ -52,6 +54,7 @@ export class RoleMap {
       {
         name: DisplayName.create(dbResult.name),
         description: dbResult.description,
+        level: SmallInt.create(dbResult.level),
         date_created: dbResult.date_created ? new Date(dbResult.date_created) : undefined,
         date_deleted: dbResult.date_deleted ? new Date(dbResult.date_deleted) : undefined,
       },
@@ -64,6 +67,7 @@ export class RoleMap {
       id: role.id.value,
       name: role.name.value,
       description: role.description,
+      level: role.level.value,
       date_created: role.date_created?.toString(),
       date_deleted: role.date_deleted?.toString(),
     }
@@ -73,6 +77,7 @@ export class RoleMap {
   public static isRole(raw: unknown): raw is IRole {
     if (!(raw as IRole).name) return false
     if (!(raw as IRole).description) return false
+    if (!(raw as IRole).level) return false
     return true
   }
 }

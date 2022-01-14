@@ -30,7 +30,7 @@
 
 /*******************************************************************************
  * Migration:   Recipe.Report
- * Version:     V6
+ * Version:     V7
  * Author:      Joshua Gray
  * Description: Create the role_to_feature type, and the roles_to_features table.
  ******************************************************************************/
@@ -41,10 +41,12 @@
  * Description: Type for an individual role_to_feature link.
  * Attributes:  role_id UUID - 
  *              feature_id UUID - 
+ *              date_created TIMESTAMPTZ - 
  */
 CREATE TYPE rr.role_to_feature_type AS (
-    role_id    UUID,
-    feature_id UUID
+    role_id      UUID,
+    feature_id   UUID,
+    date_created TIMESTAMPTZ
 );
 COMMENT ON TYPE rr.role_to_feature_type IS 'Type for an individual role_to_feature link.';
 
@@ -54,17 +56,20 @@ COMMENT ON TYPE rr.role_to_feature_type IS 'Type for an individual role_to_featu
  * Description: Table to store individual role_to_feature links.
  * Columns:     role_id - 
  *              feature_id - 
+ *              date_created TIMESTAMPTZ - 
  */
 CREATE TABLE IF NOT EXISTS rr.roles_to_features OF rr.role_to_feature_type (
-    role_id    WITH OPTIONS NOT NULL,
-    feature_id WITH OPTIONS NOT NULL,
+    role_id      WITH OPTIONS NOT NULL,
+    feature_id   WITH OPTIONS NOT NULL,
+    date_created WITH OPTIONS NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (role_id, feature_id),
     CONSTRAINT fk_role_roles_to_features    FOREIGN KEY (role_id)    REFERENCES rr.roles (id)    ON DELETE NO ACTION,
     CONSTRAINT fk_feature_roles_to_features FOREIGN KEY (feature_id) REFERENCES rr.features (id) ON DELETE NO ACTION
 );
 COMMENT ON TABLE rr.roles_to_features IS 'Table to store individual role_to_feature links.';
 COMMENT ON COLUMN rr.roles_to_features.role_id IS 'UUID of a record from the rr.roles table.';
-COMMENT ON COLUMN rr.roles_to_features.feature_id IS 'UUID of a record from the rr.featires table.';
+COMMENT ON COLUMN rr.roles_to_features.feature_id IS 'UUID of a record from the rr.features table.';
+COMMENT ON COLUMN rr.roles_to_features.date_created IS 'Datetime the record was created in the database.';
 
 /**
  * Function:    rr.roles_to_features_create

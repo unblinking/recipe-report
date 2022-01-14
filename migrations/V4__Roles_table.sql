@@ -30,7 +30,7 @@
 
 /*******************************************************************************
  * Migration:   Recipe.Report
- * Version:     V3
+ * Version:     V4
  * Author:      Joshua Gray
  * Description: Create the role type, and the roles table.
  ******************************************************************************/
@@ -42,6 +42,7 @@
  * Attributes:  id UUID - Very low probability that a UUID will be duplicated.
  *              name VARCHAR (50) - 50 char limit for display purposes.
  *              description TEXT - 
+ *              level SMALLINT - 
  *              date_created TIMESTAMPTZ - 
  *              date_deleted TIMESTAMPTZ - 
  */
@@ -49,6 +50,7 @@ CREATE TYPE rr.role_type AS (
     id              UUID,
     name            VARCHAR ( 50 ),
     description     TEXT,
+    level           SMALLINT,
     date_created    TIMESTAMPTZ,
     date_deleted    TIMESTAMPTZ
 );
@@ -61,6 +63,7 @@ COMMENT ON TYPE rr.role_type IS 'Type for an individual role.';
  * Columns:     id - Primary key with default using the gen_random_uuid() function.
  *              name - Unique, and not null.
  *              description - Not null.
+ *              level - Not null.
  *              date_created - Not null.
  *              date_deleted - 
  */
@@ -68,6 +71,7 @@ CREATE TABLE IF NOT EXISTS rr.roles OF rr.role_type (
     id            WITH OPTIONS PRIMARY KEY      DEFAULT gen_random_uuid(),
     name          WITH OPTIONS UNIQUE NOT NULL,
     description   WITH OPTIONS        NOT NULL,
+    level         WITH OPTIONS        NOT NULL,
     date_created  WITH OPTIONS        NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 COMMENT ON TABLE rr.roles IS 'Table to store role records.';
@@ -83,12 +87,14 @@ COMMENT ON COLUMN rr.roles.date_deleted IS 'Datetime the role was marked as dele
  * Description: Function to create a record in the roles table.
  * Parameters:  name VARCHAR(50) - Unique display name.
  *              description TEXT - 
- * Usage:       SELECT * FROM rr.roles_create('foo', 'bar');
+ *              level SMALLINT - 
+ * Usage:       SELECT * FROM rr.roles_create('foo', 'bar', '1');
  * Returns:     The record that was created.
  */
 CREATE OR REPLACE FUNCTION rr.roles_create (
     name        VARCHAR( 50 ),
-    description TEXT
+    description TEXT,
+    level       SMALLINT
 )
     RETURNS  SETOF rr.roles
     LANGUAGE PLPGSQL
@@ -97,8 +103,8 @@ $$
 BEGIN
     RETURN QUERY
     INSERT
-    INTO   rr.roles (name, description)
-    VALUES ($1, $2)
+    INTO   rr.roles (name, description, level)
+    VALUES ($1, $2, $3)
     RETURNING *;
 END;
 $$;
@@ -136,13 +142,15 @@ COMMENT ON FUNCTION rr.roles_read IS 'Function to read a role by id.';
  * Parameters:  id UUID - Primary key id for the record to be updated.
  *              name VARCHAR( 50 ) - 
  *              description TEXT - 
- * Usage:       SELECT * FROM rr.roles_update('00000000-0000-0000-0000-000000000000', 'foo', 'bar');
+ *              level SMALLINT - 
+ * Usage:       SELECT * FROM rr.roles_update('00000000-0000-0000-0000-000000000000', 'foo', 'bar', '1');
  * Returns:     The record that was updated.
  */
 CREATE OR REPLACE FUNCTION rr.roles_update (
     id          UUID,
     name        VARCHAR( 50 ) DEFAULT NULL,
-    description TEXT          DEFAULT NULL
+    description TEXT          DEFAULT NULL,
+    level       SMALLINT      DEFAULT NULL
 )
     RETURNS  SETOF rr.roles
     LANGUAGE PLPGSQL
@@ -153,7 +161,8 @@ BEGIN
     UPDATE rr.roles
     SET
         name          = COALESCE($2, rr.roles.name),
-        description   = COALESCE($3, rr.roles.description)
+        description   = COALESCE($3, rr.roles.description),
+        level         = COALESCE($4, rr.roles.level)
     WHERE rr.roles.id = $1
     RETURNING *;
 END;
