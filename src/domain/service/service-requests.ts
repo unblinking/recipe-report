@@ -23,6 +23,7 @@
  *
  * @module
  */
+import { IAccountDto } from 'domain/models/account-model'
 import { IFeatureDto } from 'domain/models/feature-model'
 import { IRoleDto } from 'domain/models/role-model'
 import { IUserDto } from 'domain/models/user-model'
@@ -36,6 +37,20 @@ abstract class ServiceRequest<T> {
   constructor(item: T, authorizedId?: UniqueId) {
     this._item = item
     this.authorizedId = authorizedId
+  }
+}
+
+export class AccountRequest extends ServiceRequest<IAccountDto> {
+  public get account(): IAccountDto {
+    return this._item
+  }
+
+  private constructor(account: IAccountDto, authorizedId?: UniqueId) {
+    super(account, authorizedId)
+  }
+
+  public static create(account: IAccountDto, authorizedId?: UniqueId): AccountRequest {
+    return new AccountRequest(account, authorizedId)
   }
 }
 

@@ -32,6 +32,7 @@
  * Database table names.
  */
 export const dbTables = {
+  ACCOUNTS: `rr.accounts`,
   FEATURES: `rr.features`,
   ROLES: `rr.roles`,
   ROLES_TO_FEATURES: `rr.roles_to_features`,

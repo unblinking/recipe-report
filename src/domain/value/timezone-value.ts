@@ -1,5 +1,5 @@
 /**
- * Inversion-of-control symbols.
+ * TimeZone value object.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2021
@@ -23,20 +23,32 @@
  *
  * @module
  */
+import { timeZonesNames } from '@vvo/tzdb'
 
-export const SYMBOLS = {
-  IRecipeReport: Symbol.for('IRecipeReport'),
+import { Err, errClient } from 'domain/models/err-model'
+import { ValueObject } from 'domain/value/base-value'
 
-  IBaseController: Symbol.for('IBaseConroller'),
+export interface ITimeZone {
+  value: string
+}
 
-  IDataAccessLayer: Symbol.for('IDataAccessLayer'),
-  IUnitOfWork: Symbol.for('IUnitOfWork'),
+export class TimeZone extends ValueObject<ITimeZone> {
+  public get value(): string {
+    return this.props.value
+  }
 
-  IAccountService: Symbol.for('IAccountService'),
-  ICryptoService: Symbol.for('ICryptoService'),
-  IEmailService: Symbol.for('IEmailService'),
-  IFeatureService: Symbol.for('IFeatureService'),
-  IJwtService: Symbol.for('IJwtService'),
-  IRoleService: Symbol.for('IRoleService'),
-  IUserService: Symbol.for('IUserService'),
+  private constructor(props: ITimeZone) {
+    super(props)
+  }
+
+  public static create(tz?: string): TimeZone {
+    if (!tz) {
+      throw new Err(`TZ_INVALID`, errClient.TZ_INVALID)
+    }
+
+    if (!timeZonesNames.includes(tz)) {
+      throw new Err(`TZ_INVALID`, errClient.TZ_INVALID)
+    }
+    return new TimeZone({ value: tz })
+  }
 }

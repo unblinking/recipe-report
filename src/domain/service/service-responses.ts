@@ -23,6 +23,7 @@
  *
  * @module
  */
+import { IAccountDto } from 'domain/models/account-model'
 import { Err } from 'domain/models/err-model'
 import { IFeatureDto } from 'domain/models/feature-model'
 import { IRoleDto } from 'domain/models/role-model'
@@ -77,6 +78,29 @@ abstract class ServiceResponse<T> {
     this._err = err
     this._item = item
     this._statusCode = statusCode
+  }
+}
+
+export class AccountResponse extends ServiceResponse<IAccountDto> {
+  private constructor(
+    outcome: outcomeValueType = outcomes.ERROR,
+    statusCode: httpStatusValueType,
+    item?: IAccountDto,
+    err?: Err,
+  ) {
+    super(outcome, statusCode, item, err)
+  }
+
+  public static success(item: IAccountDto): AccountResponse {
+    return new AccountResponse(outcomes.SUCCESS, httpStatus.OK, item)
+  }
+
+  public static fail(err: Err): AccountResponse {
+    return new AccountResponse(outcomes.FAIL, httpStatus.BAD_REQUEST, undefined, err)
+  }
+
+  public static error(err: Err): AccountResponse {
+    return new AccountResponse(outcomes.ERROR, httpStatus.INTERNAL_ERROR, undefined, err)
   }
 }
 

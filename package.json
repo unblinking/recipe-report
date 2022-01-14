@@ -46,6 +46,7 @@
     "@types/uuid": "8.3.3",
     "@typescript-eslint/eslint-plugin": "5.8.0",
     "@typescript-eslint/parser": "5.8.0",
+    "@vvo/tzdb": "^6.44.0",
     "@zxcvbn-ts/core": "1.2.0",
     "@zxcvbn-ts/language-common": "1.0.2",
     "@zxcvbn-ts/language-en": "1.2.0",

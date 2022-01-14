@@ -30,6 +30,7 @@ import { PoolClient } from 'pg'
 import { Err, errInternal } from 'domain/models/err-model'
 
 import { IDataAccessLayer } from 'data/data-access'
+import { AccountRepo, IAccountRepo } from 'data/repositories/account-repo'
 import { FeatureRepo, IFeatureRepo } from 'data/repositories/feature-repo'
 import { IRoleRepo, RoleRepo } from 'data/repositories/role-repo'
 import { IUserRepo, UserRepo } from 'data/repositories/user-repo'
@@ -41,6 +42,7 @@ export interface IUnitOfWork {
   begin(): Promise<void>
   commit(): Promise<void>
   rollback(): Promise<void>
+  accounts: IAccountRepo
   features: IFeatureRepo
   roles: IRoleRepo
   users: IUserRepo
@@ -50,6 +52,7 @@ export interface IUnitOfWork {
 export class UnitOfWork implements IUnitOfWork {
   private _dal: IDataAccessLayer
   private _client: PoolClient | undefined
+  private _accountRepo: IAccountRepo | undefined
   private _featureRepo: IFeatureRepo | undefined
   private _roleRepo: IRoleRepo | undefined
   private _userRepo: IUserRepo | undefined
@@ -80,6 +83,14 @@ export class UnitOfWork implements IUnitOfWork {
     }
     await this._client.query('ROLLBACK')
     this._client.release()
+  }
+
+  public get accounts(): IAccountRepo {
+    if (!this._client) throw new Err('UOW_CLIENT', errInternal.UOW_CLIENT)
+    if (!this._accountRepo) {
+      this._accountRepo = new AccountRepo(this._client)
+    }
+    return this._accountRepo
   }
 
   public get features(): IFeatureRepo {
