@@ -43,31 +43,17 @@
  * Returns:     void.
  */
 CREATE OR REPLACE FUNCTION rr.seed_roles ()
-    RETURNS void
+    RETURNS  void
     LANGUAGE PLPGSQL
     AS
 $$
-DECLARE
-    role_id_1 UUID;
-    role_id_2 UUID;
-    role_id_3 UUID;
-    role_id_4 UUID;
-    role_id_5 UUID;
-    role_id_6 UUID;
 BEGIN
-    SELECT gen_random_uuid() INTO role_id_1;
-    SELECT gen_random_uuid() INTO role_id_2;
-    SELECT gen_random_uuid() INTO role_id_3;
-    SELECT gen_random_uuid() INTO role_id_4;
-    SELECT gen_random_uuid() INTO role_id_5;
-    SELECT gen_random_uuid() INTO role_id_6;
-
-    INSERT INTO rr.roles (id, name, description, level) VALUES (role_id_1, 'Kitchen Porter',  'Basic food preparation (newbie).', 1);
-    INSERT INTO rr.roles (id, name, description, level) VALUES (role_id_2, 'Commis Chef',     'Absorbing food knowledge (beginner).', 2);
-    INSERT INTO rr.roles (id, name, description, level) VALUES (role_id_3, 'Chef de Partie',  'Cooking the food (intermediate).', 3);
-    INSERT INTO rr.roles (id, name, description, level) VALUES (role_id_4, 'Sous Chef',       'In charge of the food (experienced).', 4);
-    INSERT INTO rr.roles (id, name, description, level) VALUES (role_id_5, 'Chef de Cuisine', 'Control all aspects of the food (expert).', 5);
-    INSERT INTO rr.roles (id, name, description, level) VALUES (role_id_6, 'Executive Chef',  'Manage the kitchen and staff (admin).', 6);
+    INSERT INTO rr.roles (name, description, level) VALUES ('Kitchen Porter',  'Basic food preparation (newbie).',          1);
+    INSERT INTO rr.roles (name, description, level) VALUES ('Commis Chef',     'Absorbing food knowledge (beginner).',      2);
+    INSERT INTO rr.roles (name, description, level) VALUES ('Chef de Partie',  'Cooking the food (intermediate).',          3);
+    INSERT INTO rr.roles (name, description, level) VALUES ('Sous Chef',       'In charge of the food (experienced).',      4);
+    INSERT INTO rr.roles (name, description, level) VALUES ('Chef de Cuisine', 'Control all aspects of the food (expert).', 5);
+    INSERT INTO rr.roles (name, description, level) VALUES ('Executive Chef',  'Manage the kitchen and staff (admin).',     6);
 END;
 $$;
 COMMENT ON FUNCTION rr.seed_roles IS 'Function to seed some database records for roles.';
@@ -80,19 +66,39 @@ COMMENT ON FUNCTION rr.seed_roles IS 'Function to seed some database records for
  * Returns:     void.
  */
 CREATE OR REPLACE FUNCTION rr.seed_features ()
-    RETURNS void
+    RETURNS  void
     LANGUAGE PLPGSQL
     AS
 $$
-DECLARE
-    feature_id_1 UUID;
 BEGIN
-    SELECT gen_random_uuid() INTO feature_id_1;
-
-    INSERT INTO rr.features (id, name, description) VALUES (feature_id_1, 'Recipe List', 'A list of recipes.');
+    INSERT INTO rr.features (name, description) VALUES ('Recipe List', 'A list of recipes.');
 END;
 $$;
 COMMENT ON FUNCTION rr.seed_features IS 'Function to seed some database records for features.';
 
+/**
+ * Function:    rr.seed_roles_to_features
+ * Author:      Joshua Gray
+ * Description: Function to seed some database records for roles_to_features links.
+ * Usage:       SELECT * FROM rr.seed_roles_to_features();
+ * Returns:     void.
+ */
+CREATE OR REPLACE FUNCTION rr.seed_roles_to_features ()
+    RETURNS  void
+    LANGUAGE PLPGSQL
+    AS
+$$
+BEGIN
+    -- This will give the Recipe List feature to all roles
+    INSERT INTO rr.roles_to_features (role_id, feature_id)
+    SELECT roles.id, features.id
+    FROM rr.roles roles, rr.features features -- This is a cross join
+    WHERE roles.level > 0
+        AND features.name = 'Recipe List';
+END;
+$$;
+COMMENT ON FUNCTION rr.seed_roles_to_features IS 'Function to seed some database records for roles_to_features links.';
+
 SELECT * FROM rr.seed_roles();
 SELECT * FROM rr.seed_features();
+SELECT * FROM rr.seed_roles_to_features();
