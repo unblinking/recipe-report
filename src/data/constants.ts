@@ -2,7 +2,7 @@
  * Global constants.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
- * @copyright Copyright (C) 2017-2021
+ * @copyright Copyright (C) 2017-2022
  * @license GNU AGPLv3 or later
  *
  * Based on an approach in an article titled "How to Share Constants in
