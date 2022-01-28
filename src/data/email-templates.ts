@@ -2,7 +2,7 @@
  * Email templates.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
- * @copyright Copyright (C) 2017-2021
+ * @copyright Copyright (C) 2017-2022
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
@@ -34,7 +34,7 @@ const getProtocol = (): string => {
 }
 
 const getHostname = (): string => {
-  let hostname = `127.0.0.1:1138`
+  let hostname = `127.0.0.1:3000`
   if (process.env.NODE_ENV === 'production') {
     hostname = `api.recipe.report`
   }
@@ -50,7 +50,7 @@ Hello ${to},
 
 Thank you for registering with Recipe.Report recently. You may login after completing activation. Please follow the link below to activate your new account. The link will expire in 24 hours.
 
-${getProtocol()}://${getHostname()}/v1/users/activation/${token}
+${getProtocol()}://${getHostname()}/activate/${token}
 
 You received this email because you (or someone else) used this email address to create a new account.
 

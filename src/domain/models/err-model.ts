@@ -2,7 +2,7 @@
  * Error model.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
- * @copyright Copyright (C) 2017-2021
+ * @copyright Copyright (C) 2017-2022
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
@@ -37,8 +37,8 @@
  */
 export class Err extends Error {
   public constructor(
-    name: errEnvKeyType | errUserKeyType | errClientKeyType | errInternalKeyType,
-    message: errEnvValueType | errUserValueType | errClientValueType | errInternalValueType,
+    name: errEnvKeyType | errClientKeyType | errInternalKeyType,
+    message: errEnvValueType | errClientValueType | errInternalValueType,
   ) {
     super(message)
     this.name = name
@@ -103,20 +103,8 @@ type errEnvType = typeof errEnv
 export type errEnvKeyType = keyof errEnvType
 export type errEnvValueType = errEnvType[keyof errEnvType]
 
-// Basic user related error messages.
-export const errUser = {
-  CREATE: `The user couldn't be created.`,
-  READ: `The user couldn't be found.`,
-  UPDATE: `The user couldn't be updated.`,
-  DELETE: `The user couldn't be deleted.`,
-  ACTIVATE: `The user couldn't be activated.`,
-  AUTHENTICATE: `The user couldn't be authenticated.`,
-}
-type errUserType = typeof errUser
-export type errUserKeyType = keyof errUserType
-export type errUserValueType = errUserType[keyof errUserType]
-
 export const errClient = {
+  ID_MISMATCH: `The path UUID does not match the request body UUID.`,
   MISSING_REQ: `One or more required fields are missing.`,
   NAME_INVALID: `The name field is not in a valid format. Usename must be 2 to 50 characters in length, and contain only A-Z and 0-9.`,
   NAME_USED: `The name is already in use. Please change the requested name and try again.`,
@@ -124,6 +112,8 @@ export const errClient = {
   EMAIL_USED: `The email address is already in use. Please change the requested email address and try again.`,
   PASSWORD_WEAK: `The password did not pass complexity requirements.`,
   UID_INVALID: `The supplied UUID is not a valid v4 UUID.`,
+  TZ_INVALID: `The supplied time zone is not a valid IANA time zone.`,
+  SMALLINT_INVALID: `The small integer is out of bounds (range -32768 to +32767).`,
   TOKEN_INVALID: `The token is not in a valid format.`,
   TOKEN_TYPE: `The token type is not valid. Please provide the correct token and try again.`,
   TOKEN_EXP: `The token has expired. Please request a new token and try again.`,
@@ -132,6 +122,25 @@ export const errClient = {
   TOKENWALL_EXP: `Token has expired.`,
   LASTSTOP_404: `The endpoint you are looking for can't be found.`,
   LASTSTOP_500: `Something went wrong.`,
+  USER_CREATE: `The user couldn't be created.`,
+  USER_READ: `The user couldn't be found.`,
+  USER_UPDATE: `The user couldn't be updated.`,
+  USER_DELETE: `The user couldn't be deleted.`,
+  USER_ACTIVATE: `The user couldn't be activated.`,
+  USER_AUTHENTICATE: `The user couldn't be authenticated.`,
+  USER_NOT_ACTIVE: `The user hasn't been activated.`,
+  ACCOUNT_CREATE: `The account couldn't be created.`,
+  ACCOUNT_READ: `The account couldn't be found.`,
+  ACCOUNT_UPDATE: `The account couldn't be updated.`,
+  ACCOUNT_DELETE: `The account couldn't be deleted.`,
+  ROLE_CREATE: `The role couldn't be created.`,
+  ROLE_READ: `The role couldn't be found.`,
+  ROLE_UPDATE: `The role couldn't be updated.`,
+  ROLE_DELETE: `The role couldn't be deleted.`,
+  FEATURE_CREATE: `The feature couldn't be created.`,
+  FEATURE_READ: `The feature couldn't be found.`,
+  FEATURE_UPDATE: `The feature couldn't be updated.`,
+  FEATURE_DELETE: `The feature couldn't be deleted.`,
 }
 type errClientType = typeof errClient
 export type errClientKeyType = keyof errClientType

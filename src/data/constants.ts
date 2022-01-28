@@ -2,7 +2,7 @@
  * Global constants.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
- * @copyright Copyright (C) 2017-2021
+ * @copyright Copyright (C) 2017-2022
  * @license GNU AGPLv3 or later
  *
  * Based on an approach in an article titled "How to Share Constants in
@@ -32,7 +32,12 @@
  * Database table names.
  */
 export const dbTables = {
+  ACCOUNTS: `rr.accounts`,
+  FEATURES: `rr.features`,
+  ROLES: `rr.roles`,
+  ROLES_TO_FEATURES: `rr.roles_to_features`,
   USERS: `rr.users`,
+  USERS_TO_ROLES: `rr.users_to_roles`,
 } as const
 type dbTablesType = typeof dbTables
 export type dbTablesKeyType = keyof dbTablesType
@@ -47,7 +52,6 @@ export const httpStatus = {
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
   NOT_FOUND: 404,
-  CONFLICT: 409,
   INTERNAL_ERROR: 500,
 } as const
 type httpStatusType = typeof httpStatus
@@ -65,15 +69,3 @@ export const outcomes = {
 type outcomeType = typeof outcomes
 export type outcomeKeyType = keyof outcomeType
 export type outcomeValueType = outcomeType[keyof outcomeType]
-
-/**
- * Logging messages.
- */
-export const logMsg = {
-  // Root controller.
-  LOG_ROOT_SUCCESS: `Root route succeeded.`,
-  // User controller.
-  LOG_REG_SUCCESS: `New user registration succeeded.`,
-  LOG_ACTIVATE_SUCCESS: `New user activation succeeded.`,
-  LOG_AUTHENTICATE_SUCCESS: `User authentication succeeded.`,
-}

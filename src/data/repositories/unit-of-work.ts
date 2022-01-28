@@ -3,7 +3,7 @@
  * Coordinate the work of multiple repositories.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
- * @copyright Copyright (C) 2017-2021
+ * @copyright Copyright (C) 2017-2022
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
@@ -30,6 +30,9 @@ import { PoolClient } from 'pg'
 import { Err, errInternal } from 'domain/models/err-model'
 
 import { IDataAccessLayer } from 'data/data-access'
+import { AccountRepo, IAccountRepo } from 'data/repositories/account-repo'
+import { FeatureRepo, IFeatureRepo } from 'data/repositories/feature-repo'
+import { IRoleRepo, RoleRepo } from 'data/repositories/role-repo'
 import { IUserRepo, UserRepo } from 'data/repositories/user-repo'
 
 import { SYMBOLS } from 'root/symbols'
@@ -39,14 +42,20 @@ export interface IUnitOfWork {
   begin(): Promise<void>
   commit(): Promise<void>
   rollback(): Promise<void>
+  accounts: IAccountRepo
+  features: IFeatureRepo
+  roles: IRoleRepo
   users: IUserRepo
 }
 
 @injectable()
 export class UnitOfWork implements IUnitOfWork {
   private _dal: IDataAccessLayer
-  private _userRepo: IUserRepo | undefined
   private _client: PoolClient | undefined
+  private _accountRepo: IAccountRepo | undefined
+  private _featureRepo: IFeatureRepo | undefined
+  private _roleRepo: IRoleRepo | undefined
+  private _userRepo: IUserRepo | undefined
 
   public constructor(@inject(SYMBOLS.IDataAccessLayer) dataAccessLayer: IDataAccessLayer) {
     this._dal = dataAccessLayer
@@ -74,6 +83,30 @@ export class UnitOfWork implements IUnitOfWork {
     }
     await this._client.query('ROLLBACK')
     this._client.release()
+  }
+
+  public get accounts(): IAccountRepo {
+    if (!this._client) throw new Err('UOW_CLIENT', errInternal.UOW_CLIENT)
+    if (!this._accountRepo) {
+      this._accountRepo = new AccountRepo(this._client)
+    }
+    return this._accountRepo
+  }
+
+  public get features(): IFeatureRepo {
+    if (!this._client) throw new Err('UOW_CLIENT', errInternal.UOW_CLIENT)
+    if (!this._featureRepo) {
+      this._featureRepo = new FeatureRepo(this._client)
+    }
+    return this._featureRepo
+  }
+
+  public get roles(): IRoleRepo {
+    if (!this._client) throw new Err('UOW_CLIENT', errInternal.UOW_CLIENT)
+    if (!this._roleRepo) {
+      this._roleRepo = new RoleRepo(this._client)
+    }
+    return this._roleRepo
   }
 
   public get users(): IUserRepo {

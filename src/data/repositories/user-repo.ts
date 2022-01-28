@@ -2,7 +2,7 @@
  * User repository.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
- * @copyright Copyright (C) 2017-2021
+ * @copyright Copyright (C) 2017-2022
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
@@ -26,12 +26,12 @@
 import { PoolClient, QueryResult } from 'pg'
 
 import { UserMap } from 'domain/maps/user-map'
-import { Err, errClient, errUser } from 'domain/models/err-model'
+import { Err, errClient } from 'domain/models/err-model'
 import { User } from 'domain/models/user-model'
+import { DisplayName } from 'domain/value/display-name-value'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { Password } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
-import { Username } from 'domain/value/username-value'
 
 import { dbTables } from 'data/constants'
 import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
@@ -39,7 +39,7 @@ import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
 export interface IUserRepo extends IBaseRepo {
   create(user: User): Promise<User>
   read(id: UniqueId): Promise<User>
-  update(id: UniqueId, name?: Username, email_address?: EmailAddress): Promise<User>
+  update(id: UniqueId, name?: DisplayName, email_address?: EmailAddress): Promise<User>
   delete(id: UniqueId): Promise<User>
   activate(id: UniqueId): Promise<User>
   authenticate(email_address: EmailAddress, password: Password): Promise<User>
@@ -74,7 +74,7 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
     const query: string = `SELECT * FROM rr.users_read($1)`
     const result: QueryResult = await this.client.query(query, [id.value])
     if (result.rowCount !== 1) {
-      throw new Err(`READ`, errUser.READ)
+      throw new Err(`USER_READ`, errClient.USER_READ)
     }
     // Return domain object from database query results.
     return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
@@ -84,7 +84,7 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
   // This cannot be used to update the user password.
   public update = async (
     id: UniqueId,
-    name?: Username,
+    name?: DisplayName,
     email_address?: EmailAddress,
   ): Promise<User> => {
     // Verify the incoming user name and email_address aren't being used by any
@@ -105,6 +105,9 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
       name != undefined ? name.value : null,
       email_address != undefined ? email_address.value : null,
     ])
+    if (result.rowCount !== 1) {
+      throw new Err(`USER_READ`, errClient.USER_READ)
+    }
     // Return domain object from database query results.
     return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
   }
@@ -114,7 +117,7 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
     const query: string = `SELECT * FROM rr.users_delete($1)`
     const result: QueryResult = await this.client.query(query, [id.value])
     if (result.rowCount !== 1) {
-      throw new Err(`READ`, errUser.READ)
+      throw new Err(`USER_READ`, errClient.USER_READ)
     }
     // Return domain object from database query results.
     return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
@@ -126,7 +129,7 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
     const query: string = `SELECT * FROM rr.users_activate($1)`
     const result: QueryResult = await this.client.query(query, [id.value])
     if (result.rowCount !== 1) {
-      throw new Err(`ACTIVATE`, errUser.ACTIVATE)
+      throw new Err(`USER_ACTIVATE`, errClient.USER_ACTIVATE)
     }
     // Return domain object from database query results.
     return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
@@ -140,7 +143,10 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
       password.value,
     ])
     if (result.rowCount !== 1) {
-      throw new Err(`AUTHENTICATE`, errUser.AUTHENTICATE)
+      throw new Err(`USER_AUTHENTICATE`, errClient.USER_AUTHENTICATE)
+    }
+    if (!result.rows[0].date_activated) {
+      throw new Err(`USER_NOT_ACTIVE`, errClient.USER_NOT_ACTIVE)
     }
     // Update the authenticated user's last login date in the database.
     await this._updateLastLogin(result.rows[0].id)
@@ -156,7 +162,7 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
     return count
   }
 
-  // Function to return the count of user records, other than the specified user id, that match a given column/value
+  // Function to return the count of records, other than the specified record id, that match a given column/value
   private _countByColumnNotId = async (
     id: string,
     column: string,
@@ -172,7 +178,7 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
     const query: string = `SELECT * FROM rr.users_update_date_last_login($1)`
     const result: QueryResult = await this.client.query(query, [id])
     if (result.rows[0].users_update_date_last_login !== true) {
-      throw new Err(`AUTHENTICATE`, errUser.AUTHENTICATE)
+      throw new Err(`USER_AUTHENTICATE`, errClient.USER_AUTHENTICATE)
     }
   }
 }

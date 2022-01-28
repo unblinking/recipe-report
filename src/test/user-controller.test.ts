@@ -2,7 +2,7 @@
  * UserController unit tests.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
- * @copyright Copyright (C) 2017-2021
+ * @copyright Copyright (C) 2017-2022
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
@@ -32,14 +32,14 @@ import { UserController } from 'api/controllers/user-controller'
 
 import { MockUserServiceError, MockUserServiceFail, MockUserServiceSuccess } from 'test/mocks'
 
-describe(`UserController success.`, () => {
+describe(`UserController tests.`, () => {
   let container: Container
 
   beforeEach(() => {
     container = new Container()
   })
 
-  test(`Success response from UserService.`, async () => {
+  test(`POST request with success response from service.`, async () => {
     // Arrange.
     container.bind<UserController>('userController').to(UserController)
     container.bind<MockUserServiceSuccess>(Symbol.for('IUserService')).to(MockUserServiceSuccess)
@@ -56,10 +56,10 @@ describe(`UserController success.`, () => {
     expect(res.statusCode).toBe(200)
     expect(res.ok).toBe(true)
     expect(res.body.status).toBe('success')
-    expect(res.body.data.user).toBeTruthy
+    expect(res.body.data.user).toBeDefined
   })
 
-  test(`Fail response from UserService.`, async () => {
+  test(`POST request with fail response from service.`, async () => {
     // Arrange.
     container.bind<UserController>('userController').to(UserController)
     container.bind<MockUserServiceFail>(Symbol.for('IUserService')).to(MockUserServiceFail)
@@ -77,10 +77,11 @@ describe(`UserController success.`, () => {
     expect(res.badRequest).toBe(true)
     expect(res.clientError).toBe(true)
     expect(res.body.status).toBe('fail')
-    expect(res.body.data.message).toBeTruthy
+    expect(res.body.message).toBeDefined
+    expect(res.body.code).toBeDefined
   })
 
-  test(`Error response from UserService.`, async () => {
+  test(`POST request with error response from service.`, async () => {
     // Arrange.
     container.bind<UserController>('userController').to(UserController)
     container.bind<MockUserServiceError>(Symbol.for('IUserService')).to(MockUserServiceError)
@@ -96,8 +97,8 @@ describe(`UserController success.`, () => {
     expect(res.header['content-type']).toBe('application/json; charset=utf-8')
     expect(res.statusCode).toBe(500)
     expect(res.serverError).toBe(true)
+    expect(res.error).toBeDefined
     expect(res.body.status).toBe('error')
-    expect(res.body.err).toBeTruthy
-    expect(res.error).toBeTruthy
+    expect(res.body.message).toBe('Something went wrong.')
   })
 })

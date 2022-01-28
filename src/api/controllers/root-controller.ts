@@ -2,7 +2,7 @@
  * The root controller and routes.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
- * @copyright Copyright (C) 2017-2021
+ * @copyright Copyright (C) 2017-2022
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
@@ -26,13 +26,11 @@
 import { NextFunction, Request, Response, Router } from 'express'
 import { injectable } from 'inversify'
 
-import { httpStatus, logMsg } from 'data/constants'
-
-import { log } from 'service/log-service'
+import { httpStatus } from 'data/constants'
 
 import { IBaseController } from 'api/controllers/base-controller'
-import { success } from 'api/controllers/controller-response'
 import { fiveHundred } from 'api/middlewares/laststop'
+import { Responder } from 'api/responder'
 
 @injectable()
 export class RootController implements IBaseController {
@@ -49,11 +47,10 @@ export class RootController implements IBaseController {
   }
 
   private curtsy = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
-    log.trace(`root-controller.ts curtsy()`)
     try {
       const code = httpStatus.OK
       const welcomeMsg = `Welcome to the Recipe.Report API server. This is the root route. For documentation please go to https://docs.recipe.report/`
-      success(res, code, logMsg.LOG_ROOT_SUCCESS, { message: welcomeMsg })
+      Responder.success(res, code, { message: welcomeMsg })
     } catch (err) {
       next(err)
     }

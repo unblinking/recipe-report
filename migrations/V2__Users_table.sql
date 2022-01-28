@@ -8,7 +8,7 @@
  * @see {@link https://flywaydb.org/documentation/database/postgresql Flyway}
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
- * @copyright Copyright (C) 2017-2021
+ * @copyright Copyright (C) 2017-2022
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
@@ -80,6 +80,8 @@ CREATE TABLE IF NOT EXISTS rr.users OF rr.user_type (
     email_address WITH OPTIONS UNIQUE NOT NULL,
     date_created  WITH OPTIONS        NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
+CREATE INDEX users_name_index ON rr.users (name);
+CREATE INDEX users_email_address_index ON rr.users (email_address);
 COMMENT ON TABLE rr.users IS 'Table to store user records.';
 COMMENT ON COLUMN rr.users.id IS 'UUID primary key.';
 COMMENT ON COLUMN rr.users.name IS 'Unique display name.';
@@ -97,7 +99,7 @@ COMMENT ON COLUMN rr.users.date_deleted IS 'Datetime the user was marked as dele
  * Parameters:  name VARCHAR(50) - Unique user display name.
  *              password TEXT - Plain text user password that will be salted/hashed.
  *              email_address TEXT - 
- * Usage:       SELECT * FROM rr.users_create('foo', 'p@$$w0rd', 'foo@recipe.report', 'basic');
+ * Usage:       SELECT * FROM rr.users_create('foo', 'p@$$w0rd', 'foo@recipe.report');
  * Returns:     The record that was created.
  */
 CREATE OR REPLACE FUNCTION rr.users_create (

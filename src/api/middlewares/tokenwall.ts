@@ -4,7 +4,7 @@
  * You shall not pass! Excepting, of course, with a valid token.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
- * @copyright Copyright (C) 2017-2021
+ * @copyright Copyright (C) 2017-2022
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
@@ -27,29 +27,40 @@
  */
 import { NextFunction, Request, Response } from 'express'
 
-import { Err, errClient } from 'domain/models/err-model'
+import { Err, errClient, isErrClient } from 'domain/models/err-model'
+import { UniqueId } from 'domain/value/uid-value'
 
 import { httpStatus } from 'data/constants'
 
 import { IJwtService, Payload, tokenType } from 'service/jwt-service'
 import { log } from 'service/log-service'
-import { Responder } from 'service/responder-service'
+
+import { Responder } from 'api/responder'
 
 import { container } from 'root/ioc.config'
 import { SYMBOLS } from 'root/symbols'
 
 export interface RequestWithUser extends Request {
-  requestingUserId?: string
+  authorizedId?: UniqueId
 }
 
 export const tokenwall = (req: RequestWithUser, _res: Response, next: NextFunction): void => {
   log.trace(`tokenwall.ts tokenwall()`)
   try {
-    const token: string = req.headers.token as string
+    const authorization: string = req.headers.authorization as string
+    const split = authorization.split(' ')
+    if (split.length !== 2) {
+      throw new Err('TOKEN_INVALID', errClient.TOKEN_INVALID)
+    }
+    const regex = /^Bearer$/i
+    const authScheme = split[0]
+    if (!regex.test(authScheme)) {
+      throw new Err('TOKEN_INVALID', errClient.TOKEN_INVALID)
+    }
+    const token = split[1]
     if (!token) throw new Err(`TOKENWALL_UNDEF`, errClient.TOKENWALL_UNDEF)
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     const payload: Payload = jwt.decode(token)
-
     // Verify that the token is for access.
     if (payload.type !== tokenType.ACCESS) {
       throw new Err(`TOKENWALL_TYPE`, errClient.TOKENWALL_TYPE)
@@ -59,19 +70,22 @@ export const tokenwall = (req: RequestWithUser, _res: Response, next: NextFuncti
     if (payload.ttl < now) {
       throw new Err(`TOKENWALL_EXP`, errClient.TOKENWALL_EXP)
     }
-
     // Add the user Id from the payload to the request.
-    req.requestingUserId = payload.id
-
+    req.authorizedId = UniqueId.create(payload.id)
     // Allow the request to continue on.
     next()
   } catch (e) {
-    log.warn(`Tokenwall error. ${(e as Err).message}`)
-    const data = {
-      errorName: `401 Unauthorized`,
-      errorMessage: (e as Err).message,
+    // The caught e could be anything. Turn it into an Err.
+    const err = Err.toErr(e)
+
+    // Log the error.
+    log.warn(`${err.name} ${err.message}`)
+
+    // If the error message can be client facing, include error details.
+    if (isErrClient(err.name)) {
+      Responder.fail(_res, httpStatus.UNAUTHORIZED, err.message, err.name)
+    } else {
+      Responder.error(_res, httpStatus.UNAUTHORIZED)
     }
-    const responder: Responder = new Responder(httpStatus.UNAUTHORIZED)
-    responder.fail(_res, data)
   }
 }

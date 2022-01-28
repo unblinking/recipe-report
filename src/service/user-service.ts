@@ -2,7 +2,7 @@
  * User service.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
- * @copyright Copyright (C) 2017-2021
+ * @copyright Copyright (C) 2017-2022
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
@@ -26,21 +26,19 @@
 import { inject, injectable } from 'inversify'
 
 import { UserMap } from 'domain/maps/user-map'
-import { Err, errClient, errUser, isErrClient } from 'domain/models/err-model'
+import { Err, errClient, isErrClient } from 'domain/models/err-model'
 import { User } from 'domain/models/user-model'
 import { StringRequest, UserRequest, UuidRequest } from 'domain/service/service-requests'
 import { StringResponse, UserResponse } from 'domain/service/service-responses'
+import { DisplayName } from 'domain/value/display-name-value'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { isStrongPassword, Password, PasswordResult } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
-import { Username } from 'domain/value/username-value'
 
-import { httpStatus, outcomes } from 'data/constants'
 import { IUnitOfWork } from 'data/repositories/unit-of-work'
 
 import { IEmailService } from 'service/email-service'
 import { IJwtService, Payload, tokenType } from 'service/jwt-service'
-import { log } from 'service/log-service'
 
 import { container } from 'root/ioc.config'
 import { SYMBOLS } from 'root/symbols'
@@ -68,8 +66,6 @@ export class UserService implements IUserService {
   }
 
   public async create(req: UserRequest): Promise<UserResponse> {
-    log.trace(`user-service.ts create()`)
-
     // Get a new instance of uow from the DI container.
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 
@@ -90,7 +86,7 @@ export class UserService implements IUserService {
       await uow.connect()
       await uow.begin()
 
-      // Create the user in persistence.
+      // Create the entity in persistence.
       const user: User = await uow.users.create(UserMap.dtoToDomain(req.user))
 
       // Create a JWT for the new user's activation email.
@@ -106,12 +102,7 @@ export class UserService implements IUserService {
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
 
-      return new UserResponse(
-        outcomes.SUCCESS,
-        undefined, // No error to return.
-        UserMap.domainToDto(user),
-        httpStatus.OK,
-      )
+      return UserResponse.success(UserMap.domainToDto(user))
     } catch (e) {
       // Attempt a rollback. If no database client exists, nothing will happen.
       await uow.rollback()
@@ -121,28 +112,16 @@ export class UserService implements IUserService {
 
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        err.message = `${errUser.CREATE} ${err.message}`
-        return new UserResponse(
-          outcomes.FAIL,
-          err,
-          undefined, // No item to return.
-          httpStatus.BAD_REQUEST,
-        )
+        err.message = `${errClient.USER_CREATE} ${err.message}`
+        return UserResponse.fail(err)
       }
 
       // Do not leak internal error details, return INTERNAL_ERROR.
-      return new UserResponse(
-        outcomes.ERROR,
-        err,
-        undefined, // No item to return.
-        httpStatus.INTERNAL_ERROR,
-      )
+      return UserResponse.error(err)
     }
   }
 
   public async read(req: UuidRequest): Promise<UserResponse> {
-    log.trace(`user-service.ts read()`)
-
     // Get a new instance of uow from the DI container.
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 
@@ -151,18 +130,13 @@ export class UserService implements IUserService {
       await uow.connect()
       await uow.begin()
 
-      // Read the user from persistence.
+      // Read the entity from persistence.
       const user: User = await uow.users.read(req.id)
 
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
 
-      return new UserResponse(
-        outcomes.SUCCESS,
-        undefined, // No error to return.
-        UserMap.domainToDto(user),
-        httpStatus.OK,
-      )
+      return UserResponse.success(UserMap.domainToDto(user))
     } catch (e) {
       // Attempt a rollback. If no database client exists, nothing will happen.
       await uow.rollback()
@@ -172,28 +146,16 @@ export class UserService implements IUserService {
 
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        err.message = `${errUser.READ} ${err.message}`
-        return new UserResponse(
-          outcomes.FAIL,
-          err,
-          undefined, // No item to return.
-          httpStatus.BAD_REQUEST,
-        )
+        err.message = `${errClient.USER_READ} ${err.message}`
+        return UserResponse.fail(err)
       }
 
       // Do not leak internal error details, return INTERNAL_ERROR.
-      return new UserResponse(
-        outcomes.ERROR,
-        err,
-        undefined, // No item to return.
-        httpStatus.INTERNAL_ERROR,
-      )
+      return UserResponse.error(err)
     }
   }
 
   public async update(req: UserRequest): Promise<UserResponse> {
-    log.trace(`user-service.ts update()`)
-
     // Get a new instance of uow from the DI container.
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 
@@ -217,24 +179,19 @@ export class UserService implements IUserService {
       await uow.begin()
 
       const id = UniqueId.create(req.user.id)
-      const name = req.user.name != undefined ? Username.create(req.user.name) : undefined
+      const name = req.user.name != undefined ? DisplayName.create(req.user.name) : undefined
       const email_address =
         req.user.email_address != undefined
           ? EmailAddress.create(req.user.email_address)
           : undefined
 
-      // Update the user in persistence.
+      // Update the entity in persistence.
       const user: User = await uow.users.update(id, name, email_address)
 
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
 
-      return new UserResponse(
-        outcomes.SUCCESS,
-        undefined, // No error to return.
-        UserMap.domainToDto(user),
-        httpStatus.OK,
-      )
+      return UserResponse.success(UserMap.domainToDto(user))
     } catch (e) {
       // Attempt a rollback. If no database client exists, nothing will happen.
       await uow.rollback()
@@ -244,28 +201,16 @@ export class UserService implements IUserService {
 
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        err.message = `${errUser.UPDATE} ${err.message}`
-        return new UserResponse(
-          outcomes.FAIL,
-          err,
-          undefined, // No item to return.
-          httpStatus.BAD_REQUEST,
-        )
+        err.message = `${errClient.USER_UPDATE} ${err.message}`
+        return UserResponse.fail(err)
       }
 
       // Do not leak internal error details, return INTERNAL_ERROR.
-      return new UserResponse(
-        outcomes.ERROR,
-        err,
-        undefined, // No item to return.
-        httpStatus.INTERNAL_ERROR,
-      )
+      return UserResponse.error(err)
     }
   }
 
   public async delete(req: UuidRequest): Promise<UserResponse> {
-    log.trace(`user-service.ts delete()`)
-
     // Get a new instance of uow from the DI container.
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 
@@ -274,18 +219,13 @@ export class UserService implements IUserService {
       await uow.connect()
       await uow.begin()
 
-      // Delete the user from persistence (soft delete).
+      // Delete the entity from persistence (soft delete).
       const user: User = await uow.users.delete(req.id)
 
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
 
-      return new UserResponse(
-        outcomes.SUCCESS,
-        undefined, // No error to return.
-        UserMap.domainToDto(user),
-        httpStatus.OK,
-      )
+      return UserResponse.success(UserMap.domainToDto(user))
     } catch (e) {
       // Attempt a rollback. If no database client exists, nothing will happen.
       await uow.rollback()
@@ -295,28 +235,16 @@ export class UserService implements IUserService {
 
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        err.message = `${errUser.DELETE} ${err.message}`
-        return new UserResponse(
-          outcomes.FAIL,
-          err,
-          undefined, // No item to return.
-          httpStatus.BAD_REQUEST,
-        )
+        err.message = `${errClient.USER_DELETE} ${err.message}`
+        return UserResponse.fail(err)
       }
 
       // Do not leak internal error details, return INTERNAL_ERROR.
-      return new UserResponse(
-        outcomes.ERROR,
-        err,
-        undefined, // No item to return.
-        httpStatus.INTERNAL_ERROR,
-      )
+      return UserResponse.error(err)
     }
   }
 
   public async activate(req: StringRequest): Promise<UserResponse> {
-    log.trace(`user-service.ts activate()`)
-
     // Get a new instance of uow from the DI container.
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 
@@ -343,12 +271,7 @@ export class UserService implements IUserService {
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
 
-      return new UserResponse(
-        outcomes.SUCCESS,
-        undefined, // No error to return.
-        UserMap.domainToDto(user),
-        httpStatus.OK,
-      )
+      return UserResponse.success(UserMap.domainToDto(user))
     } catch (e) {
       // Attempt a rollback. If no database client exists, nothing will happen.
       await uow.rollback()
@@ -358,28 +281,16 @@ export class UserService implements IUserService {
 
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        err.message = `${errUser.ACTIVATE} ${err.message}`
-        return new UserResponse(
-          outcomes.FAIL,
-          err,
-          undefined, // No item to return.
-          httpStatus.BAD_REQUEST,
-        )
+        err.message = `${errClient.USER_ACTIVATE} ${err.message}`
+        return UserResponse.fail(err)
       }
 
       // Do not leak internal error details, return INTERNAL_ERROR.
-      return new UserResponse(
-        outcomes.ERROR,
-        err,
-        undefined, // No item to return.
-        httpStatus.INTERNAL_ERROR,
-      )
+      return UserResponse.error(err)
     }
   }
 
   public async authenticate(req: UserRequest): Promise<StringResponse> {
-    log.trace(`user-service.ts authenticate()`)
-
     // Get a new instance of uow from the DI container.
     const uow = container.get<IUnitOfWork>(SYMBOLS.IUnitOfWork)
 
@@ -409,12 +320,7 @@ export class UserService implements IUserService {
         new Date().getTime() + 24 * 60 * 60 * 1000, // 24 hours.
       )
 
-      return new StringResponse(
-        outcomes.SUCCESS,
-        undefined, // No error to return.
-        token,
-        httpStatus.OK,
-      )
+      return StringResponse.success(token)
     } catch (e) {
       // Attempt a rollback. If no database client exists, nothing will happen.
       await uow.rollback()
@@ -424,22 +330,12 @@ export class UserService implements IUserService {
 
       // If the error message can be client facing, return BAD_REQUEST.
       if (isErrClient(err.name)) {
-        err.message = `${errUser.AUTHENTICATE} ${err.message}`
-        return new StringResponse(
-          outcomes.FAIL,
-          err,
-          undefined, // No item to return.
-          httpStatus.BAD_REQUEST,
-        )
+        err.message = `${errClient.USER_AUTHENTICATE} ${err.message}`
+        return StringResponse.fail(err)
       }
 
       // Do not leak internal error details, return INTERNAL_ERROR.
-      return new StringResponse(
-        outcomes.ERROR,
-        err,
-        undefined, // No item to return.
-        httpStatus.INTERNAL_ERROR,
-      )
+      return StringResponse.error(err)
     }
   }
 }

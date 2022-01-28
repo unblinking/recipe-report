@@ -4,7 +4,7 @@
  * Create objects for use in unit testing.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
- * @copyright Copyright (C) 2017-2021
+ * @copyright Copyright (C) 2017-2022
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
@@ -31,12 +31,10 @@ import { Err, errClient } from 'domain/models/err-model'
 import { IUserDto, User } from 'domain/models/user-model'
 import { UserRequest } from 'domain/service/service-requests'
 import { UserResponse } from 'domain/service/service-responses'
+import { DisplayName } from 'domain/value/display-name-value'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { Password } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
-import { Username } from 'domain/value/username-value'
-
-import { httpStatus, outcomes } from 'data/constants'
 
 export const mockTokenActivation: string = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.ImNibEZSdVFwK044RFJ4akM4aW5uckZSaU1LVmpVYUVzb09xQmdwelc1Mjljdm9jLzBSMFZ4dFVmakdraTlWeXF2MHFvcU5Zdmd0aW1haFl6dHlMckRPY1Nrb0ZnanJ5Y0xDWno2Y1pBQXlYTzgxdi9kRE5WNkF3K3BkcXhqZXlTOWxtbEx0d2NZbG1HVFpZY2NjRUhKQT09Ig.fyE3vPgWjQawr68z2OtPT-pGtp43q04UKF5zlo9u4LU5bBb_Sg-5GqBbLFy9UiV_FJJIaSwrIe757fTNEvfeUw`
 
@@ -44,7 +42,7 @@ export const mockTokenAccess: string = `eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.Ikk
 
 export const mockUserDomain: User = User.create(
   {
-    name: Username.create(`noreplyuser`),
+    name: DisplayName.create(`noreplyuser`),
     password: Password.create(`$2a$08$PPhEIhC/lPgUMRAXpvrYL.ehrApeV7pdsGU6/DSufUFvuhiFtqR4C`),
     email_address: EmailAddress.create(`noreply@recipe.report`),
     date_created: new Date(),
@@ -75,12 +73,7 @@ export const mockUserDtoSavedComplete: IUserDto = {
 export class MockUserServiceSuccess {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async create(_req: UserRequest): Promise<UserResponse> {
-    return new UserResponse(
-      outcomes.SUCCESS,
-      undefined, // No error to return.
-      mockUserDtoSavedComplete,
-      httpStatus.OK,
-    )
+    return UserResponse.success(mockUserDtoSavedComplete)
   }
 }
 
@@ -89,12 +82,7 @@ export class MockUserServiceSuccess {
 export class MockUserServiceFail {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async create(_req: UserRequest): Promise<UserResponse> {
-    return new UserResponse(
-      outcomes.FAIL,
-      new Err('MISSING_REQ', errClient.MISSING_REQ),
-      undefined,
-      httpStatus.BAD_REQUEST,
-    )
+    return UserResponse.fail(new Err('MISSING_REQ', errClient.MISSING_REQ))
   }
 }
 
@@ -103,11 +91,6 @@ export class MockUserServiceFail {
 export class MockUserServiceError {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async create(_req: UserRequest): Promise<UserResponse> {
-    return new UserResponse(
-      outcomes.ERROR,
-      new Err('MISSING_REQ', errClient.MISSING_REQ),
-      undefined,
-      httpStatus.INTERNAL_ERROR,
-    )
+    return UserResponse.error(new Err('MISSING_REQ', errClient.MISSING_REQ))
   }
 }

@@ -1,8 +1,8 @@
 /**
- * Username value object.
+ * small integer value object.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
- * @copyright Copyright (C) 2017-2021
+ * @copyright Copyright (C) 2017-2022
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
@@ -27,23 +27,23 @@ import { Err, errClient } from 'domain/models/err-model'
 
 import { ValueObject } from './base-value'
 
-export interface IUsername {
-  value: string
+export interface ISmallInt {
+  value: number
 }
 
-export class Username extends ValueObject<IUsername> {
-  public get value(): string {
+export class SmallInt extends ValueObject<ISmallInt> {
+  public get value(): number {
     return this.props.value
   }
 
-  private constructor(props: IUsername) {
+  private constructor(props: ISmallInt) {
     super(props)
   }
 
-  public static create(username: string): Username {
-    if (!username.match('^[A-Za-z0-9]+$') || username.length < 2 || username.length > 50) {
-      throw new Err(`NAME_INVALID`, errClient.NAME_INVALID)
+  public static create(smallInt: number): SmallInt {
+    if (smallInt < -32768 || smallInt > 32767) {
+      throw new Err(`SMALLINT_INVALID`, errClient.SMALLINT_INVALID)
     }
-    return new Username({ value: username })
+    return new SmallInt({ value: smallInt })
   }
 }

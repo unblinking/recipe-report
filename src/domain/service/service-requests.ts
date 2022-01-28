@@ -2,7 +2,7 @@
  * Request models.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
- * @copyright Copyright (C) 2017-2021
+ * @copyright Copyright (C) 2017-2022
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
@@ -23,45 +23,62 @@
  *
  * @module
  */
+import { IAccountDto } from 'domain/models/account-model'
+import { IFeatureDto } from 'domain/models/feature-model'
+import { IRoleDto } from 'domain/models/role-model'
 import { IUserDto } from 'domain/models/user-model'
 import { UniqueId } from 'domain/value/uid-value'
 
 abstract class ServiceRequest<T> {
   protected _item: T
 
-  protected _requestingUser: IUserDto | undefined
+  protected authorizedId: UniqueId | undefined
 
-  constructor(item: T, requestingUser?: IUserDto) {
+  constructor(item: T, authorizedId?: UniqueId) {
     this._item = item
-    this._requestingUser = requestingUser
+    this.authorizedId = authorizedId
   }
 }
 
-export class UserRequest extends ServiceRequest<IUserDto> {
-  public get user(): IUserDto {
+export class AccountRequest extends ServiceRequest<IAccountDto> {
+  public get account(): IAccountDto {
     return this._item
   }
 
-  private constructor(user: IUserDto, requestingUser?: IUserDto) {
-    super(user, requestingUser)
+  private constructor(account: IAccountDto, authorizedId?: UniqueId) {
+    super(account, authorizedId)
   }
 
-  public static create(user: IUserDto, requestingUser?: IUserDto): UserRequest {
-    return new UserRequest(user, requestingUser)
+  public static create(account: IAccountDto, authorizedId?: UniqueId): AccountRequest {
+    return new AccountRequest(account, authorizedId)
   }
 }
 
-export class UuidRequest extends ServiceRequest<UniqueId> {
-  public get id(): UniqueId {
+export class FeatureRequest extends ServiceRequest<IFeatureDto> {
+  public get feature(): IFeatureDto {
     return this._item
   }
 
-  private constructor(id: UniqueId, requestingUser?: IUserDto) {
-    super(id, requestingUser)
+  private constructor(feature: IFeatureDto, authorizedId?: UniqueId) {
+    super(feature, authorizedId)
   }
 
-  public static create(id: string, requestingUser?: IUserDto): UuidRequest {
-    return new UuidRequest(UniqueId.create(id), requestingUser)
+  public static create(feature: IFeatureDto, authorizedId?: UniqueId): FeatureRequest {
+    return new FeatureRequest(feature, authorizedId)
+  }
+}
+
+export class RoleRequest extends ServiceRequest<IRoleDto> {
+  public get role(): IRoleDto {
+    return this._item
+  }
+
+  private constructor(role: IRoleDto, authorizedId?: UniqueId) {
+    super(role, authorizedId)
+  }
+
+  public static create(role: IRoleDto, authorizedId?: UniqueId): RoleRequest {
+    return new RoleRequest(role, authorizedId)
   }
 }
 
@@ -70,11 +87,39 @@ export class StringRequest extends ServiceRequest<string> {
     return this._item
   }
 
-  private constructor(item: string, requestingUser?: IUserDto) {
-    super(item, requestingUser)
+  private constructor(item: string, authorizedId?: UniqueId) {
+    super(item, authorizedId)
   }
 
-  public static create(item: string, requestingUser?: IUserDto): StringRequest {
-    return new StringRequest(item, requestingUser)
+  public static create(item: string, authorizedId?: UniqueId): StringRequest {
+    return new StringRequest(item, authorizedId)
+  }
+}
+
+export class UserRequest extends ServiceRequest<IUserDto> {
+  public get user(): IUserDto {
+    return this._item
+  }
+
+  private constructor(user: IUserDto, authorizedId?: UniqueId) {
+    super(user, authorizedId)
+  }
+
+  public static create(user: IUserDto, authorizedId?: UniqueId): UserRequest {
+    return new UserRequest(user, authorizedId)
+  }
+}
+
+export class UuidRequest extends ServiceRequest<UniqueId> {
+  public get id(): UniqueId {
+    return this._item
+  }
+
+  private constructor(id: UniqueId, authorizedId?: UniqueId) {
+    super(id, authorizedId)
+  }
+
+  public static create(id: string, authorizedId?: UniqueId): UuidRequest {
+    return new UuidRequest(UniqueId.create(id), authorizedId)
   }
 }
