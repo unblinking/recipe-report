@@ -128,6 +128,7 @@ export const errClient = {
   USER_DELETE: `The user couldn't be deleted.`,
   USER_ACTIVATE: `The user couldn't be activated.`,
   USER_AUTHENTICATE: `The user couldn't be authenticated.`,
+  USER_NOT_ACTIVE: `The user hasn't been activated.`,
   ACCOUNT_CREATE: `The account couldn't be created.`,
   ACCOUNT_READ: `The account couldn't be found.`,
   ACCOUNT_UPDATE: `The account couldn't be updated.`,

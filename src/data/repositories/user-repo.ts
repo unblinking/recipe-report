@@ -145,6 +145,9 @@ export class UserRepo extends BaseRepo<User> implements IUserRepo {
     if (result.rowCount !== 1) {
       throw new Err(`USER_AUTHENTICATE`, errClient.USER_AUTHENTICATE)
     }
+    if (!result.rows[0].date_activated) {
+      throw new Err(`USER_NOT_ACTIVE`, errClient.USER_NOT_ACTIVE)
+    }
     // Update the authenticated user's last login date in the database.
     await this._updateLastLogin(result.rows[0].id)
     // Return domain object from database query results.
