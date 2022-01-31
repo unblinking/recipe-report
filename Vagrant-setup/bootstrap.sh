@@ -2,13 +2,14 @@
 
 # Edit the following to change the name of the database user that will be created:
 APP_DB_USER=dbuser
+APP_DB_OWNER=dbowner
 APP_DB_PASS=dbpass
 
 # Edit the following to change the name of the database that is created (defaults to the user name)
 APP_DB_NAME=recipedb
 
 # Edit the following to change the version of PostgreSQL that is installed
-PG_VERSION=12
+PG_VERSION=14
 
 ###########################################################
 # Changes below this line are probably not necessary
@@ -82,15 +83,35 @@ echo "client_encoding = utf8" >> "$PG_CONF"
 service postgresql restart
 
 cat << EOF | su - postgres -c psql
--- Create the database user:
-CREATE USER $APP_DB_USER WITH PASSWORD '$APP_DB_PASS';
-
+-- Create the database app user:
+CREATE ROLE $APP_DB_USER
+    PASSWORD '$APP_DB_PASS'
+    NOSUPERUSER
+    NOCREATEDB
+    NOCREATEROLE
+    NOINHERIT
+    LOGIN
+    NOREPLICATION
+    NOBYPASSRLS
+    CONNECTION LIMIT -1;
+-- Create the database owner user:
+CREATE ROLE $APP_DB_OWNER
+    PASSWORD '$APP_DB_PASS'
+    NOSUPERUSER
+    CREATEDB
+    CREATEROLE
+    NOINHERIT
+    LOGIN
+    NOREPLICATION
+    NOBYPASSRLS
+    CONNECTION LIMIT 1;
 -- Create the database:
-CREATE DATABASE $APP_DB_NAME WITH OWNER=$APP_DB_USER
-                                  LC_COLLATE='en_US.utf8'
-                                  LC_CTYPE='en_US.utf8'
-                                  ENCODING='UTF8'
-                                  TEMPLATE=template0;
+CREATE DATABASE $APP_DB_NAME
+    WITH OWNER=$APP_DB_OWNER
+    LC_COLLATE='en_US.utf8'
+    LC_CTYPE='en_US.utf8'
+    ENCODING='UTF8'
+    TEMPLATE=template0;
 EOF
 
 # Install extensions.
