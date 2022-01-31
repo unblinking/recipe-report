@@ -46,7 +46,7 @@ export const addressNoReply = EmailAddress.create(`no-reply@recipe.report`)
 export const subjectActivation = `Recipe.Report new user account activation required.`
 export const templateActivation = (to: EmailAddress, token: string): string => {
   return `
-Hello ${to},
+Hello ${to.value},
 
 Thank you for registering with Recipe.Report recently. You may login after completing activation. Please follow the link below to activate your new account. The link will expire in 24 hours.
 

@@ -64,7 +64,7 @@ CREATE EXTENSION
 
 Set an environment variable for `FLYWAY_URL` with the database connection string. See the `.env.dev` development mode file for the development example of this environment variable. Run the `yarn run flyway` command to download [Flyway](https://flywaydb.org/documentation/). Run the `yarn run migrate` command to apply [database migrations](https://github.com/nothingworksright/api.recipe.report/tree/main/migrations).
 
-Set all of the remaining required environment vars for production. See the `.env.dev` development mode file for the required environment variable names. For MailerSend integration, also set the `MAILER_SEND_KEY` environment variable to hold a valid production API token.
+Set all of the remaining required environment vars for production. See the `.env.dev` development mode file for the required environment variable names. For MailerSend integration, also set the `RR_MAILER_SEND_KEY` environment variable to hold a valid production API token.
 
 Once the Recipe.Report API Server has been deployed to the production environment, run the `yarn run start` command to start the Recipe.Report API Server in production mode. This will set `NODE_ENV` to production and then run the compiled JavaScript.
 
