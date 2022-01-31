@@ -114,7 +114,7 @@ $$
 DECLARE
     saltedhash TEXT;
 BEGIN
-    SELECT public.crypt($2, gen_salt('bf', 8))
+    SELECT crypt($2, gen_salt('bf', 8))
     INTO   saltedhash;
 
     RETURN QUERY
@@ -290,7 +290,7 @@ BEGIN
     SELECT *
     FROM    rr.users
     WHERE   rr.users.email_address = $1
-        AND rr.users.password      = public.crypt($2, rr.users.password);
+        AND rr.users.password      = crypt($2, rr.users.password);
 END;
 $$;
 COMMENT ON FUNCTION rr.users_authenticate IS 'Function to authenticate a user by email address and password.';
