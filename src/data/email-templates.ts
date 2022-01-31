@@ -36,7 +36,7 @@ const getProtocol = (): string => {
 const getHostname = (): string => {
   let hostname = `127.0.0.1:3000`
   if (process.env.NODE_ENV === 'production') {
-    hostname = `api.recipe.report`
+    hostname = `my.recipe.report`
   }
   return hostname
 }
