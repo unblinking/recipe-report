@@ -48,7 +48,7 @@ export const templateActivation = (to: EmailAddress, token: string): string => {
   return `
 Hello ${to.value},
 
-Thank you for registering with Recipe.Report recently. You may login after completing activation. Please follow the link below to activate your new account. The link will expire in 24 hours.
+Thank you for registering with my.recipe.report recently. You may login after completing activation. Please follow the link below to activate your new account. The link will expire in 24 hours.
 
 ${getProtocol()}://${getHostname()}/activate/${token}
 
@@ -56,7 +56,7 @@ You received this email because you (or someone else) used this email address to
 
 Thank you,
 
-http://www.Recipe.Report
+https://my.recipe.report
 
 `
 }

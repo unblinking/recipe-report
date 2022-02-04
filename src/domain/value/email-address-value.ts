@@ -41,6 +41,7 @@ export class EmailAddress extends ValueObject<IEmailAddress> {
   }
 
   public static create(emailAddress: string): EmailAddress {
+    emailAddress = emailAddress.trim()
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!regex.test(emailAddress)) {
       throw new Err(`EMAIL_INVALID`, errClient.EMAIL_INVALID)
