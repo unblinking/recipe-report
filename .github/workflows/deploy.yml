@@ -18,7 +18,11 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script_stop: true
         script: |
-          cd ~/api.recipe.report
-          git pull
           pm2 stop api.recipe.report
+          cd ~
+          rm -rf api.recipe.report/
+          git clone https://github.com/nothingworksright/api.recipe.report.git
+          cd api.recipe.report/
+          npm install
+          npm run build
           pm2 restart api.recipe.report
