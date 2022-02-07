@@ -26,19 +26,16 @@
  *
  * @module
  */
-import { inject, injectable } from 'inversify'
+import { injectable } from 'inversify'
 import jwt from 'jwt-simple'
 import 'reflect-metadata'
 
-import { Err, errInternal } from 'domain/models/err-model'
-
-import { ICryptoService } from 'service/crypto-service'
-
-import { SYMBOLS } from 'root/symbols'
+import { Err, errClient, errInternal } from 'domain/models/err-model'
+import { UniqueId } from 'domain/value/uid-value'
 
 export interface IJwtService {
-  encode(id: string | undefined, type: tokenType, ttl?: number): string
-  decode(token: string | undefined): Payload
+  encode(id: string | undefined, type: tokenType, ttl?: number, nbf?: number, enc?: string): string
+  decode(token: string | undefined): Claims
 }
 
 export enum tokenType {
@@ -47,29 +44,31 @@ export enum tokenType {
   ACCESS = 2,
 }
 
-export interface Payload {
-  id: string
+export interface Claims {
+  iss: string // Issuer
+  sub: string // Subject
+  aud: string // Audience
+  exp: number // Expiration (in whole seconds)
+  nbf: number // Not Before (in whole seconds)
+  iat: number // Issued At (in whole seconds)
+  jti: string // JWT ID
+  typ: number // JWT Type
+  enc?: string // Encrypted Data
+}
+
+export interface SecureClaims {
+  uid: string
   type: tokenType
-  iat: number
-  ttl: number
 }
 
 @injectable()
 export class JwtService implements IJwtService {
-  private _crypto: ICryptoService
-
-  public constructor(@inject(SYMBOLS.ICryptoService) cryptoService: ICryptoService) {
-    this._crypto = cryptoService
-  }
-
-  /**
-   * Encode a JWT and encrypt its payload.
-   * @returns A JWT containing an encrypted payload.
-   */
   public encode = (
     id: string | undefined,
     type: tokenType,
-    ttl: number = new Date().getTime() + 60 * 60 * 24 * 1000, // 24 hours.
+    exp: number = Math.round(Date.now() / 1000) + 86400, // 24 hours from now, in whole seconds.
+    nbf: number = Math.round(Date.now() / 1000), // Whole seconds.
+    _enc: string,
   ): string => {
     // Determine our secret, from environment variable.
     const secret: string = process.env.RR_JWT_SECRET as string
@@ -79,32 +78,42 @@ export class JwtService implements IJwtService {
     // Note: tokenType.NONE is zero, a falsey value, so that would cause
     // an error here just as if type was undefined.
     if (!type) throw new Err(`JWT_TYPE`, errInternal.JWT_TYPE)
-    // Instantiate the payload.
-    const iat = new Date().getTime()
-    const payload: Payload = { id: id, type: type, iat: iat, ttl: ttl }
-    // Stringify and encrypt the payload.
-    const stringified: string = JSON.stringify(payload)
-    const encrypted: string = this._crypto.encrypt(stringified)
-    // Encode a JWT, containing the encrypted payload, and return it.
-    const encoded: string = jwt.encode(encrypted, secret, 'HS512')
+    // Preapre the payload.
+    const payload: Claims = {
+      iss: `api.recipe.report`,
+      sub: id,
+      aud: `api.recipe.report`,
+      exp: exp,
+      nbf: nbf,
+      iat: Math.round(Date.now() / 1000), // Whole seconds.
+      jti: UniqueId.create().value,
+      typ: type,
+      enc: _enc,
+    }
+    // Encode a JWT, containing the claims, and return it.
+    const encoded: string = jwt.encode(payload, secret, 'HS512')
     return encoded
   }
 
-  /**
-   * Decode a JWT and decrypt its payload.
-   * @returns A decrypted payload from a JWT.
-   */
-  public decode = (token: string | undefined): Payload => {
+  public decode = (token: string | undefined): Claims => {
     // Determine our secret, from environment variable.
     const secret: string = process.env.RR_JWT_SECRET as string
     // Verify that we aren't missing anything important.
     if (!secret) throw new Err(`JWT_SECRET_KEY`, errInternal.JWT_SECRET_KEY)
     if (!token) throw new Err(`JWT_TOKEN`, errInternal.JWT_TOKEN)
     // Decode the JWT. The signature of the token is verified.
-    const decoded: string = jwt.decode(token, secret, false, 'HS512')
-    // Decrypt and parse the payload.
-    const decrypted: string = this._crypto.decrypt(decoded)
-    const parsed: Payload = JSON.parse(decrypted)
-    return parsed
+    let payload
+    try {
+      payload = jwt.decode(token, secret, false, 'HS512')
+    } catch (e) {
+      if (e instanceof Error && e.message == 'Token expired') {
+        throw new Err('TOKEN_EXP', errClient.TOKEN_EXP)
+      } else if (e instanceof Error && e.message == 'Token not yet active') {
+        throw new Err('TOKEN_NBF', errClient.TOKEN_NBF)
+      } else {
+        throw new Err('TOKEN_INVALID', errClient.TOKEN_INVALID)
+      }
+    }
+    return payload
   }
 }

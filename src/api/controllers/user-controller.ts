@@ -96,6 +96,10 @@ export class UserController implements IBaseController {
 
   private read = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
+      // Only allow reading the user identified in the access token.
+      if (req.params.id !== req.authorizedId?.value) {
+        throw new Err('ID_MISMATCH', errClient.ID_MISMATCH)
+      }
       const svcReq = UuidRequest.create(req.params.id, req.authorizedId)
       const svcRes = await this._userService.read(svcReq)
       const code = svcRes.statusCode

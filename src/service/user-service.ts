@@ -38,7 +38,7 @@ import { UniqueId } from 'domain/value/uid-value'
 import { IUnitOfWork } from 'data/repositories/unit-of-work'
 
 import { IEmailService } from 'service/email-service'
-import { IJwtService, Payload, tokenType } from 'service/jwt-service'
+import { Claims, IJwtService, tokenType } from 'service/jwt-service'
 
 import { container } from 'root/ioc.config'
 import { SYMBOLS } from 'root/symbols'
@@ -250,15 +250,10 @@ export class UserService implements IUserService {
 
     try {
       // Decode and decrypt the token.
-      const payload: Payload = this._jwt.decode(req.item)
+      const payload: Claims = this._jwt.decode(req.item)
       // Verify that the token is for activation.
-      if (payload.type !== tokenType.ACTIVATION) {
+      if (payload.typ !== tokenType.ACTIVATION) {
         throw new Err(`TOKEN_TYPE`, errClient.TOKEN_TYPE)
-      }
-      // Verify that the token hasn't expired.
-      const now = new Date().getTime()
-      if (payload.ttl < now) {
-        throw new Err(`TOKEN_EXP`, errClient.TOKEN_EXP)
       }
 
       // Connect to the database and begin a transaction.
@@ -266,7 +261,7 @@ export class UserService implements IUserService {
       await uow.begin()
 
       // Activate the user.
-      const user = await uow.users.activate(UniqueId.create(payload.id))
+      const user = await uow.users.activate(UniqueId.create(payload.sub))
 
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
@@ -314,11 +309,7 @@ export class UserService implements IUserService {
       await uow.commit()
 
       // Create a JWT for the user's access.
-      const token = this._jwt.encode(
-        user.id.value,
-        tokenType.ACCESS,
-        new Date().getTime() + 24 * 60 * 60 * 1000, // 24 hours.
-      )
+      const token = this._jwt.encode(user.id.value, tokenType.ACCESS)
 
       return StringResponse.success(token)
     } catch (e) {

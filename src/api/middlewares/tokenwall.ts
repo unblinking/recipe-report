@@ -32,7 +32,7 @@ import { UniqueId } from 'domain/value/uid-value'
 
 import { httpStatus } from 'data/constants'
 
-import { IJwtService, Payload, tokenType } from 'service/jwt-service'
+import { Claims, IJwtService, tokenType } from 'service/jwt-service'
 import { log } from 'service/log-service'
 
 import { Responder } from 'api/responder'
@@ -60,18 +60,13 @@ export const tokenwall = (req: RequestWithUser, _res: Response, next: NextFuncti
     const token = split[1]
     if (!token) throw new Err(`TOKENWALL_UNDEF`, errClient.TOKENWALL_UNDEF)
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
-    const payload: Payload = jwt.decode(token)
+    const payload: Claims = jwt.decode(token)
     // Verify that the token is for access.
-    if (payload.type !== tokenType.ACCESS) {
+    if (payload.typ !== tokenType.ACCESS) {
       throw new Err(`TOKENWALL_TYPE`, errClient.TOKENWALL_TYPE)
     }
-    // Verify that the token hasn't expired.
-    const now = new Date().getTime()
-    if (payload.ttl < now) {
-      throw new Err(`TOKENWALL_EXP`, errClient.TOKENWALL_EXP)
-    }
     // Add the user Id from the payload to the request.
-    req.authorizedId = UniqueId.create(payload.id)
+    req.authorizedId = UniqueId.create(payload.sub)
     // Allow the request to continue on.
     next()
   } catch (e) {
