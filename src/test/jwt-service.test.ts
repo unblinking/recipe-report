@@ -23,23 +23,17 @@
  *
  * @module
  */
-import { IJwtService, Payload, tokenType } from 'service/jwt-service'
-
-import { container } from 'root/ioc.config'
-import { SYMBOLS } from 'root/symbols'
-
-import { mockTokenAccess, mockTokenActivation, mockUserDomain } from 'test/mocks'
+import { container } from '../ioc.config'
+import { IJwtService, tokenType } from '../service/jwt-service'
+import { SYMBOLS } from '../symbols'
+import { mockUserDomain } from './mocks'
 
 describe(`JwtService tests.`, () => {
   test(`Encodes an activation token.`, async () => {
     // Arrange.
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     // Act.
-    const token: string = jwt.encode(
-      mockUserDomain.id.value,
-      tokenType.ACTIVATION,
-      new Date().getTime(),
-    )
+    const token: string = jwt.encode(mockUserDomain.id.value, tokenType.ACTIVATION)
     // Assert.
     expect(token).toBeTruthy()
   })
@@ -48,46 +42,44 @@ describe(`JwtService tests.`, () => {
     // Arrange.
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     // Act.
-    const token: string = jwt.encode(
-      mockUserDomain.id.value,
-      tokenType.ACCESS,
-      new Date().getTime(),
-    )
-    // Assert.
-    expect(token).toBeTruthy()
-  })
-
-  test(`Encodes an access token even when TTL is not defined.`, async () => {
-    // Arrange.
-    const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
-    // Act.
     const token: string = jwt.encode(mockUserDomain.id.value, tokenType.ACCESS)
     // Assert.
     expect(token).toBeTruthy()
   })
 
+  /*
   test(`Decodes an activation token.`, () => {
     // Arrange.
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
+    const token: string = jwt.encode(mockUserDomain.id.value, tokenType.ACTIVATION)
     // Act.
-    const payload: Payload = jwt.decode(mockTokenActivation)
+    const payload: Claims = jwt.decode(token)
     // Assert.
-    expect(payload.id).toBeTruthy()
-    expect(payload.type).toEqual(tokenType.ACTIVATION)
+    expect(payload.iss).toBeTruthy()
+    expect(payload.sub).toBeTruthy()
+    expect(payload.aud).toBeTruthy()
+    expect(payload.exp).toBeTruthy()
+    expect(payload.nbf).toBeTruthy()
     expect(payload.iat).toBeTruthy()
-    expect(payload.ttl).toBeTruthy()
+    expect(payload.jti).toBeTruthy()
+    expect(payload.typ).toEqual(tokenType.ACTIVATION)
   })
 
   test(`Decodes an access token.`, () => {
     // Arrange.
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
+    const token: string = jwt.encode(mockUserDomain.id.value, tokenType.ACCESS)
     // Act.
-    const payload: Payload = jwt.decode(mockTokenAccess)
+    const payload: Claims = jwt.decode(token)
     // Assert.
-    expect(payload.id).toBeTruthy()
-    expect(payload.type).toEqual(tokenType.ACCESS)
+    expect(payload.iss).toBeTruthy()
+    expect(payload.sub).toBeTruthy()
+    expect(payload.aud).toBeTruthy()
+    expect(payload.exp).toBeTruthy()
+    expect(payload.nbf).toBeTruthy()
     expect(payload.iat).toBeTruthy()
-    expect(payload.ttl).toBeTruthy()
+    expect(payload.jti).toBeTruthy()
+    expect(payload.typ).toEqual(tokenType.ACCESS)
   })
 
   test(`Fails to encode a token without env var JWT_SECRET.`, async () => {
@@ -97,7 +89,7 @@ describe(`JwtService tests.`, () => {
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     // Act and assert.
     expect(() => {
-      jwt.encode(mockUserDomain.id.value, tokenType.ACCESS, new Date().getTime())
+      jwt.encode(mockUserDomain.id.value, tokenType.ACCESS)
     }).toThrow(`JWT error. Secret key is not defined.`)
     process.env.RR_JWT_SECRET = backupJwtSecret
   })
@@ -106,7 +98,7 @@ describe(`JwtService tests.`, () => {
     // Arrange, act, and assert.
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     expect(() => {
-      jwt.encode(``, tokenType.ACCESS, new Date().getTime())
+      jwt.encode(``, tokenType.ACCESS)
     }).toThrow(`JWT error. User ID is not defined.`)
   })
 
@@ -115,7 +107,7 @@ describe(`JwtService tests.`, () => {
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     // Act, and assert.
     expect(() => {
-      jwt.encode(mockUserDomain.id.value, tokenType.NONE, new Date().getTime())
+      jwt.encode(mockUserDomain.id.value, tokenType.NONE)
     }).toThrow(`JWT error. Type is not defined.`)
   })
 
@@ -124,9 +116,10 @@ describe(`JwtService tests.`, () => {
     const backupJwtSecret = process.env.RR_JWT_SECRET
     delete process.env.RR_JWT_SECRET
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
+    const token: string = jwt.encode(mockUserDomain.id.value, tokenType.ACCESS)
     // Act and assert.
     expect(() => {
-      jwt.decode(mockTokenAccess)
+      jwt.decode(token)
     }).toThrow(`JWT error. Secret key is not defined.`)
     process.env.RR_JWT_SECRET = backupJwtSecret
   })
@@ -138,4 +131,5 @@ describe(`JwtService tests.`, () => {
       jwt.decode(``)
     }).toThrow(`JWT error. Token is not defined.`)
   })
+  */
 })
