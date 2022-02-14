@@ -32,7 +32,7 @@ import { UniqueId } from 'domain/value/uid-value'
 
 import { httpStatus } from 'data/constants'
 
-import { IJwtService, Payload, tokenType } from 'service/jwt-service'
+import { Claims, IJwtService, tokenType } from 'service/jwt-service'
 import { log } from 'service/log-service'
 
 import { Responder } from 'api/responder'
@@ -45,7 +45,6 @@ export interface RequestWithUser extends Request {
 }
 
 export const tokenwall = (req: RequestWithUser, _res: Response, next: NextFunction): void => {
-  log.trace(`tokenwall.ts tokenwall()`)
   try {
     const authorization: string = req.headers.authorization as string
     const split = authorization.split(' ')
@@ -60,27 +59,20 @@ export const tokenwall = (req: RequestWithUser, _res: Response, next: NextFuncti
     const token = split[1]
     if (!token) throw new Err(`TOKENWALL_UNDEF`, errClient.TOKENWALL_UNDEF)
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
-    const payload: Payload = jwt.decode(token)
+    const payload: Claims = jwt.decode(token)
     // Verify that the token is for access.
-    if (payload.type !== tokenType.ACCESS) {
+    if (payload.typ !== tokenType.ACCESS) {
       throw new Err(`TOKENWALL_TYPE`, errClient.TOKENWALL_TYPE)
     }
-    // Verify that the token hasn't expired.
-    const now = new Date().getTime()
-    if (payload.ttl < now) {
-      throw new Err(`TOKENWALL_EXP`, errClient.TOKENWALL_EXP)
-    }
-    // Add the user Id from the payload to the request.
-    req.authorizedId = UniqueId.create(payload.id)
+    // Add the user id from the payload subject claim to the request.
+    req.authorizedId = UniqueId.create(payload.sub)
     // Allow the request to continue on.
     next()
   } catch (e) {
     // The caught e could be anything. Turn it into an Err.
     const err = Err.toErr(e)
-
     // Log the error.
     log.warn(`${err.name} ${err.message}`)
-
     // If the error message can be client facing, include error details.
     if (isErrClient(err.name)) {
       Responder.fail(_res, httpStatus.UNAUTHORIZED, err.message, err.name)

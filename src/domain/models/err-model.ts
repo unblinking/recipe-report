@@ -104,7 +104,7 @@ export type errEnvKeyType = keyof errEnvType
 export type errEnvValueType = errEnvType[keyof errEnvType]
 
 export const errClient = {
-  ID_MISMATCH: `The path UUID does not match the request body UUID.`,
+  ID_MISMATCH: `The path UUID does not match the request body UUID or token subject UUID.`,
   MISSING_REQ: `One or more required fields are missing.`,
   NAME_INVALID: `The name field is not in a valid format. Usename must be 2 to 50 characters in length, and contain only A-Z and 0-9.`,
   NAME_USED: `The name is already in use. Please change the requested name and try again.`,
@@ -116,10 +116,10 @@ export const errClient = {
   SMALLINT_INVALID: `The small integer is out of bounds (range -32768 to +32767).`,
   TOKEN_INVALID: `The token is not in a valid format.`,
   TOKEN_TYPE: `The token type is not valid. Please provide the correct token and try again.`,
+  TOKEN_NBF: `The token is not yet active. The not-before-time has not been reached. Please try again after the not-before-time.`,
   TOKEN_EXP: `The token has expired. Please request a new token and try again.`,
   TOKENWALL_UNDEF: `Token is required.`,
   TOKENWALL_TYPE: `Token type is not access. Try again using a valid access token.`,
-  TOKENWALL_EXP: `Token has expired.`,
   LASTSTOP_404: `The endpoint you are looking for can't be found.`,
   LASTSTOP_500: `Something went wrong.`,
   USER_CREATE: `The user couldn't be created.`,

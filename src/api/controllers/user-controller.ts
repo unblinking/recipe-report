@@ -96,6 +96,10 @@ export class UserController implements IBaseController {
 
   private read = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
+      // Only allow reading the user identified in the access token.
+      if (req.params.id !== req.authorizedId?.value) {
+        throw new Err('ID_MISMATCH', errClient.ID_MISMATCH)
+      }
       const svcReq = UuidRequest.create(req.params.id, req.authorizedId)
       const svcRes = await this._userService.read(svcReq)
       const code = svcRes.statusCode
@@ -129,8 +133,14 @@ export class UserController implements IBaseController {
     next: NextFunction,
   ): Promise<void> => {
     try {
+      // Put request path and body parameters must be present and must match.
+      // https://dzone.com/articles/rest-api-path-vs-request-body-parameters
       if (req.params.id !== req.body.id) {
         throw new Err(`ID_MISMATCH`, errClient.ID_MISMATCH)
+      }
+      // Only allow updating the user identified in the access token.
+      if (req.params.id !== req.authorizedId?.value) {
+        throw new Err('ID_MISMATCH', errClient.ID_MISMATCH)
       }
       const svcReq = UserRequest.create({ ...req.body }, req.authorizedId)
       const svcRes = await this._userService.update(svcReq)
@@ -165,6 +175,10 @@ export class UserController implements IBaseController {
     next: NextFunction,
   ): Promise<void> => {
     try {
+      // Only allow deleting the user identified in the access token.
+      if (req.params.id !== req.authorizedId?.value) {
+        throw new Err('ID_MISMATCH', errClient.ID_MISMATCH)
+      }
       const svcReq = UuidRequest.create(req.params.id, req.authorizedId)
       const svcRes = await this._userService.delete(svcReq)
       const code = svcRes.statusCode
