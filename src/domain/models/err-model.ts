@@ -104,7 +104,7 @@ export type errEnvKeyType = keyof errEnvType
 export type errEnvValueType = errEnvType[keyof errEnvType]
 
 export const errClient = {
-  ID_MISMATCH: `The path UUID does not match the request body UUID.`,
+  ID_MISMATCH: `The path UUID does not match the request body UUID or token subject UUID.`,
   MISSING_REQ: `One or more required fields are missing.`,
   NAME_INVALID: `The name field is not in a valid format. Usename must be 2 to 50 characters in length, and contain only A-Z and 0-9.`,
   NAME_USED: `The name is already in use. Please change the requested name and try again.`,

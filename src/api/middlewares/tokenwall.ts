@@ -45,7 +45,6 @@ export interface RequestWithUser extends Request {
 }
 
 export const tokenwall = (req: RequestWithUser, _res: Response, next: NextFunction): void => {
-  log.trace(`tokenwall.ts tokenwall()`)
   try {
     const authorization: string = req.headers.authorization as string
     const split = authorization.split(' ')
@@ -65,17 +64,15 @@ export const tokenwall = (req: RequestWithUser, _res: Response, next: NextFuncti
     if (payload.typ !== tokenType.ACCESS) {
       throw new Err(`TOKENWALL_TYPE`, errClient.TOKENWALL_TYPE)
     }
-    // Add the user Id from the payload to the request.
+    // Add the user id from the payload subject claim to the request.
     req.authorizedId = UniqueId.create(payload.sub)
     // Allow the request to continue on.
     next()
   } catch (e) {
     // The caught e could be anything. Turn it into an Err.
     const err = Err.toErr(e)
-
     // Log the error.
     log.warn(`${err.name} ${err.message}`)
-
     // If the error message can be client facing, include error details.
     if (isErrClient(err.name)) {
       Responder.fail(_res, httpStatus.UNAUTHORIZED, err.message, err.name)
