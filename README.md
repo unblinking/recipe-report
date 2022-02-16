@@ -1,5 +1,7 @@
 # 🗃 Recipe.Report API Server  
 
+![logo](https://user-images.githubusercontent.com/2879801/154334825-d5c4873c-0f43-42a7-a5a8-74a1d38163d3.svg)
+
 This is the [source code repository](https://github.com/nothingworksright/api.recipe.report) for the Recipe.Report API Server.  
 
 [![codecov](https://codecov.io/gh/nothingworksright/api.recipe.report/branch/main/graph/badge.svg?token=ARrGqDcKhD)](https://codecov.io/gh/nothingworksright/api.recipe.report)  
