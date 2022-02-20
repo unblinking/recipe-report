@@ -30,6 +30,8 @@ import { EmailAddress } from 'domain/value/email-address-value'
 import { Password } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
 
+import { AccountMap } from './account-map'
+
 export class UserMap {
   public static dtoToDomain(userDto: IUserDto): User {
     if (!this.isUser(userDto)) {
@@ -40,6 +42,9 @@ export class UserMap {
         name: DisplayName.create(userDto.name),
         password: Password.create(userDto.password),
         email_address: EmailAddress.create(userDto.email_address),
+        accounts: userDto.accounts
+          ? userDto.accounts.map((account) => AccountMap.dtoToDomain(account))
+          : undefined,
         date_created: userDto.date_created ? new Date(userDto.date_created) : undefined,
         date_activated: userDto.date_activated ? new Date(userDto.date_activated) : undefined,
         date_last_login: userDto.date_last_login ? new Date(userDto.date_last_login) : undefined,
@@ -58,6 +63,13 @@ export class UserMap {
         name: DisplayName.create(dbResult.name),
         password: Password.create(dbResult.password),
         email_address: EmailAddress.create(dbResult.email_address),
+        accounts: dbResult.accounts
+          ? dbResult.accounts.map((account) =>
+              // Using UniqueId.create() here because it can accept possible
+              // null/undefined for the id and will always return a valid UUID.
+              AccountMap.dbToDomain(account, UniqueId.create(account.id).value),
+            )
+          : undefined,
         date_created: dbResult.date_created ? new Date(dbResult.date_created) : undefined,
         date_activated: dbResult.date_activated ? new Date(dbResult.date_activated) : undefined,
         date_last_login: dbResult.date_last_login ? new Date(dbResult.date_last_login) : undefined,
@@ -73,6 +85,7 @@ export class UserMap {
       name: user.name.value,
       password: user.password.value,
       email_address: user.email_address.value,
+      accounts: user.accounts?.map((account) => AccountMap.domainToDto(account)),
       date_created: user.date_created?.toString(),
       date_activated: user.date_activated?.toString(),
       date_last_login: user.date_last_login?.toString(),

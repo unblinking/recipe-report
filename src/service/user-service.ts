@@ -26,6 +26,7 @@
 import { inject, injectable } from 'inversify'
 
 import { UserMap } from 'domain/maps/user-map'
+import { Account } from 'domain/models/account-model'
 import { Err, errClient, isErrClient } from 'domain/models/err-model'
 import { User } from 'domain/models/user-model'
 import { StringRequest, UserRequest, UuidRequest } from 'domain/service/service-requests'
@@ -132,6 +133,10 @@ export class UserService implements IUserService {
 
       // Read the entity from persistence.
       const user: User = await uow.users.read(req.id)
+
+      // Read the accounts linked to the user entity.
+      const accounts: Account[] = await uow.accounts.readAllByUser(req.id)
+      user.setAccounts(accounts)
 
       // Commit the database transaction (also releases the connection.)
       await uow.commit()
