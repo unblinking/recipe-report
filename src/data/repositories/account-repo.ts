@@ -37,6 +37,7 @@ import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
 export interface IAccountRepo extends IBaseRepo {
   create(account: Account): Promise<Account>
   read(id: UniqueId): Promise<Account>
+  readAllByUser(id: UniqueId): Promise<Account[]>
   update(
     id: UniqueId,
     name?: DisplayName,
@@ -83,6 +84,16 @@ export class AccountRepo extends BaseRepo<Account> implements IAccountRepo {
     }
     // Return domain object from database query results.
     return AccountMap.dbToDomain(result.rows[0], result.rows[0].id)
+  }
+
+  public readAllByUser = async (id: UniqueId): Promise<Account[]> => {
+    const query: string = `SELECT * FROM rr.accounts_read_all_by_user($1)`
+    const result: QueryResult = await this.client.query(query, [id.value])
+    const accounts: Account[] = []
+    result.rows.forEach((row) => {
+      accounts.push(AccountMap.dbToDomain(row, row.id))
+    })
+    return accounts
   }
 
   public update = async (

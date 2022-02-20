@@ -31,11 +31,14 @@ import { EmailAddress } from 'domain/value/email-address-value'
 import { Password } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
 
+import { Account, IAccountDto } from './account-model'
+
 export interface IUserDto {
   id?: string
   name?: string
   password?: string
   email_address?: string
+  accounts?: IAccountDto[]
   date_created?: string
   date_activated?: string
   date_last_login?: string
@@ -46,6 +49,7 @@ export interface IUser {
   name: DisplayName
   password: Password
   email_address: EmailAddress
+  accounts?: Account[]
   date_created?: Date
   date_activated?: Date
   date_last_login?: Date
@@ -67,6 +71,10 @@ export class User extends Model<IUser> {
 
   public get email_address(): EmailAddress {
     return this._props.email_address
+  }
+
+  public get accounts(): Account[] | undefined {
+    return this._props.accounts
   }
 
   public get date_created(): Date | undefined {
@@ -100,5 +108,9 @@ export class User extends Model<IUser> {
 
   public isActive(): boolean {
     return this._props.date_activated ? true : false
+  }
+
+  public setAccounts(accounts: Account[]): void {
+    this._props.accounts = accounts
   }
 }

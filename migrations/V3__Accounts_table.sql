@@ -168,6 +168,31 @@ $$;
 COMMENT ON FUNCTION rr.accounts_read IS 'Function to read an account by id.';
 
 /**
+ * Function:    rr.accounts_read_all_by_user
+ * Author:      Joshua Gray
+ * Description: Function to read all accounts by user id.
+ * Parameters:  id UUID
+ * Usage:       SELECT * FROM rr.accounts_read_all_by_user('00000000-0000-0000-0000-000000000000');
+ * Returns:     The account records if found.
+ */
+CREATE OR REPLACE FUNCTION rr.accounts_read_all_by_user (
+    id UUID
+)
+    RETURNS  SETOF rr.accounts
+    LANGUAGE PLPGSQL
+    AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT acc.*
+    FROM rr.accounts AS acc
+      LEFT OUTER JOIN rr.users_to_roles as rol on acc.id = rol.account_id
+    WHERE rol.user_id = $1;
+END;
+$$;
+COMMENT ON FUNCTION rr.accounts_read IS 'Function to read all accounts by user id.';
+
+/**
  * Function:    rr.accounts_update
  * Author:      Joshua Gray
  * Description: Function to update a record in the accounts table. The id and date_created cannot be
