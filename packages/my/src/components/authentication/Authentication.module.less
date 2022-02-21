@@ -1,0 +1,74 @@
+/**
+ * Authentication styles module in less format.
+ *
+ * @see {@link https://github.com/css-modules/css-modules}
+ *
+ * @author Joshua Gray {@link https://github.com/jmg1138}
+ * @copyright Copyright (C) 2017-2022
+ * @license GNU AGPLv3 or later
+ *
+ * This file is part of Recipe.Report Web Application.
+ * @see {@link https://github.com/nothingworksright/my.recipe.report}
+ *
+ * Recipe.Report Web App is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * Recipe.Report Web App is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * @module
+ */
+
+@import '../../.less-global-vars.less';
+
+.logo {
+  max-width: 200px;
+  margin: auto;
+}
+
+// Phone.
+@media only screen and (max-width: 499px) {
+  .form {
+    max-width: 100%;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+}
+// Tablet.
+@media only screen and (min-width: 500px) {
+  .form {
+    max-width: 400px;
+    margin: @margin-md auto @margin-md auto;
+  }
+}
+// Desktop.
+@media only screen and (min-width: 700px) {
+  .form {
+    max-width: 500px;
+    margin: @margin-md auto @margin-md auto;
+  }
+}
+
+.input {
+  width: 100%;
+}
+
+.error {
+  color: @color-error;
+  font-size: @font-size-lg;
+}
+
+.error::before {
+  display: inline;
+  vertical-align: middle;
+  content: '😲 ';
+  font-size: @font-size-lg;
+}

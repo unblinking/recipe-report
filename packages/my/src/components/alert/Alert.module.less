@@ -1,0 +1,90 @@
+/**
+ * Alert styles module in less format.
+ *
+ * @see {@link https://github.com/css-modules/css-modules}
+ *
+ * @author Joshua Gray {@link https://github.com/jmg1138}
+ * @copyright Copyright (C) 2017-2022
+ * @license GNU AGPLv3 or later
+ *
+ * This file is part of Recipe.Report Web Application.
+ * @see {@link https://github.com/nothingworksright/my.recipe.report}
+ *
+ * Recipe.Report Web App is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * Recipe.Report Web App is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * @module
+ */
+
+@import '../../.less-global-vars.less';
+
+.primary,
+.secondary,
+.success,
+.error,
+.warning,
+.info,
+.light,
+.dark,
+.spin {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 3px 3px 3px 3px;
+}
+
+.primary {
+  color: darken(@blue, 60%);
+  background-color: darken(@blue, 10%);
+}
+.secondary {
+  color: darken(@color-muted, 25%);
+  background-color: lighten(@color-muted, 20%);
+}
+.success {
+  color: darken(@green, 60%);
+  background-color: @green;
+}
+.error {
+  color: darken(@color-error, 60%);
+  background-color: @color-error;
+}
+.warning {
+  color: darken(@yellow, 60%);
+  background-color: @yellow;
+}
+.info,
+.spin {
+  color: darken(@blue, 60%);
+  background-color: lighten(@blue, 10%);
+}
+.light {
+  color: darken(@white, 50%);
+  background-color: @white;
+}
+.dark {
+  color: darken(@black, 90%);
+  background-color: @color-muted;
+}
+
+.title {
+  display: block;
+  font-size: @font-size-lg;
+}
+.message {
+  display: block;
+  font-size: @font-size-base;
+}
+.code {
+  display: block;
+  font-size: @font-size-sm;
+}

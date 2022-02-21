@@ -1,0 +1,61 @@
+/**
+ * NavBar styles module in less format.
+ *
+ * @see {@link https://github.com/css-modules/css-modules}
+ *
+ * @author Joshua Gray {@link https://github.com/jmg1138}
+ * @copyright Copyright (C) 2017-2022
+ * @license GNU AGPLv3 or later
+ *
+ * This file is part of Recipe.Report Web Application.
+ * @see {@link https://github.com/nothingworksright/my.recipe.report}
+ *
+ * Recipe.Report Web App is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * Recipe.Report Web App is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * @module
+ */
+
+@import '../../.less-global-vars.less';
+
+.container {
+  grid-area: navbar;
+}
+
+.favicon {
+  display: inline-block;
+  padding: 0.5rem;
+  width: 1em;
+  top: 0.19em;
+  position: relative;
+}
+
+.nav {
+  display: block;
+  margin: 0;
+  padding: 0.5rem;
+  background-color: @color-component-background;
+  border: none;
+}
+.nav a {
+  display: inline-block;
+  margin: 0;
+  padding: 0.5rem;
+  text-align: center;
+}
+.nav a:hover {
+  text-decoration: underline @pink;
+}
+.active {
+  text-shadow: 0 0 20px @pink;
+}
