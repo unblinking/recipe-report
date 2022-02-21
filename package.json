@@ -1,0 +1,20 @@
+{
+  "name": "recipe.report",
+  "version": "0.1.0",
+  "description": "The recipe.report monorepo.",
+  "repository": {
+    "type": "git",
+    "url": "github:nothingworksright/recipe.report"
+  },
+  "license": "AGPL-3.0-or-later",
+  "engines": {
+    "npm": "8.3.0",
+    "node": "16.13.2"
+  },
+  "author": "jmg1138 https://github.com/jmg1138",
+  "readme": "README.md",
+  "packageManager": "npm@8.3.0",
+  "workspaces": [
+    "./packages/*"
+  ]
+}
