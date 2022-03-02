@@ -25,15 +25,15 @@
  */
 import { PoolClient, QueryResult } from 'pg'
 
+import { dbTables } from 'data/constants'
+import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
+
 import { RoleMap } from 'domain/maps/role-map'
 import { Err, errClient } from 'domain/models/err-model'
 import { Role } from 'domain/models/role-model'
 import { DisplayName } from 'domain/value/display-name-value'
 import { SmallInt } from 'domain/value/smallint-value'
 import { UniqueId } from 'domain/value/uid-value'
-
-import { dbTables } from 'data/constants'
-import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
 
 export interface IRoleRepo extends IBaseRepo {
   create(role: Role): Promise<Role>

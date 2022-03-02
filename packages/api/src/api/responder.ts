@@ -28,9 +28,9 @@
  */
 import { Response } from 'express'
 
-import { errClient } from 'domain/models/err-model'
-
 import { httpStatusValueType, outcomes } from 'data/constants'
+
+import { errClient } from 'domain/models/err-model'
 
 import { log } from 'service/log-service'
 

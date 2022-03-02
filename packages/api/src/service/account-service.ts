@@ -25,6 +25,8 @@
  */
 import { injectable } from 'inversify'
 
+import { IUnitOfWork } from 'data/repositories/unit-of-work'
+
 import { AccountMap } from 'domain/maps/account-map'
 import { Account } from 'domain/models/account-model'
 import { Err, errClient, isErrClient } from 'domain/models/err-model'
@@ -32,8 +34,6 @@ import { AccountRequest, UuidRequest } from 'domain/service/service-requests'
 import { AccountResponse } from 'domain/service/service-responses'
 import { DisplayName } from 'domain/value/display-name-value'
 import { UniqueId } from 'domain/value/uid-value'
-
-import { IUnitOfWork } from 'data/repositories/unit-of-work'
 
 import { container } from 'root/ioc.config'
 import { SYMBOLS } from 'root/symbols'

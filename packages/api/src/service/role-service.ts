@@ -25,6 +25,8 @@
  */
 import { injectable } from 'inversify'
 
+import { IUnitOfWork } from 'data/repositories/unit-of-work'
+
 import { RoleMap } from 'domain/maps/role-map'
 import { Err, errClient, isErrClient } from 'domain/models/err-model'
 import { Role } from 'domain/models/role-model'
@@ -33,8 +35,6 @@ import { RoleResponse } from 'domain/service/service-responses'
 import { DisplayName } from 'domain/value/display-name-value'
 import { SmallInt } from 'domain/value/smallint-value'
 import { UniqueId } from 'domain/value/uid-value'
-
-import { IUnitOfWork } from 'data/repositories/unit-of-work'
 
 import { container } from 'root/ioc.config'
 import { SYMBOLS } from 'root/symbols'

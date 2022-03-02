@@ -32,13 +32,13 @@ import Helmet from 'helmet'
 import { injectable, multiInject } from 'inversify'
 import 'reflect-metadata'
 
-import { Err, errEnv } from 'domain/models/err-model'
-
-import { log } from 'service/log-service'
-
 import { listen } from 'api/app'
 import { IBaseController } from 'api/controllers/base-controller'
 import { callHistory } from 'api/middlewares/callhistory'
+
+import { Err, errEnv } from 'domain/models/err-model'
+
+import { log } from 'service/log-service'
 
 import { SYMBOLS } from './symbols'
 

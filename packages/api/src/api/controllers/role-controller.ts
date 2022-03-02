@@ -26,17 +26,17 @@
 import { NextFunction, Response, Router } from 'express'
 import { inject, injectable } from 'inversify'
 
-import { Err, errClient, isErrClient } from 'domain/models/err-model'
-import { RoleRequest, UuidRequest } from 'domain/service/service-requests'
-
-import { httpStatus, outcomes } from 'data/constants'
-
-import { IRoleService } from 'service/role-service'
-
 import { IBaseController } from 'api/controllers/base-controller'
 import { fiveHundred } from 'api/middlewares/laststop'
 import { RequestWithUser, tokenwall } from 'api/middlewares/tokenwall'
 import { Responder } from 'api/responder'
+
+import { httpStatus, outcomes } from 'data/constants'
+
+import { Err, errClient, isErrClient } from 'domain/models/err-model'
+import { RoleRequest, UuidRequest } from 'domain/service/service-requests'
+
+import { IRoleService } from 'service/role-service'
 
 import { SYMBOLS } from 'root/symbols'
 

@@ -26,11 +26,11 @@
 import { NextFunction, Request, Response, Router } from 'express'
 import { injectable } from 'inversify'
 
-import { httpStatus } from 'data/constants'
-
 import { IBaseController } from 'api/controllers/base-controller'
 import { fiveHundred } from 'api/middlewares/laststop'
 import { Responder } from 'api/responder'
+
+import { httpStatus } from 'data/constants'
 
 @injectable()
 export class RootController implements IBaseController {

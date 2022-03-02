@@ -25,6 +25,8 @@
  */
 import { inject, injectable } from 'inversify'
 
+import { IUnitOfWork } from 'data/repositories/unit-of-work'
+
 import { UserMap } from 'domain/maps/user-map'
 import { Account } from 'domain/models/account-model'
 import { Err, errClient, isErrClient } from 'domain/models/err-model'
@@ -35,8 +37,6 @@ import { DisplayName } from 'domain/value/display-name-value'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { isStrongPassword, Password, PasswordResult } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
-
-import { IUnitOfWork } from 'data/repositories/unit-of-work'
 
 import { IEmailService } from 'service/email-service'
 import { Claims, IJwtService, tokenType } from 'service/jwt-service'

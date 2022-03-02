@@ -27,13 +27,13 @@
 import { inject, injectable } from 'inversify'
 import { PoolClient } from 'pg'
 
-import { Err, errInternal } from 'domain/models/err-model'
-
 import { IDataAccessLayer } from 'data/data-access'
 import { AccountRepo, IAccountRepo } from 'data/repositories/account-repo'
 import { FeatureRepo, IFeatureRepo } from 'data/repositories/feature-repo'
 import { IRoleRepo, RoleRepo } from 'data/repositories/role-repo'
 import { IUserRepo, UserRepo } from 'data/repositories/user-repo'
+
+import { Err, errInternal } from 'domain/models/err-model'
 
 import { SYMBOLS } from 'root/symbols'
 

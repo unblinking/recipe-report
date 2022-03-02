@@ -25,6 +25,9 @@
  */
 import { PoolClient, QueryResult } from 'pg'
 
+import { dbTables } from 'data/constants'
+import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
+
 import { UserMap } from 'domain/maps/user-map'
 import { Err, errClient } from 'domain/models/err-model'
 import { User } from 'domain/models/user-model'
@@ -32,9 +35,6 @@ import { DisplayName } from 'domain/value/display-name-value'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { Password } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
-
-import { dbTables } from 'data/constants'
-import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
 
 export interface IUserRepo extends IBaseRepo {
   create(user: User): Promise<User>

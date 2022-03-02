@@ -25,14 +25,14 @@
  */
 import { PoolClient, QueryResult } from 'pg'
 
+import { dbTables } from 'data/constants'
+import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
+
 import { FeatureMap } from 'domain/maps/feature-map'
 import { Err, errClient } from 'domain/models/err-model'
 import { Feature } from 'domain/models/feature-model'
 import { DisplayName } from 'domain/value/display-name-value'
 import { UniqueId } from 'domain/value/uid-value'
-
-import { dbTables } from 'data/constants'
-import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
 
 export interface IFeatureRepo extends IBaseRepo {
   create(feature: Feature): Promise<Feature>

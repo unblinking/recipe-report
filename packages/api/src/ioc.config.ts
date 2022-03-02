@@ -26,6 +26,11 @@
  */
 import { Container } from 'inversify'
 
+import { IBaseController } from 'api/controllers/base-controller'
+import { RoleController } from 'api/controllers/role-controller'
+import { RootController } from 'api/controllers/root-controller'
+import { UserController } from 'api/controllers/user-controller'
+
 import { DataAccessLayer, IDataAccessLayer } from 'data/data-access'
 import { IUnitOfWork, UnitOfWork } from 'data/repositories/unit-of-work'
 
@@ -36,11 +41,6 @@ import { FeatureService, IFeatureService } from 'service/feature-service'
 import { IJwtService, JwtService } from 'service/jwt-service'
 import { IRoleService, RoleService } from 'service/role-service'
 import { IUserService, UserService } from 'service/user-service'
-
-import { IBaseController } from 'api/controllers/base-controller'
-import { RoleController } from 'api/controllers/role-controller'
-import { RootController } from 'api/controllers/root-controller'
-import { UserController } from 'api/controllers/user-controller'
 
 import { IRecipeReport, RecipeReport } from 'root/recipereport'
 import { SYMBOLS } from 'root/symbols'

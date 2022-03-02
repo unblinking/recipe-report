@@ -25,14 +25,14 @@
  */
 import { PoolClient, QueryResult } from 'pg'
 
+import { dbTables } from 'data/constants'
+import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
+
 import { AccountMap } from 'domain/maps/account-map'
 import { Account } from 'domain/models/account-model'
 import { Err, errClient } from 'domain/models/err-model'
 import { DisplayName } from 'domain/value/display-name-value'
 import { UniqueId } from 'domain/value/uid-value'
-
-import { dbTables } from 'data/constants'
-import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
 
 export interface IAccountRepo extends IBaseRepo {
   create(account: Account): Promise<Account>

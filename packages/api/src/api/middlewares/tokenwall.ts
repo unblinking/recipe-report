@@ -27,15 +27,15 @@
  */
 import { NextFunction, Request, Response } from 'express'
 
-import { Err, errClient, isErrClient } from 'domain/models/err-model'
-import { UniqueId } from 'domain/value/uid-value'
+import { Responder } from 'api/responder'
 
 import { httpStatus } from 'data/constants'
 
+import { Err, errClient, isErrClient } from 'domain/models/err-model'
+import { UniqueId } from 'domain/value/uid-value'
+
 import { Claims, IJwtService, tokenType } from 'service/jwt-service'
 import { log } from 'service/log-service'
-
-import { Responder } from 'api/responder'
 
 import { container } from 'root/ioc.config'
 import { SYMBOLS } from 'root/symbols'
