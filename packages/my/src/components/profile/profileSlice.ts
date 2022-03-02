@@ -24,19 +24,19 @@
  * @module
  */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { UserDto } from 'api.recipe.report/src/dto/user-dto'
 
 import { RootState } from 'app/store'
 
 import { requestProfile } from 'components/profile/profileAPI'
 
 import { ApiRequestProfile, ApiResponseUser } from 'interfaces/apiInterfaces'
-import { IUserDto } from 'interfaces/userInterface'
 
 export interface ProfileState {
   status: `Ready` | `Loading` | `Failed` | `Error` | `Success`
   message?: string
   code?: string
-  user?: IUserDto
+  user?: UserDto
 }
 
 const initialState: ProfileState = {
@@ -113,6 +113,6 @@ export const { ready } = profileSlice.actions
 export const selectStatus = (state: RootState): string => state.profile.status
 export const selectMessage = (state: RootState): string | undefined => state.profile.message
 export const selectCode = (state: RootState): string | undefined => state.profile.code
-export const selectUser = (state: RootState): IUserDto | undefined | null => state.profile.user
+export const selectUser = (state: RootState): UserDto | undefined | null => state.profile.user
 
 export default profileSlice.reducer

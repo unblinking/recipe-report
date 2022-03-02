@@ -23,6 +23,8 @@
  *
  * @module
  */
+import { AccountDto } from 'api.recipe.report/src/dto/account-dto'
+import { UserDto } from 'api.recipe.report/src/dto/user-dto'
 import { useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 
@@ -33,9 +35,7 @@ import styles from 'components/profile/Profile.module.css'
 import { profileAsync, selectUser } from 'components/profile/profileSlice'
 import { Spacer } from 'components/spacer/Spacer'
 
-import { IAccountDto } from 'interfaces/accountInterface'
 import { ApiRequestProfile } from 'interfaces/apiInterfaces'
-import { IUserDto } from 'interfaces/userInterface'
 
 import { Claims, parse } from 'wrappers/jwt'
 
@@ -71,7 +71,7 @@ export function Profile(): JSX.Element {
   )
 }
 
-function UserRecord(user: IUserDto | null | undefined): JSX.Element {
+function UserRecord(user: UserDto | null | undefined): JSX.Element {
   return (
     <div>
       <h1>User Profile</h1>
@@ -91,7 +91,7 @@ function UserRecord(user: IUserDto | null | undefined): JSX.Element {
   )
 }
 
-function UserAccounts(accounts: IAccountDto[] | null | undefined): JSX.Element {
+function UserAccounts(accounts: AccountDto[] | null | undefined): JSX.Element {
   return (
     <div>
       <h1>User Accounts</h1>
