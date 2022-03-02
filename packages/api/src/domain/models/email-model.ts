@@ -23,27 +23,15 @@
  *
  * @module
  */
+import { addressNoReply, subjectActivation, templateActivation } from 'data/email-templates'
+
 import { EmailMap } from 'domain/maps/email-map'
 import { Model } from 'domain/models/base-model'
 import { Err, errClient } from 'domain/models/err-model'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { UniqueId } from 'domain/value/uid-value'
 
-import { addressNoReply, subjectActivation, templateActivation } from 'data/email-templates'
-
-export interface IEmailDto {
-  from?: string
-  to?: string
-  subject?: string
-  body?: string
-}
-
-export interface IEmail {
-  from: EmailAddress
-  to: EmailAddress
-  subject: string
-  body: string
-}
+import { IEmail } from 'interface/email-interface'
 
 export class Email extends Model<IEmail> {
   public get from(): EmailAddress {

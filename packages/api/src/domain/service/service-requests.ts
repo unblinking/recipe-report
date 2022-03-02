@@ -23,11 +23,12 @@
  *
  * @module
  */
-import { IAccountDto } from 'domain/models/account-model'
-import { IFeatureDto } from 'domain/models/feature-model'
-import { IRoleDto } from 'domain/models/role-model'
-import { IUserDto } from 'domain/models/user-model'
 import { UniqueId } from 'domain/value/uid-value'
+
+import { AccountDto } from 'dto/account-dto'
+import { FeatureDto } from 'dto/feature-dto'
+import { RoleDto } from 'dto/role-dto'
+import { UserDto } from 'dto/user-dto'
 
 abstract class ServiceRequest<T> {
   protected _item: T
@@ -40,44 +41,44 @@ abstract class ServiceRequest<T> {
   }
 }
 
-export class AccountRequest extends ServiceRequest<IAccountDto> {
-  public get account(): IAccountDto {
+export class AccountRequest extends ServiceRequest<AccountDto> {
+  public get account(): AccountDto {
     return this._item
   }
 
-  private constructor(account: IAccountDto, authorizedId?: UniqueId) {
+  private constructor(account: AccountDto, authorizedId?: UniqueId) {
     super(account, authorizedId)
   }
 
-  public static create(account: IAccountDto, authorizedId?: UniqueId): AccountRequest {
+  public static create(account: AccountDto, authorizedId?: UniqueId): AccountRequest {
     return new AccountRequest(account, authorizedId)
   }
 }
 
-export class FeatureRequest extends ServiceRequest<IFeatureDto> {
-  public get feature(): IFeatureDto {
+export class FeatureRequest extends ServiceRequest<FeatureDto> {
+  public get feature(): FeatureDto {
     return this._item
   }
 
-  private constructor(feature: IFeatureDto, authorizedId?: UniqueId) {
+  private constructor(feature: FeatureDto, authorizedId?: UniqueId) {
     super(feature, authorizedId)
   }
 
-  public static create(feature: IFeatureDto, authorizedId?: UniqueId): FeatureRequest {
+  public static create(feature: FeatureDto, authorizedId?: UniqueId): FeatureRequest {
     return new FeatureRequest(feature, authorizedId)
   }
 }
 
-export class RoleRequest extends ServiceRequest<IRoleDto> {
-  public get role(): IRoleDto {
+export class RoleRequest extends ServiceRequest<RoleDto> {
+  public get role(): RoleDto {
     return this._item
   }
 
-  private constructor(role: IRoleDto, authorizedId?: UniqueId) {
+  private constructor(role: RoleDto, authorizedId?: UniqueId) {
     super(role, authorizedId)
   }
 
-  public static create(role: IRoleDto, authorizedId?: UniqueId): RoleRequest {
+  public static create(role: RoleDto, authorizedId?: UniqueId): RoleRequest {
     return new RoleRequest(role, authorizedId)
   }
 }
@@ -96,16 +97,16 @@ export class StringRequest extends ServiceRequest<string> {
   }
 }
 
-export class UserRequest extends ServiceRequest<IUserDto> {
-  public get user(): IUserDto {
+export class UserRequest extends ServiceRequest<UserDto> {
+  public get user(): UserDto {
     return this._item
   }
 
-  private constructor(user: IUserDto, authorizedId?: UniqueId) {
+  private constructor(user: UserDto, authorizedId?: UniqueId) {
     super(user, authorizedId)
   }
 
-  public static create(user: IUserDto, authorizedId?: UniqueId): UserRequest {
+  public static create(user: UserDto, authorizedId?: UniqueId): UserRequest {
     return new UserRequest(user, authorizedId)
   }
 }

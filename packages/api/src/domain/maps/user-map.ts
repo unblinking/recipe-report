@@ -23,17 +23,21 @@
  *
  * @module
  */
+import { AccountMap } from 'domain/maps/account-map'
+import { Account } from 'domain/models/account-model'
 import { Err, errInternal } from 'domain/models/err-model'
-import { IUser, IUserDto, User } from 'domain/models/user-model'
+import { User } from 'domain/models/user-model'
 import { DisplayName } from 'domain/value/display-name-value'
 import { EmailAddress } from 'domain/value/email-address-value'
 import { Password } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
 
-import { AccountMap } from './account-map'
+import { UserDto } from 'dto/user-dto'
+
+import { IUser } from 'interface/user-interface'
 
 export class UserMap {
-  public static dtoToDomain(userDto: IUserDto): User {
+  public static dtoToDomain(userDto: UserDto): User {
     if (!this.isUser(userDto)) {
       throw new Err(`DOMAIN_OBJECT`, `UserMap: ${errInternal.DOMAIN_OBJECT}`)
     }
@@ -54,7 +58,7 @@ export class UserMap {
     )
   }
 
-  public static dbToDomain(dbResult: IUserDto, id: string): User {
+  public static dbToDomain(dbResult: UserDto, id: string): User {
     if (!this.isUser(dbResult)) {
       throw new Err(`DOMAIN_OBJECT`, `UserMap: ${errInternal.DOMAIN_OBJECT}`)
     }
@@ -79,13 +83,13 @@ export class UserMap {
     )
   }
 
-  public static domainToDto(user: User): IUserDto {
+  public static domainToDto(user: User): UserDto {
     return {
       id: user.id.value,
       name: user.name.value,
       password: user.password.value,
       email_address: user.email_address.value,
-      accounts: user.accounts?.map((account) => AccountMap.domainToDto(account)),
+      accounts: user.accounts?.map((account: Account) => AccountMap.domainToDto(account)),
       date_created: user.date_created?.toString(),
       date_activated: user.date_activated?.toString(),
       date_last_login: user.date_last_login?.toString(),

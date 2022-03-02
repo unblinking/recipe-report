@@ -23,12 +23,16 @@
  *
  * @module
  */
-import { Email, IEmail, IEmailDto } from 'domain/models/email-model'
+import { Email } from 'domain/models/email-model'
 import { Err, errInternal } from 'domain/models/err-model'
 import { EmailAddress } from 'domain/value/email-address-value'
 
+import { EmailDto } from 'dto/email-dto'
+
+import { IEmail } from 'interface/email-interface'
+
 export class EmailMap {
-  public static toDomain(emailDto: IEmailDto): Email {
+  public static dtoToDomain(emailDto: EmailDto): Email {
     if (!this.isEmail(emailDto)) {
       throw new Err(`DOMAIN_OBJECT`, `EmailMap: ${errInternal.DOMAIN_OBJECT}`)
     }
@@ -40,7 +44,7 @@ export class EmailMap {
     })
   }
 
-  public static toDto(email: Email): IEmailDto {
+  public static domainToDto(email: Email): EmailDto {
     return {
       from: email.from.value,
       to: email.to.value,

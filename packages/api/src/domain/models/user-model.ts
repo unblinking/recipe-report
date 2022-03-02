@@ -24,6 +24,7 @@
  * @module
  */
 import { UserMap } from 'domain/maps/user-map'
+import { Account } from 'domain/models/account-model'
 import { Model } from 'domain/models/base-model'
 import { Err, errClient } from 'domain/models/err-model'
 import { DisplayName } from 'domain/value/display-name-value'
@@ -31,30 +32,7 @@ import { EmailAddress } from 'domain/value/email-address-value'
 import { Password } from 'domain/value/password-value'
 import { UniqueId } from 'domain/value/uid-value'
 
-import { Account, IAccountDto } from './account-model'
-
-export interface IUserDto {
-  id?: string
-  name?: string
-  password?: string
-  email_address?: string
-  accounts?: IAccountDto[]
-  date_created?: string
-  date_activated?: string
-  date_last_login?: string
-  date_deleted?: string
-}
-
-export interface IUser {
-  name: DisplayName
-  password: Password
-  email_address: EmailAddress
-  accounts?: Account[]
-  date_created?: Date
-  date_activated?: Date
-  date_last_login?: Date
-  date_deleted?: Date
-}
+import { IUser } from 'interface/user-interface'
 
 export class User extends Model<IUser> {
   public get id(): UniqueId {

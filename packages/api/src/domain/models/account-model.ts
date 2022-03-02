@@ -29,40 +29,9 @@ import { DisplayName } from 'domain/value/display-name-value'
 import { TimeZone } from 'domain/value/timezone-value'
 import { UniqueId } from 'domain/value/uid-value'
 
+import { IAccount } from 'interface/account-interface'
+
 import { Err, errClient } from './err-model'
-
-export interface IAccountDto {
-  id?: string
-  name?: string
-  description?: string
-  contact_user_id?: string
-  location_code?: string
-  time_zone?: string
-  address_country?: string
-  address_locality?: string
-  address_region?: string
-  address_post_office_box?: string
-  address_postal_code?: string
-  address_street?: string
-  date_created?: string
-  date_deleted?: string
-}
-
-export interface IAccount {
-  name: DisplayName
-  description?: string
-  contact_user_id: UniqueId
-  location_code?: string
-  time_zone?: TimeZone
-  address_country?: string
-  address_locality?: string
-  address_region?: string
-  address_post_office_box?: string
-  address_postal_code?: string
-  address_street?: string
-  date_created?: Date
-  date_deleted?: Date
-}
 
 export class Account extends Model<IAccount> {
   public get id(): UniqueId {

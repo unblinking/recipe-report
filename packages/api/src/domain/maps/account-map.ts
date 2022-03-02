@@ -23,14 +23,18 @@
  *
  * @module
  */
-import { Account, IAccount, IAccountDto } from 'domain/models/account-model'
+import { Account } from 'domain/models/account-model'
 import { Err, errInternal } from 'domain/models/err-model'
 import { DisplayName } from 'domain/value/display-name-value'
 import { TimeZone } from 'domain/value/timezone-value'
 import { UniqueId } from 'domain/value/uid-value'
 
+import { AccountDto } from 'dto/account-dto'
+
+import { IAccount } from 'interface/account-interface'
+
 export class AccountMap {
-  public static dtoToDomain(accountDto: IAccountDto): Account {
+  public static dtoToDomain(accountDto: AccountDto): Account {
     if (!this.isAccount(accountDto)) {
       throw new Err(`DOMAIN_OBJECT`, `AccountMap: ${errInternal.DOMAIN_OBJECT}`)
     }
@@ -54,7 +58,7 @@ export class AccountMap {
     )
   }
 
-  public static dbToDomain(dbResult: IAccountDto, id: string): Account {
+  public static dbToDomain(dbResult: AccountDto, id: string): Account {
     if (!this.isAccount(dbResult)) {
       throw new Err(`DOMAIN_OBJECT`, `AccountMap: ${errInternal.DOMAIN_OBJECT}`)
     }
@@ -78,7 +82,7 @@ export class AccountMap {
     )
   }
 
-  public static domainToDto(account: Account): IAccountDto {
+  public static domainToDto(account: Account): AccountDto {
     return {
       id: account.id.value,
       name: account.name.value,

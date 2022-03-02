@@ -27,6 +27,8 @@
       "api/*": ["api/*"],
       "data/*": ["data/*"],
       "domain/*": ["domain/*"],
+      "dto/*": ["dto/*"],
+      "interface/*": ["interface/*"],
       "root/*": ["*"],
       "service/*": ["service/*"],
       "test/*": ["test/*"]

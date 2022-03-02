@@ -26,22 +26,9 @@
 import { DisplayName } from 'domain/value/display-name-value'
 import { UniqueId } from 'domain/value/uid-value'
 
+import { IFeature } from 'interface/feature-interface'
+
 import { Model } from './base-model'
-
-export interface IFeatureDto {
-  id?: string
-  name?: string
-  description?: string
-  date_created?: string
-  date_deleted?: string
-}
-
-export interface IFeature {
-  name: DisplayName
-  description: string
-  date_created?: Date
-  date_deleted?: Date
-}
 
 export class Feature extends Model<IFeature> {
   public get id(): UniqueId {

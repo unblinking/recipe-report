@@ -24,13 +24,17 @@
  * @module
  */
 import { Err, errInternal } from 'domain/models/err-model'
-import { IRole, IRoleDto, Role } from 'domain/models/role-model'
+import { Role } from 'domain/models/role-model'
 import { DisplayName } from 'domain/value/display-name-value'
 import { SmallInt } from 'domain/value/smallint-value'
 import { UniqueId } from 'domain/value/uid-value'
 
+import { RoleDto } from 'dto/role-dto'
+
+import { IRole } from 'interface/role-interface'
+
 export class RoleMap {
-  public static dtoToDomain(roleDto: IRoleDto): Role {
+  public static dtoToDomain(roleDto: RoleDto): Role {
     if (!this.isRole(roleDto)) {
       throw new Err(`DOMAIN_OBJECT`, `RoleMap: ${errInternal.DOMAIN_OBJECT}`)
     }
@@ -46,7 +50,7 @@ export class RoleMap {
     )
   }
 
-  public static dbToDomain(dbResult: IRoleDto, id: string): Role {
+  public static dbToDomain(dbResult: RoleDto, id: string): Role {
     if (!this.isRole(dbResult)) {
       throw new Err(`DOMAIN_OBJECT`, `RoleMap: ${errInternal.DOMAIN_OBJECT}`)
     }
@@ -62,7 +66,7 @@ export class RoleMap {
     )
   }
 
-  public static domainToDto(role: Role): IRoleDto {
+  public static domainToDto(role: Role): RoleDto {
     return {
       id: role.id.value,
       name: role.name.value,

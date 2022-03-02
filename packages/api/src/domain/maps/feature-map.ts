@@ -24,12 +24,16 @@
  * @module
  */
 import { Err, errInternal } from 'domain/models/err-model'
-import { Feature, IFeature, IFeatureDto } from 'domain/models/feature-model'
+import { Feature } from 'domain/models/feature-model'
 import { DisplayName } from 'domain/value/display-name-value'
 import { UniqueId } from 'domain/value/uid-value'
 
+import { FeatureDto } from 'dto/feature-dto'
+
+import { IFeature } from 'interface/feature-interface'
+
 export class FeatureMap {
-  public static dtoToDomain(featureDto: IFeatureDto): Feature {
+  public static dtoToDomain(featureDto: FeatureDto): Feature {
     if (!this.isFeature(featureDto)) {
       throw new Err(`DOMAIN_OBJECT`, `FeatureMap: ${errInternal.DOMAIN_OBJECT}`)
     }
@@ -44,7 +48,7 @@ export class FeatureMap {
     )
   }
 
-  public static dbToDomain(dbResult: IFeatureDto, id: string): Feature {
+  public static dbToDomain(dbResult: FeatureDto, id: string): Feature {
     if (!this.isFeature(dbResult)) {
       throw new Err(`DOMAIN_OBJECT`, `FeatureMap: ${errInternal.DOMAIN_OBJECT}`)
     }
@@ -59,7 +63,7 @@ export class FeatureMap {
     )
   }
 
-  public static domainToDto(feature: Feature): IFeatureDto {
+  public static domainToDto(feature: Feature): FeatureDto {
     return {
       id: feature.id.value,
       name: feature.name.value,

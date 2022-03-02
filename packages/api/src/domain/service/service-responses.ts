@@ -23,13 +23,14 @@
  *
  * @module
  */
-import { IAccountDto } from 'domain/models/account-model'
-import { Err } from 'domain/models/err-model'
-import { IFeatureDto } from 'domain/models/feature-model'
-import { IRoleDto } from 'domain/models/role-model'
-import { IUserDto } from 'domain/models/user-model'
-
 import { httpStatus, httpStatusValueType, outcomes, outcomeValueType } from 'data/constants'
+
+import { Err } from 'domain/models/err-model'
+
+import { AccountDto } from 'dto/account-dto'
+import { FeatureDto } from 'dto/feature-dto'
+import { RoleDto } from 'dto/role-dto'
+import { UserDto } from 'dto/user-dto'
 
 abstract class ServiceResponse<T> {
   // What was the outcome?
@@ -81,17 +82,17 @@ abstract class ServiceResponse<T> {
   }
 }
 
-export class AccountResponse extends ServiceResponse<IAccountDto> {
+export class AccountResponse extends ServiceResponse<AccountDto> {
   private constructor(
     outcome: outcomeValueType = outcomes.ERROR,
     statusCode: httpStatusValueType,
-    item?: IAccountDto,
+    item?: AccountDto,
     err?: Err,
   ) {
     super(outcome, statusCode, item, err)
   }
 
-  public static success(item: IAccountDto): AccountResponse {
+  public static success(item: AccountDto): AccountResponse {
     return new AccountResponse(outcomes.SUCCESS, httpStatus.OK, item)
   }
 
@@ -104,17 +105,17 @@ export class AccountResponse extends ServiceResponse<IAccountDto> {
   }
 }
 
-export class FeatureResponse extends ServiceResponse<IFeatureDto> {
+export class FeatureResponse extends ServiceResponse<FeatureDto> {
   private constructor(
     outcome: outcomeValueType = outcomes.ERROR,
     statusCode: httpStatusValueType,
-    item?: IFeatureDto,
+    item?: FeatureDto,
     err?: Err,
   ) {
     super(outcome, statusCode, item, err)
   }
 
-  public static success(item: IFeatureDto): FeatureResponse {
+  public static success(item: FeatureDto): FeatureResponse {
     return new FeatureResponse(outcomes.SUCCESS, httpStatus.OK, item)
   }
 
@@ -127,17 +128,17 @@ export class FeatureResponse extends ServiceResponse<IFeatureDto> {
   }
 }
 
-export class RoleResponse extends ServiceResponse<IRoleDto> {
+export class RoleResponse extends ServiceResponse<RoleDto> {
   private constructor(
     outcome: outcomeValueType = outcomes.ERROR,
     statusCode: httpStatusValueType,
-    item?: IRoleDto,
+    item?: RoleDto,
     err?: Err,
   ) {
     super(outcome, statusCode, item, err)
   }
 
-  public static success(item: IRoleDto): RoleResponse {
+  public static success(item: RoleDto): RoleResponse {
     return new RoleResponse(outcomes.SUCCESS, httpStatus.OK, item)
   }
 
@@ -173,17 +174,17 @@ export class StringResponse extends ServiceResponse<string> {
   }
 }
 
-export class UserResponse extends ServiceResponse<IUserDto> {
+export class UserResponse extends ServiceResponse<UserDto> {
   private constructor(
     outcome: outcomeValueType = outcomes.ERROR,
     statusCode: httpStatusValueType,
-    item?: IUserDto,
+    item?: UserDto,
     err?: Err,
   ) {
     super(outcome, statusCode, item, err)
   }
 
-  public static success(item: IUserDto): UserResponse {
+  public static success(item: UserDto): UserResponse {
     return new UserResponse(outcomes.SUCCESS, httpStatus.OK, item)
   }
 
