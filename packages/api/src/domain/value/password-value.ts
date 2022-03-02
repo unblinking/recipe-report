@@ -23,7 +23,7 @@
  *
  * @module
  */
-import { zxcvbn, ZxcvbnOptions } from '@zxcvbn-ts/core'
+import { zxcvbn, zxcvbnOptions } from '@zxcvbn-ts/core'
 import {
   CrackTimesSeconds,
   FeedbackType,
@@ -101,7 +101,7 @@ export const isStrongPassword = async (
       userInputs: userInputs,
     },
   }
-  ZxcvbnOptions.setOptions(options)
+  zxcvbnOptions.setOptions(options)
   const result: ZxcvbnResult = await zxcvbn(password)
   const score: number = result.score
   const warnings: number = result.feedback.warning ? 1 : 0
