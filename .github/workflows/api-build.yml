@@ -1,6 +1,12 @@
 name: Build
 
-on: [pull_request]
+on:
+  pull_request:
+    types: [opened]
+    branches:
+      - main
+    paths:
+      - 'packages/api/**'
 
 jobs:
   build:
@@ -29,9 +35,11 @@ jobs:
 
     - name: Build
       run: npm run build
+      working-directory: packages/api
 
     - name: Test
       run: npm run test
+      working-directory: packages/api
 
     - name: Codecov
       uses: codecov/codecov-action@v2
