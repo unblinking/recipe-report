@@ -1,0 +1,31 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/api/**'
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy to production
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        script_stop: true
+        script: |
+          pm2 stop api.recipe.report
+          cd ~
+          rm -rf recipe.report/
+          git clone https://github.com/nothingworksright/recipe.report.git
+          cd recipe.report/packages/api/
+          npm install
+          npm run build
+          pm2 restart api.recipe.report

@@ -1,0 +1,148 @@
+/**
+ * Index styles module in less format.
+ *
+ * @see {@link https://github.com/css-modules/css-modules}
+ *
+ * @author Joshua Gray {@link https://github.com/jmg1138}
+ * @copyright Copyright (C) 2017-2022
+ * @license GNU AGPLv3 or later
+ *
+ * This file is part of Recipe.Report Web Application.
+ * @see {@link https://github.com/nothingworksright/my.recipe.report}
+ *
+ * Recipe.Report Web App is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * Recipe.Report Web App is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * @module
+ */
+
+@import '.less-global-vars.less';
+
+body {
+  background-color: @color-body-background;
+  font-family: @font-family;
+  font-size: @font-size-base;
+  color: @color-text;
+  line-height: @line-height-base;
+  margin: 0;
+}
+
+h1 {
+  color: @color-heading;
+}
+h2 {
+  color: @color-heading;
+}
+h3 {
+  color: @color-heading;
+}
+h4 {
+  color: @color-heading;
+}
+h5 {
+  color: @color-heading;
+}
+
+a {
+  color: @color-link;
+  text-decoration: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+}
+a:hover {
+  color: @color-link-hover;
+}
+a:active {
+  color: @color-link-active;
+}
+
+form {
+  background-color: @color-component-background;
+  padding: @padding-md;
+  border: 1px solid @purple;
+  border-radius: 4px;
+}
+label {
+  font-size: @font-size-lg;
+}
+
+input {
+  display: block;
+  box-sizing: border-box;
+  border: @border-base;
+  border-radius: @border-radius-base;
+  margin-bottom: @margin-xss;
+  padding: @padding-sm;
+  font-size: @font-size-base;
+  color: @white;
+  background-color: @color-background;
+}
+input:focus {
+  outline: @border-base;
+}
+
+button[type='submit'],
+input[type='submit'] {
+  color: @color-text;
+  transition: 0.3s all;
+  background-color: @color-button-primary;
+  border: none;
+  padding: @padding-lg;
+  font-size: @font-size-lg;
+  font-weight: bold;
+  letter-spacing: 10px;
+  text-transform: uppercase;
+}
+button[type='submit']:hover,
+input[type='submit']:hover {
+  background-color: @color-button-primary-hover;
+}
+button[type='submit']:active,
+input[type='button']:active,
+input[type='submit']:active {
+  transform: translateY(3px);
+  border: 0;
+  opacity: 0.8;
+}
+
+table {
+  border-collapse: separate;
+  margin: 25px 0;
+}
+table thead tr {
+  background-color: @black;
+  color: @blue;
+  text-align: center;
+}
+table tbody th {
+  background-color: @black;
+  color: @blue;
+  text-align: right;
+}
+table th,
+table td {
+  padding: 12px 15px;
+}
+table tbody tr {
+  border-bottom: 1px solid @blue;
+}
+table tbody tr:nth-of-type(odd) {
+  background-color: @color-component-background;
+}
+table tbody tr:last-of-type {
+  border-bottom: 1px solid @purple;
+}
+table tbody tr:hover {
+  color: @orange;
+}

@@ -1,0 +1,25 @@
+{
+  "printWidth": 100,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "arrowParens": "always",
+  "jsxSingleQuote": false,
+  "importOrder": [
+    "<THIRD_PARTY_MODULES>",
+    "^api/(.*)$",
+    "^data/(.*)$",
+    "^domain/(.*)$",
+    "^dto/(.*)$",
+    "^interface/(.*)$",
+    "^service/(.*)$",
+    "^root/(.*)$",
+    "^test/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "importOrderCaseInsensitive": true,
+  "parser": "typescript",
+  "importOrderParserPlugins" : ["classProperties", "decorators-legacy", "typescript"]
+}
