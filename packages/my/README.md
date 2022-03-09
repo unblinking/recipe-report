@@ -1,4 +1,4 @@
-# my.Recipe.Report, the Web App
+# my.Recipe.Report, the Web App  
 
 ![logo](https://user-images.githubusercontent.com/2879801/154334825-d5c4873c-0f43-42a7-a5a8-74a1d38163d3.svg)
 
@@ -6,7 +6,7 @@ This is the [source code](https://github.com/nothingworksright/my.recipe.report)
 
 Written using [React](https://reactjs.org/)/[Redux](https://redux.js.org/)/[Thunk](https://github.com/reduxjs/redux-thunk)/[TypeScript](https://www.typescriptlang.org/). You can find information on [how to use TypeScript with Redux Toolkit](https://redux.js.org/tutorials/typescript-quick-start).
 
-## Development work
+## Development work  
 
 Want to do some development work?
 
@@ -15,9 +15,9 @@ npm install
 npm run develop
 ```
 
-### Helpful development tips
+### Helpful development tips  
 
-#### React developer tools
+#### React developer tools  
 
 In the browser, install the React Developer Tools extension. [Firefox](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/). [Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi). [Edge](https://microsoftedge.microsoft.com/addons/detail/react-developer-tools/gpphkfbcpidddadnkolkpfckpihlkkil).
 
@@ -25,7 +25,7 @@ Once that is installed, you can view the Redux store while debugging in the brow
 
 First, select a component in the React developer tools, and then go to the browser console and type `$r` to access the instance of that React component. To see that component's Redux store try `$r.props.store.getState()`.
 
-## Production build
+## Production build  
 
 Want to mimic a production build?
 
@@ -36,11 +36,24 @@ npm run build
 
 The build will be ready in the `build` directory.
 
-## `package.json`
+## Production host  
+
+This project is currently hosted on [Cloudflare Pages](https://developers.cloudflare.com/pages/).  
+
+Field|Setting
+--|--
+Production branch|`main`
+Framework preset|Create React App
+Build command|`npm run build`
+Build output directory|`build`
+Root directory path|`packages/my`
+Env var|`NODE_VERSION` 16.14.0
+
+## `package.json`  
 
 You can't put comments into a `package.json` file, so here are some comments that might help explain why the stuff that is in there is in there.
 
-### `devDependencies`
+### `devDependencies`  
 
 In the `devDependencies` we have packages that are only needed during work in a development environment.
 
@@ -52,7 +65,7 @@ npm-check-updates|Heads-up when dependencies have newer versions available.
 prettier|Enforce consistent code style.
 @testing-library/jest-dom<br />@testing-library/react<br />@testing-library/user-event|Unit testing for React.
 
-### `dependencies`
+### `dependencies`  
 
 In the `dependencies` we have packages that could be required to build and deploy this static web site. In some continuous deployment services, the project must be able to build. Any packages that are required to complete the build are listed here.
 
