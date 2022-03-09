@@ -20,9 +20,9 @@ jobs:
         script: |
           pm2 stop api.recipe.report
           cd ~
-          rm -rf api.recipe.report/
-          git clone https://github.com/nothingworksright/api.recipe.report.git
-          cd api.recipe.report/
+          rm -rf recipe.report/
+          git clone https://github.com/nothingworksright/recipe.report.git
+          cd recipe.report/packages/api/
           npm install
           npm run build
           pm2 restart api.recipe.report
