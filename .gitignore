@@ -84,7 +84,7 @@ typings/
 .vagrant
 
 # Flyway.
-flyway*
+flyway-*/
 
 # Build
 dist/

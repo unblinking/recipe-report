@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy-API
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Deploy to production
+    - name: Deploy-API-Production
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -25,7 +25,8 @@ jobs:
           cd ~
           rm -rf recipe-report/
           git clone https://github.com/nothingworksright/recipe-report.git
-          cd recipe.report/packages/api/
+          cd recipe-report
           npm install
+          cd packages/api
           npm run build
           pm2 restart api.recipe.report
