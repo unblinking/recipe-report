@@ -1,0 +1,42 @@
+name: Build-MY
+
+on:
+  pull_request:
+    types: [opened]
+    branches:
+      - main
+    paths:
+      - 'packages/my/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    env:
+      NODE_ENV: development
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16.14.0
+
+    - name: Install
+      run: npm install
+
+    - name: Build-API
+      run: npm run build
+      working-directory: packages/my
+
+    - name: Test-API
+      run: npm run test
+      working-directory: packages/my
+
+    - name: Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        verbose: true
