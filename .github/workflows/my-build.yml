@@ -1,4 +1,4 @@
-name: Build-backend
+name: Build-frontend
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - 'packages/api/**'
+      - 'packages/my/**'
 
 jobs:
   build:
@@ -15,11 +15,6 @@ jobs:
 
     env:
       NODE_ENV: development
-      RR_PORT: 1138
-      RR_CRYPTO_KEY: MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT
-      RR_CRYPTO_ALGO: aes-256-cbc
-      RR_CRYPTO_IV_LENGTH: 16
-      RR_JWT_SECRET: devTestEnvironment
 
     steps:
     - name: Checkout repository
@@ -33,13 +28,13 @@ jobs:
     - name: Install
       run: npm install
 
-    - name: Build-Backend
+    - name: Build-Frontend
       run: npm run build
-      working-directory: packages/api
+      working-directory: packages/my
 
-    - name: Test-Backend
+    - name: Test-Frontend
       run: npm run test
-      working-directory: packages/api
+      working-directory: packages/my
 
     - name: Codecov
       uses: codecov/codecov-action@v2
