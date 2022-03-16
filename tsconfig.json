@@ -1,0 +1,97 @@
+{
+  // https://www.typescriptlang.org/tsconfig
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 16",
+
+  "compilerOptions": {
+    // Type Checking
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "alwaysStrict": true,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true, // Equivalent to enabling all of the strict mode family options.
+    "useUnknownInCatchVariables": true,
+
+    // Modules
+    "allowUmdGlobalAccess": false,
+    // "baseUrl": "./src", // Specified in each package's tsconfig.json file.
+    "module": "es2020",
+    "moduleResolution": "node",
+    "noResolve": false,
+    // "paths": {}, // Specified in each package's tsconfig.json file.
+    "resolveJsonModule": true,
+    // "rootDirs": ["./src"], Specified in each package's tsconfig.json file.
+    // "typeRoots": [], // By default all visible ”@types” packages are included in your compilation.
+    // "types": [], // Only specifying this in each package's tsconfig.json file when needed.
+
+    // Emit
+    "declaration": true,
+    // "declarationDir": "",
+    "declarationMap": true,
+    "downlevelIteration": true,
+    "emitBOM": false,
+    "emitDeclarationOnly": false,
+    "importHelpers": false,
+    "importsNotUsedAsValues": "error",
+    "inlineSourceMap": false,
+    "inlineSources": false,
+    // "mapRoot": "",
+    "newLine": "lf",
+    "noEmit": false,
+    "noEmitHelpers": false,
+    "noEmitOnError": false,
+    // "outDir": "",
+    // "outFile": "",
+    "preserveConstEnums": false,
+    "preserveValueImports": false,
+    "removeComments": true,
+    "sourceMap": true,
+    // "sourceRoot": "",
+    "stripInternal": false,
+
+    // JavaScript Support
+    "allowJs": false,
+    "checkJs": false,
+    // "maxNodeModuleJsDepth": 0, // This flag is can only be used when allowJs is enabled.
+
+    // Editor Support
+    "disableSizeLimit": true,
+    // "plugins": [],
+
+    // Interop Constraints
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": false,
+    "preserveSymlinks": false,
+
+    // Backwards Compatibility
+    "charset": "utf8",
+    "keyofStringsOnly": false,
+    "noImplicitUseStrict": false,
+    "noStrictGenericChecks": false,
+    // "out": "",
+    "suppressExcessPropertyErrors": false,
+    "suppressImplicitAnyIndexErrors": false,
+
+    // Language and Environment
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "jsx": "react-jsx",
+    "lib": ["es2021"],
+    "target": "es2021",
+    "useDefineForClassFields": false,
+
+    // Completeness
+    "skipLibCheck": true
+  }
+}
