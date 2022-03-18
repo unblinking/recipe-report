@@ -1,0 +1,8 @@
+{
+  "name": "@recipe-report/domain",
+  "version": "0.1.0",
+  "description": "recipe.report domain",
+  "repository": "github:nothingworksright/recipe-report",
+  "license": "AGPL-3.0-or-later",
+  "author": "jmg1138 https://github.com/jmg1138"
+}

@@ -7,11 +7,10 @@
   "jsxSingleQuote": true,
   "importOrder": [
     "<THIRD_PARTY_MODULES>",
-    "^controllers/(.*)$",
-    "^middlewares/(.*)$",
-    "^templates/(.*)$",
+    "^app/(.*)$",
+    "^components/(.*)$",
     "^root/(.*)$",
-    "^tests/(.*)$",
+    "^wrappers/(.*)$",
     "^[./]"
   ],
   "importOrderSeparation": true,
