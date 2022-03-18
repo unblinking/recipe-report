@@ -1,8 +1,8 @@
 {
-  "name": "my.recipe.report",
+  "name": "@recipe-report/web",
   "version": "0.1.0",
-  "description": "Recipe.Report Web App",
-  "repository": "github:nothingworksright/my.recipe.report",
+  "description": "recipe.report web app",
+  "repository": "github:nothingworksright/recipe-report",
   "license": "AGPL-3.0-or-later",
   "engines": {
     "node": "16.14.0"
@@ -54,7 +54,6 @@
     "@types/react-dom": "^17.0.11",
     "@types/react-helmet": "^6.1.5",
     "@types/react-redux": "^7.1.22",
-    "api.recipe.report": "0.1.0",
     "history": "5",
     "jwt-decode": "3.1.2",
     "less": "^4.1.2",

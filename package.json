@@ -1,5 +1,5 @@
 {
-  "name": "recipe.report",
+  "name": "@recipe-report/monorepo",
   "version": "0.1.0",
   "description": "The recipe.report monorepo.",
   "repository": {
@@ -11,6 +11,7 @@
     "npm": "8.3.1",
     "node": "16.14.0"
   },
+
   "author": "jmg1138 https://github.com/jmg1138",
   "readme": "README.md",
   "packageManager": "npm@8.3.1",
