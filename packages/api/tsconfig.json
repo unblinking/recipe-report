@@ -8,14 +8,11 @@
     // Modules
     "baseUrl": "./src",
     "paths": {
-      "api/*": ["api/*"],
-      "data/*": ["data/*"],
-      "domain/*": ["domain/*"],
-      "dto/*": ["dto/*"],
-      "interface/*": ["interface/*"],
+      "controllers/*": ["controllers/*"],
+      "middlewares/*": ["middlewares/*"],
+      "templates/*": ["templates/*"],
       "root/*": ["*"],
-      "service/*": ["service/*"],
-      "test/*": ["test/*"]
+      "tests/*": ["tests/*"]
     },
     "rootDirs": ["./src"],
     "types": [

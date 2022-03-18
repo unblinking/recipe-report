@@ -3,6 +3,9 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Node 16",
 
+  "include": ["packages/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"],
+
   "compilerOptions": {
     // Type Checking
     "allowUnreachableCode": false,
@@ -23,13 +26,13 @@
 
     // Modules
     "allowUmdGlobalAccess": false,
-    // "baseUrl": "./src", // Specified in each package's tsconfig.json file.
+    // "baseUrl": "./packages",
     "module": "es2020",
     "moduleResolution": "node",
     "noResolve": false,
-    // "paths": {}, // Specified in each package's tsconfig.json file.
+    // "paths": {},
     "resolveJsonModule": true,
-    // "rootDirs": ["./src"], Specified in each package's tsconfig.json file.
+    // "rootDirs": ["./packages"],
     // "typeRoots": [], // By default all visible ”@types” packages are included in your compilation.
     // "types": [], // Only specifying this in each package's tsconfig.json file when needed.
 
