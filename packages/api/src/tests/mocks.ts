@@ -25,16 +25,11 @@
  *
  * @module
  */
+import type { UserDto } from '@recipe-report/domain/dtos'
+import { Err, errClient, User } from '@recipe-report/domain/models'
+import { UserRequest, UserResponse } from '@recipe-report/domain/services'
+import { DisplayName, EmailAddress, Password, UniqueId } from '@recipe-report/domain/values'
 import { injectable } from 'inversify'
-
-import { Err, errClient } from 'domain/models/err-model'
-import { IUserDto, User } from 'domain/models/user-model'
-import { UserRequest } from 'domain/service/service-requests'
-import { UserResponse } from 'domain/service/service-responses'
-import { DisplayName } from 'domain/value/display-name-value'
-import { EmailAddress } from 'domain/value/email-address-value'
-import { Password } from 'domain/value/password-value'
-import { UniqueId } from 'domain/value/uid-value'
 
 export const mockUserDomain: User = User.create(
   {
@@ -46,18 +41,18 @@ export const mockUserDomain: User = User.create(
   UniqueId.create(),
 )
 
-export const mockUserDtoNewComplete: IUserDto = {
+export const mockUserDtoNewComplete: UserDto = {
   name: 'foo',
   password: 'passwordfoo',
   email_address: 'foo@recipe.report',
 }
 
-export const mockUserDtoNewIncomplete: IUserDto = {
+export const mockUserDtoNewIncomplete: UserDto = {
   name: 'foo',
   email_address: 'foo@recipe.report',
 }
 
-export const mockUserDtoSavedComplete: IUserDto = {
+export const mockUserDtoSavedComplete: UserDto = {
   name: 'foo',
   password: 'passwordfoo',
   email_address: 'foo@recipe.report',

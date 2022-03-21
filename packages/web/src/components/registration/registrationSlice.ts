@@ -24,12 +24,11 @@
  * @module
  */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import type { ApiRequestRegistration, ApiResponse } from 'interfaces/apiInterfaces'
 
 import type { RootState } from 'app/store'
 
 import { requestRegistration } from 'components/registration/registrationAPI'
-
-import type { ApiRequestRegistration, ApiResponse } from 'interfaces/apiInterfaces'
 
 export interface RegistrationState {
   status: `Ready` | `Loading` | `Failed` | `Error` | `Registered`

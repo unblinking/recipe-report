@@ -8,8 +8,6 @@
     "node": "16.14.0"
   },
   "scripts": {
-    "flyway": "wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/7.3.0/flyway-commandline-7.3.0-linux-x64.tar.gz | tar xvz",
-    "migrate": "./flyway-7.3.0/flyway -configFiles=flyway.conf migrate",
     "prettier": "prettier --write src/**",
     "linter": "eslint --ext .js,.jsx,.ts,.tsx src/",
     "updates": "echo \"Checking for available dependency updates\" && ncu",
@@ -20,7 +18,6 @@
     "start": "node dist/main.js"
   },
   "author": "jmg1138 https://github.com/jmg1138",
-  "main": "app.js",
   "readme": "README.md",
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^3.2.0",

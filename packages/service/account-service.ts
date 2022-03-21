@@ -23,20 +23,14 @@
  *
  * @module
  */
+import { container, SYMBOLS } from '@recipe-report/api/ioc'
+import type { IUnitOfWork } from '@recipe-report/data/repositories'
+import { AccountMap } from '@recipe-report/domain/maps'
+import { Account, Err, errClient, isErrClient } from '@recipe-report/domain/models'
+import { AccountRequest, UuidRequest, AccountResponse } from '@recipe-report/domain/services'
+import { DisplayName, UniqueId } from '@recipe-report/domain/values'
 import { injectable } from 'inversify'
-
-import { IUnitOfWork } from 'data/repositories/unit-of-work'
-
-import { AccountMap } from 'domain/maps/account-map'
-import { Account } from 'domain/models/account-model'
-import { Err, errClient, isErrClient } from 'domain/models/err-model'
-import { AccountRequest, UuidRequest } from 'domain/service/service-requests'
-import { AccountResponse } from 'domain/service/service-responses'
-import { DisplayName } from 'domain/value/display-name-value'
-import { UniqueId } from 'domain/value/uid-value'
-
-import { container } from 'root/ioc.config'
-import { SYMBOLS } from 'root/symbols'
+import 'reflect-metadata'
 
 export interface IAccountService {
   create(req: AccountRequest): Promise<AccountResponse>

@@ -23,14 +23,12 @@
  *
  * @module
  */
+import type { IBaseController } from '@recipe-report/api/controllers'
+import { fiveHundred } from '@recipe-report/api/middlewares'
+import { httpStatus } from '@recipe-report/data'
 import { NextFunction, Request, Response, Router } from 'express'
 import { injectable } from 'inversify'
-
-import { IBaseController } from 'api/controllers/base-controller'
-import { fiveHundred } from 'api/middlewares/laststop'
-import { Responder } from 'api/responder'
-
-import { httpStatus } from 'data/constants'
+import { Responder } from 'responder'
 
 @injectable()
 export class RootController implements IBaseController {

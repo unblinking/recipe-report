@@ -26,13 +26,10 @@
  *
  * @module
  */
-import { Response } from 'express'
-
-import { httpStatusValueType, outcomes } from 'data/constants'
-
-import { errClient } from 'domain/models/err-model'
-
-import { log } from 'service/log-service'
+import { httpStatusValueType, outcomes } from '@recipe-report/data'
+import { errClient } from '@recipe-report/domain/models'
+import { log } from '@recipe-report/service'
+import type { Response } from 'express'
 
 export class Responder {
   // All went well, and (usually) some data was returned.

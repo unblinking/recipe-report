@@ -23,14 +23,9 @@
  *
  * @module
  */
-import { httpStatus, httpStatusValueType, outcomes, outcomeValueType } from 'data/constants'
-
-import { Err } from 'domain/models/err-model'
-
-import { AccountDto } from 'dto/account-dto'
-import { FeatureDto } from 'dto/feature-dto'
-import { RoleDto } from 'dto/role-dto'
-import { UserDto } from 'dto/user-dto'
+import { httpStatus, httpStatusValueType, outcomes, outcomeValueType } from '@recipe-report/data'
+import type { AccountDto, FeatureDto, RoleDto, UserDto } from '@recipe-report/domain/dtos'
+import type { Err } from '@recipe-report/domain/models'
 
 abstract class ServiceResponse<T> {
   // What was the outcome?
@@ -45,12 +40,12 @@ abstract class ServiceResponse<T> {
   // Item requested.
   // If some item was requested, respond with the item here.
   // Examples: a user object, or an authentication token.
-  protected _item?: T
+  protected _item?: T | undefined
 
   // Err object.
   // An error happened during the request.
   // This could be from an outcome of FAIL or ERROR.
-  protected _err?: Err
+  protected _err?: Err | undefined
 
   public get outcome(): outcomeValueType {
     return this._outcome

@@ -23,6 +23,7 @@
  *
  * @module
  */
+import type { ApiRequestRegistration } from 'interfaces/apiInterfaces'
 import { Helmet } from 'react-helmet'
 import { useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
@@ -39,8 +40,6 @@ import {
   selectStatus,
 } from 'components/registration/registrationSlice'
 import { Spacer } from 'components/spacer/Spacer'
-
-import type { ApiRequestRegistration } from 'interfaces/apiInterfaces'
 
 interface FormSubmitRegistration {
   name: string

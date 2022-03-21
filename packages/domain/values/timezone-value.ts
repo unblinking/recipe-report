@@ -23,10 +23,9 @@
  *
  * @module
  */
+import { Err, errClient } from '@recipe-report/domain/models'
+import { ValueObject } from '@recipe-report/domain/values'
 import { timeZonesNames } from '@vvo/tzdb'
-
-import { Err, errClient } from 'domain/models/err-model'
-import { ValueObject } from 'domain/value/base-value'
 
 export interface ITimeZone {
   value: string

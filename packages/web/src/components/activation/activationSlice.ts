@@ -24,12 +24,11 @@
  * @module
  */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import type { ApiRequestActivation, ApiResponse } from 'interfaces/apiInterfaces'
 
 import type { RootState } from 'app/store'
 
 import { requestActivation } from 'components/activation/activationAPI'
-
-import type { ApiRequestActivation, ApiResponse } from 'interfaces/apiInterfaces'
 
 export interface ActivationState {
   status: `Ready` | `Loading` | `Failed` | `Error` | `Activated`

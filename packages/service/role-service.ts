@@ -23,21 +23,14 @@
  *
  * @module
  */
+import { container, SYMBOLS } from '@recipe-report/api/ioc'
+import type { IUnitOfWork } from '@recipe-report/data/repositories'
+import { RoleMap } from '@recipe-report/domain/maps'
+import { Err, errClient, isErrClient, Role } from '@recipe-report/domain/models'
+import { RoleRequest, UuidRequest, RoleResponse } from '@recipe-report/domain/services'
+import { DisplayName, SmallInt, UniqueId } from '@recipe-report/domain/values'
 import { injectable } from 'inversify'
-
-import { IUnitOfWork } from 'data/repositories/unit-of-work'
-
-import { RoleMap } from 'domain/maps/role-map'
-import { Err, errClient, isErrClient } from 'domain/models/err-model'
-import { Role } from 'domain/models/role-model'
-import { RoleRequest, UuidRequest } from 'domain/service/service-requests'
-import { RoleResponse } from 'domain/service/service-responses'
-import { DisplayName } from 'domain/value/display-name-value'
-import { SmallInt } from 'domain/value/smallint-value'
-import { UniqueId } from 'domain/value/uid-value'
-
-import { container } from 'root/ioc.config'
-import { SYMBOLS } from 'root/symbols'
+import 'reflect-metadata'
 
 export interface IRoleService {
   create(req: RoleRequest): Promise<RoleResponse>

@@ -27,16 +27,16 @@
 export class AccountDto {
   id?: string
   name?: string
-  description?: string
+  description?: string | undefined
   contact_user_id?: string
-  location_code?: string
-  time_zone?: string
-  address_country?: string
-  address_locality?: string
-  address_region?: string
-  address_post_office_box?: string
-  address_postal_code?: string
-  address_street?: string
-  date_created?: string
-  date_deleted?: string
+  location_code?: string | undefined
+  time_zone?: string | undefined
+  address_country?: string | undefined
+  address_locality?: string | undefined
+  address_region?: string | undefined
+  address_post_office_box?: string | undefined
+  address_postal_code?: string | undefined
+  address_street?: string | undefined
+  date_created?: string | undefined
+  date_deleted?: string | undefined
 }

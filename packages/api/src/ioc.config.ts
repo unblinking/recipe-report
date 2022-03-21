@@ -24,23 +24,30 @@
  *
  * @module
  */
+import { RoleController, RootController, UserController } from '@recipe-report/api/controllers'
+import type { IBaseController } from '@recipe-report/api/controllers'
+import type { IDataAccessLayer } from '@recipe-report/data'
+import { DataAccessLayer } from '@recipe-report/data'
+import { IUnitOfWork, UnitOfWork } from '@recipe-report/data/repositories'
+import type {
+  IAccountService,
+  ICryptoService,
+  IEmailService,
+  IFeatureService,
+  IJwtService,
+  IRoleService,
+  IUserService,
+} from '@recipe-report/service'
+import {
+  AccountService,
+  CryptoService,
+  EmailService,
+  FeatureService,
+  JwtService,
+  RoleService,
+  UserService,
+} from '@recipe-report/service'
 import { Container } from 'inversify'
-
-import { IBaseController } from 'api/controllers/base-controller'
-import { RoleController } from 'api/controllers/role-controller'
-import { RootController } from 'api/controllers/root-controller'
-import { UserController } from 'api/controllers/user-controller'
-
-import { DataAccessLayer, IDataAccessLayer } from 'data/data-access'
-import { IUnitOfWork, UnitOfWork } from 'data/repositories/unit-of-work'
-
-import { AccountService, IAccountService } from 'service/account-service'
-import { CryptoService, ICryptoService } from 'service/crypto-service'
-import { EmailService, IEmailService } from 'service/email-service'
-import { FeatureService, IFeatureService } from 'service/feature-service'
-import { IJwtService, JwtService } from 'service/jwt-service'
-import { IRoleService, RoleService } from 'service/role-service'
-import { IUserService, UserService } from 'service/user-service'
 
 import { IRecipeReport, RecipeReport } from 'root/recipereport'
 import { SYMBOLS } from 'root/symbols'

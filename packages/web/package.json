@@ -8,7 +8,7 @@
     "node": "16.14.0"
   },
   "scripts": {
-    "prettier": "prettier --write src/**",
+    "prettier": "prettier --write src/**/**.{ts,tsx}",
     "linter": "eslint --ext .js,.jsx,.ts,.tsx src/",
     "updates": "echo \"Checking for available dependency updates\" && ncu -u",
     "test": "react-scripts test",

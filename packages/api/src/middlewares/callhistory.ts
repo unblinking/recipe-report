@@ -24,9 +24,8 @@
  *
  * @module
  */
-import { NextFunction, Request, Response } from 'express'
-
-import { log } from 'service/log-service'
+import { log } from '@recipe-report/service'
+import type { NextFunction, Request, Response } from 'express'
 
 /**
  * Call history for API calls.

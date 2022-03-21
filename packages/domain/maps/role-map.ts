@@ -23,15 +23,10 @@
  *
  * @module
  */
-import { Err, errInternal } from 'domain/models/err-model'
-import { Role } from 'domain/models/role-model'
-import { DisplayName } from 'domain/value/display-name-value'
-import { SmallInt } from 'domain/value/smallint-value'
-import { UniqueId } from 'domain/value/uid-value'
-
-import { RoleDto } from 'dto/role-dto'
-
-import { IRole } from 'interface/role-interface'
+import type { RoleDto } from '@recipe-report/domain/dtos'
+import type { IRole } from '@recipe-report/domain/interfaces'
+import { Err, errInternal, Role } from '@recipe-report/domain/models'
+import { DisplayName, SmallInt, UniqueId } from '@recipe-report/domain/values'
 
 export class RoleMap {
   public static dtoToDomain(roleDto: RoleDto): Role {

@@ -27,20 +27,16 @@
  *
  * @module
  */
+import { listen } from '@recipe-report/api'
+import type { IBaseController } from '@recipe-report/api/controllers'
+import { SYMBOLS } from '@recipe-report/api/ioc'
+import { callHistory } from '@recipe-report/api/middlewares'
+import { Err, errEnv } from '@recipe-report/domain/models'
+import { log } from '@recipe-report/service'
 import { json, RequestHandler } from 'express'
 import Helmet from 'helmet'
 import { injectable, multiInject } from 'inversify'
 import 'reflect-metadata'
-
-import { listen } from 'api/app'
-import { IBaseController } from 'api/controllers/base-controller'
-import { callHistory } from 'api/middlewares/callhistory'
-
-import { Err, errEnv } from 'domain/models/err-model'
-
-import { log } from 'service/log-service'
-
-import { SYMBOLS } from './symbols'
 
 export interface IRecipeReport {
   start(): void
@@ -68,7 +64,7 @@ export class RecipeReport implements IRecipeReport {
         callHistory,
       ]
       const controllers: Array<IBaseController> = this._controllers
-      const port: number = parseInt(process.env.RR_PORT as string, 10)
+      const port: number = parseInt(process.env['RR_PORT'] as string, 10)
       listen(middlewares, controllers, port)
     } catch (e) {
       log.fatal((e as Error).message)
@@ -80,37 +76,38 @@ export class RecipeReport implements IRecipeReport {
   /// This confirms that necessary environment variables have been defined.
   private _envVarCheck = (): void => {
     log.trace(`envvarcheck.ts envVarCheck()`)
-    if (!process.env.NODE_ENV) {
+    if (!process.env['NODE_ENV']) {
       log.warn(`NODE_ENV is not set. Assuming environment is not production.`)
     }
-    if (!process.env.RR_PORT) throw new Err(`ENV_RR_PORT`, errEnv.ENV_RR_PORT)
-    if (!process.env.RR_CRYPTO_KEY) throw new Err(`ENV_RR_CRYPTO_KEY`, errEnv.ENV_RR_CRYPTO_KEY)
-    if (!process.env.RR_CRYPTO_ALGO) throw new Err(`ENV_RR_CRYPTO_ALGO`, errEnv.ENV_RR_CRYPTO_ALGO)
-    if (!process.env.RR_CRYPTO_IV_LENGTH)
+    if (!process.env['RR_PORT']) throw new Err(`ENV_RR_PORT`, errEnv.ENV_RR_PORT)
+    if (!process.env['RR_CRYPTO_KEY']) throw new Err(`ENV_RR_CRYPTO_KEY`, errEnv.ENV_RR_CRYPTO_KEY)
+    if (!process.env['RR_CRYPTO_ALGO'])
+      throw new Err(`ENV_RR_CRYPTO_ALGO`, errEnv.ENV_RR_CRYPTO_ALGO)
+    if (!process.env['RR_CRYPTO_IV_LENGTH'])
       throw new Err(`ENV_RR_CRYPTO_IV_LENGTH`, errEnv.ENV_RR_CRYPTO_IV_LENGTH)
-    if (!process.env.RR_JWT_SECRET) throw new Err(`ENV_RR_JWT_SECRET`, errEnv.ENV_RR_JWT_SECRET)
-    if (!process.env.RRDB_USER) throw new Err(`ENV_RRDB_USER`, errEnv.ENV_RRDB_USER)
-    if (!process.env.RRDB_HOST) throw new Err(`ENV_RRDB_HOST`, errEnv.ENV_RRDB_HOST)
-    if (!process.env.RRDB_DATABASE) throw new Err(`ENV_RRDB_DATABASE`, errEnv.ENV_RRDB_DATABASE)
-    if (!process.env.RRDB_PASSWORD) throw new Err(`ENV_RRDB_PASSWORD`, errEnv.ENV_RRDB_PASSWORD)
-    if (!process.env.RRDB_PORT) throw new Err(`ENV_RRDB_PORT`, errEnv.ENV_RRDB_PORT)
-    if (!process.env.RRDB_URL) {
+    if (!process.env['RR_JWT_SECRET']) throw new Err(`ENV_RR_JWT_SECRET`, errEnv.ENV_RR_JWT_SECRET)
+    if (!process.env['RRDB_USER']) throw new Err(`ENV_RRDB_USER`, errEnv.ENV_RRDB_USER)
+    if (!process.env['RRDB_HOST']) throw new Err(`ENV_RRDB_HOST`, errEnv.ENV_RRDB_HOST)
+    if (!process.env['RRDB_DATABASE']) throw new Err(`ENV_RRDB_DATABASE`, errEnv.ENV_RRDB_DATABASE)
+    if (!process.env['RRDB_PASSWORD']) throw new Err(`ENV_RRDB_PASSWORD`, errEnv.ENV_RRDB_PASSWORD)
+    if (!process.env['RRDB_PORT']) throw new Err(`ENV_RRDB_PORT`, errEnv.ENV_RRDB_PORT)
+    if (!process.env['RRDB_URL']) {
       log.warn(`RRDB_URL is not set. Database migrations are disabled.`)
     }
-    if (!process.env.RRDB_MIGRATIONS) {
+    if (!process.env['RRDB_MIGRATIONS']) {
       log.warn(`RRDB_MIGRATIONS is not set. Database migrations are disabled.`)
     }
-    if (!process.env.RR_LOG_TARGETS) {
+    if (!process.env['RR_LOG_TARGETS']) {
       log.warn(`RR_LOG_TARGETS is not set. Logging is disabled.`)
     }
   }
 
   // Fun. Playful frivolity.
-  private _version: string = process.env.npm_package_version as string
+  private _version: string = process.env['npm_package_version'] as string
   private _stage: string = `Alpha`
-  private _mode: string = (process.env.NODE_ENV as string) || `development`
-  private _license: string = process.env.npm_package_license as string
-  private _repository: string = `https://github.com/nothingworksright/api.recipe.report`
+  private _mode: string = (process.env['NODE_ENV'] as string) || `development`
+  private _license: string = 'AGPL-3.0-or-later'
+  private _repository: string = `github:nothingworksright/recipe-report`
   private _graffiti: string = `\x1b[1m\x1b[32m ____           _
 |  _ \\ ___  ___(_)_ __   ___
 | |_) / _ \\/ __| | '_ \\ / _ \\

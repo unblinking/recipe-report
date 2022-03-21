@@ -23,22 +23,20 @@
  *
  * @module
  */
-import { DisplayName } from 'domain/value/display-name-value'
-import { TimeZone } from 'domain/value/timezone-value'
-import { UniqueId } from 'domain/value/uid-value'
+import type { DisplayName, TimeZone, UniqueId } from '@recipe-report/domain/values'
 
 export interface IAccount {
   name: DisplayName
-  description?: string
+  description?: string | undefined
   contact_user_id: UniqueId
-  location_code?: string
-  time_zone?: TimeZone
-  address_country?: string
-  address_locality?: string
-  address_region?: string
-  address_post_office_box?: string
-  address_postal_code?: string
-  address_street?: string
-  date_created?: Date
-  date_deleted?: Date
+  location_code?: string | undefined
+  time_zone?: TimeZone | undefined
+  address_country?: string | undefined
+  address_locality?: string | undefined
+  address_region?: string | undefined
+  address_post_office_box?: string | undefined
+  address_postal_code?: string | undefined
+  address_street?: string | undefined
+  date_created?: Date | undefined
+  date_deleted?: Date | undefined
 }

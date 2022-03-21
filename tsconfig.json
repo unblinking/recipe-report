@@ -27,7 +27,7 @@
     // Modules
     "allowUmdGlobalAccess": false,
     // "baseUrl": "./packages",
-    "module": "es2020",
+    "module": "commonjs",
     "moduleResolution": "node",
     "noResolve": false,
     // "paths": {},
@@ -37,9 +37,9 @@
     // "types": [], // Only specifying this in each package's tsconfig.json file when needed.
 
     // Emit
-    "declaration": true,
+    "declaration": false,
     // "declarationDir": "",
-    "declarationMap": true,
+    // "declarationMap": true,
     "downlevelIteration": true,
     "emitBOM": false,
     "emitDeclarationOnly": false,

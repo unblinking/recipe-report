@@ -23,9 +23,9 @@
  *
  * @module
  */
-import { container } from '../ioc.config'
-import { IJwtService, tokenType } from '../service/jwt-service'
-import { SYMBOLS } from '../symbols'
+import { container, SYMBOLS } from '@recipe-report/api/ioc'
+import { IJwtService, tokenType } from '@recipe-report/service'
+
 import { mockUserDomain } from './mocks'
 
 describe(`JwtService tests.`, () => {

@@ -23,20 +23,14 @@
  *
  * @module
  */
+import { container, SYMBOLS } from '@recipe-report/api/ioc'
+import type { IUnitOfWork } from '@recipe-report/data/repositories'
+import { FeatureMap } from '@recipe-report/domain/maps'
+import { Err, errClient, isErrClient, Feature } from '@recipe-report/domain/models'
+import { FeatureRequest, UuidRequest, FeatureResponse } from '@recipe-report/domain/services'
+import { DisplayName, UniqueId } from '@recipe-report/domain/values'
 import { injectable } from 'inversify'
-
-import { IUnitOfWork } from 'data/repositories/unit-of-work'
-
-import { FeatureMap } from 'domain/maps/feature-map'
-import { Err, errClient, isErrClient } from 'domain/models/err-model'
-import { Feature } from 'domain/models/feature-model'
-import { FeatureRequest, UuidRequest } from 'domain/service/service-requests'
-import { FeatureResponse } from 'domain/service/service-responses'
-import { DisplayName } from 'domain/value/display-name-value'
-import { UniqueId } from 'domain/value/uid-value'
-
-import { container } from 'root/ioc.config'
-import { SYMBOLS } from 'root/symbols'
+import 'reflect-metadata'
 
 export interface IFeatureService {
   create(req: FeatureRequest): Promise<FeatureResponse>

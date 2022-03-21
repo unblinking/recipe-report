@@ -23,22 +23,16 @@
  *
  * @module
  */
+import { Responder } from '@recipe-report/api'
+import type { IBaseController } from '@recipe-report/api/controllers'
+import { SYMBOLS } from '@recipe-report/api/ioc'
+import { fiveHundred, RequestWithUser, tokenwall } from '@recipe-report/api/middlewares'
+import { httpStatus, outcomes } from '@recipe-report/data'
+import { Err, errClient, isErrClient } from '@recipe-report/domain/models'
+import { StringRequest, UserRequest, UuidRequest } from '@recipe-report/domain/services'
+import type { IUserService } from '@recipe-report/service'
 import { NextFunction, Response, Router } from 'express'
 import { inject, injectable } from 'inversify'
-
-import { IBaseController } from 'api/controllers/base-controller'
-import { fiveHundred } from 'api/middlewares/laststop'
-import { RequestWithUser, tokenwall } from 'api/middlewares/tokenwall'
-import { Responder } from 'api/responder'
-
-import { httpStatus, outcomes } from 'data/constants'
-
-import { Err, errClient, isErrClient } from 'domain/models/err-model'
-import { StringRequest, UserRequest, UuidRequest } from 'domain/service/service-requests'
-
-import { IUserService } from 'service/user-service'
-
-import { SYMBOLS } from 'root/symbols'
 
 @injectable()
 export class UserController implements IBaseController {
@@ -97,10 +91,10 @@ export class UserController implements IBaseController {
   private read = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       // Only allow reading the user identified in the access token.
-      if (req.params.id !== req.authorizedId?.value) {
+      if (!req.params['id'] || req.params['id'] !== req.authorizedId?.value) {
         throw new Err('ID_MISMATCH', errClient.ID_MISMATCH)
       }
-      const svcReq = UuidRequest.create(req.params.id, req.authorizedId)
+      const svcReq = UuidRequest.create(req.params['id'], req.authorizedId)
       const svcRes = await this._userService.read(svcReq)
       const code = svcRes.statusCode
       switch (svcRes.outcome) {
@@ -135,11 +129,11 @@ export class UserController implements IBaseController {
     try {
       // Put request path and body parameters must be present and must match.
       // https://dzone.com/articles/rest-api-path-vs-request-body-parameters
-      if (req.params.id !== req.body.id) {
+      if (req.params['id'] !== req.body.id) {
         throw new Err(`ID_MISMATCH`, errClient.ID_MISMATCH)
       }
       // Only allow updating the user identified in the access token.
-      if (req.params.id !== req.authorizedId?.value) {
+      if (req.params['id'] !== req.authorizedId?.value) {
         throw new Err('ID_MISMATCH', errClient.ID_MISMATCH)
       }
       const svcReq = UserRequest.create({ ...req.body }, req.authorizedId)
@@ -176,10 +170,10 @@ export class UserController implements IBaseController {
   ): Promise<void> => {
     try {
       // Only allow deleting the user identified in the access token.
-      if (req.params.id !== req.authorizedId?.value) {
+      if (!req.params['id'] || req.params['id'] !== req.authorizedId?.value) {
         throw new Err('ID_MISMATCH', errClient.ID_MISMATCH)
       }
-      const svcReq = UuidRequest.create(req.params.id, req.authorizedId)
+      const svcReq = UuidRequest.create(req.params['id'], req.authorizedId)
       const svcRes = await this._userService.delete(svcReq)
       const code = svcRes.statusCode
       switch (svcRes.outcome) {
@@ -212,7 +206,10 @@ export class UserController implements IBaseController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const svcReq = StringRequest.create(req.params.token)
+      if (!req.params['token']) {
+        throw new Err('TOKEN_INVALID', errClient.TOKEN_INVALID)
+      }
+      const svcReq = StringRequest.create(req.params['token'])
       const svcRes = await this._userService.activate(svcReq)
       const code = svcRes.statusCode
       switch (svcRes.outcome) {

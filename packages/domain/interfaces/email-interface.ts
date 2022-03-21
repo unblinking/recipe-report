@@ -23,7 +23,7 @@
  *
  * @module
  */
-import { EmailAddress } from 'domain/value/email-address-value'
+import type { EmailAddress } from '@recipe-report/domain/values'
 
 export interface IEmail {
   from: EmailAddress

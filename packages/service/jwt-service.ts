@@ -26,12 +26,11 @@
  *
  * @module
  */
+import { Err, errClient, errInternal } from '@recipe-report/domain/models'
+import { UniqueId } from '@recipe-report/domain/values'
 import { injectable } from 'inversify'
 import jwt from 'jwt-simple'
 import 'reflect-metadata'
-
-import { Err, errClient, errInternal } from 'domain/models/err-model'
-import { UniqueId } from 'domain/value/uid-value'
 
 export interface IJwtService {
   encode(id: string | undefined, type: tokenType, ttl?: number, nbf?: number, enc?: string): string
@@ -71,7 +70,7 @@ export class JwtService implements IJwtService {
     _enc: string,
   ): string => {
     // Determine our secret, from environment variable.
-    const secret: string = process.env.RR_JWT_SECRET as string
+    const secret: string = process.env['RR_JWT_SECRET'] as string
     // Verify that we aren't missing anything important.
     if (!secret) throw new Err(`JWT_SECRET_KEY`, errInternal.JWT_SECRET_KEY)
     if (!id) throw new Err(`JWT_USER_ID`, errInternal.JWT_USER_ID)
@@ -97,7 +96,7 @@ export class JwtService implements IJwtService {
 
   public decode = (token: string | undefined): Claims => {
     // Determine our secret, from environment variable.
-    const secret: string = process.env.RR_JWT_SECRET as string
+    const secret: string = process.env['RR_JWT_SECRET'] as string
     // Verify that we aren't missing anything important.
     if (!secret) throw new Err(`JWT_SECRET_KEY`, errInternal.JWT_SECRET_KEY)
     if (!token) throw new Err(`JWT_TOKEN`, errInternal.JWT_TOKEN)

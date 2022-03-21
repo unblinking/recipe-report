@@ -15,7 +15,5 @@
   ],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
-  "importOrderCaseInsensitive": true,
-  "parser": "typescript",
-  "importOrderParserPlugins" : ["classProperties", "decorators-legacy", "typescript"]
+  "importOrderCaseInsensitive": true
 }

@@ -23,8 +23,9 @@
  *
  * @module
  */
+import { ValueObject } from '@recipe-report/domain/values'
 import { zxcvbn, zxcvbnOptions } from '@zxcvbn-ts/core'
-import {
+import type {
   CrackTimesSeconds,
   FeedbackType,
   LooseObject,
@@ -35,7 +36,6 @@ import zxcvbnEnPackage from '@zxcvbn-ts/language-en'
 
 // import { errMsg } from 'data/constants'
 // import { Err } from 'root/utils'
-import { ValueObject } from './base-value'
 
 export interface PasswordResult {
   success: boolean

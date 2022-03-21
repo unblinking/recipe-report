@@ -23,8 +23,8 @@
  *
  * @module
  */
-import { UniqueId } from '@recipe-report/domain'
-import type { AccountDto, FeatureDto, RoleDto, UserDto } from '@recipe-report/domain'
+import type { AccountDto, FeatureDto, RoleDto, UserDto } from '@recipe-report/domain/dtos'
+import { UniqueId } from '@recipe-report/domain/values'
 
 abstract class ServiceRequest<T> {
   protected _item: T
@@ -116,6 +116,8 @@ export class UuidRequest extends ServiceRequest<UniqueId> {
     super(id, authorizedId)
   }
 
+  // The id must be defined here. Otherwise UniqueId.create will just create a new
+  // UUID, and we don't want a UuidRequest to happen if no UUID has been provided.
   public static create(id: string, authorizedId?: UniqueId): UuidRequest {
     return new UuidRequest(UniqueId.create(id), authorizedId)
   }

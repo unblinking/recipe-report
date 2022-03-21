@@ -24,18 +24,22 @@
  *
  * @module
  */
+import { SYMBOLS } from '@recipe-report/api/src/symbols'
+import type { IDataAccessLayer } from '@recipe-report/data'
+import {
+  AccountRepo,
+  IAccountRepo,
+  FeatureRepo,
+  IFeatureRepo,
+  IRoleRepo,
+  RoleRepo,
+  IUserRepo,
+  UserRepo,
+} from '@recipe-report/data/repositories'
+import { Err, errInternal } from '@recipe-report/domain/models'
 import { inject, injectable } from 'inversify'
-import { PoolClient } from 'pg'
-
-import { IDataAccessLayer } from 'data/data-access'
-import { AccountRepo, IAccountRepo } from 'data/repositories/account-repo'
-import { FeatureRepo, IFeatureRepo } from 'data/repositories/feature-repo'
-import { IRoleRepo, RoleRepo } from 'data/repositories/role-repo'
-import { IUserRepo, UserRepo } from 'data/repositories/user-repo'
-
-import { Err, errInternal } from 'domain/models/err-model'
-
-import { SYMBOLS } from 'root/symbols'
+import type { PoolClient } from 'pg'
+import 'reflect-metadata'
 
 export interface IUnitOfWork {
   connect(): Promise<void>

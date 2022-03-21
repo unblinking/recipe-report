@@ -38,5 +38,5 @@ import { createLogger } from 'bs-logger'
  * @see {@link https://github.com/huafu/bs-logger bs-logger}
  */
 export const log = createLogger({
-  targets: process.env.RR_LOG_TARGETS,
+  targets: process.env['RR_LOG_TARGETS'] as string,
 })

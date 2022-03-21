@@ -23,9 +23,8 @@
  *
  * @module
  */
-import { container } from 'root/ioc.config'
-import { IRecipeReport } from 'root/recipereport'
-import { SYMBOLS } from 'root/symbols'
+import type { IRecipeReport } from '@recipe-report/api'
+import { container, SYMBOLS } from '@recipe-report/api/ioc'
 
 // Composition root: https://blog.ploeh.dk/2011/07/28/CompositionRoot/
 // Time to compose the entire object graph! Exciting!

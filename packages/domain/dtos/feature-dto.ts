@@ -28,6 +28,6 @@ export class FeatureDto {
   id?: string
   name?: string
   description?: string
-  date_created?: string
-  date_deleted?: string
+  date_created?: string | undefined
+  date_deleted?: string | undefined
 }

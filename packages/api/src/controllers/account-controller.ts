@@ -23,20 +23,16 @@
  *
  * @module
  */
+import { Responder } from '@recipe-report/api'
+import type { IBaseController } from '@recipe-report/api/controllers'
+import { SYMBOLS } from '@recipe-report/api/ioc'
+import { fiveHundred, RequestWithUser, tokenwall } from '@recipe-report/api/middlewares'
 import { httpStatus, outcomes } from '@recipe-report/data'
-import { Err, errClient, isErrClient } from '@recipe-report/domain'
-import { AccountRequest, UuidRequest } from '@recipe-report/domain'
+import { Err, errClient, isErrClient } from '@recipe-report/domain/models'
+import { AccountRequest, UuidRequest } from '@recipe-report/domain/services'
 import type { IAccountService } from '@recipe-report/service'
 import { NextFunction, Response, Router } from 'express'
 import { inject, injectable } from 'inversify'
-
-import type { IBaseController } from 'controllers/base-controller'
-
-import { fiveHundred } from 'middlewares/laststop'
-import { RequestWithUser, tokenwall } from 'middlewares/tokenwall'
-
-import { Responder } from 'root/responder'
-import { SYMBOLS } from 'root/symbols'
 
 @injectable()
 export class AccountController implements IBaseController {

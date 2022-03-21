@@ -4,5 +4,9 @@
   "description": "recipe.report service",
   "repository": "github:nothingworksright/recipe-report",
   "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "prettier": "prettier --write *.ts",
+    "linter": "eslint --ext .js,.jsx,.ts,.tsx src/"
+  },
   "author": "jmg1138 https://github.com/jmg1138"
 }

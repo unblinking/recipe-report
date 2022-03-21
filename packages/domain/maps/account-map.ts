@@ -23,15 +23,10 @@
  *
  * @module
  */
-import { Account } from 'domain/models/account-model'
-import { Err, errInternal } from 'domain/models/err-model'
-import { DisplayName } from 'domain/value/display-name-value'
-import { TimeZone } from 'domain/value/timezone-value'
-import { UniqueId } from 'domain/value/uid-value'
-
-import { AccountDto } from 'dto/account-dto'
-
-import { IAccount } from 'interface/account-interface'
+import type { AccountDto } from '@recipe-report/domain/dtos'
+import type { IAccount } from '@recipe-report/domain/interfaces'
+import { Account, Err, errInternal } from '@recipe-report/domain/models'
+import { DisplayName, TimeZone, UniqueId } from '@recipe-report/domain/values'
 
 export class AccountMap {
   public static dtoToDomain(accountDto: AccountDto): Account {

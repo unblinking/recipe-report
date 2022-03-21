@@ -23,16 +23,12 @@
  *
  * @module
  */
-import { PoolClient, QueryResult } from 'pg'
-
-import { dbTables } from 'data/constants'
-import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
-
-import { AccountMap } from 'domain/maps/account-map'
-import { Account } from 'domain/models/account-model'
-import { Err, errClient } from 'domain/models/err-model'
-import { DisplayName } from 'domain/value/display-name-value'
-import { UniqueId } from 'domain/value/uid-value'
+import { dbTables } from '@recipe-report/data'
+import { BaseRepo, IBaseRepo } from '@recipe-report/data/repositories'
+import { AccountMap } from '@recipe-report/domain/maps'
+import { Account, Err, errClient } from '@recipe-report/domain/models'
+import type { DisplayName, UniqueId } from '@recipe-report/domain/values'
+import type { PoolClient, QueryResult } from 'pg'
 
 export interface IAccountRepo extends IBaseRepo {
   create(account: Account): Promise<Account>
@@ -55,7 +51,7 @@ export interface IAccountRepo extends IBaseRepo {
   delete(id: UniqueId): Promise<Account>
 }
 
-export class AccountRepo extends BaseRepo<Account> implements IAccountRepo {
+export class AccountRepo extends BaseRepo implements IAccountRepo {
   constructor(client: PoolClient) {
     super(client, dbTables.ACCOUNTS)
   }

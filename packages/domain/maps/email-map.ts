@@ -23,13 +23,10 @@
  *
  * @module
  */
-import { Email } from 'domain/models/email-model'
-import { Err, errInternal } from 'domain/models/err-model'
-import { EmailAddress } from 'domain/value/email-address-value'
-
-import { EmailDto } from 'dto/email-dto'
-
-import { IEmail } from 'interface/email-interface'
+import type { EmailDto } from '@recipe-report/domain/dtos'
+import type { IEmail } from '@recipe-report/domain/interfaces'
+import { Email, Err, errInternal } from '@recipe-report/domain/models'
+import { EmailAddress } from '@recipe-report/domain/values'
 
 export class EmailMap {
   public static dtoToDomain(emailDto: EmailDto): Email {

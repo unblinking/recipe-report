@@ -23,18 +23,16 @@
  *
  * @module
  */
-import { Account } from 'domain/models/account-model'
-import { DisplayName } from 'domain/value/display-name-value'
-import { EmailAddress } from 'domain/value/email-address-value'
-import { Password } from 'domain/value/password-value'
+import type { Account } from '@recipe-report/domain/models'
+import type { DisplayName, EmailAddress, Password } from '@recipe-report/domain/values'
 
 export interface IUser {
   name: DisplayName
   password: Password
   email_address: EmailAddress
-  accounts?: Account[]
-  date_created?: Date
-  date_activated?: Date
-  date_last_login?: Date
-  date_deleted?: Date
+  accounts?: Account[] | undefined
+  date_created?: Date | undefined
+  date_activated?: Date | undefined
+  date_last_login?: Date | undefined
+  date_deleted?: Date | undefined
 }

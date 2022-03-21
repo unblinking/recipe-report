@@ -23,15 +23,12 @@
  *
  * @module
  */
+import { Email, Err, errInternal } from '@recipe-report/domain/models'
+import type { EmailAddress } from '@recipe-report/domain/values'
+import { log } from '@recipe-report/service'
 import { injectable } from 'inversify'
 import { EmailParams, MailerSend, Recipient, Sender } from 'mailer-send-ts'
 import 'reflect-metadata'
-
-import { Email } from 'domain/models/email-model'
-import { Err, errInternal } from 'domain/models/err-model'
-import { EmailAddress } from 'domain/value/email-address-value'
-
-import { log } from 'service/log-service'
 
 export interface IEmailService {
   sendActivation(emailAddress: EmailAddress, token: string): Promise<void>
@@ -65,12 +62,12 @@ export class EmailService implements IEmailService {
     if (!email.body) {
       throw new Err(`EMAIL_BODY`, errInternal.EMAIL_BODY)
     }
-    if (process.env.NODE_ENV === `production`) {
-      if (!process.env.RR_MAILER_SEND_KEY) {
+    if (process.env['NODE_ENV'] === `production`) {
+      if (!process.env['RR_MAILER_SEND_KEY']) {
         throw new Err(`EMAIL_MS_API_KEY`, errInternal.EMAIL_MS_API_KEY)
       }
       const mailerSend = new MailerSend({
-        apiKey: process.env.RR_MAILER_SEND_KEY,
+        apiKey: process.env['RR_MAILER_SEND_KEY'],
       })
       const sentFrom = new Sender(email.from.value, `Recipe.Report`)
       const recipients = [new Recipient(email.to.value, email.to.value)]

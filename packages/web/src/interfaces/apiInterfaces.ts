@@ -26,7 +26,7 @@
  *
  * @module
  */
-import type { UserDto } from '@recipe-report/domain'
+import type { UserDto } from '@recipe-report/domain/dtos'
 
 // Universal API response interface.
 // All responses from the Recipe.Report API Server will be in this format.

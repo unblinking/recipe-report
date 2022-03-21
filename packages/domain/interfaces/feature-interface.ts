@@ -23,11 +23,11 @@
  *
  * @module
  */
-import { DisplayName } from 'domain/value/display-name-value'
+import type { DisplayName } from '@recipe-report/domain/values'
 
 export interface IFeature {
   name: DisplayName
   description: string
-  date_created?: Date
-  date_deleted?: Date
+  date_created?: Date | undefined
+  date_deleted?: Date | undefined
 }

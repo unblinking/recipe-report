@@ -7,6 +7,7 @@
   "compilerOptions": {
     // Modules
     "baseUrl": "./src",
+    "module": "esnext",
     "paths": {
       "app/*": ["app/*"],
       "components/*": ["components/*"],
@@ -17,7 +18,7 @@
     "rootDirs": ["./src"],
 
     // Emit
-    "declarationDir": "./types",
+    // "declarationDir": "./types",
     "noEmit": true,
     "preserveConstEnums": true,
     "preserveValueImports": true,

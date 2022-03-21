@@ -23,13 +23,9 @@
  *
  * @module
  */
-import { DisplayName } from 'domain/value/display-name-value'
-import { SmallInt } from 'domain/value/smallint-value'
-import { UniqueId } from 'domain/value/uid-value'
-
-import { IRole } from 'interface/role-interface'
-
-import { Model } from './base-model'
+import type { IRole } from '@recipe-report/domain/interfaces'
+import { Model } from '@recipe-report/domain/models'
+import type { DisplayName, SmallInt, UniqueId } from '@recipe-report/domain/values'
 
 export class Role extends Model<IRole> {
   public get id(): UniqueId {

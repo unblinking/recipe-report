@@ -23,12 +23,9 @@
  *
  * @module
  */
-import { DisplayName } from 'domain/value/display-name-value'
-import { UniqueId } from 'domain/value/uid-value'
-
-import { IFeature } from 'interface/feature-interface'
-
-import { Model } from './base-model'
+import type { IFeature } from '@recipe-report/domain/interfaces'
+import { Model } from '@recipe-report/domain/models'
+import type { DisplayName, UniqueId } from '@recipe-report/domain/values'
 
 export class Feature extends Model<IFeature> {
   public get id(): UniqueId {

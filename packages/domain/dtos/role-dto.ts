@@ -29,6 +29,6 @@ export class RoleDto {
   name?: string
   description?: string
   level?: number
-  date_created?: string
-  date_deleted?: string
+  date_created?: string | undefined
+  date_deleted?: string | undefined
 }

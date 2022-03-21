@@ -23,8 +23,8 @@
  *
  * @module
  */
-import type { AccountDto } from '@recipe-report/domain'
-import type { UserDto } from '@recipe-report/domain'
+import type { AccountDto, UserDto } from '@recipe-report/domain/dtos'
+import type { ApiRequestProfile } from 'interfaces/apiInterfaces'
 import { useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 
@@ -34,8 +34,6 @@ import { selectToken } from 'components/authentication/authenticationSlice'
 import styles from 'components/profile/Profile.module.css'
 import { profileAsync, selectUser } from 'components/profile/profileSlice'
 import { Spacer } from 'components/spacer/Spacer'
-
-import type { ApiRequestProfile } from 'interfaces/apiInterfaces'
 
 import { parse } from 'wrappers/jwt'
 import type { Claims } from 'wrappers/jwt'
@@ -52,7 +50,7 @@ export function Profile(): JSX.Element {
       }
       dispatch(profileAsync(apiRequestProfile))
     }
-  })
+  }, [])
   const user = useAppSelector(selectUser)
   const userInfo = UserRecord(user)
   const userAccounts = UserAccounts(user?.accounts)

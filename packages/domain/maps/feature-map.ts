@@ -23,14 +23,10 @@
  *
  * @module
  */
-import { Err, errInternal } from 'domain/models/err-model'
-import { Feature } from 'domain/models/feature-model'
-import { DisplayName } from 'domain/value/display-name-value'
-import { UniqueId } from 'domain/value/uid-value'
-
-import { FeatureDto } from 'dto/feature-dto'
-
-import { IFeature } from 'interface/feature-interface'
+import type { FeatureDto } from '@recipe-report/domain/dtos'
+import type { IFeature } from '@recipe-report/domain/interfaces'
+import { Err, errInternal, Feature } from '@recipe-report/domain/models'
+import { DisplayName, UniqueId } from '@recipe-report/domain/values'
 
 export class FeatureMap {
   public static dtoToDomain(featureDto: FeatureDto): Feature {

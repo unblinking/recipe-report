@@ -23,15 +23,10 @@
  *
  * @module
  */
-import { addressNoReply, subjectActivation, templateActivation } from 'data/email-templates'
-
-import { EmailMap } from 'domain/maps/email-map'
-import { Model } from 'domain/models/base-model'
-import { Err, errClient } from 'domain/models/err-model'
-import { EmailAddress } from 'domain/value/email-address-value'
-import { UniqueId } from 'domain/value/uid-value'
-
-import { IEmail } from 'interface/email-interface'
+import type { IEmail } from '@recipe-report/domain/interfaces'
+import { EmailMap } from '@recipe-report/domain/maps'
+import { Err, errClient, Model } from '@recipe-report/domain/models'
+import { EmailAddress, UniqueId } from '@recipe-report/domain/values'
 
 export class Email extends Model<IEmail> {
   public get from(): EmailAddress {
@@ -64,12 +59,49 @@ export class Email extends Model<IEmail> {
   }
 
   public static createActivation(to: EmailAddress, token: string): Email {
-    const from = addressNoReply
+    const from = Email.addressNoReply
     return Email.create({
       from: from,
       to: to,
-      subject: subjectActivation,
-      body: templateActivation(to, token),
+      subject: Email.subjectActivation,
+      body: Email.templateActivation(to, token),
     })
+  }
+
+  public static addressNoReply = EmailAddress.create(`no-reply@recipe.report`)
+
+  public static subjectActivation = `Recipe.Report new user account activation required.`
+
+  public static templateActivation = (to: EmailAddress, token: string): string => {
+    return `
+Hello ${to.value},
+
+Thank you for registering with my.recipe.report recently. You may login after completing activation. Please follow the link below to activate your new account. The link will expire in 24 hours.
+
+${this.getProtocol()}://${this.getHostname()}/activate/${token}
+
+You received this email because you (or someone else) used this email address to create a new account.
+
+Thank you,
+
+https://my.recipe.report
+
+`
+  }
+
+  private static getProtocol = (): string => {
+    let protocol = `http`
+    if (process.env['NODE_ENV'] === 'production') {
+      protocol = `https`
+    }
+    return protocol
+  }
+
+  private static getHostname = (): string => {
+    let hostname = `127.0.0.1:3000`
+    if (process.env['NODE_ENV'] === 'production') {
+      hostname = `my.recipe.report`
+    }
+    return hostname
   }
 }

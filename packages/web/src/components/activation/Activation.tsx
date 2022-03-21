@@ -23,6 +23,7 @@
  *
  * @module
  */
+import type { ApiRequestActivation } from 'interfaces/apiInterfaces'
 import { useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
@@ -40,8 +41,6 @@ import { Alert, alertStyles } from 'components/alert/Alert'
 import { Logo } from 'components/logo/Logo'
 import { Spacer } from 'components/spacer/Spacer'
 
-import type { ApiRequestActivation } from 'interfaces/apiInterfaces'
-
 export function Activation(): JSX.Element {
   const status = useAppSelector(selectStatus)
   const message = useAppSelector(selectMessage)
@@ -55,8 +54,7 @@ export function Activation(): JSX.Element {
       }
       dispatch(activateAsync(apiRequestActivation))
     }
-
-  })
+  }, [])
   return (
     <div>
       <Helmet>

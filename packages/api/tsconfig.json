@@ -18,11 +18,12 @@
     "types": [
       "jest",
       "node",
+      "inversify",
       "reflect-metadata"
     ],
 
     // Emit
-    "declarationDir": "./types",
+    // "declarationDir": "./types",
     "outDir": "./dist"
   }
 }

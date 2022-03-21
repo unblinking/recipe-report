@@ -25,20 +25,13 @@
  *
  * @module
  */
-import { NextFunction, Request, Response } from 'express'
-
-import { Responder } from 'api/responder'
-
-import { httpStatus } from 'data/constants'
-
-import { Err, errClient, isErrClient } from 'domain/models/err-model'
-import { UniqueId } from 'domain/value/uid-value'
-
-import { Claims, IJwtService, tokenType } from 'service/jwt-service'
-import { log } from 'service/log-service'
-
-import { container } from 'root/ioc.config'
-import { SYMBOLS } from 'root/symbols'
+import { Responder } from '@recipe-report/api'
+import { container, SYMBOLS } from '@recipe-report/api/ioc'
+import { httpStatus } from '@recipe-report/data'
+import { Err, errClient, isErrClient } from '@recipe-report/domain/models'
+import { UniqueId } from '@recipe-report/domain/values'
+import { Claims, IJwtService, log, tokenType } from '@recipe-report/service'
+import type { NextFunction, Request, Response } from 'express'
 
 export interface RequestWithUser extends Request {
   authorizedId?: UniqueId
@@ -53,7 +46,7 @@ export const tokenwall = (req: RequestWithUser, _res: Response, next: NextFuncti
     }
     const regex = /^Bearer$/i
     const authScheme = split[0]
-    if (!regex.test(authScheme)) {
+    if (!authScheme || !regex.test(authScheme)) {
       throw new Err('TOKEN_INVALID', errClient.TOKEN_INVALID)
     }
     const token = split[1]

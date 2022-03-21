@@ -23,9 +23,8 @@
  *
  * @module
  */
-import { Err, errClient } from 'domain/models/err-model'
-
-import { ValueObject } from './base-value'
+import { Err, errClient } from '@recipe-report/domain/models'
+import { ValueObject } from '@recipe-report/domain/values'
 
 export interface IEmailAddress {
   value: string

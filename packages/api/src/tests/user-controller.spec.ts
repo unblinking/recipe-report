@@ -23,14 +23,13 @@
  *
  * @module
  */
+import { UserController } from '@recipe-report/api/controllers'
 import express, { json } from 'express'
 import { Container } from 'inversify'
 import 'reflect-metadata'
 import request from 'supertest'
 
-import { UserController } from 'api/controllers/user-controller'
-
-import { MockUserServiceError, MockUserServiceFail, MockUserServiceSuccess } from 'test/mocks'
+import { MockUserServiceError, MockUserServiceFail, MockUserServiceSuccess } from './mocks'
 
 describe(`UserController tests.`, () => {
   let container: Container

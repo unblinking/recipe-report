@@ -23,6 +23,7 @@
  *
  * @module
  */
+import type { ApiRequestAuthentication } from 'interfaces/apiInterfaces'
 import { Helmet } from 'react-helmet'
 import { useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
@@ -39,8 +40,6 @@ import {
 } from 'components/authentication/authenticationSlice'
 import { Logo } from 'components/logo/Logo'
 import { Spacer } from 'components/spacer/Spacer'
-
-import type { ApiRequestAuthentication } from 'interfaces/apiInterfaces'
 
 interface FormSubmitAuthentication {
   email_address: string

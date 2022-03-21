@@ -23,15 +23,10 @@
  *
  * @module
  */
-import { AccountMap } from 'domain/maps/account-map'
-import { Model } from 'domain/models/base-model'
-import { DisplayName } from 'domain/value/display-name-value'
-import { TimeZone } from 'domain/value/timezone-value'
-import { UniqueId } from 'domain/value/uid-value'
-
-import { IAccount } from 'interface/account-interface'
-
-import { Err, errClient } from './err-model'
+import type { IAccount } from '@recipe-report/domain/interfaces'
+import { AccountMap } from '@recipe-report/domain/maps'
+import { Err, errClient, Model } from '@recipe-report/domain/models'
+import type { DisplayName, TimeZone, UniqueId } from '@recipe-report/domain/values'
 
 export class Account extends Model<IAccount> {
   public get id(): UniqueId {

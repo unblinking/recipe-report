@@ -23,26 +23,28 @@
  *
  * @module
  */
+import { container, SYMBOLS } from '@recipe-report/api/ioc'
+import type { IUnitOfWork } from '@recipe-report/data/repositories'
+import { UserMap } from '@recipe-report/domain/maps'
+import { Account, Err, errClient, isErrClient, User } from '@recipe-report/domain/models'
+import {
+  StringRequest,
+  UserRequest,
+  UuidRequest,
+  StringResponse,
+  UserResponse,
+} from '@recipe-report/domain/services'
+import {
+  DisplayName,
+  EmailAddress,
+  isStrongPassword,
+  Password,
+  PasswordResult,
+  UniqueId,
+} from '@recipe-report/domain/values'
+import { IEmailService, Claims, IJwtService, tokenType } from '@recipe-report/service'
 import { inject, injectable } from 'inversify'
-
-import { IUnitOfWork } from 'data/repositories/unit-of-work'
-
-import { UserMap } from 'domain/maps/user-map'
-import { Account } from 'domain/models/account-model'
-import { Err, errClient, isErrClient } from 'domain/models/err-model'
-import { User } from 'domain/models/user-model'
-import { StringRequest, UserRequest, UuidRequest } from 'domain/service/service-requests'
-import { StringResponse, UserResponse } from 'domain/service/service-responses'
-import { DisplayName } from 'domain/value/display-name-value'
-import { EmailAddress } from 'domain/value/email-address-value'
-import { isStrongPassword, Password, PasswordResult } from 'domain/value/password-value'
-import { UniqueId } from 'domain/value/uid-value'
-
-import { IEmailService } from 'service/email-service'
-import { Claims, IJwtService, tokenType } from 'service/jwt-service'
-
-import { container } from 'root/ioc.config'
-import { SYMBOLS } from 'root/symbols'
+import 'reflect-metadata'
 
 export interface IUserService {
   create(req: UserRequest): Promise<UserResponse>

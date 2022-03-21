@@ -23,22 +23,16 @@
  *
  * @module
  */
+import { Responder } from '@recipe-report/api'
+import type { IBaseController } from '@recipe-report/api/controllers'
+import { SYMBOLS } from '@recipe-report/api/ioc'
+import { fiveHundred, RequestWithUser, tokenwall } from '@recipe-report/api/middlewares'
+import { httpStatus, outcomes } from '@recipe-report/data'
+import { Err, errClient, isErrClient } from '@recipe-report/domain/models'
+import { FeatureRequest, UuidRequest } from '@recipe-report/domain/services'
+import type { IFeatureService } from '@recipe-report/service'
 import { NextFunction, Response, Router } from 'express'
 import { inject, injectable } from 'inversify'
-
-import { IBaseController } from 'api/controllers/base-controller'
-import { fiveHundred } from 'api/middlewares/laststop'
-import { RequestWithUser, tokenwall } from 'api/middlewares/tokenwall'
-import { Responder } from 'api/responder'
-
-import { httpStatus, outcomes } from 'data/constants'
-
-import { Err, errClient, isErrClient } from 'domain/models/err-model'
-import { FeatureRequest, UuidRequest } from 'domain/service/service-requests'
-
-import { IFeatureService } from 'service/feature-service'
-
-import { SYMBOLS } from 'root/symbols'
 
 @injectable()
 export class FeatureController implements IBaseController {
@@ -94,7 +88,10 @@ export class FeatureController implements IBaseController {
 
   private read = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const svcReq = UuidRequest.create(req.params.id, req.authorizedId)
+      if (!req.params['id']) {
+        throw new Err('UID_INVALID', errClient.UID_INVALID)
+      }
+      const svcReq = UuidRequest.create(req.params['id'], req.authorizedId)
       const svcRes = await this._featureService.read(svcReq)
       const code = svcRes.statusCode
       switch (svcRes.outcome) {
@@ -127,7 +124,7 @@ export class FeatureController implements IBaseController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      if (req.params.id !== req.body.id) {
+      if (req.params['id'] !== req.body.id) {
         throw new Err(`ID_MISMATCH`, errClient.ID_MISMATCH)
       }
       const svcReq = FeatureRequest.create({ ...req.body }, req.authorizedId)
@@ -163,7 +160,10 @@ export class FeatureController implements IBaseController {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const svcReq = UuidRequest.create(req.params.id, req.authorizedId)
+      if (!req.params['id']) {
+        throw new Err('UID_INVALID', errClient.UID_INVALID)
+      }
+      const svcReq = UuidRequest.create(req.params['id'], req.authorizedId)
       const svcRes = await this._featureService.delete(svcReq)
       const code = svcRes.statusCode
       switch (svcRes.outcome) {

@@ -23,7 +23,7 @@
  *
  * @module
  */
-import { UniqueId } from 'domain/value/uid-value'
+import { UniqueId } from '@recipe-report/domain/values'
 
 export abstract class Model<T> {
   protected readonly _id: UniqueId

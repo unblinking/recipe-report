@@ -23,13 +23,12 @@
  *
  * @module
  */
-import type { DisplayName } from '@recipe-report/domain'
-import type { SmallInt } from '@recipe-report/domain'
+import type { DisplayName, SmallInt } from '@recipe-report/domain/values'
 
 export interface IRole {
   name: DisplayName
   description: string
   level: SmallInt
-  date_created?: Date
-  date_deleted?: Date
+  date_created?: Date | undefined
+  date_deleted?: Date | undefined
 }

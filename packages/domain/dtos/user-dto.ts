@@ -23,16 +23,16 @@
  *
  * @module
  */
-import type { AccountDto } from 'dtos/account-dto'
+import type { AccountDto } from '@recipe-report/domain/dtos'
 
 export class UserDto {
   id?: string
   name?: string
   password?: string
   email_address?: string
-  accounts?: AccountDto[]
-  date_created?: string
-  date_activated?: string
-  date_last_login?: string
-  date_deleted?: string
+  accounts?: AccountDto[] | undefined
+  date_created?: string | undefined
+  date_activated?: string | undefined
+  date_last_login?: string | undefined
+  date_deleted?: string | undefined
 }

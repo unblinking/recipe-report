@@ -25,15 +25,11 @@
  */
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { NextFunction, Request, Response } from 'express'
-
-import { Responder } from 'api/responder'
-
-import { httpStatus } from 'data/constants'
-
-import { errClient } from 'domain/models/err-model'
-
-import { log } from 'service/log-service'
+import { Responder } from '@recipe-report/api'
+import { httpStatus } from '@recipe-report/data'
+import { errClient } from '@recipe-report/domain/models'
+import { log } from '@recipe-report/service'
+import type { NextFunction, Request, Response } from 'express'
 
 /**
  * Four, oh four! Not found, my dude.

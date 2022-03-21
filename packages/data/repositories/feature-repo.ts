@@ -23,16 +23,12 @@
  *
  * @module
  */
-import { PoolClient, QueryResult } from 'pg'
-
-import { dbTables } from 'data/constants'
-import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
-
-import { FeatureMap } from 'domain/maps/feature-map'
-import { Err, errClient } from 'domain/models/err-model'
-import { Feature } from 'domain/models/feature-model'
-import { DisplayName } from 'domain/value/display-name-value'
-import { UniqueId } from 'domain/value/uid-value'
+import { dbTables } from '@recipe-report/data'
+import { BaseRepo, IBaseRepo } from '@recipe-report/data/repositories'
+import { FeatureMap } from '@recipe-report/domain/maps'
+import { Err, errClient, Feature } from '@recipe-report/domain/models'
+import type { DisplayName, UniqueId } from '@recipe-report/domain/values'
+import type { PoolClient, QueryResult } from 'pg'
 
 export interface IFeatureRepo extends IBaseRepo {
   create(feature: Feature): Promise<Feature>
@@ -41,7 +37,7 @@ export interface IFeatureRepo extends IBaseRepo {
   delete(id: UniqueId): Promise<Feature>
 }
 
-export class FeatureRepo extends BaseRepo<Feature> implements IFeatureRepo {
+export class FeatureRepo extends BaseRepo implements IFeatureRepo {
   constructor(client: PoolClient) {
     super(client, dbTables.FEATURES)
   }

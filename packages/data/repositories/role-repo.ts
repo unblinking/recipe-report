@@ -23,17 +23,12 @@
  *
  * @module
  */
-import { PoolClient, QueryResult } from 'pg'
-
-import { dbTables } from 'data/constants'
-import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
-
-import { RoleMap } from 'domain/maps/role-map'
-import { Err, errClient } from 'domain/models/err-model'
-import { Role } from 'domain/models/role-model'
-import { DisplayName } from 'domain/value/display-name-value'
-import { SmallInt } from 'domain/value/smallint-value'
-import { UniqueId } from 'domain/value/uid-value'
+import { dbTables } from '@recipe-report/data'
+import { BaseRepo, IBaseRepo } from '@recipe-report/data/repositories'
+import { RoleMap } from '@recipe-report/domain/maps'
+import { Err, errClient, Role } from '@recipe-report/domain/models'
+import type { DisplayName, SmallInt, UniqueId } from '@recipe-report/domain/values'
+import type { PoolClient, QueryResult } from 'pg'
 
 export interface IRoleRepo extends IBaseRepo {
   create(role: Role): Promise<Role>
@@ -42,7 +37,7 @@ export interface IRoleRepo extends IBaseRepo {
   delete(id: UniqueId): Promise<Role>
 }
 
-export class RoleRepo extends BaseRepo<Role> implements IRoleRepo {
+export class RoleRepo extends BaseRepo implements IRoleRepo {
   constructor(client: PoolClient) {
     super(client, dbTables.ROLES)
   }

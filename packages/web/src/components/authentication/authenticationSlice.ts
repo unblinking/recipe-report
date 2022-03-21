@@ -24,12 +24,11 @@
  * @module
  */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import type { ApiRequestAuthentication, ApiResponse } from 'interfaces/apiInterfaces'
 
 import type { RootState } from 'app/store'
 
 import { requestAuthentication } from 'components/authentication/authenticationAPI'
-
-import type { ApiRequestAuthentication, ApiResponse } from 'interfaces/apiInterfaces'
 
 export interface AuthenticationState {
   status: `Required` | `Loading` | `Failed` | `Error` | `Authenticated`

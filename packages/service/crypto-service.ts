@@ -35,14 +35,14 @@
  *
  * @module
  */
+import { Err, errInternal } from '@recipe-report/domain/models'
 import Crypto from 'crypto'
 import { injectable } from 'inversify'
+import 'reflect-metadata'
 
-import { Err, errInternal } from 'domain/models/err-model'
-
-const key: string = process.env.RR_CRYPTO_KEY as string
-const ivLength: number = parseInt(process.env.RR_CRYPTO_IV_LENGTH as string, 10)
-const algorithm: string = process.env.RR_CRYPTO_ALGO as string
+const key: string = process.env['RR_CRYPTO_KEY'] as string
+const ivLength: number = parseInt(process.env['RR_CRYPTO_IV_LENGTH'] as string, 10)
+const algorithm: string = process.env['RR_CRYPTO_ALGO'] as string
 
 const varCheck = (): void => {
   if (!key) throw new Err(`CRYPTO_KEY`, errInternal.CRYPTO_KEY)

@@ -44,7 +44,6 @@ jspm_packages/
 
 # Typescript declaration and map files
 typings/
-*.d.ts
 *.d.ts.map
 
 # TypeScript cache

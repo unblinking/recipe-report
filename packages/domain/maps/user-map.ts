@@ -23,18 +23,11 @@
  *
  * @module
  */
-import { AccountMap } from 'domain/maps/account-map'
-import { Account } from 'domain/models/account-model'
-import { Err, errInternal } from 'domain/models/err-model'
-import { User } from 'domain/models/user-model'
-import { DisplayName } from 'domain/value/display-name-value'
-import { EmailAddress } from 'domain/value/email-address-value'
-import { Password } from 'domain/value/password-value'
-import { UniqueId } from 'domain/value/uid-value'
-
-import { UserDto } from 'dto/user-dto'
-
-import { IUser } from 'interface/user-interface'
+import type { UserDto } from '@recipe-report/domain/dtos'
+import type { IUser } from '@recipe-report/domain/interfaces'
+import { AccountMap } from '@recipe-report/domain/maps'
+import { Account, Err, errInternal, User } from '@recipe-report/domain/models'
+import { DisplayName, EmailAddress, Password, UniqueId } from '@recipe-report/domain/values'
 
 export class UserMap {
   public static dtoToDomain(userDto: UserDto): User {

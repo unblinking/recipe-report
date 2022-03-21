@@ -23,18 +23,12 @@
  *
  * @module
  */
-import { PoolClient, QueryResult } from 'pg'
-
-import { dbTables } from 'data/constants'
-import { BaseRepo, IBaseRepo } from 'data/repositories/base-repo'
-
-import { UserMap } from 'domain/maps/user-map'
-import { Err, errClient } from 'domain/models/err-model'
-import { User } from 'domain/models/user-model'
-import { DisplayName } from 'domain/value/display-name-value'
-import { EmailAddress } from 'domain/value/email-address-value'
-import { Password } from 'domain/value/password-value'
-import { UniqueId } from 'domain/value/uid-value'
+import { dbTables } from '@recipe-report/data'
+import { BaseRepo, IBaseRepo } from '@recipe-report/data/repositories'
+import { UserMap } from '@recipe-report/domain/maps'
+import { Err, errClient, User } from '@recipe-report/domain/models'
+import type { DisplayName, EmailAddress, Password, UniqueId } from '@recipe-report/domain/values'
+import type { PoolClient, QueryResult } from 'pg'
 
 export interface IUserRepo extends IBaseRepo {
   create(user: User): Promise<User>
@@ -45,7 +39,7 @@ export interface IUserRepo extends IBaseRepo {
   authenticate(email_address: EmailAddress, password: Password): Promise<User>
 }
 
-export class UserRepo extends BaseRepo<User> implements IUserRepo {
+export class UserRepo extends BaseRepo implements IUserRepo {
   constructor(client: PoolClient) {
     super(client, dbTables.USERS)
   }

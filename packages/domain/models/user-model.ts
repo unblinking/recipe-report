@@ -23,16 +23,10 @@
  *
  * @module
  */
-import { UserMap } from 'domain/maps/user-map'
-import { Account } from 'domain/models/account-model'
-import { Model } from 'domain/models/base-model'
-import { Err, errClient } from 'domain/models/err-model'
-import { DisplayName } from 'domain/value/display-name-value'
-import { EmailAddress } from 'domain/value/email-address-value'
-import { Password } from 'domain/value/password-value'
-import { UniqueId } from 'domain/value/uid-value'
-
-import { IUser } from 'interface/user-interface'
+import type { IUser } from '@recipe-report/domain/interfaces'
+import { UserMap } from '@recipe-report/domain/maps'
+import { Account, Model, Err, errClient } from '@recipe-report/domain/models'
+import type { DisplayName, EmailAddress, Password, UniqueId } from '@recipe-report/domain/values'
 
 export class User extends Model<IUser> {
   public get id(): UniqueId {
