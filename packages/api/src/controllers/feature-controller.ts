@@ -23,8 +23,8 @@
  *
  * @module
  */
-import { Responder } from '@recipe-report/api'
 import type { IBaseController } from '@recipe-report/api/controllers'
+import { Responder } from '@recipe-report/api/controllers'
 import { SYMBOLS } from '@recipe-report/api/ioc'
 import { fiveHundred, RequestWithUser, tokenwall } from '@recipe-report/api/middlewares'
 import { httpStatus, outcomes } from '@recipe-report/data'
@@ -33,6 +33,7 @@ import { FeatureRequest, UuidRequest } from '@recipe-report/domain/services'
 import type { IFeatureService } from '@recipe-report/service'
 import { NextFunction, Response, Router } from 'express'
 import { inject, injectable } from 'inversify'
+import 'reflect-metadata'
 
 @injectable()
 export class FeatureController implements IBaseController {

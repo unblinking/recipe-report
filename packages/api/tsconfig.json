@@ -5,7 +5,10 @@
   "exclude": ["node_modules", "**/*.spec.ts"],
 
   "compilerOptions": {
-    // Modules
+
+    "exactOptionalPropertyTypes":false,
+
+
     "baseUrl": "./src",
     "paths": {
       "controllers/*": ["controllers/*"],
@@ -22,8 +25,7 @@
       "reflect-metadata"
     ],
 
-    // Emit
-    // "declarationDir": "./types",
+
     "outDir": "./dist"
   }
 }

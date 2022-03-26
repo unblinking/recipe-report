@@ -27,7 +27,6 @@
  *
  * @module
  */
-import { listen } from '@recipe-report/api'
 import type { IBaseController } from '@recipe-report/api/controllers'
 import { SYMBOLS } from '@recipe-report/api/ioc'
 import { callHistory } from '@recipe-report/api/middlewares'
@@ -37,6 +36,8 @@ import { json, RequestHandler } from 'express'
 import Helmet from 'helmet'
 import { injectable, multiInject } from 'inversify'
 import 'reflect-metadata'
+
+import { listen } from './app'
 
 export interface IRecipeReport {
   start(): void

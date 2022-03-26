@@ -30,6 +30,7 @@ import { Err, errClient, User } from '@recipe-report/domain/models'
 import { UserRequest, UserResponse } from '@recipe-report/domain/services'
 import { DisplayName, EmailAddress, Password, UniqueId } from '@recipe-report/domain/values'
 import { injectable } from 'inversify'
+import 'reflect-metadata'
 
 export const mockUserDomain: User = User.create(
   {

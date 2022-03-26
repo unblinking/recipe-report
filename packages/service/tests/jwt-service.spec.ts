@@ -23,15 +23,22 @@
  *
  * @module
  */
-import { container, SYMBOLS } from '@recipe-report/api/ioc'
-import { IJwtService, tokenType } from '@recipe-report/service'
-
-import { mockUserDomain } from './mocks'
+import { mockUserDomain } from '../../test/mocks'
+import { SYMBOLS } from '@recipe-report/api/ioc'
+import { IJwtService, JwtService, tokenType, Claims } from '@recipe-report/service'
+import { Container } from 'inversify'
 
 describe(`JwtService tests.`, () => {
+  let container: Container
+
+  beforeEach(() => {
+    container = new Container()
+    container.bind<IJwtService>(Symbol.for('IJwtService')).to(JwtService)
+  })
+
   test(`Encodes an activation token.`, async () => {
     // Arrange.
-    const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
+    const jwt = container.get<IJwtService>(Symbol.for('IJwtService'))
     // Act.
     const token: string = jwt.encode(mockUserDomain.id.value, tokenType.ACTIVATION)
     // Assert.
@@ -40,14 +47,13 @@ describe(`JwtService tests.`, () => {
 
   test(`Encodes an access token.`, async () => {
     // Arrange.
-    const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
+    const jwt = container.get<IJwtService>(Symbol.for('IJwtService'))
     // Act.
     const token: string = jwt.encode(mockUserDomain.id.value, tokenType.ACCESS)
     // Assert.
     expect(token).toBeTruthy()
   })
 
-  /*
   test(`Decodes an activation token.`, () => {
     // Arrange.
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
@@ -82,16 +88,16 @@ describe(`JwtService tests.`, () => {
     expect(payload.typ).toEqual(tokenType.ACCESS)
   })
 
-  test(`Fails to encode a token without env var JWT_SECRET.`, async () => {
+  test(`Fails to encode a token without env var RR_JWT_SECRET.`, async () => {
     // Arrange.
-    const backupJwtSecret = process.env.RR_JWT_SECRET
-    delete process.env.RR_JWT_SECRET
+    const backupJwtSecret = process.env['RR_JWT_SECRET']
+    delete process.env['RR_JWT_SECRET']
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     // Act and assert.
     expect(() => {
       jwt.encode(mockUserDomain.id.value, tokenType.ACCESS)
     }).toThrow(`JWT error. Secret key is not defined.`)
-    process.env.RR_JWT_SECRET = backupJwtSecret
+    process.env['RR_JWT_SECRET'] = backupJwtSecret
   })
 
   test(`Fails to encode a token without a user id.`, () => {
@@ -111,17 +117,17 @@ describe(`JwtService tests.`, () => {
     }).toThrow(`JWT error. Type is not defined.`)
   })
 
-  test(`Fails to decode a token without env var JWT_SECRET.`, () => {
+  test(`Fails to decode a token without env var RR_JWT_SECRET.`, () => {
     // Arrange.
-    const backupJwtSecret = process.env.RR_JWT_SECRET
-    delete process.env.RR_JWT_SECRET
     const jwt = container.get<IJwtService>(SYMBOLS.IJwtService)
     const token: string = jwt.encode(mockUserDomain.id.value, tokenType.ACCESS)
+    const backupJwtSecret = process.env['RR_JWT_SECRET']
+    delete process.env['RR_JWT_SECRET']
     // Act and assert.
     expect(() => {
       jwt.decode(token)
     }).toThrow(`JWT error. Secret key is not defined.`)
-    process.env.RR_JWT_SECRET = backupJwtSecret
+    process.env['RR_JWT_SECRET'] = backupJwtSecret
   })
 
   test(`Fails to decodes without a token.`, () => {
@@ -131,5 +137,4 @@ describe(`JwtService tests.`, () => {
       jwt.decode(``)
     }).toThrow(`JWT error. Token is not defined.`)
   })
-  */
 })

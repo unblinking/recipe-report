@@ -66,7 +66,7 @@ export class JwtService implements IJwtService {
     id: string | undefined,
     type: tokenType,
     exp: number = Math.round(Date.now() / 1000) + 86400, // 24 hours from now, in whole seconds.
-    nbf: number = Math.round(Date.now() / 1000), // Whole seconds.
+    nbf: number = Math.round(Date.now() / 1000) - 1, // 1 second ago, in whole seconds.
     _enc: string,
   ): string => {
     // Determine our secret, from environment variable.

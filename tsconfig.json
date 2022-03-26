@@ -1,5 +1,4 @@
 {
-  // https://www.typescriptlang.org/tsconfig
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Node 16",
 
@@ -7,7 +6,7 @@
   "exclude": ["node_modules", "**/*.spec.ts"],
 
   "compilerOptions": {
-    // Type Checking
+
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "alwaysStrict": true,
@@ -21,25 +20,16 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "strict": true, // Equivalent to enabling all of the strict mode family options.
+    "strict": true,
     "useUnknownInCatchVariables": true,
 
-    // Modules
     "allowUmdGlobalAccess": false,
-    // "baseUrl": "./packages",
     "module": "commonjs",
     "moduleResolution": "node",
     "noResolve": false,
-    // "paths": {},
     "resolveJsonModule": true,
-    // "rootDirs": ["./packages"],
-    // "typeRoots": [], // By default all visible ”@types” packages are included in your compilation.
-    // "types": [], // Only specifying this in each package's tsconfig.json file when needed.
 
-    // Emit
     "declaration": false,
-    // "declarationDir": "",
-    // "declarationMap": true,
     "downlevelIteration": true,
     "emitBOM": false,
     "emitDeclarationOnly": false,
@@ -47,46 +37,34 @@
     "importsNotUsedAsValues": "error",
     "inlineSourceMap": false,
     "inlineSources": false,
-    // "mapRoot": "",
     "newLine": "lf",
     "noEmit": false,
     "noEmitHelpers": false,
     "noEmitOnError": false,
-    // "outDir": "",
-    // "outFile": "",
     "preserveConstEnums": false,
     "preserveValueImports": false,
     "removeComments": true,
     "sourceMap": true,
-    // "sourceRoot": "",
     "stripInternal": false,
 
-    // JavaScript Support
     "allowJs": false,
     "checkJs": false,
-    // "maxNodeModuleJsDepth": 0, // This flag is can only be used when allowJs is enabled.
 
-    // Editor Support
     "disableSizeLimit": true,
-    // "plugins": [],
 
-    // Interop Constraints
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": false,
     "preserveSymlinks": false,
 
-    // Backwards Compatibility
     "charset": "utf8",
     "keyofStringsOnly": false,
     "noImplicitUseStrict": false,
     "noStrictGenericChecks": false,
-    // "out": "",
     "suppressExcessPropertyErrors": false,
     "suppressImplicitAnyIndexErrors": false,
 
-    // Language and Environment
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "jsx": "react-jsx",
@@ -94,7 +72,6 @@
     "target": "es2021",
     "useDefineForClassFields": false,
 
-    // Completeness
     "skipLibCheck": true
   }
 }

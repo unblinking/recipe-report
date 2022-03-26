@@ -25,7 +25,7 @@
  */
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Responder } from '@recipe-report/api'
+import { Responder } from '@recipe-report/api/controllers'
 import { httpStatus } from '@recipe-report/data'
 import { errClient } from '@recipe-report/domain/models'
 import { log } from '@recipe-report/service'

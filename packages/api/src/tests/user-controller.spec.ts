@@ -29,7 +29,11 @@ import { Container } from 'inversify'
 import 'reflect-metadata'
 import request from 'supertest'
 
-import { MockUserServiceError, MockUserServiceFail, MockUserServiceSuccess } from './mocks'
+import {
+  MockUserServiceError,
+  MockUserServiceFail,
+  MockUserServiceSuccess,
+} from '../../../test/mocks'
 
 describe(`UserController tests.`, () => {
   let container: Container

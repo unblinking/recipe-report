@@ -24,8 +24,15 @@
  *
  * @module
  */
-import { RoleController, RootController, UserController } from '@recipe-report/api/controllers'
+import {
+  AccountController,
+  FeatureController,
+  RoleController,
+  RootController,
+  UserController,
+} from '@recipe-report/api/controllers'
 import type { IBaseController } from '@recipe-report/api/controllers'
+import { SYMBOLS } from '@recipe-report/api/ioc'
 import type { IDataAccessLayer } from '@recipe-report/data'
 import { DataAccessLayer } from '@recipe-report/data'
 import { IUnitOfWork, UnitOfWork } from '@recipe-report/data/repositories'
@@ -49,15 +56,16 @@ import {
 } from '@recipe-report/service'
 import { Container } from 'inversify'
 
-import { IRecipeReport, RecipeReport } from 'root/recipereport'
-import { SYMBOLS } from 'root/symbols'
+import { IRecipeReport, RecipeReport } from './recipereport'
 
-export const container = new Container()
+const container = new Container()
 
 // Add the RecipeReport class to the container.
 container.bind<IRecipeReport>(SYMBOLS.IRecipeReport).to(RecipeReport)
 
 // Add the controllers to the container.
+container.bind<IBaseController>(SYMBOLS.IBaseController).to(AccountController)
+container.bind<IBaseController>(SYMBOLS.IBaseController).to(FeatureController)
 container.bind<IBaseController>(SYMBOLS.IBaseController).to(RoleController)
 container.bind<IBaseController>(SYMBOLS.IBaseController).to(RootController)
 container.bind<IBaseController>(SYMBOLS.IBaseController).to(UserController)
@@ -74,3 +82,5 @@ container.bind<IFeatureService>(SYMBOLS.IFeatureService).to(FeatureService)
 container.bind<IJwtService>(SYMBOLS.IJwtService).to(JwtService)
 container.bind<IRoleService>(SYMBOLS.IRoleService).to(RoleService)
 container.bind<IUserService>(SYMBOLS.IUserService).to(UserService)
+
+export { container }

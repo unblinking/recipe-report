@@ -23,12 +23,13 @@
  *
  * @module
  */
+import { Responder } from '@recipe-report/api/controllers'
 import type { IBaseController } from '@recipe-report/api/controllers'
 import { fiveHundred } from '@recipe-report/api/middlewares'
 import { httpStatus } from '@recipe-report/data'
 import { NextFunction, Request, Response, Router } from 'express'
 import { injectable } from 'inversify'
-import { Responder } from 'responder'
+import 'reflect-metadata'
 
 @injectable()
 export class RootController implements IBaseController {

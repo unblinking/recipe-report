@@ -1,4 +1,5 @@
 // Controllers
+export * from './src/controllers/responder'
 export * from './src/controllers/base-controller'
 export * from './src/controllers/account-controller'
 export * from './src/controllers/feature-controller'

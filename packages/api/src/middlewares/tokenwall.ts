@@ -25,7 +25,7 @@
  *
  * @module
  */
-import { Responder } from '@recipe-report/api'
+import { Responder } from '@recipe-report/api/controllers'
 import { container, SYMBOLS } from '@recipe-report/api/ioc'
 import { httpStatus } from '@recipe-report/data'
 import { Err, errClient, isErrClient } from '@recipe-report/domain/models'

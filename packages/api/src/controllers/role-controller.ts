@@ -23,7 +23,7 @@
  *
  * @module
  */
-import { Responder } from '@recipe-report/api'
+import { Responder } from '@recipe-report/api/controllers'
 import type { IBaseController } from '@recipe-report/api/controllers'
 import { SYMBOLS } from '@recipe-report/api/ioc'
 import { fiveHundred, RequestWithUser, tokenwall } from '@recipe-report/api/middlewares'
@@ -33,6 +33,7 @@ import { RoleRequest, UuidRequest } from '@recipe-report/domain/services'
 import type { IRoleService } from '@recipe-report/service'
 import { NextFunction, Response, Router } from 'express'
 import { inject, injectable } from 'inversify'
+import 'reflect-metadata'
 
 @injectable()
 export class RoleController implements IBaseController {
