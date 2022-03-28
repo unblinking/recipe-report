@@ -31,20 +31,8 @@
  *
  * @module
  */
+import type { Claims } from '@recipe-report/service/jwt-service'
 import jwt_decode from 'jwt-decode'
-
-// TODO: Import this from the shared interfaces in the monorepo instead of duplicating it here.
-export interface Claims {
-  iss: string // Issuer
-  sub: string // Subject
-  aud: string // Audience
-  exp: number // Expiration (in whole seconds)
-  nbf: number // Not Before (in whole seconds)
-  iat: number // Issued At (in whole seconds)
-  jti: string // JWT ID
-  typ: number // JWT Type
-  enc?: string // Encrypted Data
-}
 
 export function parse(token: string): Claims {
   const payload: Claims = jwt_decode(token)
