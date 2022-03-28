@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 16",
+
+  "include": ["packages/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"],
+
+  "compilerOptions": {
+
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "alwaysStrict": true,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "useUnknownInCatchVariables": true,
+
+    "allowUmdGlobalAccess": false,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noResolve": false,
+    "resolveJsonModule": true,
+
+    "declaration": false,
+    "downlevelIteration": true,
+    "emitBOM": false,
+    "emitDeclarationOnly": false,
+    "importHelpers": false,
+    "importsNotUsedAsValues": "error",
+    "inlineSourceMap": false,
+    "inlineSources": false,
+    "newLine": "lf",
+    "noEmit": false,
+    "noEmitHelpers": false,
+    "noEmitOnError": false,
+    "preserveConstEnums": false,
+    "preserveValueImports": false,
+    "removeComments": true,
+    "sourceMap": true,
+    "stripInternal": false,
+
+    "allowJs": false,
+    "checkJs": false,
+
+    "disableSizeLimit": true,
+
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": false,
+    "preserveSymlinks": false,
+
+    "charset": "utf8",
+    "keyofStringsOnly": false,
+    "noImplicitUseStrict": false,
+    "noStrictGenericChecks": false,
+    "suppressExcessPropertyErrors": false,
+    "suppressImplicitAnyIndexErrors": false,
+
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "jsx": "react-jsx",
+    "lib": ["es2021"],
+    "target": "es2021",
+    "useDefineForClassFields": false,
+
+    "skipLibCheck": true
+  }
+}

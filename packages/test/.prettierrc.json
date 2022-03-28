@@ -1,0 +1,10 @@
+{
+  "printWidth": 100,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "arrowParens": "always",
+  "jsxSingleQuote": true,
+  "parser": "typescript",
+  "importOrderParserPlugins" : ["classProperties", "decorators-legacy", "typescript"]
+}

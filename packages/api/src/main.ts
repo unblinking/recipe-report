@@ -23,14 +23,13 @@
  *
  * @module
  */
-import { container } from 'root/ioc.config'
-import { IRecipeReport } from 'root/recipereport'
-import { SYMBOLS } from 'root/symbols'
+import { container, SYMBOLS } from '@recipe-report/api/ioc'
+
+import type { IRecipeReport } from './recipereport'
 
 // Composition root: https://blog.ploeh.dk/2011/07/28/CompositionRoot/
 // Time to compose the entire object graph! Exciting!
 const recipeReport = container.get<IRecipeReport>(SYMBOLS.IRecipeReport)
-// const recipeReport = new RecipeReport()
 
 // Now we pull down on the propeller and see if this thing will start.
 recipeReport.start()

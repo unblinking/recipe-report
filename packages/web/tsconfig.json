@@ -1,0 +1,37 @@
+{
+  "extends": "../../tsconfig.json",
+
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"],
+
+  "compilerOptions": {
+    // Modules
+    "baseUrl": "./src",
+    "module": "esnext",
+    "paths": {
+      "app/*": ["app/*"],
+      "components/*": ["components/*"],
+      "interfaces/*": ["interfaces/*"],
+      "root/*": ["*"],
+      "wrappers/*": ["wrappers/*"]
+    },
+    "rootDirs": ["./src"],
+
+    // Emit
+    // "declarationDir": "./types",
+    "noEmit": true,
+    "preserveConstEnums": true,
+    "preserveValueImports": true,
+
+    // Interop Constraints
+    "isolatedModules": true,
+
+    // Language and Environment
+    "lib": [ // Required for Create-React-App
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "target": "es5"
+  }
+}

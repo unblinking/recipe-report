@@ -1,5 +1,5 @@
 {
-  "name": "recipe.report",
+  "name": "@recipe-report/monorepo",
   "version": "0.1.0",
   "description": "The recipe.report monorepo.",
   "repository": {
@@ -11,10 +11,22 @@
     "npm": "8.3.1",
     "node": "16.14.0"
   },
+  "scripts": {
+    "test": "jest --colors --coverage",
+    "testonly": "jest --colors"
+  },
   "author": "jmg1138 https://github.com/jmg1138",
   "readme": "README.md",
   "packageManager": "npm@8.3.1",
   "workspaces": [
     "./packages/*"
-  ]
+  ],
+  "devDependencies": {
+    "@types/jest": "27.4.0",
+    "@types/supertest": "^2.0.11",
+    "inversify": "^6.0.1",
+    "jest": "^27.5.1",
+    "supertest": "^6.2.2",
+    "ts-jest": "27.1.3"
+  }
 }

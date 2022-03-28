@@ -42,8 +42,9 @@ build/Release
 node_modules/
 jspm_packages/
 
-# Typescript v1 declaration files
+# Typescript declaration and map files
 typings/
+*.d.ts.map
 
 # TypeScript cache
 *.tsbuildinfo
