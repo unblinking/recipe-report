@@ -23,7 +23,7 @@
  *
  * @module
  */
-import type { ApiRequestProfile, ApiResponseUser } from 'interfaces/apiInterfaces'
+import type { ApiRequestProfile, ApiResponseUser } from '@recipe-report/domain/interfaces'
 
 import * as fetch from 'wrappers/fetch'
 

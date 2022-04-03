@@ -23,7 +23,7 @@
  *
  * @module
  */
-import type { ApiRequestRegistration, ApiResponse } from 'interfaces/apiInterfaces'
+import type { ApiRequestRegistration, ApiResponse } from '@recipe-report/domain/interfaces'
 
 import * as fetch from 'wrappers/fetch'
 

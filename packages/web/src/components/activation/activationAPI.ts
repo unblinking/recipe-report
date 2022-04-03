@@ -23,7 +23,7 @@
  *
  * @module
  */
-import type { ApiRequestActivation, ApiResponse } from 'interfaces/apiInterfaces'
+import type { ApiRequestActivation, ApiResponse } from '@recipe-report/domain/interfaces'
 
 import * as fetch from 'wrappers/fetch'
 
