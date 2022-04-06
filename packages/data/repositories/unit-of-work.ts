@@ -26,16 +26,13 @@
  */
 import { SYMBOLS } from '@recipe-report/api/src/symbols'
 import type { IDataAccessLayer } from '@recipe-report/data'
-import {
-  AccountRepo,
+import type {
   IAccountRepo,
-  FeatureRepo,
   IFeatureRepo,
   IRoleRepo,
-  RoleRepo,
   IUserRepo,
-  UserRepo,
 } from '@recipe-report/data/repositories'
+import { AccountRepo, FeatureRepo, RoleRepo, UserRepo } from '@recipe-report/data/repositories'
 import { Err, errInternal } from '@recipe-report/domain/models'
 import { inject, injectable } from 'inversify'
 import type { PoolClient } from 'pg'

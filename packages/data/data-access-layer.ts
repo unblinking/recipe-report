@@ -25,7 +25,8 @@
  */
 import { log } from '@recipe-report/service'
 import { injectable } from 'inversify'
-import { Pool, PoolClient, QueryResult } from 'pg'
+import type { PoolClient, QueryResult } from 'pg'
+import { Pool } from 'pg'
 import 'reflect-metadata'
 
 export interface IDataAccessLayer {

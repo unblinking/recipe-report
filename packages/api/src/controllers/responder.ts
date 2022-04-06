@@ -26,7 +26,8 @@
  *
  * @module
  */
-import { httpStatusValueType, outcomes } from '@recipe-report/data'
+import type { httpStatusValueType } from '@recipe-report/data'
+import { outcomes } from '@recipe-report/data'
 import { errClient } from '@recipe-report/domain/models'
 import { log } from '@recipe-report/service'
 import type { Response } from 'express'

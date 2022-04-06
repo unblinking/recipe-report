@@ -35,7 +35,8 @@ import type { IBaseController } from '@recipe-report/api/controllers'
 import { SYMBOLS } from '@recipe-report/api/ioc'
 import type { IDataAccessLayer } from '@recipe-report/data'
 import { DataAccessLayer } from '@recipe-report/data'
-import { IUnitOfWork, UnitOfWork } from '@recipe-report/data/repositories'
+import type { IUnitOfWork } from '@recipe-report/data/repositories'
+import { UnitOfWork } from '@recipe-report/data/repositories'
 import type {
   IAccountService,
   ICryptoService,
@@ -56,7 +57,8 @@ import {
 } from '@recipe-report/service'
 import { Container } from 'inversify'
 
-import { IRecipeReport, RecipeReport } from './recipereport'
+import type { IRecipeReport } from './recipereport'
+import { RecipeReport } from './recipereport'
 
 const container = new Container()
 

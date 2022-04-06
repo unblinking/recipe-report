@@ -34,15 +34,16 @@ import {
   StringResponse,
   UserResponse,
 } from '@recipe-report/domain/services'
+import type { PasswordResult } from '@recipe-report/domain/values'
 import {
   DisplayName,
   EmailAddress,
   isStrongPassword,
   Password,
-  PasswordResult,
   UniqueId,
 } from '@recipe-report/domain/values'
-import { IEmailService, Claims, IJwtService, tokenType } from '@recipe-report/service'
+import type { IEmailService, Claims, IJwtService } from '@recipe-report/service'
+import { tokenType } from '@recipe-report/service'
 import { inject, injectable } from 'inversify'
 import 'reflect-metadata'
 
