@@ -9,6 +9,7 @@
     "baseUrl": "./src",
     "module": "esnext",
     "paths": {
+      "@recipe-report/*": ["../../*"],
       "app/*": ["app/*"],
       "components/*": ["components/*"],
       "interfaces/*": ["interfaces/*"],
