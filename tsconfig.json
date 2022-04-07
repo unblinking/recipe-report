@@ -24,7 +24,7 @@
     "useUnknownInCatchVariables": true,
 
     "allowUmdGlobalAccess": false,
-    "module": "commonjs",
+    "module": "ES2022",
     "moduleResolution": "node",
     "noResolve": false,
     "resolveJsonModule": true,
@@ -41,8 +41,8 @@
     "noEmit": false,
     "noEmitHelpers": false,
     "noEmitOnError": false,
-    "preserveConstEnums": false,
-    "preserveValueImports": false,
+    "preserveConstEnums": true,
+    "preserveValueImports": true,
     "removeComments": true,
     "sourceMap": true,
     "stripInternal": false,
@@ -55,7 +55,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "isolatedModules": false,
+    "isolatedModules": true,
     "preserveSymlinks": false,
 
     "charset": "utf8",
