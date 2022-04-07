@@ -30,7 +30,8 @@ import { container, SYMBOLS } from '@recipe-report/api/ioc'
 import { httpStatus } from '@recipe-report/data'
 import { Err, errClient, isErrClient } from '@recipe-report/domain/models'
 import { UniqueId } from '@recipe-report/domain/values'
-import { Claims, IJwtService, log, tokenType } from '@recipe-report/service'
+import type { Claims, IJwtService } from '@recipe-report/service'
+import { log, tokenType } from '@recipe-report/service'
 import type { NextFunction, Request, Response } from 'express'
 
 export interface RequestWithUser extends Request {

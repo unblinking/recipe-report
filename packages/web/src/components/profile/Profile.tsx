@@ -24,6 +24,7 @@
  * @module
  */
 import type { AccountDto, UserDto } from '@recipe-report/domain/dtos'
+import type { Claims } from '@recipe-report/service/jwt-service'
 import type { ApiRequestProfile } from 'interfaces/apiInterfaces'
 import { useEffect } from 'react'
 import { Helmet } from 'react-helmet'
@@ -36,7 +37,6 @@ import { profileAsync, selectUser } from 'components/profile/profileSlice'
 import { Spacer } from 'components/spacer/Spacer'
 
 import { parse } from 'wrappers/jwt'
-import type { Claims } from 'wrappers/jwt'
 
 export function Profile(): JSX.Element {
   const token = useAppSelector(selectToken)

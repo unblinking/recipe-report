@@ -25,7 +25,8 @@
  */
 import { log } from '@recipe-report/service'
 import { injectable } from 'inversify'
-import { Pool, PoolClient, QueryResult } from 'pg'
+import type { PoolClient, QueryResult } from 'pg'
+import pg from 'pg'
 import 'reflect-metadata'
 
 export interface IDataAccessLayer {
@@ -40,7 +41,7 @@ export interface IDataAccessLayer {
  */
 @injectable()
 export class DataAccessLayer implements IDataAccessLayer {
-  private _pool: Pool = new Pool({
+  private _pool = new pg.Pool({
     user: process.env['RRDB_USER'] as string,
     host: process.env['RRDB_HOST'] as string,
     database: process.env['RRDB_DATABASE'] as string,

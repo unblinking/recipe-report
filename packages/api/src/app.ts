@@ -27,7 +27,8 @@ import type { IBaseController } from '@recipe-report/api/controllers'
 import { fiveHundred, fourOhFour } from '@recipe-report/api/middlewares'
 import { log } from '@recipe-report/service'
 import cors from 'cors'
-import express, { Application, RequestHandler } from 'express'
+import type { Application, RequestHandler } from 'express'
+import express from 'express'
 
 export const listen = (
   middlewares: Array<RequestHandler>,
