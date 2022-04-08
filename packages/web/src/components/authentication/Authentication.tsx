@@ -23,7 +23,7 @@
  *
  * @module
  */
-import type { ApiRequestAuthentication } from 'interfaces/apiInterfaces'
+import type { ApiRequestAuthentication } from '@recipe-report/domain/interfaces'
 import { Helmet } from 'react-helmet'
 import { useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'

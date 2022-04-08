@@ -23,7 +23,7 @@
  *
  * @module
  */
-import type { ApiRequestActivation } from 'interfaces/apiInterfaces'
+import type { ApiRequestActivation } from '@recipe-report/domain/interfaces'
 import { useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
