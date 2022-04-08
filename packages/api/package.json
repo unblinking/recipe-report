@@ -7,13 +7,14 @@
   "engines": {
     "node": "16.14.0"
   },
+  "type": "module",
   "scripts": {
     "prettier": "prettier --write src/**",
     "linter": "eslint --ext .js,.jsx,.ts,.tsx src/",
     "updates": "echo \"Checking for available dependency updates\" && ncu",
     "build": "tsc && tsc-alias",
     "develop": "ts-node -r tsconfig-paths/register src/main.ts",
-    "start": "node dist/main.js"
+    "start": "node --es-module-specifier-resolution=node dist/api/src/main.js"
   },
   "author": "jmg1138 https://github.com/jmg1138",
   "readme": "README.md",

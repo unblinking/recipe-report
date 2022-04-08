@@ -24,7 +24,8 @@
  * @module
  */
 import { dbTables } from '@recipe-report/data'
-import { BaseRepo, IBaseRepo } from '@recipe-report/data/repositories'
+import type { IBaseRepo } from '@recipe-report/data/repositories'
+import { BaseRepo } from '@recipe-report/data/repositories'
 import { RoleMap } from '@recipe-report/domain/maps'
 import { Err, errClient, Role } from '@recipe-report/domain/models'
 import type { DisplayName, SmallInt, UniqueId } from '@recipe-report/domain/values'

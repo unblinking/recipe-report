@@ -5,10 +5,9 @@
   "exclude": ["node_modules", "**/*.spec.ts"],
 
   "compilerOptions": {
-    // Modules
     "baseUrl": "./src",
-    "module": "esnext",
     "paths": {
+      "@recipe-report/*": ["../../*"],
       "app/*": ["app/*"],
       "components/*": ["components/*"],
       "root/*": ["*"],
@@ -16,14 +15,7 @@
     },
     "rootDirs": ["./src"],
 
-    // Emit
-    // "declarationDir": "./types",
     "noEmit": true,
-    "preserveConstEnums": true,
-    "preserveValueImports": true,
-
-    // Interop Constraints
-    "isolatedModules": true,
 
     // Language and Environment
     "lib": [ // Required for Create-React-App

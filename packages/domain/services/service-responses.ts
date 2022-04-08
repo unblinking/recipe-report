@@ -23,7 +23,8 @@
  *
  * @module
  */
-import { httpStatus, httpStatusValueType, outcomes, outcomeValueType } from '@recipe-report/data'
+import type { httpStatusValueType, outcomeValueType } from '@recipe-report/data'
+import { httpStatus, outcomes } from '@recipe-report/data'
 import type { AccountDto, FeatureDto, RoleDto, UserDto } from '@recipe-report/domain/dtos'
 import type { Err } from '@recipe-report/domain/models'
 

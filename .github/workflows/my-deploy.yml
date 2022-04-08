@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'packages/my/**'
+      - 'packages/web/**'
 
 jobs:
   deploy:
@@ -24,5 +24,5 @@ jobs:
           cd ~/recipe-report
           git pull
           npm install
-          cd packages/my
+          cd packages/web
           npm run build

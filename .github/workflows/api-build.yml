@@ -7,6 +7,9 @@ on:
       - main
     paths:
       - 'packages/api/**'
+      - 'packages/data/**'
+      - 'packages/domain/**'
+      - 'packages/service/**'
 
 jobs:
   build:
@@ -36,12 +39,3 @@ jobs:
     - name: Build-Backend
       run: npm run build
       working-directory: packages/api
-
-    - name: Test-Backend
-      run: npm run test
-      working-directory: packages/api
-
-    - name: Codecov
-      uses: codecov/codecov-action@v2
-      with:
-        verbose: true

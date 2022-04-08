@@ -25,7 +25,8 @@
  */
 import { mockUserDomain } from '../../test/mocks'
 import { SYMBOLS } from '@recipe-report/api/ioc'
-import { IJwtService, JwtService, tokenType, Claims } from '@recipe-report/service'
+import type { IJwtService, Claims } from '@recipe-report/service'
+import { JwtService, tokenType } from '@recipe-report/service'
 import { Container } from 'inversify'
 
 describe(`JwtService tests.`, () => {

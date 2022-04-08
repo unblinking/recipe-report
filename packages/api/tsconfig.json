@@ -5,27 +5,17 @@
   "exclude": ["node_modules", "**/*.spec.ts"],
 
   "compilerOptions": {
-
-    "exactOptionalPropertyTypes":false,
-
-
     "baseUrl": "./src",
     "paths": {
-      "controllers/*": ["controllers/*"],
-      "middlewares/*": ["middlewares/*"],
-      "templates/*": ["templates/*"],
-      "root/*": ["*"],
-      "tests/*": ["tests/*"]
+      "@recipe-report/*": ["../../*"],
     },
     "rootDirs": ["./src"],
     "types": [
       "jest",
       "node",
       "inversify",
-      "reflect-metadata"
+      "reflect-metadata",
     ],
-
-
     "outDir": "./dist"
   }
 }

@@ -1,4 +1,4 @@
-name: Build-frontend
+name: Test-packages
 
 on:
   pull_request:
@@ -6,10 +6,7 @@ on:
     branches:
       - main
     paths:
-      - 'packages/web/**'
-      - 'packages/data/**'
-      - 'packages/domain/**'
-      - 'packages/service/**'
+      - 'packages/**'
 
 jobs:
   build:
@@ -18,6 +15,11 @@ jobs:
 
     env:
       NODE_ENV: development
+      RR_PORT: 1138
+      RR_CRYPTO_KEY: MqSm0P5dMgFSZhEBKpCv4dVKgDrsgrmT
+      RR_CRYPTO_ALGO: aes-256-cbc
+      RR_CRYPTO_IV_LENGTH: 16
+      RR_JWT_SECRET: devTestEnvironment
 
     steps:
     - name: Checkout repository
@@ -31,6 +33,10 @@ jobs:
     - name: Install
       run: npm install
 
-    - name: Build-Frontend
-      run: npm run build
-      working-directory: packages/web
+    - name: Test
+      run: npm t
+
+    - name: Coverage-Report
+      uses: codecov/codecov-action@v2
+      with:
+        verbose: true
