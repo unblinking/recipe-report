@@ -10,7 +10,7 @@
  * @see {@link https://medium.com/codex/how-to-share-constants-in-typescript-project-8f76a2e40352}
  *
  * This file is part of Recipe.Report API server.
- * @see {@link https://github.com/nothingworksright/api.recipe.report}
+ * @see {@link https://github.com/nothingworksright/recipe-report}
  *
  * Recipe.Report API Server is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License as
