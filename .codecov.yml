@@ -1,0 +1,14 @@
+fixes:
+  - "/home/runner/work/recipe-report/recipe-report::"
+coverage:
+  precision: 5
+  round: down
+  range: "1...100"
+comment:
+  layout: "reach, diff, flags, files, footer, sunburst"
+  behavior: default
+  require_changes: false
+  require_base: no
+  require_head: no
+  branches:
+    - main
