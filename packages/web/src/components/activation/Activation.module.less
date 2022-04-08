@@ -8,7 +8,7 @@
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report Web Application.
- * @see {@link https://github.com/nothingworksright/my.recipe.report}
+ * @see {@link https://github.com/nothingworksright/recipe-report}
  *
  * Recipe.Report Web App is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License as
