@@ -10,7 +10,6 @@
       "@recipe-report/*": ["../../*"],
       "app/*": ["app/*"],
       "components/*": ["components/*"],
-      "interfaces/*": ["interfaces/*"],
       "root/*": ["*"],
       "wrappers/*": ["wrappers/*"]
     },

@@ -24,8 +24,8 @@
  * @module
  */
 import type { UserDto } from '@recipe-report/domain/dtos'
+import type { ApiRequestProfile, ApiResponseUser } from '@recipe-report/domain/interfaces'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import type { ApiRequestProfile, ApiResponseUser } from 'interfaces/apiInterfaces'
 
 import type { RootState } from 'app/store'
 

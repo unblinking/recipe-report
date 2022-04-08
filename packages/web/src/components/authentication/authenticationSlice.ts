@@ -23,8 +23,8 @@
  *
  * @module
  */
+import type { ApiRequestAuthentication, ApiResponse } from '@recipe-report/domain/interfaces'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import type { ApiRequestAuthentication, ApiResponse } from 'interfaces/apiInterfaces'
 
 import type { RootState } from 'app/store'
 
