@@ -29,8 +29,9 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { useAppSelector } from 'app/hooks'
 
 import { Activation } from 'components/activation/Activation'
+import styles from 'components/app/App.module.css'
 import { Authentication } from 'components/authentication/Authentication'
-import { selectToken } from 'components/authentication/authenticationSlice'
+import { selectAuthenticationToken } from 'components/authentication/authenticationSlice'
 import { Dashboard } from 'components/dashboard/Dashboard'
 import { NotFound } from 'components/error/NotFound'
 import { Footer } from 'components/footer/Footer'
@@ -38,10 +39,8 @@ import { NavBar } from 'components/navbar/NavBar'
 import { Profile } from 'components/profile/Profile'
 import { Registration } from 'components/registration/Registration'
 
-import styles from './App.module.css'
-
 export function App(): JSX.Element {
-  const token = useAppSelector(selectToken)
+  const token = useAppSelector(selectAuthenticationToken)
   const location = useLocation()
   return (
     <div className={styles['container']}>

@@ -9,7 +9,7 @@ on:
       - 'packages/**'
 
 jobs:
-  build:
+  test-packages:
 
     runs-on: ubuntu-latest
 

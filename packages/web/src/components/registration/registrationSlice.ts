@@ -57,7 +57,7 @@ export const registrationSlice = createSlice({
   name: `registration`,
   initialState,
   reducers: {
-    ready: (state) => {
+    register: (state) => {
       state.status = `Ready`
       state.message = `Please register.`
     },
@@ -96,10 +96,12 @@ export const registrationSlice = createSlice({
   },
 })
 
-export const { ready } = registrationSlice.actions
+export const { register } = registrationSlice.actions
 
-export const selectStatus = (state: RootState): string => state.registration.status
-export const selectMessage = (state: RootState): string | undefined => state.registration.message
-export const selectCode = (state: RootState): string | undefined => state.registration.code
+export const selectRegistrationStatus = (state: RootState): string => state.registration.status
+export const selectRegistrationMessage = (state: RootState): string | undefined =>
+  state.registration.message
+export const selectRegistrationCode = (state: RootState): string | undefined =>
+  state.registration.code
 
 export default registrationSlice.reducer

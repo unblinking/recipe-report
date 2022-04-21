@@ -25,13 +25,13 @@
  */
 import type { ApiRequestAuthentication, ApiResponse } from '@recipe-report/domain/interfaces'
 
-import * as fetch from 'wrappers/fetch'
+import { post } from 'wrappers/fetch'
 
 // Perform a user authentication.
 export async function requestAuthentication(
   request: ApiRequestAuthentication,
 ): Promise<ApiResponse> {
   const path = process.env['REACT_APP_API_URI'] + `/v1/users/session`
-  const response = await fetch.post<ApiRequestAuthentication, ApiResponse>(path, request)
+  const response = await post<ApiRequestAuthentication, ApiResponse>(path, request)
   return response
 }

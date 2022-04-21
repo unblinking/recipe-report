@@ -16,6 +16,7 @@
       "inversify",
       "reflect-metadata",
     ],
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "lib": ["ES2021"],
   }
 }

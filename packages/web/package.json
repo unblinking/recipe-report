@@ -8,13 +8,13 @@
     "node": "16.14.0"
   },
   "scripts": {
+    "updates": "echo \"Checking for available dependency updates\" && ncu -u",
     "prettier": "prettier --write src/**/**.{ts,tsx}",
     "linter": "eslint --ext .js,.jsx,.ts,.tsx src/",
-    "updates": "echo \"Checking for available dependency updates\" && ncu -u",
-    "test": "react-scripts test",
-    "prebuild": "less-watch-compiler --config less-builder.config.json",
+    "prebuild": "npm run prettier && npm run linter && rimraf build && less-watch-compiler --config less-builder.config.json",
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
-    "develop": "concurrently --kill-others \"less-watch-compiler --config less-watcher.config.json\" \"react-scripts start\""
+    "develop": "npm run build && concurrently --kill-others \"less-watch-compiler --config less-watcher.config.json\" \"react-scripts start\"",
+    "test": "react-scripts test"
   },
   "author": "jmg1138 https://github.com/jmg1138",
   "main": "app.js",

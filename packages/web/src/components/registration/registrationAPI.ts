@@ -25,11 +25,11 @@
  */
 import type { ApiRequestRegistration, ApiResponse } from '@recipe-report/domain/interfaces'
 
-import * as fetch from 'wrappers/fetch'
+import { post } from 'wrappers/fetch'
 
 // Perform a user registration.
 export async function requestRegistration(request: ApiRequestRegistration): Promise<ApiResponse> {
   const path = process.env['REACT_APP_API_URI'] + `/v1/users`
-  const response = await fetch.post<ApiRequestRegistration, ApiResponse>(path, request)
+  const response = await post<ApiRequestRegistration, ApiResponse>(path, request)
   return response
 }

@@ -108,10 +108,12 @@ export const authenticationSlice = createSlice({
 
 export const { logout } = authenticationSlice.actions
 
-export const selectStatus = (state: RootState): string => state.authentication.status
-export const selectMessage = (state: RootState): string | undefined => state.authentication.message
-export const selectCode = (state: RootState): string | undefined => state.authentication.code
-export const selectToken = (state: RootState): string | undefined | null =>
+export const selectAuthenticationStatus = (state: RootState): string => state.authentication.status
+export const selectAuthenticationMessage = (state: RootState): string | undefined =>
+  state.authentication.message
+export const selectAuthenticationCode = (state: RootState): string | undefined =>
+  state.authentication.code
+export const selectAuthenticationToken = (state: RootState): string | undefined | null =>
   state.authentication.token
 
 export default authenticationSlice.reducer
