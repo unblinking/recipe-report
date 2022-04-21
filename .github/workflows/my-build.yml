@@ -12,7 +12,7 @@ on:
       - 'packages/service/**'
 
 jobs:
-  build:
+  build-frontend:
 
     runs-on: ubuntu-latest
 
