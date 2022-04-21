@@ -33,18 +33,18 @@ import { useAppDispatch, useAppSelector } from 'app/hooks'
 import styles from 'components/activation/Activation.module.css'
 import {
   activateAsync,
-  selectCode,
-  selectMessage,
-  selectStatus,
+  selectActivationCode,
+  selectActivationMessage,
+  selectActivationStatus,
 } from 'components/activation/activationSlice'
 import { Alert, alertStyles } from 'components/alert/Alert'
 import { Logo } from 'components/logo/Logo'
 import { Spacer } from 'components/spacer/Spacer'
 
 export function Activation(): JSX.Element {
-  const status = useAppSelector(selectStatus)
-  const message = useAppSelector(selectMessage)
-  const code = useAppSelector(selectCode)
+  const status = useAppSelector(selectActivationStatus)
+  const message = useAppSelector(selectActivationMessage)
+  const code = useAppSelector(selectActivationCode)
   const { token } = useParams()
   const dispatch = useAppDispatch()
   useEffect(() => {

@@ -34,7 +34,7 @@
 import type { Claims } from '@recipe-report/service/jwt-service'
 import jwt_decode from 'jwt-decode'
 
-export function parse(token: string): Claims {
+export function parseJwt(token: string): Claims {
   const payload: Claims = jwt_decode(token)
   return payload
 }

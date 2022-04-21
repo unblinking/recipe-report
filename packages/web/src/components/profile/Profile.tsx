@@ -31,19 +31,19 @@ import { Helmet } from 'react-helmet'
 
 import { useAppDispatch, useAppSelector } from 'app/hooks'
 
-import { selectToken } from 'components/authentication/authenticationSlice'
+import { selectAuthenticationToken } from 'components/authentication/authenticationSlice'
 import styles from 'components/profile/Profile.module.css'
-import { profileAsync, selectUser } from 'components/profile/profileSlice'
+import { profileAsync, selectProfileUser } from 'components/profile/profileSlice'
 import { Spacer } from 'components/spacer/Spacer'
 
-import { parse } from 'wrappers/jwt'
+import { parseJwt } from 'wrappers/jwt'
 
 export function Profile(): JSX.Element {
-  const token = useAppSelector(selectToken)
+  const token = useAppSelector(selectAuthenticationToken)
   const dispatch = useAppDispatch()
   useEffect(() => {
     if (token) {
-      const payload: Claims = parse(token)
+      const payload: Claims = parseJwt(token)
       const apiRequestProfile: ApiRequestProfile = {
         id: payload.sub,
         token: token,
@@ -51,7 +51,7 @@ export function Profile(): JSX.Element {
       dispatch(profileAsync(apiRequestProfile))
     }
   }, [])
-  const user = useAppSelector(selectUser)
+  const user = useAppSelector(selectProfileUser)
   const userInfo = UserRecord(user)
   const userAccounts = UserAccounts(user?.accounts)
   return (

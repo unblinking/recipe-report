@@ -57,7 +57,7 @@ export const activationSlice = createSlice({
   name: `activation`,
   initialState,
   reducers: {
-    ready: (state) => {
+    activate: (state) => {
       state.status = `Ready`
       state.message = `Please follow the activation link from the email you received.`
     },
@@ -96,10 +96,11 @@ export const activationSlice = createSlice({
   },
 })
 
-export const { ready } = activationSlice.actions
+export const { activate } = activationSlice.actions
 
-export const selectStatus = (state: RootState): string => state.activation.status
-export const selectMessage = (state: RootState): string | undefined => state.activation.message
-export const selectCode = (state: RootState): string | undefined => state.activation.code
+export const selectActivationStatus = (state: RootState): string => state.activation.status
+export const selectActivationMessage = (state: RootState): string | undefined =>
+  state.activation.message
+export const selectActivationCode = (state: RootState): string | undefined => state.activation.code
 
 export default activationSlice.reducer

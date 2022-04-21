@@ -25,6 +25,7 @@
  *
  * @module
  */
+import 'Index.module.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -33,8 +34,6 @@ import { BrowserRouter } from 'react-router-dom'
 import { store } from 'app/store'
 
 import { App } from 'components/app/App'
-
-import './Index.module.css'
 
 ReactDOM.render(
   <React.StrictMode>

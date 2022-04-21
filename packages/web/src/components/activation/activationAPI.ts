@@ -25,10 +25,10 @@
  */
 import type { ApiRequestActivation, ApiResponse } from '@recipe-report/domain/interfaces'
 
-import * as fetch from 'wrappers/fetch'
+import { put } from 'wrappers/fetch'
 
 export async function requestActivation(request: ApiRequestActivation): Promise<ApiResponse> {
   const path = process.env['REACT_APP_API_URI'] + `/v1/users/activation/${request.token}`
-  const response = await fetch.put<ApiRequestActivation, ApiResponse>(path, request)
+  const response = await put<ApiRequestActivation, ApiResponse>(path, request)
   return response
 }

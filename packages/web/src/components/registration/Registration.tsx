@@ -35,9 +35,9 @@ import { Logo } from 'components/logo/Logo'
 import styles from 'components/registration/Registration.module.css'
 import {
   registerAsync,
-  selectCode,
-  selectMessage,
-  selectStatus,
+  selectRegistrationCode,
+  selectRegistrationMessage,
+  selectRegistrationStatus,
 } from 'components/registration/registrationSlice'
 import { Spacer } from 'components/spacer/Spacer'
 
@@ -48,9 +48,9 @@ interface FormSubmitRegistration {
 }
 
 export function Registration(): JSX.Element {
-  const status = useAppSelector(selectStatus)
-  const message = useAppSelector(selectMessage)
-  const code = useAppSelector(selectCode)
+  const status = useAppSelector(selectRegistrationStatus)
+  const message = useAppSelector(selectRegistrationMessage)
+  const code = useAppSelector(selectRegistrationCode)
   const dispatch = useAppDispatch()
   const {
     register,

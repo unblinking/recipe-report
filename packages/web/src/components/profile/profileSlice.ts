@@ -59,7 +59,7 @@ export const profileSlice = createSlice({
   name: `profile`,
   initialState,
   reducers: {
-    ready: (state) => {
+    loadProfile: (state) => {
       state.status = `Ready`
       state.message = `Ready to load the user profile details.`
     },
@@ -99,11 +99,12 @@ export const profileSlice = createSlice({
   },
 })
 
-export const { ready } = profileSlice.actions
+export const { loadProfile } = profileSlice.actions
 
-export const selectStatus = (state: RootState): string => state.profile.status
-export const selectMessage = (state: RootState): string | undefined => state.profile.message
-export const selectCode = (state: RootState): string | undefined => state.profile.code
-export const selectUser = (state: RootState): UserDto | undefined | null => state.profile.user
+export const selectProfileStatus = (state: RootState): string => state.profile.status
+export const selectProfileMessage = (state: RootState): string | undefined => state.profile.message
+export const selectProfileCode = (state: RootState): string | undefined => state.profile.code
+export const selectProfileUser = (state: RootState): UserDto | undefined | null =>
+  state.profile.user
 
 export default profileSlice.reducer

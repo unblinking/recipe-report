@@ -25,10 +25,10 @@
  */
 import type { ApiRequestProfile, ApiResponseUser } from '@recipe-report/domain/interfaces'
 
-import * as fetch from 'wrappers/fetch'
+import { get } from 'wrappers/fetch'
 
 export async function requestProfile(request: ApiRequestProfile): Promise<ApiResponseUser> {
   const path = process.env['REACT_APP_API_URI'] + `/v1/users/${request.id}`
-  const response = await fetch.get<ApiResponseUser>(path, request.token)
+  const response = await get<ApiResponseUser>(path, request.token)
   return response
 }

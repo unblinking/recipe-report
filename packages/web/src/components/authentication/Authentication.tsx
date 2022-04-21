@@ -34,9 +34,9 @@ import { Alert, alertStyles } from 'components/alert/Alert'
 import styles from 'components/authentication/Authentication.module.css'
 import {
   authenticateAsync,
-  selectCode,
-  selectMessage,
-  selectStatus,
+  selectAuthenticationCode,
+  selectAuthenticationMessage,
+  selectAuthenticationStatus,
 } from 'components/authentication/authenticationSlice'
 import { Logo } from 'components/logo/Logo'
 import { Spacer } from 'components/spacer/Spacer'
@@ -48,9 +48,9 @@ interface FormSubmitAuthentication {
 }
 
 export function Authentication(): JSX.Element {
-  const status = useAppSelector(selectStatus)
-  const message = useAppSelector(selectMessage)
-  const code = useAppSelector(selectCode)
+  const status = useAppSelector(selectAuthenticationStatus)
+  const message = useAppSelector(selectAuthenticationMessage)
+  const code = useAppSelector(selectAuthenticationCode)
   const dispatch = useAppDispatch()
   const {
     register,
