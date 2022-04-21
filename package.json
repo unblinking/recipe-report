@@ -12,8 +12,10 @@
     "node": "16.14.0"
   },
   "scripts": {
+    "updates": "echo \"Checking for available dependency updates\" && ncu",
     "test": "jest --colors --coverage",
-    "testonly": "jest --colors"
+    "testonly": "jest --colors",
+    "uninstall": "rimraf package-lock.json && rimraf ./**/node_modules"
   },
   "author": "jmg1138 https://github.com/jmg1138",
   "readme": "README.md",
