@@ -8,10 +8,6 @@
     "baseUrl": "./src",
     "paths": {
       "@recipe-report/*": ["../../*"],
-      "app/*": ["app/*"],
-      "components/*": ["components/*"],
-      "root/*": ["*"],
-      "wrappers/*": ["wrappers/*"]
     },
     "rootDirs": ["./src"],
 
@@ -21,7 +17,7 @@
     "lib": [ // Required for Create-React-App
       "dom",
       "dom.iterable",
-      "esnext"
+      "ESNext"
     ],
     "target": "es5"
   }
