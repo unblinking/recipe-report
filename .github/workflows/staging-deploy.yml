@@ -1,19 +1,19 @@
-name: Deploy-frontend
+name: Deploy-staging
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'packages/web/**'
+      - 'packages/**'
 
 jobs:
-  deploy:
+  deploy-staging:
 
     runs-on: ubuntu-latest
 
     steps:
-    - name: Deploy-Frontend-Production
+    - name: Deploy-Staging
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -21,8 +21,10 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script_stop: true
         script: |
+          pm2 stop api.recipe.report
           cd ~/recipe-report
           git pull
           npm install
-          cd packages/web
+          cd packages/api
           npm run build
+          pm2 restart api.recipe.report

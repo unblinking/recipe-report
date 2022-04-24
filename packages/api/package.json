@@ -12,7 +12,7 @@
     "updates": "echo \"Checking for available dependency updates\" && ncu",
     "prettier": "prettier --write src/**",
     "linter": "eslint --ext .js,.jsx,.ts,.tsx src/",
-    "prebuild": "npm run prettier && npm run linter && rimraf dist",
+    "prebuild": "rimraf dist",
     "build": "tsc && tsc-alias",
     "develop": "npm run build && npm run start",
     "start": "node --es-module-specifier-resolution=node dist/api/src/main.js"
