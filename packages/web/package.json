@@ -11,7 +11,7 @@
     "updates": "echo \"Checking for available dependency updates\" && ncu -u",
     "prettier": "prettier --write src/**/**.{ts,tsx}",
     "linter": "eslint --ext .js,.jsx,.ts,.tsx src/",
-    "prebuild": "npm run prettier && npm run linter && rimraf build && less-watch-compiler --config less-builder.config.json",
+    "prebuild": "rimraf build && less-watch-compiler --config less-builder.config.json",
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "develop": "npm run build && concurrently --kill-others \"less-watch-compiler --config less-watcher.config.json\" \"react-scripts start\"",
     "test": "react-scripts test"
