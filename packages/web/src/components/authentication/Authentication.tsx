@@ -24,7 +24,7 @@
  * @module
  */
 import type { ApiRequestAuthentication } from '@recipe-report/domain/interfaces'
-import { Helmet } from 'react-helmet'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
 
@@ -67,48 +67,52 @@ export function Authentication(): JSX.Element {
 
   return (
     <div>
-      <Helmet>
-        <meta charSet='utf-8' />
-        <title>Sign in - Recipe.Report</title>
-        <link rel='canonical' href='https://my.recipe.report' />
-      </Helmet>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles['form']}>
-        <div className={styles['logo']}>
-          <Logo />
-        </div>
-        <h1>Sign in</h1>
-        <Spacer size={20} axis='vertical' />
-        <label>Email Address</label>
-        <input
-          type='text'
-          className={styles['input']}
-          {...register(`email_address`, { required: true })}
-        />
-        {errors.email_address && (
-          <span className={styles['error']}>Please enter your email address.</span>
-        )}
-        <Spacer size={20} axis='vertical' />
-        <label>Password</label>
-        <input
-          type='password'
-          className={styles['input']}
-          {...register(`password`, { required: true })}
-        />
-        {errors.password && <span className={styles['error']}>Please enter your password.</span>}
-        <Spacer size={30} axis='vertical' />
-        {status !== 'Loading' && <input type='submit' className={styles['input']} value='Submit' />}
-        {status === 'Loading' && (
-          <Alert style={alertStyles.SPIN} title={status} message={message} code={code} />
-        )}
-        {status === 'Failed' && (
-          <Alert style={alertStyles.ERROR} title={status} message={message} code={code} />
-        )}
-        {status === 'Error' && (
-          <Alert style={alertStyles.ERROR} title={status} message={message} code={code} />
-        )}
-        <Spacer size={20} axis='vertical' />
-        <a href='/register'>Create an account</a>
-      </form>
+      <HelmetProvider>
+        <Helmet>
+          <meta charSet='utf-8' />
+          <title>Sign in - Recipe.Report</title>
+          <link rel='canonical' href='https://my.recipe.report' />
+        </Helmet>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles['form']}>
+          <div className={styles['logo']}>
+            <Logo />
+          </div>
+          <h1>Sign in</h1>
+          <Spacer size={20} axis='vertical' />
+          <label>Email Address</label>
+          <input
+            type='text'
+            className={styles['input']}
+            {...register(`email_address`, { required: true })}
+          />
+          {errors.email_address && (
+            <span className={styles['error']}>Please enter your email address.</span>
+          )}
+          <Spacer size={20} axis='vertical' />
+          <label>Password</label>
+          <input
+            type='password'
+            className={styles['input']}
+            {...register(`password`, { required: true })}
+          />
+          {errors.password && <span className={styles['error']}>Please enter your password.</span>}
+          <Spacer size={30} axis='vertical' />
+          {status !== 'Loading' && (
+            <input type='submit' className={styles['input']} value='Submit' />
+          )}
+          {status === 'Loading' && (
+            <Alert style={alertStyles.SPIN} title={status} message={message} code={code} />
+          )}
+          {status === 'Failed' && (
+            <Alert style={alertStyles.ERROR} title={status} message={message} code={code} />
+          )}
+          {status === 'Error' && (
+            <Alert style={alertStyles.ERROR} title={status} message={message} code={code} />
+          )}
+          <Spacer size={20} axis='vertical' />
+          <a href='/register'>Create an account</a>
+        </form>
+      </HelmetProvider>
     </div>
   )
 }

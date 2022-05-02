@@ -23,7 +23,7 @@
  *
  * @module
  */
-import { Helmet } from 'react-helmet'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
 import { useAppSelector } from 'app/hooks'
@@ -44,40 +44,46 @@ export function App(): JSX.Element {
   const location = useLocation()
   return (
     <div className={styles['container']}>
-      <Helmet>
-        <meta charSet='utf-8' />
-        <title>Recipe.Report</title>
-        <link rel='canonical' href='https://my.recipe.report' />
-      </Helmet>
-      <Routes>
-        <Route path='*' element={<NotFound />} />
-        <Route
-          path='/'
-          element={
-            token ? (
-              <Dashboard />
-            ) : (
-              <Navigate to='/authenticate' state={{ from: location }} replace />
-            )
-          }
-        />
-        <Route path='/activate/:token' element={<Activation />} />
-        <Route
-          path='/authenticate'
-          element={
-            token ? <Navigate to='/' state={{ from: location }} replace /> : <Authentication />
-          }
-        />
-        <Route
-          path='/profile'
-          element={
-            token ? <Profile /> : <Navigate to='/authenticate' state={{ from: location }} replace />
-          }
-        />
-        <Route path='/register' element={<Registration />} />
-      </Routes>
-      <NavBar />
-      <Footer />
+      <HelmetProvider>
+        <Helmet>
+          <meta charSet='utf-8' />
+          <title>Recipe.Report</title>
+          <link rel='canonical' href='https://my.recipe.report' />
+        </Helmet>
+        <Routes>
+          <Route path='*' element={<NotFound />} />
+          <Route
+            path='/'
+            element={
+              token ? (
+                <Dashboard />
+              ) : (
+                <Navigate to='/authenticate' state={{ from: location }} replace />
+              )
+            }
+          />
+          <Route path='/activate/:token' element={<Activation />} />
+          <Route
+            path='/authenticate'
+            element={
+              token ? <Navigate to='/' state={{ from: location }} replace /> : <Authentication />
+            }
+          />
+          <Route
+            path='/profile'
+            element={
+              token ? (
+                <Profile />
+              ) : (
+                <Navigate to='/authenticate' state={{ from: location }} replace />
+              )
+            }
+          />
+          <Route path='/register' element={<Registration />} />
+        </Routes>
+        <NavBar />
+        <Footer />
+      </HelmetProvider>
     </div>
   )
 }

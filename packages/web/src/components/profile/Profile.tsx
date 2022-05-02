@@ -27,7 +27,7 @@ import type { AccountDto, UserDto } from '@recipe-report/domain/dtos'
 import type { ApiRequestProfile } from '@recipe-report/domain/interfaces'
 import type { Claims } from '@recipe-report/service/jwt-service'
 import { useEffect } from 'react'
-import { Helmet } from 'react-helmet'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 
 import { useAppDispatch, useAppSelector } from 'app/hooks'
 
@@ -56,16 +56,18 @@ export function Profile(): JSX.Element {
   const userAccounts = UserAccounts(user?.accounts)
   return (
     <div>
-      <Helmet>
-        <meta charSet='utf-8' />
-        <title>User Profile - Recipe.Report</title>
-        <link rel='canonical' href='https://my.recipe.report' />
-      </Helmet>
-      <div className={styles['container']}>
-        {userInfo}
-        <Spacer size={20} axis='vertical' />
-        {userAccounts}
-      </div>
+      <HelmetProvider>
+        <Helmet>
+          <meta charSet='utf-8' />
+          <title>User Profile - Recipe.Report</title>
+          <link rel='canonical' href='https://my.recipe.report' />
+        </Helmet>
+        <div className={styles['container']}>
+          {userInfo}
+          <Spacer size={20} axis='vertical' />
+          {userAccounts}
+        </div>
+      </HelmetProvider>
     </div>
   )
 }
