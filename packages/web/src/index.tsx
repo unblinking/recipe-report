@@ -27,15 +27,38 @@
  */
 import 'Index.module.css'
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 
-import { store } from 'app/store'
+import packageJson from '../package.json'
+import { store } from './app/store'
+import { App } from './components/app/App'
 
-import { App } from 'components/app/App'
+// I added this totally superfluous graffiti for the browser console.
+// Yes, importing the whole package.json to show the version. This project is
+// "free and open" already (GNU AGPLv3), so the source code is readily
+// available, there is no top-secret info is being leaked by doing this.
 
-ReactDOM.render(
+const graffiti: string = `
+   ____           _                
+  |  _ \\ ___  ___(_)_ __   ___     
+  | |_) / _ \\/ __| | '_ \\ / _ \\    
+  |  _ <  __/ (__| | |_) |  __/    
+  |_|_\\_\\___|\\___|_| .__/ \\___|    
+  |  _ \\ ___ _ __  |_|_  _ _| |_   
+  | |_) / _ \\ '_ \\ / _ \\| '_| __|  
+  |  _ <  __/ |_) | (_) | | | |_   
+  |_| \\_\\___| .__/ \\___/|_|  \\__|  
+  Web       |_|     version ${packageJson.version}  
+                                   
+`
+console.log('%c' + graffiti, 'color: #0f0; background-color: #222; font-weight: bold;')
+
+const container = document.getElementById('root')
+const root = createRoot(container as HTMLElement)
+
+root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
@@ -43,5 +66,4 @@ ReactDOM.render(
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,
-  document.getElementById('root'),
 )

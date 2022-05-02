@@ -25,7 +25,7 @@
  */
 import type { ApiRequestRegistration, ApiResponse } from '@recipe-report/domain/interfaces'
 
-import { post } from 'wrappers/fetch'
+import { post } from '../../wrappers/fetch'
 
 // Perform a user registration.
 export async function requestRegistration(request: ApiRequestRegistration): Promise<ApiResponse> {

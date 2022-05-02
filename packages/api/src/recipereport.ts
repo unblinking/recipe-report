@@ -115,11 +115,11 @@ export class RecipeReport implements IRecipeReport {
 | |_) / _ \\/ __| | '_ \\ / _ \\
 |  _ <  __/ (__| | |_) |  __/
 |_|_\\_\\___|\\___|_| .__/ \\___|
-|  _ \\ ___ _ __  |_|_  _ __| |_
-| |_) / _ \\ '_ \\ / _ \\| '__| __|
-|  _ <  __/ |_) | (_) | |  | |_
-|_| \\_\\___| .__/ \\___/|_|   \\__|
-\x1b[37m\x1b[33mAPI\x1b[1m\x1b[32m       |_|      \x1b[37m\x1b[33mversion ${this._version}\x1b[37m\x1b[21m
+|  _ \\ ___ _ __  |_|_  _ _| |_
+| |_) / _ \\ '_ \\ / _ \\| '_| __|
+|  _ <  __/ |_) | (_) | | | |_
+|_| \\_\\___| .__/ \\___/|_|  \\__|
+\x1b[37m\x1b[33mAPI\x1b[1m\x1b[32m       |_|     \x1b[37m\x1b[33mversion ${this._version}\x1b[37m\x1b[21m
 
 Release is \x1b[36m${this._stage}\x1b[37m
 Running in \x1b[36m${this._mode}\x1b[37m mode

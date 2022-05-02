@@ -26,9 +26,8 @@
 import type { ApiRequestRegistration, ApiResponse } from '@recipe-report/domain/interfaces'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import type { RootState } from 'app/store'
-
-import { requestRegistration } from 'components/registration/registrationAPI'
+import type { RootState } from '../../app/store'
+import { requestRegistration } from '../../components/registration/registrationAPI'
 
 export interface RegistrationState {
   status: `Ready` | `Loading` | `Failed` | `Error` | `Registered`

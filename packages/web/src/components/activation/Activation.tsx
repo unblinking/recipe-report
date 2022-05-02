@@ -25,21 +25,20 @@
  */
 import type { ApiRequestActivation } from '@recipe-report/domain/interfaces'
 import { useEffect } from 'react'
-import { Helmet } from 'react-helmet'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { useParams } from 'react-router-dom'
 
-import { useAppDispatch, useAppSelector } from 'app/hooks'
-
-import styles from 'components/activation/Activation.module.css'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import styles from '../../components/activation/Activation.module.css'
 import {
   activateAsync,
   selectActivationCode,
   selectActivationMessage,
   selectActivationStatus,
-} from 'components/activation/activationSlice'
-import { Alert, alertStyles } from 'components/alert/Alert'
-import { Logo } from 'components/logo/Logo'
-import { Spacer } from 'components/spacer/Spacer'
+} from '../../components/activation/activationSlice'
+import { Alert, alertStyles } from '../../components/alert/Alert'
+import { Logo } from '../../components/logo/Logo'
+import { Spacer } from '../../components/spacer/Spacer'
 
 export function Activation(): JSX.Element {
   const status = useAppSelector(selectActivationStatus)
@@ -57,39 +56,41 @@ export function Activation(): JSX.Element {
   }, [])
   return (
     <div>
-      <Helmet>
-        <meta charSet='utf-8' />
-        <title>User Activation - Recipe.Report</title>
-        <link rel='canonical' href='https://my.recipe.report' />
-      </Helmet>
-      <form className={styles['form']}>
-        <div className={styles['logo']}>
-          <Logo />
-        </div>
-        <h1>User Activation</h1>
-        <Spacer size={20} axis='vertical' />
-        {token && status === 'Loading' && (
-          <Alert style={alertStyles.SPIN} title={status} message={message} code={code} />
-        )}
-        {token && status === 'Activated' && (
-          <Alert style={alertStyles.SUCCESS} title={status} message={message} code={code} />
-        )}
-        {token && status === 'Failed' && (
-          <Alert style={alertStyles.ERROR} title={status} message={message} code={code} />
-        )}
-        {token && status === 'Error' && (
-          <Alert style={alertStyles.ERROR} title={status} message={message} code={code} />
-        )}
-        {!token && (
-          <Alert
-            style={alertStyles.ERROR}
-            title='No token'
-            message='There was no token in the activation URL.'
-          />
-        )}
-        <Spacer size={20} axis='vertical' />
-        <a href='/authenticate'>Sign in</a>
-      </form>
+      <HelmetProvider>
+        <Helmet>
+          <meta charSet='utf-8' />
+          <title>User Activation - Recipe.Report</title>
+          <link rel='canonical' href='https://my.recipe.report' />
+        </Helmet>
+        <form className={styles['form']}>
+          <div className={styles['logo']}>
+            <Logo />
+          </div>
+          <h1>User Activation</h1>
+          <Spacer size={20} axis='vertical' />
+          {token && status === 'Loading' && (
+            <Alert style={alertStyles.SPIN} title={status} message={message} code={code} />
+          )}
+          {token && status === 'Activated' && (
+            <Alert style={alertStyles.SUCCESS} title={status} message={message} code={code} />
+          )}
+          {token && status === 'Failed' && (
+            <Alert style={alertStyles.ERROR} title={status} message={message} code={code} />
+          )}
+          {token && status === 'Error' && (
+            <Alert style={alertStyles.ERROR} title={status} message={message} code={code} />
+          )}
+          {!token && (
+            <Alert
+              style={alertStyles.ERROR}
+              title='No token'
+              message='There was no token in the activation URL.'
+            />
+          )}
+          <Spacer size={20} axis='vertical' />
+          <a href='/authenticate'>Sign in</a>
+        </form>
+      </HelmetProvider>
     </div>
   )
 }

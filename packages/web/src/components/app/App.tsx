@@ -23,61 +23,66 @@
  *
  * @module
  */
-import { Helmet } from 'react-helmet'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
-import { useAppSelector } from 'app/hooks'
-
-import { Activation } from 'components/activation/Activation'
-import styles from 'components/app/App.module.css'
-import { Authentication } from 'components/authentication/Authentication'
-import { selectAuthenticationToken } from 'components/authentication/authenticationSlice'
-import { Dashboard } from 'components/dashboard/Dashboard'
-import { NotFound } from 'components/error/NotFound'
-import { Footer } from 'components/footer/Footer'
-import { NavBar } from 'components/navbar/NavBar'
-import { Profile } from 'components/profile/Profile'
-import { Registration } from 'components/registration/Registration'
+import { useAppSelector } from '../../app/hooks'
+import { Activation } from '../../components/activation/Activation'
+import styles from '../../components/app/App.module.css'
+import { Authentication } from '../../components/authentication/Authentication'
+import { selectAuthenticationToken } from '../../components/authentication/authenticationSlice'
+import { Dashboard } from '../../components/dashboard/Dashboard'
+import { NotFound } from '../../components/error/NotFound'
+import { Footer } from '../../components/footer/Footer'
+import { NavBar } from '../../components/navbar/NavBar'
+import { Profile } from '../../components/profile/Profile'
+import { Registration } from '../../components/registration/Registration'
 
 export function App(): JSX.Element {
   const token = useAppSelector(selectAuthenticationToken)
   const location = useLocation()
   return (
     <div className={styles['container']}>
-      <Helmet>
-        <meta charSet='utf-8' />
-        <title>Recipe.Report</title>
-        <link rel='canonical' href='https://my.recipe.report' />
-      </Helmet>
-      <Routes>
-        <Route path='*' element={<NotFound />} />
-        <Route
-          path='/'
-          element={
-            token ? (
-              <Dashboard />
-            ) : (
-              <Navigate to='/authenticate' state={{ from: location }} replace />
-            )
-          }
-        />
-        <Route path='/activate/:token' element={<Activation />} />
-        <Route
-          path='/authenticate'
-          element={
-            token ? <Navigate to='/' state={{ from: location }} replace /> : <Authentication />
-          }
-        />
-        <Route
-          path='/profile'
-          element={
-            token ? <Profile /> : <Navigate to='/authenticate' state={{ from: location }} replace />
-          }
-        />
-        <Route path='/register' element={<Registration />} />
-      </Routes>
-      <NavBar />
-      <Footer />
+      <HelmetProvider>
+        <Helmet>
+          <meta charSet='utf-8' />
+          <title>Recipe.Report</title>
+          <link rel='canonical' href='https://my.recipe.report' />
+        </Helmet>
+        <Routes>
+          <Route path='*' element={<NotFound />} />
+          <Route
+            path='/'
+            element={
+              token ? (
+                <Dashboard />
+              ) : (
+                <Navigate to='/authenticate' state={{ from: location }} replace />
+              )
+            }
+          />
+          <Route path='/activate/:token' element={<Activation />} />
+          <Route
+            path='/authenticate'
+            element={
+              token ? <Navigate to='/' state={{ from: location }} replace /> : <Authentication />
+            }
+          />
+          <Route
+            path='/profile'
+            element={
+              token ? (
+                <Profile />
+              ) : (
+                <Navigate to='/authenticate' state={{ from: location }} replace />
+              )
+            }
+          />
+          <Route path='/register' element={<Registration />} />
+        </Routes>
+        <NavBar />
+        <Footer />
+      </HelmetProvider>
     </div>
   )
 }

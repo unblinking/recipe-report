@@ -23,8 +23,8 @@
  *
  * @module
  */
-import styles from 'components/alert/Alert.module.css'
-import icons from 'components/alert/AlertIcon.module.css'
+import styles from '../../components/alert/Alert.module.css'
+import icons from '../../components/alert/AlertIcon.module.css'
 
 export const alertStyles = {
   PRIMARY: `primary`,

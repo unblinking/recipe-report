@@ -27,11 +27,10 @@
  */
 import { NavLink } from 'react-router-dom'
 
-import { useAppSelector } from 'app/hooks'
-
-import { selectAuthenticationToken } from 'components/authentication/authenticationSlice'
-import { Favicon } from 'components/logo/Favicon'
-import styles from 'components/navbar/NavBar.module.css'
+import { useAppSelector } from '../../app/hooks'
+import { selectAuthenticationToken } from '../../components/authentication/authenticationSlice'
+import { Favicon } from '../../components/logo/Favicon'
+import styles from '../../components/navbar/NavBar.module.css'
 
 export function NavBar(): JSX.Element {
   const token = useAppSelector(selectAuthenticationToken)

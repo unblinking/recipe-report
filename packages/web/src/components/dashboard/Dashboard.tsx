@@ -23,9 +23,9 @@
  *
  * @module
  */
-import { Helmet } from 'react-helmet'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 
-import styles from 'components/dashboard/Dashboard.module.css'
+import styles from '../../components/dashboard/Dashboard.module.css'
 
 /**
  * Landing page and dashboard for an authenticated user.
@@ -34,18 +34,20 @@ import styles from 'components/dashboard/Dashboard.module.css'
 export function Dashboard(): JSX.Element {
   return (
     <div>
-      <Helmet>
-        <meta charSet='utf-8' />
-        <title>Dashboard - Recipe.Report</title>
-        <link rel='canonical' href='https://my.recipe.report' />
-      </Helmet>
-      <div className={styles['container']}>
-        <h1>Welcome to my.Recipe.Report</h1>
-        <p>
-          Recipe.Report is an alpha open-source project that will be available soon. Please check
-          back later for new features to become available.
-        </p>
-      </div>
+      <HelmetProvider>
+        <Helmet>
+          <meta charSet='utf-8' />
+          <title>Dashboard - Recipe.Report</title>
+          <link rel='canonical' href='https://my.recipe.report' />
+        </Helmet>
+        <div className={styles['container']}>
+          <h1>Welcome to my.Recipe.Report</h1>
+          <p>
+            Recipe.Report is an alpha open-source project that will be available soon. Please check
+            back later for new features to become available.
+          </p>
+        </div>
+      </HelmetProvider>
     </div>
   )
 }

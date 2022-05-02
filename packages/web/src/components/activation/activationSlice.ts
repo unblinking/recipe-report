@@ -26,9 +26,8 @@
 import type { ApiRequestActivation, ApiResponse } from '@recipe-report/domain/interfaces'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import type { RootState } from 'app/store'
-
-import { requestActivation } from 'components/activation/activationAPI'
+import type { RootState } from '../../app/store'
+import { requestActivation } from '../../components/activation/activationAPI'
 
 export interface ActivationState {
   status: `Ready` | `Loading` | `Failed` | `Error` | `Activated`
