@@ -21,10 +21,13 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script_stop: true
         script: |
-          pm2 stop api.recipe.report
           cd ~/recipe-report
+          git stash
           git pull
           npm install
-          cd packages/api
+          pm2 stop api.recipe.report
+          cd ~/recipe-report/packages/api
           npm run build
           pm2 restart api.recipe.report
+          cd ~/recipe-report/packages/web
+          npm run build
