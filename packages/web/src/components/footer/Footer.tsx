@@ -23,7 +23,7 @@
  *
  * @module
  */
-import styles from 'components/footer/Footer.module.css'
+import styles from '../../components/footer/Footer.module.css'
 
 export function Footer(): JSX.Element {
   return (

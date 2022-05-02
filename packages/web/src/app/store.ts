@@ -26,10 +26,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import type { Action, ThunkAction } from '@reduxjs/toolkit'
 
-import activationReducer from 'components/activation/activationSlice'
-import authenticationReducer from 'components/authentication/authenticationSlice'
-import profileReducer from 'components/profile/profileSlice'
-import registrationReducer from 'components/registration/registrationSlice'
+import activationReducer from '../components/activation/activationSlice'
+import authenticationReducer from '../components/authentication/authenticationSlice'
+import profileReducer from '../components/profile/profileSlice'
+import registrationReducer from '../components/registration/registrationSlice'
 
 /**
  * Redux Toolkit's store.

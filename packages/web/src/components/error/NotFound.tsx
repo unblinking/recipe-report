@@ -23,7 +23,7 @@
  *
  * @module
  */
-import styles from 'components/error/Error.module.css'
+import styles from '../../components/error/Error.module.css'
 
 /**
  * NotFound page similar to a HTTP Status 404 error.

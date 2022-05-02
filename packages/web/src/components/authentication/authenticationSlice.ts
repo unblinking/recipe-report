@@ -26,9 +26,8 @@
 import type { ApiRequestAuthentication, ApiResponse } from '@recipe-report/domain/interfaces'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import type { RootState } from 'app/store'
-
-import { requestAuthentication } from 'components/authentication/authenticationAPI'
+import type { RootState } from '../../app/store'
+import { requestAuthentication } from '../../components/authentication/authenticationAPI'
 
 export interface AuthenticationState {
   status: `Required` | `Loading` | `Failed` | `Error` | `Authenticated`

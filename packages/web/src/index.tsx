@@ -31,11 +31,9 @@ import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 
-import { store } from 'app/store'
-
-import { App } from 'components/app/App'
-
 import packageJson from '../package.json'
+import { store } from './app/store'
+import { App } from './components/app/App'
 
 // I added this totally superfluous graffiti for the browser console.
 // Yes, importing the whole package.json to show the version. This project is

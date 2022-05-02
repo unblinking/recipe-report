@@ -26,18 +26,17 @@
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
-import { useAppSelector } from 'app/hooks'
-
-import { Activation } from 'components/activation/Activation'
-import styles from 'components/app/App.module.css'
-import { Authentication } from 'components/authentication/Authentication'
-import { selectAuthenticationToken } from 'components/authentication/authenticationSlice'
-import { Dashboard } from 'components/dashboard/Dashboard'
-import { NotFound } from 'components/error/NotFound'
-import { Footer } from 'components/footer/Footer'
-import { NavBar } from 'components/navbar/NavBar'
-import { Profile } from 'components/profile/Profile'
-import { Registration } from 'components/registration/Registration'
+import { useAppSelector } from '../../app/hooks'
+import { Activation } from '../../components/activation/Activation'
+import styles from '../../components/app/App.module.css'
+import { Authentication } from '../../components/authentication/Authentication'
+import { selectAuthenticationToken } from '../../components/authentication/authenticationSlice'
+import { Dashboard } from '../../components/dashboard/Dashboard'
+import { NotFound } from '../../components/error/NotFound'
+import { Footer } from '../../components/footer/Footer'
+import { NavBar } from '../../components/navbar/NavBar'
+import { Profile } from '../../components/profile/Profile'
+import { Registration } from '../../components/registration/Registration'
 
 export function App(): JSX.Element {
   const token = useAppSelector(selectAuthenticationToken)

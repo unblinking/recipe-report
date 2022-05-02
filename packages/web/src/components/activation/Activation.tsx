@@ -28,18 +28,17 @@ import { useEffect } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { useParams } from 'react-router-dom'
 
-import { useAppDispatch, useAppSelector } from 'app/hooks'
-
-import styles from 'components/activation/Activation.module.css'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import styles from '../../components/activation/Activation.module.css'
 import {
   activateAsync,
   selectActivationCode,
   selectActivationMessage,
   selectActivationStatus,
-} from 'components/activation/activationSlice'
-import { Alert, alertStyles } from 'components/alert/Alert'
-import { Logo } from 'components/logo/Logo'
-import { Spacer } from 'components/spacer/Spacer'
+} from '../../components/activation/activationSlice'
+import { Alert, alertStyles } from '../../components/alert/Alert'
+import { Logo } from '../../components/logo/Logo'
+import { Spacer } from '../../components/spacer/Spacer'
 
 export function Activation(): JSX.Element {
   const status = useAppSelector(selectActivationStatus)

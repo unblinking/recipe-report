@@ -29,14 +29,12 @@ import type { Claims } from '@recipe-report/service/jwt-service'
 import { useEffect } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 
-import { useAppDispatch, useAppSelector } from 'app/hooks'
-
-import { selectAuthenticationToken } from 'components/authentication/authenticationSlice'
-import styles from 'components/profile/Profile.module.css'
-import { profileAsync, selectProfileUser } from 'components/profile/profileSlice'
-import { Spacer } from 'components/spacer/Spacer'
-
-import { parseJwt } from 'wrappers/jwt'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { selectAuthenticationToken } from '../../components/authentication/authenticationSlice'
+import styles from '../../components/profile/Profile.module.css'
+import { profileAsync, selectProfileUser } from '../../components/profile/profileSlice'
+import { Spacer } from '../../components/spacer/Spacer'
+import { parseJwt } from '../../wrappers/jwt'
 
 export function Profile(): JSX.Element {
   const token = useAppSelector(selectAuthenticationToken)

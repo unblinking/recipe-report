@@ -28,18 +28,17 @@ import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
 
-import { useAppDispatch, useAppSelector } from 'app/hooks'
-
-import { Alert, alertStyles } from 'components/alert/Alert'
-import styles from 'components/authentication/Authentication.module.css'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { Alert, alertStyles } from '../../components/alert/Alert'
+import styles from '../../components/authentication/Authentication.module.css'
 import {
   authenticateAsync,
   selectAuthenticationCode,
   selectAuthenticationMessage,
   selectAuthenticationStatus,
-} from 'components/authentication/authenticationSlice'
-import { Logo } from 'components/logo/Logo'
-import { Spacer } from 'components/spacer/Spacer'
+} from '../../components/authentication/authenticationSlice'
+import { Logo } from '../../components/logo/Logo'
+import { Spacer } from '../../components/spacer/Spacer'
 
 interface FormSubmitAuthentication {
   email_address: string

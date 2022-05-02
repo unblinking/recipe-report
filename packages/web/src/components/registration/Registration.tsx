@@ -28,18 +28,17 @@ import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import type { SubmitHandler } from 'react-hook-form'
 
-import { useAppDispatch, useAppSelector } from 'app/hooks'
-
-import { Alert, alertStyles } from 'components/alert/Alert'
-import { Logo } from 'components/logo/Logo'
-import styles from 'components/registration/Registration.module.css'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { Alert, alertStyles } from '../../components/alert/Alert'
+import { Logo } from '../../components/logo/Logo'
+import styles from '../../components/registration/Registration.module.css'
 import {
   registerAsync,
   selectRegistrationCode,
   selectRegistrationMessage,
   selectRegistrationStatus,
-} from 'components/registration/registrationSlice'
-import { Spacer } from 'components/spacer/Spacer'
+} from '../../components/registration/registrationSlice'
+import { Spacer } from '../../components/spacer/Spacer'
 
 interface FormSubmitRegistration {
   name: string

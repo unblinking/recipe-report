@@ -27,9 +27,8 @@ import type { UserDto } from '@recipe-report/domain/dtos'
 import type { ApiRequestProfile, ApiResponseUser } from '@recipe-report/domain/interfaces'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import type { RootState } from 'app/store'
-
-import { requestProfile } from 'components/profile/profileAPI'
+import type { RootState } from '../../app/store'
+import { requestProfile } from '../../components/profile/profileAPI'
 
 export interface ProfileState {
   status: `Ready` | `Loading` | `Failed` | `Error` | `Success`

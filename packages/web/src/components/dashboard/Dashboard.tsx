@@ -25,7 +25,7 @@
  */
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 
-import styles from 'components/dashboard/Dashboard.module.css'
+import styles from '../../components/dashboard/Dashboard.module.css'
 
 /**
  * Landing page and dashboard for an authenticated user.
