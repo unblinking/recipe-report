@@ -14,8 +14,8 @@
     "linter": "eslint --ext .js,.jsx,.ts,.tsx src/",
     "prebuild": "rimraf dist",
     "build": "tsc && tsc-alias",
-    "develop": "npm run build && npm run start",
-    "start": "node --es-module-specifier-resolution=node dist/api/src/main.js"
+    "start": "node --es-module-specifier-resolution=node dist/api/src/main.js",
+    "develop": "npm run build && npm run start"
   },
   "author": "jmg1138 https://github.com/jmg1138",
   "readme": "README.md",

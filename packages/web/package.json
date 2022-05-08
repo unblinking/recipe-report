@@ -13,7 +13,7 @@
     "linter": "eslint --ext .js,.jsx,.ts,.tsx src/",
     "prebuild": "rimraf build && less-watch-compiler --config less-builder.config.json",
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
-    "develop": "npm run build && concurrently --kill-others \"less-watch-compiler --config less-watcher.config.json\" \"react-scripts start\"",
+    "develop": "concurrently --kill-others \"less-watch-compiler --config less-watcher.config.json\" \"react-scripts start\"",
     "test": "react-scripts test"
   },
   "author": "jmg1138 https://github.com/jmg1138",
