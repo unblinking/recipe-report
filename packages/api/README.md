@@ -79,6 +79,43 @@ When you're ready to see it in action, run the `npm run develop` command to star
 npm run develop
 ```
 
+## API Endpoints  
+
+### User  
+
+
+
+Users can register, activate, and then access the application. Users are linked to accounts with roles.  
+
+In the `rr.users_to_roles` table, a record links a user, a role, and an account.  
+
+User passwords must pass minimum complexity according to [zxcvbn](https://dropbox.tech/security/zxcvbn-realistic-password-strength-estimation).  
+
+### Account  
+
+Accounts have a primary user contact, in addition to users who are linked to accounts with roles.  
+
+Most data, such as Recipes, belong to accounts.  
+
+### Role  
+
+Roles establish a level of access to an account.  
+
+Example roles:  
+
+Name|Description|Level
+--|--|--
+Kitchen Porter|Basic food preparation (newbie)|1
+Commis Chef|Absorbing food knowledge (beginner)|2
+Chef de Partie|Cooking the food (intermediate)|3
+Sous Chef|In charge of the food (experienced)|4
+Chef de Cuisine|Control all aspects of the food (expert)|5
+Executive Chef|Manage the kitchen and staff (admin)|6
+
+### Feature  
+
+Features are accessible to users based on account roles. For example, all users with any role/level for an account can access the recipe list feature for that account. Other features might only be accessible by users with a role/level 3 and above for an account, or only by level 6, etc.  
+
 ## Production  
 
 Instructions for setting up a production environment for the Recipe.Report API are outside of the scope of this readme document. Currently the production API instance runs [Debian Linux](https://www.debian.org/), uses [Uncomplicated Firewall](https://wiki.debian.org/Uncomplicated%20Firewall%20%28ufw%29), and uses [Nginx](https://www.nginx.com/) as a reverse proxy, and manages the Node.js process for the API using the PM2 process manager. DNS is pointed to Cloudflare and Nginx is configured to require [authenticated origin pulls](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/). Deployments happen through [GitHub Actions](https://github.com/features/actions).  
