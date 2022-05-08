@@ -34,8 +34,11 @@ print_db_usage () {
   echo "Env variable for application development:"
   echo "  DATABASE_URL=postgresql://$APP_DB_USER:$APP_DB_PASS@localhost:15432/$APP_DB_NAME"
   echo ""
-  echo "Local command to access the database via psql:"
+  echo "Local command to access the database via psql as the application user:"
   echo "  PGUSER=$APP_DB_USER PGPASSWORD=$APP_DB_PASS psql -h localhost -p 15432 $APP_DB_NAME"
+  echo ""
+  echo "Local command to access the database via psql as the database owner:"
+  echo "  PGUSER=$APP_DB_OWNER PGPASSWORD=$APP_DB_PASS psql -h localhost -p 15432 $APP_DB_NAME"
 }
 
 export DEBIAN_FRONTEND=noninteractive

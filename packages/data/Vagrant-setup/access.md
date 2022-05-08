@@ -10,6 +10,8 @@ Username: dbuser
 Password: dbpass
 ```
 
+## Access the Vagrant VM  
+
 Admin access to postgres user via VM:  
 
 ```bash
@@ -25,19 +27,31 @@ sudo su - postgres
 PGUSER=dbuser PGPASSWORD=dbpass psql -h localhost recipedb
 ```
 
+## Connection string for development  
+
 Env variable for application development:  
 
 ```
 DATABASE_URL=postgresql://dbuser:dbpass@localhost:15432/recipedb
 ```
 
-Local command to access the database via psql:  
+## Access the db via local command
+
+Connect via psql as dbuser:  
 
 ```
 PGUSER=dbuser PGPASSWORD=dbpass psql -h localhost -p 15432 recipedb
 ```
 
-Rollback all migrations:
+Connect via psql as dbowner:  
+
+```
+PGUSER=dbowner PGPASSWORD=dbpass psql -h localhost -p 15432 recipedb
+```
+
+## Rollback all migrations  
+
+First, connect to the database via psql as dbowner. Then run these SQL commands.  
 
 ```sql
 DROP SCHEMA rr CASCADE;
