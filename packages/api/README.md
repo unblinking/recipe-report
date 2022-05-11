@@ -83,8 +83,6 @@ npm run develop
 
 ### User  
 
-
-
 Users can register, activate, and then access the application. Users are linked to accounts with roles.  
 
 In the `rr.users_to_roles` table, a record links a user, a role, and an account.  
