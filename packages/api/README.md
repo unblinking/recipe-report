@@ -40,7 +40,11 @@ Prepare the development database, install dependencies, and then launch the API 
 
 ### Database  
 
-Prepare a development copy of the Recipe.Report database. From the data package directory (recipe-report/packages/data/), run the `vagrant up` command to create and configure a [Vagrant](https://www.vagrantup.com/intro) VM running PostgreSQL. Once the development database is running, run the `npm run flyway` command to download [Flyway](https://flywaydb.org/documentation/). Next, run the `npm run migrate` command to apply [database migrations](recipe-report/packages/data/migrations).  
+Prepare a development copy of the Recipe.Report database.  
+
+[HashiCorp Vagrant](https://www.vagrantup.com/) is used to make setting up a development database quick and easy. [Download](https://www.vagrantup.com/downloads) and [install Vagrant](https://learn.hashicorp.com/tutorials/vagrant/getting-started-install?in=vagrant/getting-started).  
+
+From the data package directory (recipe-report/packages/data/), run the `vagrant up` command to create and configure a [Vagrant](https://www.vagrantup.com/intro) VM running PostgreSQL. Once the development database is running, run the `npm run flyway` command to download [Flyway](https://flywaydb.org/documentation/). Next, run the `npm run migrate` command to apply [database migrations](recipe-report/packages/data/migrations).  
 
 ```bash
 cd ~/recipe-report/packages/data
