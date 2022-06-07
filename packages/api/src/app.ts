@@ -26,15 +26,17 @@
 import type { IBaseController } from '@recipe-report/api/controllers'
 import { fiveHundred, fourOhFour } from '@recipe-report/api/middlewares'
 import { log } from '@recipe-report/service'
+import type { ApolloServer } from 'apollo-server-express'
 import cors from 'cors'
 import type { Application, RequestHandler } from 'express'
 import express from 'express'
 
-export const listen = (
+export const listen = async (
   middlewares: Array<RequestHandler>,
   controllers: Array<IBaseController>,
+  apollo: ApolloServer,
   port: number,
-): void => {
+): Promise<void> => {
   log.trace(`app.ts listen()`)
 
   // Instatiate our express.js web application with settings.
@@ -51,9 +53,15 @@ export const listen = (
   // of those is a complete middleware and routing system (mini-app). For more
   // info about this style of express.js router setup, see the following link.
   // @see {@link https://expressjs.com/en/guide/routing.html express.Router}
+  // TODO: Use map instead of forEach?
   controllers.forEach((controller: IBaseController) => {
     app.use(controller.path, controller.router)
   })
+
+  // Start the Apollo GraphQL middleware.
+  await apollo.start()
+  // Mount the Apollo GraphQL middelware.
+  app.use(apollo.getMiddleware({ path: '/gql' }))
 
   // If none of the registered controllers were hit, reply 404 Not Found.
   // This is really our final application-level middleware.
@@ -68,6 +76,6 @@ export const listen = (
 
   // Finally, start listening on the specified port.
   app.listen(port, () => {
-    log.info(`Expressjs is listening on port ${port}`)
+    log.info(`Express.js is listening on port ${port}`)
   })
 }

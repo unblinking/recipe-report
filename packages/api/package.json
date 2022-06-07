@@ -40,6 +40,7 @@
     "@zxcvbn-ts/core": "2.0.1",
     "@zxcvbn-ts/language-common": "2.0.1",
     "@zxcvbn-ts/language-en": "2.0.1",
+    "apollo-server-express": "3.7.0",
     "bs-logger": "0.2.6",
     "cors": "2.8.5",
     "express": "4.18.1",
