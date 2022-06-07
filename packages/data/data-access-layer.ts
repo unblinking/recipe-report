@@ -47,13 +47,6 @@ export class DataAccessLayer implements IDataAccessLayer {
     database: process.env['RRDB_DATABASE'] as string,
     password: process.env['RRDB_PASSWORD'] as string,
     port: parseInt(process.env['RRDB_PORT'] as string, 10),
-    ssl:
-      process.env['NODE_ENV'] == 'production'
-        ? {
-            rejectUnauthorized: false,
-            ca: process.env['RRDB_CA_CERT'],
-          }
-        : false,
   })
 
   /**
