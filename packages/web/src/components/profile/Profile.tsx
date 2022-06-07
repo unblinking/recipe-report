@@ -97,7 +97,7 @@ function UserAccounts(accounts: AccountDto[] | null | undefined): JSX.Element {
       <table>
         <tbody>
           {accounts?.map((account) => (
-            <tr>
+            <tr key={account.id}>
               <th>Account Name</th>
               <td>{account.name}</td>
             </tr>

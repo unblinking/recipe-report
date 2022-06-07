@@ -53,7 +53,6 @@ export const listen = async (
   // of those is a complete middleware and routing system (mini-app). For more
   // info about this style of express.js router setup, see the following link.
   // @see {@link https://expressjs.com/en/guide/routing.html express.Router}
-  // TODO: Use map instead of forEach?
   controllers.forEach((controller: IBaseController) => {
     app.use(controller.path, controller.router)
   })

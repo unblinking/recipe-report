@@ -86,12 +86,7 @@ export class AccountRepo extends BaseRepo implements IAccountRepo {
   public readAllByUser = async (id: UniqueId): Promise<Account[]> => {
     const query: string = `SELECT * FROM rr.accounts_read_all_by_user($1)`
     const result: QueryResult = await this.client.query(query, [id.value])
-    const accounts: Account[] = []
-    // TODO: Use map instead of forEach?
-    result.rows.forEach((row) => {
-      accounts.push(AccountMap.dbToDomain(row, row.id))
-    })
-    return accounts
+    return result.rows.map((row) => AccountMap.dbToDomain(row, row.id))
   }
 
   public update = async (
