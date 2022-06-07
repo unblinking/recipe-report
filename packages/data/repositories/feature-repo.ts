@@ -87,7 +87,7 @@ export class FeatureRepo extends BaseRepo implements IFeatureRepo {
       description != undefined ? description : null,
     ])
     if (result.rowCount !== 1) {
-      throw new Err(`FEATURE_READ`, errClient.FEATURE_READ)
+      throw new Err(`FEATURE_UPDATE`, errClient.FEATURE_UPDATE)
     }
     // Return domain object from database query results.
     return FeatureMap.dbToDomain(result.rows[0], result.rows[0].id)
@@ -98,7 +98,7 @@ export class FeatureRepo extends BaseRepo implements IFeatureRepo {
     const query: string = `SELECT * FROM rr.features_delete($1)`
     const result: QueryResult = await this.client.query(query, [id.value])
     if (result.rowCount !== 1) {
-      throw new Err(`FEATURE_READ`, errClient.FEATURE_READ)
+      throw new Err(`FEATURE_DELETE`, errClient.FEATURE_DELETE)
     }
     // Return domain object from database query results.
     return FeatureMap.dbToDomain(result.rows[0], result.rows[0].id)

@@ -37,7 +37,7 @@ export class RootController implements IBaseController {
   router: Router = Router()
   path: string = `/`
 
-  constructor() {
+  public constructor() {
     this.initRoutes()
   }
 

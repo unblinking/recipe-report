@@ -1,5 +1,5 @@
 /**
- * Feature DTO.
+ * Feature interface.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2022

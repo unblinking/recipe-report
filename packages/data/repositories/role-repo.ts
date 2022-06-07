@@ -90,7 +90,7 @@ export class RoleRepo extends BaseRepo implements IRoleRepo {
       level != undefined ? level.value : null,
     ])
     if (result.rowCount !== 1) {
-      throw new Err(`ROLE_READ`, errClient.ROLE_READ)
+      throw new Err(`ROLE_UPDATE`, errClient.ROLE_UPDATE)
     }
     // Return domain object from database query results.
     return RoleMap.dbToDomain(result.rows[0], result.rows[0].id)
@@ -101,7 +101,7 @@ export class RoleRepo extends BaseRepo implements IRoleRepo {
     const query: string = `SELECT * FROM rr.roles_delete($1)`
     const result: QueryResult = await this.client.query(query, [id.value])
     if (result.rowCount !== 1) {
-      throw new Err(`ROLE_READ`, errClient.ROLE_READ)
+      throw new Err(`ROLE_DELETE`, errClient.ROLE_DELETE)
     }
     // Return domain object from database query results.
     return RoleMap.dbToDomain(result.rows[0], result.rows[0].id)
