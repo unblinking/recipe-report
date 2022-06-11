@@ -6,7 +6,7 @@
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
- * @see {@link https://github.com/nothingworksright/recipe-report}
+ * @see {@link https://github.com/unblinking/recipe-report}
  *
  * Recipe.Report API Server is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License as
@@ -86,11 +86,7 @@ export class AccountRepo extends BaseRepo implements IAccountRepo {
   public readAllByUser = async (id: UniqueId): Promise<Account[]> => {
     const query: string = `SELECT * FROM rr.accounts_read_all_by_user($1)`
     const result: QueryResult = await this.client.query(query, [id.value])
-    const accounts: Account[] = []
-    result.rows.forEach((row) => {
-      accounts.push(AccountMap.dbToDomain(row, row.id))
-    })
-    return accounts
+    return result.rows.map((row) => AccountMap.dbToDomain(row, row.id))
   }
 
   public update = async (
@@ -129,7 +125,7 @@ export class AccountRepo extends BaseRepo implements IAccountRepo {
       address_street != undefined ? address_street : null,
     ])
     if (result.rowCount !== 1) {
-      throw new Err(`ACCOUNT_READ`, errClient.ACCOUNT_READ)
+      throw new Err(`ACCOUNT_UPDATE`, errClient.ACCOUNT_UPDATE)
     }
     // Return domain object from database query results.
     return AccountMap.dbToDomain(result.rows[0], result.rows[0].id)
@@ -140,7 +136,7 @@ export class AccountRepo extends BaseRepo implements IAccountRepo {
     const query: string = `SELECT * FROM rr.accounts_delete($1)`
     const result: QueryResult = await this.client.query(query, [id.value])
     if (result.rowCount !== 1) {
-      throw new Err(`ACCOUNT_READ`, errClient.ACCOUNT_READ)
+      throw new Err(`ACCOUNT_DELETE`, errClient.ACCOUNT_DELETE)
     }
     // Return domain object from database query results.
     return AccountMap.dbToDomain(result.rows[0], result.rows[0].id)

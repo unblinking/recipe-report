@@ -6,7 +6,7 @@
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
- * @see {@link https://github.com/nothingworksright/recipe-report}
+ * @see {@link https://github.com/unblinking/recipe-report}
  *
  * Recipe.Report API Server is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License as
@@ -103,6 +103,9 @@ type errEnvType = typeof errEnv
 export type errEnvKeyType = keyof errEnvType
 export type errEnvValueType = errEnvType[keyof errEnvType]
 
+// TODO: Prefix all errClient keys with something like EC_
+// TODO: This way there is no chance of having errClient and errInternal keys that match
+// TODO: Otherwise when we check if an error name is an errClient key, we might match on something that was errInternal.
 export const errClient = {
   ID_MISMATCH: `The path UUID does not match the request body UUID or token subject UUID.`,
   MISSING_REQ: `One or more required fields are missing.`,

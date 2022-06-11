@@ -2,7 +2,7 @@
   "name": "@recipe-report/api",
   "version": "0.1.0",
   "description": "recipe.report api server.",
-  "repository": "github:nothingworksright/recipe-report",
+  "repository": "github:unblinking/recipe-report",
   "license": "AGPL-3.0-or-later",
   "engines": {
     "node": "16.14.0"
@@ -14,8 +14,8 @@
     "linter": "eslint --ext .js,.jsx,.ts,.tsx src/",
     "prebuild": "rimraf dist",
     "build": "tsc && tsc-alias",
-    "develop": "npm run build && npm run start",
-    "start": "node --es-module-specifier-resolution=node dist/api/src/main.js"
+    "start": "node --es-module-specifier-resolution=node dist/api/src/main.js",
+    "develop": "npm run build && npm run start"
   },
   "author": "jmg1138 https://github.com/jmg1138",
   "readme": "README.md",
@@ -40,6 +40,7 @@
     "@zxcvbn-ts/core": "2.0.1",
     "@zxcvbn-ts/language-common": "2.0.1",
     "@zxcvbn-ts/language-en": "2.0.1",
+    "apollo-server-express": "3.7.0",
     "bs-logger": "0.2.6",
     "cors": "2.8.5",
     "express": "4.18.1",

@@ -10,7 +10,7 @@
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
- * @see {@link https://github.com/nothingworksright/recipe-report}
+ * @see {@link https://github.com/unblinking/recipe-report}
  *
  * Recipe.Report API Server is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License as
@@ -39,6 +39,7 @@ import { injectable, multiInject } from 'inversify'
 import 'reflect-metadata'
 
 import { listen } from './app'
+import { apolloServer } from './graph/apolloServer'
 
 export interface IRecipeReport {
   start(): void
@@ -52,14 +53,17 @@ export class RecipeReport implements IRecipeReport {
     this._controllers = controllers
   }
 
-  public start = (): void => {
+  public start = async (): Promise<void> => {
     try {
       log.trace(`recipereport.ts start()`)
       process.stdout.write(this._graffiti)
       this._envVarCheck()
       const middlewares: Array<RequestHandler> = [
         Helmet({
-          contentSecurityPolicy: { directives: { defaultSrc: ["'self'"] } },
+          contentSecurityPolicy: {
+            useDefaults: true,
+            directives: { defaultSrc: ["'self'"] },
+          },
           referrerPolicy: { policy: 'same-origin' },
         }),
         json(),
@@ -67,7 +71,7 @@ export class RecipeReport implements IRecipeReport {
       ]
       const controllers: Array<IBaseController> = this._controllers
       const port: number = parseInt(process.env['RR_PORT'] as string, 10)
-      listen(middlewares, controllers, port)
+      await listen(middlewares, controllers, apolloServer, port)
     } catch (e) {
       log.fatal((e as Error).message)
       process.exit(1)
@@ -77,7 +81,7 @@ export class RecipeReport implements IRecipeReport {
   /// Environment variables roll call. Shabooya, sha sha shabooya ROLL CALL!
   /// This confirms that necessary environment variables have been defined.
   private _envVarCheck = (): void => {
-    log.trace(`envvarcheck.ts envVarCheck()`)
+    log.trace(`recipereport.ts envVarCheck()`)
     if (!process.env['NODE_ENV']) {
       log.warn(`NODE_ENV is not set. Assuming environment is not production.`)
     }
@@ -93,6 +97,9 @@ export class RecipeReport implements IRecipeReport {
     if (!process.env['RRDB_DATABASE']) throw new Err(`ENV_RRDB_DATABASE`, errEnv.ENV_RRDB_DATABASE)
     if (!process.env['RRDB_PASSWORD']) throw new Err(`ENV_RRDB_PASSWORD`, errEnv.ENV_RRDB_PASSWORD)
     if (!process.env['RRDB_PORT']) throw new Err(`ENV_RRDB_PORT`, errEnv.ENV_RRDB_PORT)
+    if (!process.env['RRDB_OWNER']) {
+      log.warn(`RRDB_OWNER is not set. Database migrations are disabled.`)
+    }
     if (!process.env['RRDB_URL']) {
       log.warn(`RRDB_URL is not set. Database migrations are disabled.`)
     }
@@ -109,7 +116,7 @@ export class RecipeReport implements IRecipeReport {
   private _stage: string = `Alpha`
   private _mode: string = (process.env['NODE_ENV'] as string) || `development`
   private _license: string = 'AGPL-3.0-or-later'
-  private _repository: string = `github:nothingworksright/recipe-report`
+  private _repository: string = `github:unblinking/recipe-report`
   private _graffiti: string = `\x1b[1m\x1b[32m ____           _
 |  _ \\ ___  ___(_)_ __   ___
 | |_) / _ \\/ __| | '_ \\ / _ \\

@@ -1,18 +1,12 @@
 /**
- * Database migration for Recipe.Report.
- * 
- * Using PostgreSQL for database.
- * @see {@link https://www.postgresql.org/ PostgreSQL}
- * 
- * Using Flyway for database migrations.
- * @see {@link https://flywaydb.org/documentation/database/postgresql Flyway}
+ * GraphQL ApolloServer wrapper.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2022
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
- * @see {@link https://github.com/nothingworksright/recipe-report}
+ * @see {@link https://github.com/unblinking/recipe-report}
  *
  * Recipe.Report API Server is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License as
@@ -26,16 +20,21 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * @module
  */
+import type { ExpressContext } from 'apollo-server-express'
+import { ApolloServer } from 'apollo-server-express'
 
-/*******************************************************************************
- * Migration:   Recipe.Report
- * Version:     V9
- * Author:      Joshua Gray
- * Description: Grant safe access to the API database user (dbuser).
- ******************************************************************************/
+import { typeDefs } from './schema'
 
-GRANT CONNECT ON DATABASE recipedb TO dbuser;
-GRANT USAGE ON SCHEMA rr TO dbuser;
-GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA rr TO dbuser;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA rr TO dbuser;
+const resolvers = {
+  Query: {
+    hello: (): string => 'Hello world!',
+  },
+}
+
+export const apolloServer: ApolloServer<ExpressContext> = new ApolloServer({
+  typeDefs: typeDefs,
+  resolvers: resolvers,
+})

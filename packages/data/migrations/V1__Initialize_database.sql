@@ -12,7 +12,7 @@
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
- * @see {@link https://github.com/nothingworksright/recipe-report}
+ * @see {@link https://github.com/unblinking/recipe-report}
  *
  * Recipe.Report API Server is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License as
@@ -43,6 +43,24 @@
  */
 CREATE SCHEMA IF NOT EXISTS rr;
 COMMENT ON SCHEMA rr IS 'The namespace for Recipe.Report types, tables, and functions.';
+
+/**
+ * Grant:       Connect, usage, execute, select/insert/update/delete.
+ * Author:      Joshua Gray
+ * Description: Grant safe access to the API database user (dbuser).
+ */
+GRANT CONNECT ON DATABASE recipedb TO dbuser;
+GRANT USAGE ON SCHEMA rr TO dbuser;
+
+ALTER DEFAULT PRIVILEGES
+FOR USER dbowner
+IN SCHEMA rr
+GRANT EXECUTE ON FUNCTIONS TO dbuser;
+
+ALTER DEFAULT PRIVILEGES
+FOR USER dbowner
+IN SCHEMA rr
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO dbuser;
 
 /**
  * Function:    rr.get_table_types

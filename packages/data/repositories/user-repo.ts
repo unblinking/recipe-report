@@ -6,7 +6,7 @@
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
- * @see {@link https://github.com/nothingworksright/recipe-report}
+ * @see {@link https://github.com/unblinking/recipe-report}
  *
  * Recipe.Report API Server is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License as
@@ -101,7 +101,7 @@ export class UserRepo extends BaseRepo implements IUserRepo {
       email_address != undefined ? email_address.value : null,
     ])
     if (result.rowCount !== 1) {
-      throw new Err(`USER_READ`, errClient.USER_READ)
+      throw new Err(`USER_UPDATE`, errClient.USER_UPDATE)
     }
     // Return domain object from database query results.
     return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
@@ -112,7 +112,7 @@ export class UserRepo extends BaseRepo implements IUserRepo {
     const query: string = `SELECT * FROM rr.users_delete($1)`
     const result: QueryResult = await this.client.query(query, [id.value])
     if (result.rowCount !== 1) {
-      throw new Err(`USER_READ`, errClient.USER_READ)
+      throw new Err(`USER_DELETE`, errClient.USER_DELETE)
     }
     // Return domain object from database query results.
     return UserMap.dbToDomain(result.rows[0], result.rows[0].id)

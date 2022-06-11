@@ -6,7 +6,7 @@
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
- * @see {@link https://github.com/nothingworksright/recipe-report}
+ * @see {@link https://github.com/unblinking/recipe-report}
  *
  * Recipe.Report API Server is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License as
@@ -121,7 +121,7 @@ export class RoleService implements IRoleService {
         throw new Err(`MISSING_REQ`, `${errClient.MISSING_REQ} id`)
       }
       // Verify the request DTO has a name or description or level.
-      // Each property is options, but hopefully they're updating at least one
+      // Each property is optional, but hopefully they're updating at least one
       // of those.
       if (!req.role.name && !req.role.description && !req.role.level) {
         throw new Err(

@@ -6,7 +6,7 @@
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
- * @see {@link https://github.com/nothingworksright/recipe-report}
+ * @see {@link https://github.com/unblinking/recipe-report}
  *
  * Recipe.Report API Server is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License as
@@ -37,7 +37,7 @@ export class RootController implements IBaseController {
   router: Router = Router()
   path: string = `/`
 
-  constructor() {
+  public constructor() {
     this.initRoutes()
   }
 
