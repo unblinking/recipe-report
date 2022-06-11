@@ -4,17 +4,17 @@
 
 This is the monorepo for all recipe.report packages.  
 
-[![codecov](https://codecov.io/gh/nothingworksright/recipe-report/branch/main/graph/badge.svg?token=ARrGqDcKhD)](https://codecov.io/gh/nothingworksright/recipe-report)  
+[![codecov](https://codecov.io/gh/unblinking/recipe-report/branch/main/graph/badge.svg?token=ARrGqDcKhD)](https://codecov.io/gh/unblinking/recipe-report)  
 
 ## Frontend  
 
 - [https://my.recipe.report](https://my.recipe.report)  
-- [Source code](https://github.com/nothingworksright/recipe-report/tree/main/packages/web)  
+- [Source code](https://github.com/unblinking/recipe-report/tree/main/packages/web)  
 
 ## Backend  
 
 - [https://api.recipe.report](https://api.recipe.report)  
-- [Source code](https://github.com/nothingworksright/recipe-report/tree/main/packages/api)  
+- [Source code](https://github.com/unblinking/recipe-report/tree/main/packages/api)  
 
 ## Testing  
 

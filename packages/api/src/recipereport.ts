@@ -10,7 +10,7 @@
  * @license GNU AGPLv3 or later
  *
  * This file is part of Recipe.Report API server.
- * @see {@link https://github.com/nothingworksright/recipe-report}
+ * @see {@link https://github.com/unblinking/recipe-report}
  *
  * Recipe.Report API Server is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License as
@@ -116,7 +116,7 @@ export class RecipeReport implements IRecipeReport {
   private _stage: string = `Alpha`
   private _mode: string = (process.env['NODE_ENV'] as string) || `development`
   private _license: string = 'AGPL-3.0-or-later'
-  private _repository: string = `github:nothingworksright/recipe-report`
+  private _repository: string = `github:unblinking/recipe-report`
   private _graffiti: string = `\x1b[1m\x1b[32m ____           _
 |  _ \\ ___  ___(_)_ __   ___
 | |_) / _ \\/ __| | '_ \\ / _ \\

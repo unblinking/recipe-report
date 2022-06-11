@@ -2,7 +2,7 @@
   "name": "@recipe-report/service",
   "version": "0.1.0",
   "description": "recipe.report service",
-  "repository": "github:nothingworksright/recipe-report",
+  "repository": "github:unblinking/recipe-report",
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "prettier": "prettier --write *.ts",

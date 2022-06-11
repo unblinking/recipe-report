@@ -2,7 +2,7 @@
 
 ![logo](https://user-images.githubusercontent.com/2879801/154334825-d5c4873c-0f43-42a7-a5a8-74a1d38163d3.svg)  
 
-This is the [source code repository](https://github.com/nothingworksright/recipe-report/tree/main/packages/web) for the Recipe.Report Web App.
+This is the [source code repository](https://github.com/unblinking/recipe-report/tree/main/packages/web) for the Recipe.Report Web App.
 
 Written using [Node.js](https://nodejs.org/)/[React](https://reactjs.org/)/[Redux](https://redux.js.org/)/[Thunk](https://github.com/reduxjs/redux-thunk)/[TypeScript](https://www.typescriptlang.org/), using [React Hooks](https://reactjs.org/docs/hooks-overview.html).  
 

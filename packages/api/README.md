@@ -2,7 +2,7 @@
 
 ![logo](https://user-images.githubusercontent.com/2879801/154334825-d5c4873c-0f43-42a7-a5a8-74a1d38163d3.svg)  
 
-This is the [source code repository](https://github.com/nothingworksright/recipe-report/tree/main/packages/api) for the Recipe.Report API Server.  
+This is the [source code repository](https://github.com/unblinking/recipe-report/tree/main/packages/api) for the Recipe.Report API Server.  
 
 Written using [Node.js](https://nodejs.org/)/[Express.js](https://expressjs.com/)/[Inversify.js](https://inversify.io/)/[TypeScript](https://www.typescriptlang.org/), following the [Domain-Driven Design](https://khalilstemmler.com/articles/domain-driven-design-intro/) approach.  
 

@@ -2,7 +2,7 @@
   "name": "@recipe-report/api",
   "version": "0.1.0",
   "description": "recipe.report api server.",
-  "repository": "github:nothingworksright/recipe-report",
+  "repository": "github:unblinking/recipe-report",
   "license": "AGPL-3.0-or-later",
   "engines": {
     "node": "16.14.0"

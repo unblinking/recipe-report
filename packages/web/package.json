@@ -2,7 +2,7 @@
   "name": "@recipe-report/web",
   "version": "0.1.0",
   "description": "recipe.report web app",
-  "repository": "github:nothingworksright/recipe-report",
+  "repository": "github:unblinking/recipe-report",
   "license": "AGPL-3.0-or-later",
   "engines": {
     "node": "16.14.0"

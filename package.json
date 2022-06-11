@@ -4,7 +4,7 @@
   "description": "The recipe.report monorepo.",
   "repository": {
     "type": "git",
-    "url": "github:nothingworksright/recipe.report"
+    "url": "github:unblinking/recipe.report"
   },
   "license": "AGPL-3.0-or-later",
   "engines": {
