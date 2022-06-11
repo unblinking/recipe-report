@@ -29,5 +29,5 @@ jobs:
           cd ~/recipe-report/packages/api
           npm run build
           pm2 restart api.recipe.report
-          cd ~/recipe-report/packages/web
+          cd ~/recipe-report/packages/react-app
           npm run build

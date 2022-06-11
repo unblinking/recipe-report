@@ -128,7 +128,7 @@ Features are accessible to users based on account roles. For example, all users 
 
 Instructions for setting up a production environment for the Recipe.Report API are outside of the scope of this readme document. Currently the production API instance runs [Debian Linux](https://www.debian.org/), uses [Uncomplicated Firewall](https://wiki.debian.org/Uncomplicated%20Firewall%20%28ufw%29), uses [Nginx](https://www.nginx.com/) as a reverse proxy, and manages the Node.js process for the API using the [PM2 process manager](https://pm2.keymetrics.io/). Domain DNS is pointed to Cloudflare and Nginx is configured to require [authenticated origin pulls](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/). Deployments happen through [GitHub Actions](https://github.com/features/actions).  
 
-## Frontend  
+## Frontend (React App)  
 
 Written using [Node.js](https://nodejs.org/)/[React](https://reactjs.org/)/[Redux](https://redux.js.org/)/[Thunk](https://github.com/reduxjs/redux-thunk)/[TypeScript](https://www.typescriptlang.org/), using [React Hooks](https://reactjs.org/docs/hooks-overview.html).  
 
@@ -149,14 +149,14 @@ npm install
 
 #### Style, linting, updates  
 
-Run these commands from the web package directory (~/recipe-report/packages/web/).  
+Run these commands from the react-app package directory (~/recipe-report/packages/react-app/).  
 
 Run the `npm run prettier` command to format the source code using the [Prettier](https://prettier.io/docs/en/index.html) opinionated styling. Run the `npm run linter` command to identify and report [ESLint](https://eslint.org/docs/user-guide/getting-started) code pattern findings. These can also be run automatically as IDE extensions.  
 
 Run the `npm run updates` command to check for dependency updates.  
 
 ```bash
-cd ~/recipe-report/packages/web
+cd ~/recipe-report/packages/react-app
 npm run prettier
 npm run linter
 npm run updates
@@ -164,12 +164,12 @@ npm run updates
 
 #### Start the React app  
 
-Run these commands from the web package directory (~/recipe-report/packages/web/).  
+Run these commands from the react-app package directory (~/recipe-report/packages/react-app/).  
 
 When you're ready to see it in action, run the `npm run develop` command to start the Recipe.Report React app in development mode. This will run the `npm run build` command which runs both the [`less-watch-compiler`](https://github.com/jonycheung/deadsimple-less-watch-compiler) command and the [`react-scripts start`](https://create-react-app.dev/docs/available-scripts/#npm-start) command, 
 
 ```bash
-cd ~/recipe-report/packages/web
+cd ~/recipe-report/packages/react-app
 npm run develop
 ```
 
