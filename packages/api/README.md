@@ -4,6 +4,8 @@
 
 This is the [source code repository](https://github.com/unblinking/recipe-report/tree/main/packages/api) for the Recipe.Report API Server.  
 
+[![codecov](https://codecov.io/gh/unblinking/recipe-report/branch/main/graph/badge.svg?token=ARrGqDcKhD)](https://codecov.io/gh/unblinking/recipe-report)  
+
 Written using [Node.js](https://nodejs.org/)/[Express.js](https://expressjs.com/)/[Inversify.js](https://inversify.io/)/[TypeScript](https://www.typescriptlang.org/), following the [Domain-Driven Design](https://khalilstemmler.com/articles/domain-driven-design-intro/) approach.  
 
 The API server is broken up into a multilayered architechture that implements a service/repository pattern. The API layer, the service layer, the business/domain layer, and the data access layer (repositories implemented through the unit-of-work pattern).  
