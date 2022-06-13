@@ -9,15 +9,15 @@
  * Typescript Project" by Sunny Sun. 7/25/2021.
  * @see {@link https://medium.com/codex/how-to-share-constants-in-typescript-project-8f76a2e40352}
  *
- * This file is part of Recipe.Report API server.
+ * This file is part of Recipe.Report.
  * @see {@link https://github.com/unblinking/recipe-report}
  *
- * Recipe.Report API Server is free software: you can redistribute it and/or
+ * Recipe.Report is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the License,
  * or (at your option) any later version.
  *
- * Recipe.Report API Server is distributed in the hope that it will be useful,
+ * Recipe.Report is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.

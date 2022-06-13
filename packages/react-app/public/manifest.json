@@ -1,0 +1,16 @@
+{
+  "short_name": "my.Recipe.Report",
+  "name": "Recipe.Report React App",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "48x48 72x72 96x96 128x128 256x256",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#f92672",
+  "background_color": "#0e101c"
+}
