@@ -149,6 +149,18 @@ export class UserRepo extends BaseRepo implements IUserRepo {
     return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
   }
 
+  public createRole = async (userId: UniqueId, roleId: UniqueId, accountId: UniqueId): Promise<void> => {
+    const query: string = `SELECT * FROM rr.users_to_roles_create($1, $2, $3)`
+    const result: QueryResult = await this.client.query(query, [
+      userId.value,
+      roleId.value,
+      accountId.value,
+    ])
+    if (result.rowCount !== 1) {
+      throw new Err(`USER_CREATE_ROLE`, errClient.USER_CREATE_ROLE)
+    }
+  }
+
   // Function to return the count of user records that match a given column/value
   private _countByColumn = async (column: string, value: string): Promise<number> => {
     const query: string = `SELECT * FROM rr.users_count_by_column_value($1, $2)`
