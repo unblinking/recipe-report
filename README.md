@@ -44,7 +44,7 @@ Prepare the development database, install dependencies, and then start the API s
 
 Prepare a development copy of the Recipe.Report database.  
 
-[HashiCorp Vagrant](https://www.vagrantup.com/) is used to make setting up a development database quick and easy. [Download](https://www.vagrantup.com/downloads) and [install Vagrant](https://learn.hashicorp.com/tutorials/vagrant/getting-started-install?in=vagrant/getting-started).  
+[HashiCorp Vagrant](https://www.vagrantup.com/) is used to make setting up a development database quick and easy. [Download](https://www.vagrantup.com/downloads) and [install Vagrant](https://learn.hashicorp.com/tutorials/vagrant/getting-started-install?in=vagrant/getting-started). Vagrant relies on "providers" such as VirtualBox, VMware, or HyperV, so install one of those.  
 
 From the data package directory (recipe-report/packages/data/), run the `vagrant up` command to create and configure a [Vagrant](https://www.vagrantup.com/intro) VM running PostgreSQL. Once the development database is running, run the `npm run flyway` command to download [Flyway](https://flywaydb.org/documentation/). Next, run the `npm run migrate` command to apply [database migrations](recipe-report/packages/data/migrations).  
 
@@ -57,7 +57,7 @@ npm run migrate
 
 #### Install  
 
-The Recipe.Report packages are organized into a monorepo. Install dependencies from the root directory (~/recipe-report/).  
+The Recipe.Report packages are organized into a monorepo. Install dependencies from the root directory (~/recipe-report/). Node.js and npm must be installed installed before running this command.  
 
 ```bash
 cd ~/recipe-report
