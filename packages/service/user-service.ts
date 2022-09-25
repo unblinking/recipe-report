@@ -25,8 +25,9 @@
  */
 import { container, SYMBOLS } from '@recipe-report/api/ioc'
 import type { IUnitOfWork } from '@recipe-report/data/repositories'
-import { UserMap } from '@recipe-report/domain/maps'
-import { Account, Err, errClient, isErrClient, User } from '@recipe-report/domain/models'
+import type { AccountDto } from '@recipe-report/domain/dtos'
+import { AccountMap, UserMap } from '@recipe-report/domain/maps'
+import { Account, Err, errClient, isErrClient, Role, User } from '@recipe-report/domain/models'
 import {
   StringRequest,
   UserRequest,
@@ -92,6 +93,21 @@ export class UserService implements IUserService {
 
       // Create the entity in persistence.
       const user: User = await uow.users.create(UserMap.dtoToDomain(req.user))
+
+      // Create the user's first account.
+      const accountDto: AccountDto = {
+        name: `Kitchen of ` + user.name.value,
+        contact_user_id: user.id.value
+      }
+      const account: Account = await uow.accounts.create(Account.create(AccountMap.dtoToDomain(accountDto)))
+
+      // Find the highest level role (admin).
+      const roles: Role[] = await uow.roles.readAll()
+      const adminRole: Role = roles.reduce((prev, current) => (prev.level.value > current.level.value) ? prev : current)
+
+      // Create the user's role for their first account.
+      // They will have the highest level role for their own account.
+      await uow.users.createUserToRole(user.id, adminRole.id, account.id)
 
       // Create a JWT for the new user's activation email.
       const token = this._jwt.encode(

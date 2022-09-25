@@ -34,6 +34,7 @@ import type { PoolClient, QueryResult } from 'pg'
 export interface IRoleRepo extends IBaseRepo {
   create(role: Role): Promise<Role>
   read(id: UniqueId): Promise<Role>
+  readAll(): Promise<Role[]>
   update(id: UniqueId, name?: DisplayName, description?: string, level?: SmallInt): Promise<Role>
   delete(id: UniqueId): Promise<Role>
 }
@@ -68,6 +69,12 @@ export class RoleRepo extends BaseRepo implements IRoleRepo {
     }
     // Return domain object from database query results.
     return RoleMap.dbToDomain(result.rows[0], result.rows[0].id)
+  }
+
+  public readAll = async (): Promise<Role[]> => {
+    const query: string = `SELECT * FROM rr.roles_read_all()`
+    const result: QueryResult = await this.client.query(query, [])
+    return result.rows.map((row) => RoleMap.dbToDomain(row, row.id))
   }
 
   public update = async (

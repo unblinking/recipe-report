@@ -135,6 +135,26 @@ $$;
 COMMENT ON FUNCTION rr.roles_read IS 'Function to read a role by id.';
 
 /**
+ * Function:    rr.roles_read_all
+ * Author:      Joshua Gray
+ * Description: Function to read all roles.
+ * Usage:       SELECT * FROM rr.roles_read_all();
+ * Returns:     The role records if found.
+ */
+CREATE OR REPLACE FUNCTION rr.roles_read_all ()
+    RETURNS  SETOF rr.roles
+    LANGUAGE PLPGSQL
+    AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT rol.*
+    FROM rr.roles AS rol;
+END;
+$$;
+COMMENT ON FUNCTION rr.roles_read_all IS 'Function to read all roles.';
+
+/**
  * Function:    rr.roles_update
  * Author:      Joshua Gray
  * Description: Function to update a record in the roles table. The id and date_created cannot be

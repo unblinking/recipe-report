@@ -41,7 +41,7 @@ export class DisplayName extends ValueObject<IDisplayName> {
 
   public static create(displayName: string): DisplayName {
     displayName = displayName.trim()
-    if (!displayName.match('^[A-Za-z0-9]+$') || displayName.length < 2 || displayName.length > 50) {
+    if (!displayName.match('^(?! )[A-Za-z0-9 ]*(?<! )$') || displayName.length < 2 || displayName.length > 50) {
       throw new Err(`NAME_INVALID`, errClient.NAME_INVALID)
     }
     return new DisplayName({ value: displayName })

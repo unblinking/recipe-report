@@ -38,6 +38,7 @@ export interface IUserRepo extends IBaseRepo {
   delete(id: UniqueId): Promise<User>
   activate(id: UniqueId): Promise<User>
   authenticate(email_address: EmailAddress, password: Password): Promise<User>
+  createUserToRole(userId: UniqueId, roleId: UniqueId, accountId: UniqueId): Promise<void>
 }
 
 export class UserRepo extends BaseRepo implements IUserRepo {
@@ -147,6 +148,19 @@ export class UserRepo extends BaseRepo implements IUserRepo {
     await this._updateLastLogin(result.rows[0].id)
     // Return domain object from database query results.
     return UserMap.dbToDomain(result.rows[0], result.rows[0].id)
+  }
+
+  // Create a user_to_role record, linking a user to an account, with account access determined by the role.
+  public createUserToRole = async (userId: UniqueId, roleId: UniqueId, accountId: UniqueId): Promise<void> => {
+    const query: string = `SELECT * FROM rr.users_to_roles_create($1, $2, $3)`
+    const result: QueryResult = await this.client.query(query, [
+      userId.value,
+      roleId.value,
+      accountId.value,
+    ])
+    if (result.rowCount !== 1) {
+      throw new Err(`USER_CREATE_ROLE`, errClient.USER_CREATE_ROLE)
+    }
   }
 
   // Function to return the count of user records that match a given column/value
