@@ -190,7 +190,7 @@ BEGIN
     WHERE rol.user_id = $1;
 END;
 $$;
-COMMENT ON FUNCTION rr.accounts_read IS 'Function to read all accounts by user id.';
+COMMENT ON FUNCTION rr.accounts_read_all_by_user IS 'Function to read all accounts by user id.';
 
 /**
  * Function:    rr.accounts_update
