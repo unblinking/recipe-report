@@ -109,7 +109,7 @@ export type errEnvValueType = errEnvType[keyof errEnvType]
 export const errClient = {
   ID_MISMATCH: `The path UUID does not match the request body UUID or token subject UUID.`,
   MISSING_REQ: `One or more required fields are missing.`,
-  NAME_INVALID: `The name field is not in a valid format. Usename must be 2 to 50 characters in length, and contain only A-Z and 0-9.`,
+  NAME_INVALID: `The username field is not in a valid format. Username must be 2 to 50 characters in length, and contain only A-Z and 0-9.`,
   NAME_USED: `The name is already in use. Please change the requested name and try again.`,
   EMAIL_INVALID: `The email address is not in a valid format.`,
   EMAIL_USED: `The email address is already in use. Please change the requested email address and try again.`,
@@ -129,6 +129,7 @@ export const errClient = {
   USER_READ: `The user couldn't be found.`,
   USER_UPDATE: `The user couldn't be updated.`,
   USER_DELETE: `The user couldn't be deleted.`,
+  USER_CREATE_ROLE: `The user role couldn't be created`,
   USER_ACTIVATE: `The user couldn't be activated.`,
   USER_AUTHENTICATE: `The user couldn't be authenticated.`,
   USER_NOT_ACTIVE: `The user hasn't been activated.`,
