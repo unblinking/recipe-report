@@ -32,7 +32,7 @@ import { requestActivation } from './activationAPI'
 export interface ActivationState {
   status: `Ready` | `Loading` | `Failed` | `Error` | `Activated`
   message?: string
-  code?: string
+  code?: string | undefined
 }
 
 const initialState: ActivationState = {
@@ -82,6 +82,7 @@ export const activationSlice = createSlice({
           case `success`:
             state.status = `Activated`
             state.message = `Activation successful. Please sign in.`
+            state.code = undefined
             break
           default:
             state = initialState

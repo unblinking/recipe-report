@@ -32,7 +32,7 @@ import { requestRegistration } from './registrationAPI'
 export interface RegistrationState {
   status: `Ready` | `Loading` | `Failed` | `Error` | `Registered`
   message?: string
-  code?: string
+  code?: string | undefined
 }
 
 const initialState: RegistrationState = {
@@ -82,6 +82,7 @@ export const registrationSlice = createSlice({
           case `success`:
             state.status = `Registered`
             state.message = `Registration successful. Please follow the new user activation link that was just sent to your email address, and then sign in.`
+            state.code = undefined
             break
           default:
             state = initialState

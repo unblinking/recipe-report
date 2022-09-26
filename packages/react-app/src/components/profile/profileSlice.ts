@@ -33,7 +33,7 @@ import { requestProfile } from './profileAPI'
 export interface ProfileState {
   status: `Ready` | `Loading` | `Failed` | `Error` | `Success`
   message?: string
-  code?: string
+  code?: string | undefined
   user?: UserDto
 }
 
@@ -84,7 +84,8 @@ export const profileSlice = createSlice({
           case `success`:
             state.status = `Success`
             state.message = `Profile loading successful.`
-            state.user = action.payload.data.user
+            state.code = undefined
+            state.user = action?.payload?.data?.user
             break
           default:
             state = initialState
