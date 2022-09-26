@@ -32,7 +32,7 @@ import { requestAuthentication } from './authenticationAPI'
 export interface AuthenticationState {
   status: `Required` | `Loading` | `Failed` | `Error` | `Authenticated`
   message?: string
-  code?: string
+  code?: string | undefined
   token?: string | null
 }
 
@@ -92,6 +92,7 @@ export const authenticationSlice = createSlice({
               state.status = `Failed`
               state.message = `Authentication failure. No token received. ${action?.payload?.message}`
             }
+            state.code = undefined
             break
           default:
             state = initialState
