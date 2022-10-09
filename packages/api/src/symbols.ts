@@ -37,6 +37,7 @@ export const SYMBOLS = {
   IEmailService: Symbol.for('IEmailService'),
   IFeatureService: Symbol.for('IFeatureService'),
   IJwtService: Symbol.for('IJwtService'),
+  IRecipeService: Symbol.for('IRecipeService'),
   IRoleService: Symbol.for('IRoleService'),
   IUserService: Symbol.for('IUserService'),
 }

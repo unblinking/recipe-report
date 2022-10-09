@@ -34,6 +34,7 @@
 export const dbTables = {
   ACCOUNTS: `rr.accounts`,
   FEATURES: `rr.features`,
+  RECIPES: `rr.recipes`,
   ROLES: `rr.roles`,
   ROLES_TO_FEATURES: `rr.roles_to_features`,
   USERS: `rr.users`,

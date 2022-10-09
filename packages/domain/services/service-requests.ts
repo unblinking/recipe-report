@@ -23,7 +23,7 @@
  *
  * @module
  */
-import type { AccountDto, FeatureDto, RoleDto, UserDto } from '@recipe-report/domain/dtos'
+import type { AccountDto, FeatureDto, RecipeDto, RoleDto, UserDto } from '@recipe-report/domain/dtos'
 import { UniqueId } from '@recipe-report/domain/values'
 
 abstract class ServiceRequest<T> {
@@ -62,6 +62,20 @@ export class FeatureRequest extends ServiceRequest<FeatureDto> {
 
   public static create(feature: FeatureDto, authorizedId?: UniqueId): FeatureRequest {
     return new FeatureRequest(feature, authorizedId)
+  }
+}
+
+export class RecipeRequest extends ServiceRequest<RecipeDto> {
+  public get recipe(): RecipeDto {
+    return this._item
+  }
+
+  private constructor(recipe: RecipeDto, authorizedId?: UniqueId) {
+    super(recipe, authorizedId)
+  }
+
+  public static create(recipe: RecipeDto, authorizedId?: UniqueId): RecipeRequest {
+    return new RecipeRequest(recipe, authorizedId)
   }
 }
 
