@@ -26,6 +26,8 @@
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
+import { Recipe } from 'components/recipe/Recipe'
+
 import { useAppSelector } from '../../app/hooks'
 import styles from '../../components/app/App.module.css'
 import { Activation } from '../activation/Activation'
@@ -73,6 +75,16 @@ export function App(): JSX.Element {
             element={
               token ? (
                 <Profile />
+              ) : (
+                <Navigate to='/authenticate' state={{ from: location }} replace />
+              )
+            }
+          />
+          <Route
+            path='/recipe'
+            element={
+              token ? (
+                <Recipe />
               ) : (
                 <Navigate to='/authenticate' state={{ from: location }} replace />
               )
