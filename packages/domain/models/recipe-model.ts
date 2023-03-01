@@ -1,5 +1,5 @@
 /**
- * Inversion-of-control symbols.
+ * Recipe model.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2022
@@ -23,21 +23,37 @@
  *
  * @module
  */
-
-export const SYMBOLS = {
-  IRecipeReport: Symbol.for('IRecipeReport'),
-
-  IBaseController: Symbol.for('IBaseConroller'),
-
-  IDataAccessLayer: Symbol.for('IDataAccessLayer'),
-  IUnitOfWork: Symbol.for('IUnitOfWork'),
-
-  IAccountService: Symbol.for('IAccountService'),
-  ICryptoService: Symbol.for('ICryptoService'),
-  IEmailService: Symbol.for('IEmailService'),
-  IFeatureService: Symbol.for('IFeatureService'),
-  IJwtService: Symbol.for('IJwtService'),
-  IRecipeService: Symbol.for('IRecipeService'),
-  IRoleService: Symbol.for('IRoleService'),
-  IUserService: Symbol.for('IUserService'),
-}
+ import type { IRecipe } from '@recipe-report/domain/interfaces'
+ import { Model } from '@recipe-report/domain/models'
+ import type { DisplayName, UniqueId } from '@recipe-report/domain/values'
+ 
+ export class Recipe extends Model<IRecipe> {
+   public get id(): UniqueId {
+     return this._id
+   }
+ 
+   public get name(): DisplayName {
+     return this._props.name
+   }
+ 
+   public get description(): string {
+     return this._props.description
+   }
+ 
+   public get date_created(): Date | undefined {
+     return this._props.date_created
+   }
+ 
+   public get date_deleted(): Date | undefined {
+     return this._props.date_deleted
+   }
+ 
+   private constructor(props: IRecipe, id?: UniqueId) {
+     super(props, id)
+   }
+ 
+   public static create(props: IRecipe, id?: UniqueId): Recipe {
+     return new Recipe(props, id)
+   }
+ }
+ 

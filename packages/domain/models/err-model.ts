@@ -145,6 +145,10 @@ export const errClient = {
   FEATURE_READ: `The feature couldn't be found.`,
   FEATURE_UPDATE: `The feature couldn't be updated.`,
   FEATURE_DELETE: `The feature couldn't be deleted.`,
+  RECIPE_CREATE: `The recipe couldn't be created.`,
+  RECIPE_READ: `The recipe couldn't be found.`,
+  RECIPE_UPDATE: `The recipe couldn't be updated.`,
+  RECIPE_DELETE: `The recipe couldn't be deleted.`,
 }
 type errClientType = typeof errClient
 export type errClientKeyType = keyof errClientType

@@ -42,7 +42,7 @@ build/Release
 node_modules/
 jspm_packages/
 
-# Typescript declaration and map files
+# Typescript declaration and map filesf
 typings/
 *.d.ts.map
 
@@ -129,3 +129,8 @@ build/
 # Don't track css files. They are generated pre-build.
 *.css
 *.css.map
+
+# Svelte-kit
+.svelte-kit/
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*

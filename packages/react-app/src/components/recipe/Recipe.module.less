@@ -1,5 +1,7 @@
 /**
- * Inversion-of-control symbols.
+ * Recipe styles module in less format.
+ *
+ * @see {@link https://github.com/css-modules/css-modules}
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2022
@@ -24,20 +26,10 @@
  * @module
  */
 
-export const SYMBOLS = {
-  IRecipeReport: Symbol.for('IRecipeReport'),
+ @import '../../.less-global-vars.less';
 
-  IBaseController: Symbol.for('IBaseConroller'),
-
-  IDataAccessLayer: Symbol.for('IDataAccessLayer'),
-  IUnitOfWork: Symbol.for('IUnitOfWork'),
-
-  IAccountService: Symbol.for('IAccountService'),
-  ICryptoService: Symbol.for('ICryptoService'),
-  IEmailService: Symbol.for('IEmailService'),
-  IFeatureService: Symbol.for('IFeatureService'),
-  IJwtService: Symbol.for('IJwtService'),
-  IRecipeService: Symbol.for('IRecipeService'),
-  IRoleService: Symbol.for('IRoleService'),
-  IUserService: Symbol.for('IUserService'),
-}
+ .container {
+   margin: 5px;
+   padding: 5px;
+ }
+ 

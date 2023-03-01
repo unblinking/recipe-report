@@ -29,10 +29,11 @@ import type { IDataAccessLayer } from '@recipe-report/data'
 import type {
   IAccountRepo,
   IFeatureRepo,
+  IRecipeRepo,
   IRoleRepo,
   IUserRepo,
 } from '@recipe-report/data/repositories'
-import { AccountRepo, FeatureRepo, RoleRepo, UserRepo } from '@recipe-report/data/repositories'
+import { AccountRepo, FeatureRepo, RecipeRepo, RoleRepo, UserRepo } from '@recipe-report/data/repositories'
 import { Err, errInternal } from '@recipe-report/domain/models'
 import { inject, injectable } from 'inversify'
 import type { PoolClient } from 'pg'
@@ -45,6 +46,7 @@ export interface IUnitOfWork {
   rollback(): Promise<void>
   accounts: IAccountRepo
   features: IFeatureRepo
+  recipes: IRecipeRepo
   roles: IRoleRepo
   users: IUserRepo
 }
@@ -55,6 +57,7 @@ export class UnitOfWork implements IUnitOfWork {
   private _client: PoolClient | undefined
   private _accountRepo: IAccountRepo | undefined
   private _featureRepo: IFeatureRepo | undefined
+  private _recipeRepo: IRecipeRepo | undefined
   private _roleRepo: IRoleRepo | undefined
   private _userRepo: IUserRepo | undefined
 
@@ -100,6 +103,14 @@ export class UnitOfWork implements IUnitOfWork {
       this._featureRepo = new FeatureRepo(this._client)
     }
     return this._featureRepo
+  }
+
+  public get recipes(): IRecipeRepo {
+    if (!this._client) throw new Err('UOW_CLIENT', errInternal.UOW_CLIENT)
+    if (!this._recipeRepo) {
+      this._recipeRepo = new RecipeRepo(this._client)
+    }
+    return this._recipeRepo
   }
 
   public get roles(): IRoleRepo {

@@ -26,7 +26,7 @@
  *
  * @module
  */
-import type { UserDto } from '@recipe-report/domain/dtos'
+import type { RecipeDto, UserDto } from '@recipe-report/domain/dtos'
 
 // Universal API response interface.
 // All responses from the Recipe.Report API Server will be in this format.
@@ -35,6 +35,10 @@ export interface ApiResponse {
   message?: string
   code?: string
   data?: Record<string, unknown>
+}
+
+export interface ApiResponseRecipe extends ApiResponse {
+  data: Record<'recipe', RecipeDto>
 }
 
 export interface ApiResponseUser extends ApiResponse {
@@ -51,6 +55,11 @@ export interface ApiRequestAuthentication {
 }
 
 export interface ApiRequestProfile {
+  id: string
+  token: string
+}
+
+export interface ApiRequestRecipe {
   id: string
   token: string
 }

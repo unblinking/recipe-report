@@ -1,5 +1,5 @@
 /**
- * Inversion-of-control symbols.
+ * Recipe DTO.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2022
@@ -24,20 +24,11 @@
  * @module
  */
 
-export const SYMBOLS = {
-  IRecipeReport: Symbol.for('IRecipeReport'),
-
-  IBaseController: Symbol.for('IBaseConroller'),
-
-  IDataAccessLayer: Symbol.for('IDataAccessLayer'),
-  IUnitOfWork: Symbol.for('IUnitOfWork'),
-
-  IAccountService: Symbol.for('IAccountService'),
-  ICryptoService: Symbol.for('ICryptoService'),
-  IEmailService: Symbol.for('IEmailService'),
-  IFeatureService: Symbol.for('IFeatureService'),
-  IJwtService: Symbol.for('IJwtService'),
-  IRecipeService: Symbol.for('IRecipeService'),
-  IRoleService: Symbol.for('IRoleService'),
-  IUserService: Symbol.for('IUserService'),
-}
+ export class RecipeDto {
+    id?: string
+    name?: string
+    description?: string
+    date_created?: string | undefined
+    date_deleted?: string | undefined
+  }
+  

@@ -32,11 +32,21 @@ import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import styles from '../../components/profile/Profile.module.css'
 import { parseJwt } from '../../wrappers/jwt'
+import { Alert, alertStyles } from '../alert/Alert'
 import { selectAuthenticationToken } from '../authentication/authenticationSlice'
 import { Spacer } from '../spacer/Spacer'
-import { profileAsync, selectProfileUser } from './profileSlice'
+import {
+  profileAsync,
+  selectProfileCode,
+  selectProfileMessage,
+  selectProfileStatus,
+  selectProfileUser,
+} from './profileSlice'
 
 export function Profile(): JSX.Element {
+  const status = useAppSelector(selectProfileStatus)
+  const message = useAppSelector(selectProfileMessage)
+  const code = useAppSelector(selectProfileCode)
   const token = useAppSelector(selectAuthenticationToken)
   const dispatch = useAppDispatch()
   useEffect(() => {
@@ -60,6 +70,15 @@ export function Profile(): JSX.Element {
           <title>User Profile - Recipe.Report</title>
           <link rel='canonical' href='https://my.recipe.report' />
         </Helmet>
+        {status === 'Loading' && (
+          <Alert style={alertStyles.SPIN} title={status} message={message} code={code} />
+        )}
+        {status === 'Failed' && (
+          <Alert style={alertStyles.ERROR} title={status} message={message} code={code} />
+        )}
+        {status === 'Error' && (
+          <Alert style={alertStyles.ERROR} title={status} message={message} code={code} />
+        )}
         <div className={styles['container']}>
           {userInfo}
           <Spacer size={20} axis='vertical' />

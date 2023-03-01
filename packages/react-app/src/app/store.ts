@@ -29,6 +29,7 @@ import type { Action, ThunkAction } from '@reduxjs/toolkit'
 import activationReducer from '../components/activation/activationSlice'
 import authenticationReducer from '../components/authentication/authenticationSlice'
 import profileReducer from '../components/profile/profileSlice'
+import recipeReducer from '../components/recipe/recipeSlice'
 import registrationReducer from '../components/registration/registrationSlice'
 
 /**
@@ -40,6 +41,7 @@ export const store = configureStore({
     activation: activationReducer,
     authentication: authenticationReducer,
     profile: profileReducer,
+    recipe: recipeReducer,
     registration: registrationReducer,
   },
 })

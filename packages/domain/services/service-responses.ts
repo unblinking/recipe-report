@@ -25,7 +25,7 @@
  */
 import type { httpStatusValueType, outcomeValueType } from '@recipe-report/data'
 import { httpStatus, outcomes } from '@recipe-report/data'
-import type { AccountDto, FeatureDto, RoleDto, UserDto } from '@recipe-report/domain/dtos'
+import type { AccountDto, FeatureDto, RecipeDto, RoleDto, UserDto } from '@recipe-report/domain/dtos'
 import type { Err } from '@recipe-report/domain/models'
 
 abstract class ServiceResponse<T> {
@@ -121,6 +121,29 @@ export class FeatureResponse extends ServiceResponse<FeatureDto> {
 
   public static error(err: Err): FeatureResponse {
     return new FeatureResponse(outcomes.ERROR, httpStatus.INTERNAL_ERROR, undefined, err)
+  }
+}
+
+export class RecipeResponse extends ServiceResponse<RecipeDto> {
+  private constructor(
+    outcome: outcomeValueType = outcomes.ERROR,
+    statusCode: httpStatusValueType,
+    item?: RecipeDto,
+    err?: Err,
+  ) {
+    super(outcome, statusCode, item, err)
+  }
+
+  public static success(item: RecipeDto): RecipeResponse {
+    return new RecipeResponse(outcomes.SUCCESS, httpStatus.OK, item)
+  }
+
+  public static fail(err: Err): RecipeResponse {
+    return new RecipeResponse(outcomes.FAIL, httpStatus.BAD_REQUEST, undefined, err)
+  }
+
+  public static error(err: Err): RecipeResponse {
+    return new RecipeResponse(outcomes.ERROR, httpStatus.INTERNAL_ERROR, undefined, err)
   }
 }
 

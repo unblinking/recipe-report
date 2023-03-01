@@ -53,7 +53,14 @@ export function NavBar(): JSX.Element {
             to='/profile'
             className={({ isActive }): any => (isActive ? styles['active'] : undefined)}
           >
-            🧑‍🍳 Profile
+            Profile
+          </NavLink>
+          |
+          <NavLink
+            to='/recipe'
+            className={({ isActive }): any => (isActive ? styles['active'] : undefined)}
+          >
+            Recipe
           </NavLink>
         </nav>
       )}

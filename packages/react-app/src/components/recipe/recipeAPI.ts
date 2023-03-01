@@ -1,5 +1,5 @@
 /**
- * Inversion-of-control symbols.
+ * API functions to be used with createAsyncThunk in the recipeSlice.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2022
@@ -23,21 +23,12 @@
  *
  * @module
  */
+import type { ApiRequestRecipe, ApiResponseRecipe } from '@recipe-report/domain/interfaces'
 
-export const SYMBOLS = {
-  IRecipeReport: Symbol.for('IRecipeReport'),
+import { get } from '../../wrappers/fetch'
 
-  IBaseController: Symbol.for('IBaseConroller'),
-
-  IDataAccessLayer: Symbol.for('IDataAccessLayer'),
-  IUnitOfWork: Symbol.for('IUnitOfWork'),
-
-  IAccountService: Symbol.for('IAccountService'),
-  ICryptoService: Symbol.for('ICryptoService'),
-  IEmailService: Symbol.for('IEmailService'),
-  IFeatureService: Symbol.for('IFeatureService'),
-  IJwtService: Symbol.for('IJwtService'),
-  IRecipeService: Symbol.for('IRecipeService'),
-  IRoleService: Symbol.for('IRoleService'),
-  IUserService: Symbol.for('IUserService'),
+export async function requestRecipe(request: ApiRequestRecipe): Promise<ApiResponseRecipe> {
+  const path = process.env['REACT_APP_API_URI'] + `/v1/recipes/${request.id}`
+  const response = await get<ApiResponseRecipe>(path, request.token)
+  return response
 }

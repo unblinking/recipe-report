@@ -27,6 +27,7 @@
 import {
   AccountController,
   FeatureController,
+  RecipeController,
   RoleController,
   RootController,
   UserController,
@@ -43,6 +44,7 @@ import type {
   IEmailService,
   IFeatureService,
   IJwtService,
+  IRecipeService,
   IRoleService,
   IUserService,
 } from '@recipe-report/service'
@@ -52,6 +54,7 @@ import {
   EmailService,
   FeatureService,
   JwtService,
+  RecipeService,
   RoleService,
   UserService,
 } from '@recipe-report/service'
@@ -68,6 +71,7 @@ container.bind<IRecipeReport>(SYMBOLS.IRecipeReport).to(RecipeReport)
 // Add the controllers to the container.
 container.bind<IBaseController>(SYMBOLS.IBaseController).to(AccountController)
 container.bind<IBaseController>(SYMBOLS.IBaseController).to(FeatureController)
+container.bind<IBaseController>(SYMBOLS.IBaseController).to(RecipeController)
 container.bind<IBaseController>(SYMBOLS.IBaseController).to(RoleController)
 container.bind<IBaseController>(SYMBOLS.IBaseController).to(RootController)
 container.bind<IBaseController>(SYMBOLS.IBaseController).to(UserController)
@@ -82,6 +86,7 @@ container.bind<ICryptoService>(SYMBOLS.ICryptoService).to(CryptoService)
 container.bind<IEmailService>(SYMBOLS.IEmailService).to(EmailService)
 container.bind<IFeatureService>(SYMBOLS.IFeatureService).to(FeatureService)
 container.bind<IJwtService>(SYMBOLS.IJwtService).to(JwtService)
+container.bind<IRecipeService>(SYMBOLS.IRecipeService).to(RecipeService)
 container.bind<IRoleService>(SYMBOLS.IRoleService).to(RoleService)
 container.bind<IUserService>(SYMBOLS.IUserService).to(UserService)
 
