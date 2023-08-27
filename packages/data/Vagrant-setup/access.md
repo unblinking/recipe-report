@@ -27,6 +27,12 @@ sudo su - postgres
 PGUSER=dbuser PGPASSWORD=dbpass psql -h localhost recipedb
 ```
 
+List all tables in the rr schema:
+
+```psql
+\dt rr.*
+```
+
 ## Connection string for development  
 
 Env variable for application development:  
