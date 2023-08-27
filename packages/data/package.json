@@ -8,7 +8,11 @@
     "flyway": "wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/7.3.0/flyway-commandline-7.3.0-linux-x64.tar.gz | tar xvz",
     "migrate": "./flyway-7.3.0/flyway -configFiles=flyway.conf migrate",
     "prettier": "prettier --write constants.ts data-access-layer.ts repositories/**",
-    "linter": "eslint --ext .js,.jsx,.ts,.tsx src/"
+    "linter": "eslint --ext .js,.jsx,.ts,.tsx src/",
+    "graph": "postgraphile --connection postgres://dbuser:dbpass@localhost:15432/recipedb --schema rr"
   },
-  "author": "jmg1138 https://github.com/jmg1138"
+  "author": "jmg1138 https://github.com/jmg1138",
+  "dependencies": {
+    "postgraphile": "^4.13.0"
+  }
 }
