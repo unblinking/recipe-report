@@ -25,7 +25,7 @@
  */
 import type { ApiRequestRecipe, ApiResponseRecipe } from '@recipe-report/domain/interfaces'
 
-import { get } from '../../wrappers/fetch'
+import { get } from '../../../../client-share/wrappers/fetch'
 
 export async function requestRecipe(request: ApiRequestRecipe): Promise<ApiResponseRecipe> {
   const path = process.env['REACT_APP_API_URI'] + `/v1/recipes/${request.id}`

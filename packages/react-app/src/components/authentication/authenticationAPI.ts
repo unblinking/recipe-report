@@ -25,7 +25,7 @@
  */
 import type { ApiRequestAuthentication, ApiResponse } from '@recipe-report/domain/interfaces'
 
-import { post } from '../../wrappers/fetch'
+import { post } from '../../../../client-share/wrappers/fetch'
 
 // Perform a user authentication.
 export async function requestAuthentication(

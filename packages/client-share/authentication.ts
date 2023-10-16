@@ -1,5 +1,5 @@
 /**
- * API functions to be used with createAsyncThunk in the registrationSlice.
+ * Shared client API functions for authentication.
  *
  * @author Joshua Gray {@link https://github.com/jmg1138}
  * @copyright Copyright (C) 2017-2022
@@ -23,13 +23,15 @@
  *
  * @module
  */
-import type { ApiRequestRegistration, ApiResponse } from '@recipe-report/domain/interfaces'
+import type { ApiRequestAuthentication, ApiResponse } from '@recipe-report/domain/interfaces'
 
-import { post } from '../../../../client-share/wrappers/fetch'
+import { post } from './wrappers/fetch'
 
-// Perform a user registration.
-export async function requestRegistration(request: ApiRequestRegistration): Promise<ApiResponse> {
-  const path = process.env['REACT_APP_API_URI'] + `/v1/users`
-  const response = await post<ApiRequestRegistration, ApiResponse>(path, request)
+// Perform a user authentication.
+export async function requestAuthentication(
+  request: ApiRequestAuthentication,
+): Promise<ApiResponse> {
+  const path = process.env['REACT_APP_API_URI'] + `/v1/users/session`
+  const response = await post<ApiRequestAuthentication, ApiResponse>(path, request)
   return response
 }

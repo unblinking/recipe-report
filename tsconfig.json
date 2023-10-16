@@ -34,7 +34,6 @@
     "emitBOM": false,
     "emitDeclarationOnly": false,
     "importHelpers": false,
-    "importsNotUsedAsValues": "error",
     "inlineSourceMap": false,
     "inlineSources": false,
     "newLine": "lf",
@@ -42,7 +41,6 @@
     "noEmitHelpers": false,
     "noEmitOnError": false,
     "preserveConstEnums": true,
-    "preserveValueImports": true,
     "removeComments": true,
     "sourceMap": true,
     "stripInternal": false,
@@ -58,7 +56,6 @@
     "isolatedModules": true,
     "preserveSymlinks": false,
 
-    "charset": "utf8",
     "keyofStringsOnly": false,
     "noImplicitUseStrict": false,
     "noStrictGenericChecks": false,

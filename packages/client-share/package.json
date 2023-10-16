@@ -1,0 +1,12 @@
+{
+  "name": "@recipe-report/client-share",
+  "version": "0.1.0",
+  "description": "recipe.report client-share",
+  "repository": "github:unblinking/recipe-report",
+  "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "prettier": "prettier --write **",
+    "linter": "eslint --ext .js,.jsx,.ts,.tsx"
+  },
+  "author": "jmg1138 https://github.com/jmg1138"
+}

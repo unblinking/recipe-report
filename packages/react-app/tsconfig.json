@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.json",
 
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../client-share/wrappers"],
   "exclude": ["node_modules", "**/*.spec.ts"],
 
   "compilerOptions": {

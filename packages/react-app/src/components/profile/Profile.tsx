@@ -31,7 +31,7 @@ import { Helmet, HelmetProvider } from 'react-helmet-async'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import styles from '../../components/profile/Profile.module.css'
-import { parseJwt } from '../../wrappers/jwt'
+import { parseJwt } from '../../../../client-share/wrappers/jwt-share/wrappers/jwt'
 import { Alert, alertStyles } from '../alert/Alert'
 import { selectAuthenticationToken } from '../authentication/authenticationSlice'
 import { Spacer } from '../spacer/Spacer'
